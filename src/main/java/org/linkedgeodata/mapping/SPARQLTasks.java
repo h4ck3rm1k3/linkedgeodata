@@ -24,16 +24,12 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
-import org.dllearner.utilities.datastructures.RDFNodeTuple;
-import org.dllearner.utilities.datastructures.StringTuple;
-import org.dllearner.utilities.owl.OWLVocabulary;
 
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.query.ResultSetFactory;
 import com.hp.hpl.jena.query.ResultSetFormatter;
 import com.hp.hpl.jena.query.ResultSetRewindable;
-import com.hp.hpl.jena.sparql.core.ResultBinding;
 
 /**
  * @author Sebastian Hellmann Convenience class for SPARQL queries initialized
@@ -225,54 +221,6 @@ public class SPARQLTasks {
 	}
 
 	/**
-	 * get all instances for a complex concept / class description in KBSyntax.
-	 * 
-	 * @param conceptKBSyntax
-	 *            A description string in KBSyntax
-	 * @param sparqlResultLimit
-	 *            Limits the ResultSet size
-	 * @return SortedSet with the instance uris
-	 */
-	public SortedSet<String> retrieveInstancesForClassDescription(
-			String conceptKBSyntax, int sparqlResultLimit) {
-
-		String sparqlQueryString = "";
-		try {
-			sparqlQueryString = SparqlQueryDescriptionConvertVisitor
-					.getSparqlQuery(conceptKBSyntax, sparqlResultLimit, false, false);
-		} catch (Exception e) {
-			logger.warn(e.getMessage());
-		}
-		return queryAsSet(sparqlQueryString, "subject");
-	}
-
-	/**
-	 * same as <code>retrieveInstancesForClassDescription</code> including
-	 * RDFS Reasoning.
-	 * 
-	 * @param conceptKBSyntax
-	 *            A description string in KBSyntax
-	 * @param sparqlResultLimit
-	 *            Limits the ResultSet size
-	 * @return SortedSet with the instance uris
-	 */
-	public SortedSet<String> retrieveInstancesForClassDescriptionIncludingSubclasses(
-			String conceptKBSyntax, int sparqlResultLimit, int maxDepth) {
-
-		String sparqlQueryString = "";
-		try {
-			sparqlQueryString = SparqlQueryDescriptionConvertVisitor
-					.getSparqlQueryIncludingSubclasses(conceptKBSyntax,
-							sparqlResultLimit, this, maxDepth);
-			
-
-		} catch (Exception e) {
-			logger.warn(e.getMessage());
-		}
-		return queryAsSet(sparqlQueryString, "subject");
-	}
-
-	/**
 	 * get all direct Classes of an instance.
 	 * 
 	 * @param instance
@@ -423,31 +371,6 @@ public class SPARQLTasks {
 		return getTuplesFromResultSet(rs, var1, var2);
 	}
 	
-	@SuppressWarnings("unchecked")
-	public SortedSet<RDFNodeTuple> queryAsRDFNodeTuple(String sparqlQueryString, String var1, String var2) {
-		ResultSetRewindable rsw = null;
-		SortedSet<RDFNodeTuple> returnSet = new TreeSet<RDFNodeTuple>();
-		
-		try {
-			String jsonString = query(sparqlQueryString);
-			rsw = SparqlQuery.convertJSONtoResultSet(jsonString);
-
-		
-		
-		List<ResultBinding> l = ResultSetFormatter.toList(rsw);
-		for (ResultBinding resultBinding : l) {
-			returnSet.add(new RDFNodeTuple(resultBinding.get(var1),resultBinding.get(var2)));
-		}
-		
-		rsw.reset();
-		} catch (Exception e) {
-			logger.info("ignoring (see log for details): Exception caught in SPARQLTasks, passing emtpy result: "+e.getMessage());
-		}
-		
-		return returnSet;
-	}
-
-	
 	/**
 	 * little higher level, executes query ,returns all resources for a
 	 * variable.
@@ -562,10 +485,9 @@ public class SPARQLTasks {
 			ResultSetRewindable rs, String variable) {
 		final SortedSet<String> result = new TreeSet<String>();
 
-		@SuppressWarnings("unchecked")
-		final List<ResultBinding> l = ResultSetFormatter.toList(rs);
+		final List<QuerySolution> l = ResultSetFormatter.toList(rs);
 
-		for (ResultBinding resultBinding : l) {
+		for (QuerySolution resultBinding : l) {
 			result.add(resultBinding.get(variable).toString());
 		}
 		rs.reset();
@@ -577,9 +499,8 @@ public class SPARQLTasks {
 			ResultSetRewindable rs, String predicate, String object) {
 		final SortedSet<StringTuple> returnSet = new TreeSet<StringTuple>();
 		//SimpleClock sc = new SimpleClock();
-		@SuppressWarnings("unchecked")
-		final List<ResultBinding> l = ResultSetFormatter.toList(rs);
-		for (ResultBinding resultBinding : l) {
+		final List<QuerySolution> l = ResultSetFormatter.toList(rs);
+		for (QuerySolution resultBinding : l) {
 			returnSet.add(new StringTuple(resultBinding.get(predicate).toString(),resultBinding.get(object).toString()));
 		}
 		//sc.printAndSet("allTuples");

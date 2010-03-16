@@ -27,8 +27,12 @@ import java.nio.charset.Charset;
 
 import javax.xml.ws.http.HTTPException;
 
-
-import com.jamonapi.utils.Logger;
+import com.hp.hpl.jena.query.ResultSet;
+import com.hp.hpl.jena.query.ResultSetFactory;
+import com.hp.hpl.jena.query.ResultSetFormatter;
+import com.hp.hpl.jena.query.ResultSetRewindable;
+import com.hp.hpl.jena.sparql.engine.http.QueryEngineHTTP;
+import org.apache.log4j.Logger;
 
 
 /**
@@ -42,6 +46,8 @@ import com.jamonapi.utils.Logger;
  */
 public class SparqlQuery {
 
+	private static Logger logger = Logger.getLogger(SparqlQuery.class);
+	
 	private static boolean logDeletedOnStart = false;
 
 	// additional file for logging SPARQL queries etc.
@@ -98,8 +104,6 @@ public class SparqlQuery {
 			queryExecution.addNamedGraph(ngu);
 		}
 
-		Monitor httpTime = JamonMonitorLogger.getTimeMonitor(SparqlQuery.class, "sparql query time").start();
-
 		try {
 			logger.debug("sending query: length: " + sparqlQueryString.length() + " | ENDPOINT: "
 					+ sparqlEndpoint.getURL().toString());
@@ -127,7 +131,6 @@ public class SparqlQuery {
 			throw e;
 		}
 
-		httpTime.stop();
 		isRunning = false;
 		wasExecuted = true;
 		return rs;

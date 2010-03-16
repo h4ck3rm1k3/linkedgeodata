@@ -32,8 +32,6 @@ import java.util.LinkedList;
 
 import org.apache.log4j.Logger;
 
-import com.jamonapi.Monitor;
-
 /**
  * SPARQL query cache to avoid possibly expensive multiple queries. The queries
  * and their results are written to files. A cache has an associated cache
