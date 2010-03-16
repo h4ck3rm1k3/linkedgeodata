@@ -5,4 +5,41 @@
   <version>0.0.1-SNAPSHOT</version>
   <name>LinkedGeoData</name>
   <description>LinkedGeoData.org - Adding a spatial dimension to the Web of Data.</description>
+  <repositories>
+  	<repository>
+  		<snapshots>
+  			<enabled>false</enabled>
+  		</snapshots>
+  		<id>our archiva</id>
+  		<url>http://db0.aksw.org:8081/archiva/repository/internal/</url>
+  	</repository>
+  </repositories>
+  <dependencies>
+  	<dependency>
+  		<groupId>com.hp.hpl.jena</groupId>
+  		<artifactId>jena</artifactId>
+  		<version>2.6.2</version>
+  		<type>jar</type>
+  		<scope>compile</scope>
+  	</dependency>
+  	<dependency>
+  		<groupId>com.jamonapi</groupId>
+  		<artifactId>jamon</artifactId>
+  		<version>2.4</version>
+  		<type>jar</type>
+  		<scope>compile</scope>
+  	</dependency>
+  	<dependency>
+  		<groupId>com.hp.hpl.jena</groupId>
+  		<artifactId>arq</artifactId>
+  		<version>2.8.1</version>
+  		<type>jar</type>
+  		<scope>compile</scope>
+  	</dependency>
+  	<dependency>
+  		<groupId>com.wcohen.ss</groupId>
+  		<artifactId>secondstring-20060615</artifactId>
+  		<version>20060615</version>
+  	</dependency>
+  </dependencies>
 </project>
