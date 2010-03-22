@@ -1,0 +1,12 @@
+[database]
+; the type of database server
+type = mysql
+; the server, where the mysql database is located
+server = localhost
+; the user, that has rights to access the navigator database
+user = root
+; the password of that user
+pass = 
+; name of the OSM database
+name = osm
+

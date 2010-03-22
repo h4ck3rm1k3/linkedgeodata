@@ -1,0 +1,85 @@
+html {
+	height:100%;
+	overflow: hidden;
+}
+
+img.noborder {
+	border:0;
+	vertical-align:text-top;
+}
+
+a.link {
+	text-decoration: none;
+	border-style: none;
+	color: #000000;
+}
+a.link:visited {
+	text-decoration: none;
+	border-style: none;
+	color: #000000;
+}
+a.link:active {
+	text-decoration: none;
+	border-style: none;
+	color: #000000;
+}
+a.link:hover {
+	text-decoration: none;
+	border-style: none;
+	color: #ffffff;
+}
+
+div.header {
+	/*height: 90px;*/
+	margin: 0px;
+	background-color: #f7f7f7;
+	font-family: Arial,'sans serif';
+	font-size: 80%;
+}
+
+div.map {
+	width: 60%;
+	height:100%;
+	float:left;
+	border-right: 1px solid #000000;
+}
+
+div.map-bar {
+	background-color:#c0c0ff;
+	height: 2em;
+	vertical-align: middle;
+	/*text-align: right;*/
+}
+
+
+body {
+	height: 100%;
+	margin:0px;
+	background-color:#f7f7f7;
+	font-family:Arial,'sans serif';
+	font-size:80%;
+}
+
+input[disabled] {color:#000000;}
+
+/* colors for background of instances */
+.color0 {
+	background-color:#e0e0ff;
+}
+
+.color1 {
+	background-color:#ffffff;
+}
+
+.highlight {
+	background-color:#ffdf7f;
+}
+
+/*.nodeform textarea, .nodeform input[type=text] {
+	width:10em;
+}*/
+
+input,textarea {
+	border: solid black 0px;
+	background-color:#ddd;
+}

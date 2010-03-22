@@ -1,0 +1,2 @@
+php_flag magic_quotes_gpc off
+php_flag session.gc_maxlifetime 3600000
