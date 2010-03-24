@@ -1,0 +1,17 @@
+ABOUT
+=====
+
+LinkedGeoData is a project, which converts OpenStreetMap data to RDF and 
+interlinks it with other data sets. This data is provided as Linked Data, 
+SPARQL endpoint, and downloadable RDF files.
+
+INSTRUCTIONS
+============
+
+The code base itself is only relevant for LinkedGeoData developers and
+contributors. Everyone else should use the provided services (Linked Data,
+SPARQL, REST interface, LGD Browser).
+
+We are in the progress of migrating code to the project. Until this phase is
+completed, the code is likely to not work as expected.
+
