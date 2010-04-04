@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.linkedgeodata.mappingx;
+package org.linkedgeodata.mapping;
 
 /**
  * A container which can hold two Strings, mainly used as a helper.

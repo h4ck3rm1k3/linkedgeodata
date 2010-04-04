@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.linkedgeodata.mappingx;
+package org.linkedgeodata.mapping;
 
 import java.net.URI;
 import java.util.LinkedList;
@@ -25,11 +25,11 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.linkedgeodata.mappingx.Cache;
-import org.linkedgeodata.mappingx.DBpediaLinkedGeoData;
-import org.linkedgeodata.mappingx.POIClass;
-import org.linkedgeodata.mappingx.Point;
-import org.linkedgeodata.mappingx.SPARQLTasks;
+import org.linkedgeodata.mapping.Cache;
+import org.linkedgeodata.mapping.DBpediaLinkedGeoData;
+import org.linkedgeodata.mapping.POIClass;
+import org.linkedgeodata.mapping.Point;
+import org.linkedgeodata.mapping.SPARQLTasks;
 
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;

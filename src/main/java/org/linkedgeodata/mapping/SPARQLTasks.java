@@ -1,4 +1,4 @@
-package org.linkedgeodata.mappingx;
+package org.linkedgeodata.mapping;
 
 /**
  * Copyright (C) 2009-2010, LinkedGeoData developers
@@ -25,11 +25,11 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
-import org.linkedgeodata.mappingx.Cache;
-import org.linkedgeodata.mappingx.OWLVocabulary;
-import org.linkedgeodata.mappingx.SparqlEndpoint;
-import org.linkedgeodata.mappingx.SparqlQuery;
-import org.linkedgeodata.mappingx.StringTuple;
+import org.linkedgeodata.mapping.Cache;
+import org.linkedgeodata.mapping.OWLVocabulary;
+import org.linkedgeodata.mapping.SparqlEndpoint;
+import org.linkedgeodata.mapping.SparqlQuery;
+import org.linkedgeodata.mapping.StringTuple;
 
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;

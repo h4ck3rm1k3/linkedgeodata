@@ -17,30 +17,47 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.linkedgeodata.mappingx;
+package org.linkedgeodata.mapping;
 
 import java.net.URI;
 
-
 /**
- * Takes a DBpedia resource as input and outputs the most likely
- * owl:sameAs mapping in LinkedGeoData.
+ * A geo location.
  * 
  * @author Jens Lehmann
  *
  */
-public class SingleDBpediaMapping {
-
-	/**
-	 * @param args
-	 * @throws Exception 
-	 */
-	public static void main(String[] args) throws Exception {
-		URI uri = URI.create("http://dbpedia.org/resource/Leipzig");
-		System.out.println("Trying to find a match for " + uri);
-		DBpediaPoint dp = new DBpediaPoint(uri);
-		URI lgdURI = DBpediaLinkedGeoData.findGeoDataMatch(dp);
-		System.out.println(lgdURI);
+public class Point {
+	
+	protected double geoLat;
+	
+	protected double geoLong;
+	
+	protected URI uri;
+	
+	protected POIClass poiClass;
+	
+	public Point(URI uri, POIClass poiClass, double geoLat, double geoLong) {
+		this.uri = uri;
+		this.poiClass = poiClass;
+		this.geoLat = geoLat;
+		this.geoLong = geoLong;
 	}
 
+	public double getGeoLat() {
+		return geoLat;
+	}
+
+	public double getGeoLong() {
+		return geoLong;
+	}
+	
+	public URI getUri() {
+		return uri;
+	}	
+	
+	public POIClass getPoiClass() {
+		return poiClass;
+	}	
+	
 }
