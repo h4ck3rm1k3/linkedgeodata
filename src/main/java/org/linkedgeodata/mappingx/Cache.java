@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.linkedgeodata.mapping;
+package org.linkedgeodata.mappingx;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,6 +31,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.LinkedList;
 
 import org.apache.log4j.Logger;
+import org.linkedgeodata.mappingx.Files;
+import org.linkedgeodata.mappingx.SparqlQuery;
 
 /**
  * SPARQL query cache to avoid possibly expensive multiple queries. The queries

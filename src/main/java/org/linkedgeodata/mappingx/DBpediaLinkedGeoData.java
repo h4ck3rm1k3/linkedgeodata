@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.linkedgeodata.mapping;
+package org.linkedgeodata.mappingx;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -37,6 +37,13 @@ import java.util.Map;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.linkedgeodata.mappingx.Cache;
+import org.linkedgeodata.mappingx.DBpediaPoint;
+import org.linkedgeodata.mappingx.Files;
+import org.linkedgeodata.mappingx.LGDPoint;
+import org.linkedgeodata.mappingx.POIClass;
+import org.linkedgeodata.mappingx.SPARQLTasks;
+import org.linkedgeodata.mappingx.SparqlEndpoint;
 
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;

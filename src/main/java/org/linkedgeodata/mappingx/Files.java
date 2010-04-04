@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.linkedgeodata.mapping;
+package org.linkedgeodata.mappingx;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;

@@ -1,3 +1,5 @@
+package org.linkedgeodata.mappingx;
+
 /**
  * Copyright (C) 2009-2010, LinkedGeoData developers
  *
@@ -17,20 +19,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.linkedgeodata.mapping;
 
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
+import org.linkedgeodata.mappingx.Cache;
+import org.linkedgeodata.mappingx.OWLVocabulary;
+import org.linkedgeodata.mappingx.SparqlEndpoint;
+import org.linkedgeodata.mappingx.SparqlQuery;
+import org.linkedgeodata.mappingx.StringTuple;
 
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.query.ResultSetFactory;
 import com.hp.hpl.jena.query.ResultSetFormatter;
 import com.hp.hpl.jena.query.ResultSetRewindable;
-
 
 /**
  * @author Sebastian Hellmann Convenience class for SPARQL queries initialized
