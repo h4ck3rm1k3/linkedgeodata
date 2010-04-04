@@ -31,6 +31,7 @@ import com.hp.hpl.jena.query.ResultSetFactory;
 import com.hp.hpl.jena.query.ResultSetFormatter;
 import com.hp.hpl.jena.query.ResultSetRewindable;
 
+
 /**
  * @author Sebastian Hellmann Convenience class for SPARQL queries initialized
  *         with a SparqlEndpoint. A Cache can also be used to further improve

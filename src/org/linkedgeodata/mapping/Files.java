@@ -32,8 +32,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.ibm.icu.util.StringTokenizer;
+import java.util.StringTokenizer;
 
 /**
  * @author Jens Lehmann

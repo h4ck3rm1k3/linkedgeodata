@@ -27,12 +27,14 @@ import java.nio.charset.Charset;
 
 import javax.xml.ws.http.HTTPException;
 
+import org.apache.log4j.Logger;
+
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.query.ResultSetFactory;
 import com.hp.hpl.jena.query.ResultSetFormatter;
 import com.hp.hpl.jena.query.ResultSetRewindable;
 import com.hp.hpl.jena.sparql.engine.http.QueryEngineHTTP;
-import org.apache.log4j.Logger;
+
 
 
 /**
