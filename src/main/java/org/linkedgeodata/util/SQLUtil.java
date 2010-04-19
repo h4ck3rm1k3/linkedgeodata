@@ -1,13 +1,13 @@
 package org.linkedgeodata.util;
 
-import java.io.InputStream;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
-
-import com.ctc.wstx.util.StringUtil;
+import org.linkedgeodata.core.dao.IQuery;
 
 
 //http://stackoverflow.com/questions/1497569/how-to-execute-sql-script-file-using-jdbc
@@ -17,17 +17,19 @@ public class SQLUtil
 	
 	public static String placeHolder(int n, int m)
 	{
-		String part = "(";
-		for(int i = m; i >= 0; --i) {
+		String part = "";
+		for(int i = m - 1; i >= 0; --i) {
 			part += "?";
 			
 			if(i != 0)
 				part += ", ";
 		}
-		part += ")";
+
+		if(m > 1)
+			part = "(" + part + ")";
 		
 		String result = "";
-		for(int j = n; j >= 0; --j) {
+		for(int j = n - 1; j >= 0; --j) {
 			result += part;
 			
 			if(j != 0)
@@ -90,6 +92,13 @@ public class SQLUtil
 						SQLEscapeTransformer.getInstance()));
 	}
 	*/
+
+	public static <T> T single(ResultSet rs, Class<T> clazz)
+		throws SQLException
+	{
+		return single(rs, clazz, true);
+	}
+
 	/**
 	 * Returns the 1st column of the first row or null of there is no row.
 	 * Also throws exception if there is more than 1 row and 1 column.
@@ -100,7 +109,7 @@ public class SQLUtil
 	 * @throws SQLException
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> T single(ResultSet rs, Class<T> clazz)
+	public static <T> T single(ResultSet rs, Class<T> clazz, boolean bClose)
 		throws SQLException
 	{
 		if(rs.getMetaData().getColumnCount() != 1)
@@ -116,9 +125,82 @@ public class SQLUtil
 			if(rs.next()) 
 				throw new RuntimeException("only at most 1 row expected");
 		}
+
+		if(bClose)
+			rs.close();
 		
 		return result;
 	}
+	
+	
+	public static <T> List<T> list(ResultSet rs, Class<T> clazz)
+		throws SQLException
+	{
+		return list(rs, clazz, true);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> List<T> list(ResultSet rs, Class<T> clazz, boolean bClose)
+		throws SQLException
+	{		
+		List<T> result = new ArrayList<T>();
+		
+		while(rs.next()) {
+			Object o = rs.getObject(1);;
+			//System.out.println("Result = " + o);
+			T item = (T)o;
+			result.add(item);
+		}
+	
+		if(bClose)
+			rs.close();
+		return result;
+		
+	}
+	
+	
+	public static <T> void executeSetArgs(PreparedStatement stmt, Class<T> clazz, Object ...args)
+		throws SQLException
+	{
+		for(int i = 0; i < args.length; ++i) {
+			stmt.setObject(i + 1, args[i]);
+		}
+		
+		// Pad with zeroes
+		for(int i = args.length; i < stmt.getParameterMetaData().getParameterCount(); ++i) {
+			stmt.setObject(i + 1, null);
+		}
+	}
+	
+	public static <T> T execute(PreparedStatement stmt, Class<T> clazz, Object ...args)
+		throws SQLException
+	{
+		executeSetArgs(stmt, clazz, args);
+	
+		T result = null;
+		if(clazz == null || Void.class.equals(clazz)) {
+			stmt.execute();
+		}
+		else {
+			ResultSet rs = stmt.executeQuery();		
+			result = SQLUtil.single(rs, clazz);
+			rs.close();
+		}
+	
+		return result;
+	}
+	
+	public static <T> List<T> executeList(PreparedStatement stmt, Class<T> clazz, Object ...args)
+		throws SQLException
+	{
+		executeSetArgs(stmt, clazz, args);
+	
+		ResultSet rs = stmt.executeQuery();		
+		List<T> result = SQLUtil.list(rs, clazz);
+
+		return result;
+	}
+
 	
 	/*
 	public static String escape(Object value)
