@@ -1,0 +1,358 @@
+<?php
+
+define("MYSQLSTRING",'mysql:host=localhost;dbname=osm');
+define("USER",'username not set');
+define("PW",'password not set');
+
+
+
+/**
+ * 
+ * This select statement actually consits of 2 queries:
+ * The first subselect finds the starting and end node of a way and the
+ * total number of nodes on that way.
+ * 
+ * The second subselect combines all node positions of that path
+ * into a single string.
+ * 
+ * Known issue/feature: currently trailing zeroes are not removed as
+ * ROUND does not remove them.
+ */
+$georssWayQuery = "
+	SELECT
+		CONCAT('base:way/', wt.id, '#id') AS id,
+		d.val AS 't:unc',
+		CONCAT('georss:', wt.way_type)
+	FROM (
+		SELECT
+			mm.id,
+			IF(wn_min.node_id = wn_max.node_id,
+				IF(mm.node_count >= 4, 'polygon', 'error'),
+				IF(mm.node_count >= 2, 'line', 'error')
+			) AS way_type
+		FROM (
+			SELECT
+				wn.id,
+				MIN(wn.sequence_id) AS min_seq_id,
+				MAX(wn.sequence_id) AS max_seq_id,
+				COUNT(*) AS node_count
+			FROM
+				way_nodes wn
+			WHERE
+				wn.id = $1
+			GROUP BY
+				wn.id
+		) mm
+			INNER JOIN way_nodes wn_min ON ((wn_min.id, wn_min.sequence_id) = (mm.id, mm.min_seq_id))
+			INNER JOIN way_nodes wn_max ON ((wn_max.id, wn_max.sequence_id) = (mm.id, mm.max_seq_id))
+	) wt
+	INNER JOIN (
+		SELECT
+			wn.id,
+			GROUP_CONCAT(
+				ROUND(n.latitude / 10000000, 7),
+				' ',
+				ROUND(n.longitude / 10000000, 7)
+				ORDER BY wn.sequence_id
+			SEPARATOR ' ') AS val
+		FROM
+			way_nodes wn
+			INNER JOIN nodes n ON (n.id = wn.node_id)
+		WHERE
+			wn.id = $1
+		GROUP BY
+			wn.id
+	) d
+	ON (wt.id = d.id)
+	";
+
+$georssNodeQuery = "
+	SELECT
+		CONCAT('base:node/', n.id, '#id') AS id,
+		CONCAT(
+			ROUND(n.latitude  / 10000000, 7),
+			' ',
+			ROUND(n.longitude / 10000000, 7)
+		) AS 't:unc',
+		'georss:point' AS a
+	FROM
+		nodes n
+	WHERE
+		n.id = $1
+	";
+
+
+/*
+$testQuery = "
+	SELECT
+		CONCAT('base:', 'test') AS id,
+		CONCAT('vocabulary:', 'test') AS 'rdf:type',
+		'latlon',
+		'blubb' as 't:unc',
+		'sup' AS a
+	";
+
+$georssWayQuery = $testQuery;
+*/
+
+try{
+$triplify['db']=new PDO(MYSQLSTRING, USER, PW);
+}catch(Exception $e){die('db server down');}
+
+$triplify['namespaces']=array(
+	'vocabulary'=>'http://linkedgeodata.org/vocabulary#',
+	'base'=>'http://linkedgeodata.org/triplify/',
+	'rdf'=>'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+	'rdfs'=>'http://www.w3.org/2000/01/rdf-schema#',
+	'owl'=>'http://www.w3.org/2002/07/owl#',
+	'foaf'=>'http://xmlns.com/foaf/0.1/',
+	'sioc'=>'http://rdfs.org/sioc/ns#',
+	'sioctypes'=>'http://rdfs.org/sioc/types#',
+	'dc'=>'http://purl.org/dc/elements/1.1/',
+	'dcterms'=>'http://purl.org/dc/terms/',
+	'skos'=>'http://www.w3.org/2004/02/skos/core#',
+	'tag'=>'http://www.holygoat.co.uk/owl/redwood/0.1/tags/',
+	'xsd'=>'http://www.w3.org/2001/XMLSchema#',
+	'wgs84_pos'=>'http://www.w3.org/2003/01/geo/wgs84_pos#',
+	'update'=>'http://triplify.org/vocabulary/update#',
+	'dbp'=>'http://dbpedia.org/resource/',
+    'georss'=>'http://www.georss.org/georss/'
+);
+
+$distance='ROUND(1000*1.609 * 3956 * 2 * ASIN(SQRT(  POWER(SIN(($1 - latitude/10000000) * pi()/180 / 2), 2) +
+		COS($1 * pi()/180) *  COS(latitude/10000000 * pi()/180) *  POWER(SIN(($2 - longitude/10000000) * pi()
+		/180 / 2), 2) ) )) AS distance';
+
+$box='longitude between CEIL(($2-($3/1000)/abs(cos(radians($1))*111))*10000000) and CEIL(($2+($3/1000)/abs(cos(radians($1))*111))*10000000)
+		AND latitude between CEIL(($1-($3/1000/111))*10000000) and CEIL(($1+($3/1000/111))*10000000)';
+$latlon='longitude/10000000 AS "wgs84_pos:long^^xsd:decimal",latitude/10000000 AS "wgs84_pos:lat^^xsd:decimal"';
+
+$triplify['queries']=array(
+	'/^near\/(-?[0-9\.]+),(-?[0-9\.]+)\/([0-9]+)\/?$/'=>'
+SELECT CONCAT("base:",n.type,"/",n.id,"#id") AS id, CONCAT("vocabulary:",n.type) AS "rdf:type", '.$latlon.',
+	CONCAT(IF(p.type="datatype","","vocabulary:"),IF(rv.label LIKE "yes" AND p.type!="datatype",REPLACE(rk.label,":","%25"),rv.label)) AS "t:unc",
+	IF(p.type="classification" OR (p.type!="datatype" AND rv.label LIKE "yes"),"rdf:type",
+		CONCAT(REPLACE(rk.label,":","%25"),IF(p.type="datatype","","->"))
+	) a
+  , '.$distance.'
+FROM  elements n
+  INNER JOIN tags t USING(type,id) INNER JOIN properties p ON(t.k=p.id)
+  INNER JOIN resources rk ON(rk.id=t.k)
+  INNER JOIN resources rv ON(rv.id=t.v)
+WHERE '.$box.'
+HAVING distance < $3 LIMIT 1000',
+
+	'/^nearhacked\/(-?[0-9\.]+),(-?[0-9\.]+)\/([0-9]+)\/?$/'=>array('
+SELECT CONCAT("base:",n.type,"/",n.id,"#id") AS id,'.$latlon.',
+  rv.label AS "t:unc", REPLACE(rk.label,":","%25"), '.$distance.'
+FROM  elements n
+  INNER JOIN tags t USING(type,id)
+  INNER JOIN resources rk ON(rk.id=t.k)
+  INNER JOIN resources rv ON(rv.id=t.v)
+WHERE '.$box.'
+HAVING distance < $3',
+		'n.id'=>'SELECT CONCAT("base:",n.type,"/",n.id,"#id") AS id,'.$latlon.',
+		rv.label AS "t:unc", REPLACE(rk.label,":","%25"), '.$distance.'
+	FROM closedway_boundaries cb INNER JOIN  elements n ON(cb.id=n.id AND n.type="way")
+  INNER JOIN tags t ON(n.id=t.id AND t.type="way")
+  INNER JOIN resources rk ON(rk.id=t.k)
+  INNER JOIN resources rv ON(rv.id=t.v)
+	WHERE $1*10000000 BETWEEN minlat AND maxlat AND $2*10000000 BETWEEN minlon AND maxlon'
+),
+
+'/^nearhackedin\/(-?[0-9\.]+),(-?[0-9\.]+)\/([0-9]+)\/?$/'=>'
+SELECT CONCAT("base:",n.type,"/",n.id,"#id") AS id,'.$latlon.',
+  rv.label AS "t:unc", REPLACE(rk.label,":","%25")
+FROM  elements n
+  INNER JOIN closedway_boundaries cb ON (cb.id = n.id )
+  INNER JOIN tags t USING(type,id)
+  INNER JOIN resources rk ON(rk.id=t.k)
+  INNER JOIN resources rv ON(rv.id=t.v)
+WHERE {cb.minlat > $1}	',
+
+/*
+ // Just a test to see if there is any output
+	'/^test\/(-?[0-9\.]+),(-?[0-9\.]+)\/([0-9]+)\/class\/.+\/?$/'=>'
+SELECT
+	CONCAT("base:", "test") AS id,
+	CONCAT("vocabulary:", "test")             AS "rdf:type",
+	"latlon",
+	"blubb" as "t:unc",
+	"sup" AS a
+	',
+*/
+
+	'/^near\/(-?[0-9\.]+),(-?[0-9\.]+)\/([0-9]+)\/([^\/=]+)\/?$/'=>'
+SELECT  CONCAT("base:",n.type,"/",n.id,"#id") AS id, CONCAT("vocabulary:",n.type) AS "rdf:type",'.$latlon.',
+	CONCAT(IF(p.type="datatype","","vocabulary:"),IF(rv.label LIKE "yes" AND p.type!="datatype",REPLACE(rk.label,":","%25"),rv.label)) AS "t:unc",
+	IF(p.type="classification" OR (p.type!="datatype" AND rv.label LIKE "yes"),"rdf:type",
+		CONCAT(REPLACE(rk.label,":","%25"),IF(p.type="datatype","","->"))
+	) a,
+	'.$distance.'
+FROM  elements n
+  INNER JOIN tags t USING(type,id) INNER JOIN properties p ON(t.k=p.id)
+  INNER JOIN tags tp ON(tp.id=t.id)
+  INNER JOIN resources rk ON(rk.id=t.k)
+  INNER JOIN resources rv ON(rv.id=t.v)
+WHERE tp.k=(SELECT id FROM resources WHERE label="$4" LIMIT 1)
+	AND '.$box.'
+HAVING distance < $3 LIMIT 1000',
+
+
+/**
+ * near/$lat,$lon/$dist/$prop=$value
+ */
+	'/^near\/(-?[0-9\.]+),(-?[0-9\.]+)\/([0-9]+)\/([^\/=]+)=(.+)\/?$/'=>'
+SELECT  CONCAT("base:",n.type,"/",n.id,"#id") AS id, CONCAT("vocabulary:",n.type) AS "rdf:type",'.$latlon.',
+	CONCAT(IF(p.type="datatype","","vocabulary:"),IF(rv.label LIKE "yes" AND p.type!="datatype",REPLACE(rk.label,":","%25"),rv.label)) AS "t:unc",
+	IF(p.type="classification" OR (p.type!="datatype" AND rv.label LIKE "yes"),"rdf:type",
+		CONCAT(REPLACE(rk.label,":","%25"),IF(p.type="datatype","","->"))
+	) a,
+	'.$distance.'
+FROM  elements n
+  INNER JOIN tags t USING(type,id) INNER JOIN properties p ON(t.k=p.id)
+  INNER JOIN tags tp ON(tp.id=t.id)
+  INNER JOIN resources rk ON(rk.id=t.k)
+  INNER JOIN resources rv ON(rv.id=t.v)
+WHERE tp.k=(SELECT id FROM resources WHERE label="$4" LIMIT 1) AND tp.v=(SELECT id FROM resources WHERE label="$5" LIMIT 1)
+	AND '.$box.'
+HAVING distance < $3 LIMIT 1000',
+
+
+/**
+ * Pattern for near/$lon,$lat/$dist/class/$className
+ * (with optional / at end)
+ *
+ * The s prefix on sp, sk and sv can be read as 'search'.
+ * So we search for entities with the given constraints on their
+ * properties, and then fetch all properties they have.
+ */
+'/^near\/(-?[0-9\.]+),(-?[0-9\.]+)\/([0-9]+)\/class\/(.+)\/?$/'=>'
+SELECT
+	CONCAT("base:", n.type, "/", n.id, "#id") AS id,
+	CONCAT("vocabulary:", n.type)             AS "rdf:type",
+	'.$latlon.',
+	CONCAT(
+	    IF(p.type = "datatype", "", "vocabulary:"),
+		IF(rv.label LIKE "yes" AND p.type != "datatype",
+		    REPLACE(rk.label,":","%25"),
+			rv.label)
+	)                                         AS "t:unc",
+	IF(p.type = "classification" OR
+	    (p.type != "datatype" AND rv.label LIKE "yes"),
+		"rdf:type",
+		CONCAT(REPLACE(rk.label,":","%25"),IF(p.type="datatype","","->"))
+	)                                         AS a,
+	'.$distance.'
+FROM
+    elements n
+    INNER JOIN tags       st ON ((st.type, st.id) = (n.type, n.id))
+    INNER JOIN properties sp ON (sp.id = st.k)
+    INNER JOIN resources  sk ON (sk.id = st.k)
+    INNER JOIN resources  sv ON (sv.id = st.v)
+
+    INNER JOIN tags       t  ON ((t.type, t.id) = (n.type, n.id))
+    INNER JOIN properties p  ON (p.id  = t.k)
+    INNER JOIN resources  rk ON (rk.id = t.k)
+    INNER JOIN resources  rv ON (rv.id = t.v)
+
+WHERE
+    sp.type   = "classification" AND
+	(sk.label = "$4" OR sv.label = "$4")
+	AND '.$box.'
+HAVING distance < $3 LIMIT 1000',
+
+	'nodeold'=>array(
+		'SELECT CONCAT("base:node/",n.id,"#id") AS id,'.$latlon.' FROM nodes n WHERE 1',
+		't.id'=>'SELECT CONCAT("base:node/",t.id,"#id") AS id,
+				CONCAT(IF(p.type="datatype","","vocabulary:"),IF(v.label LIKE "yes" AND p.type!="datatype",REPLACE(k.label,":","%25"),v.label)) AS "t:unc",
+				IF(p.type="classification" OR (p.type!="datatype" AND v.label LIKE "yes"),"rdf:type",
+					CONCAT(REPLACE(k.label,":","%25"),IF(p.type="datatype","","->"))
+				) a
+			FROM tags t INNER JOIN properties p ON(t.k=p.id)
+				INNER JOIN resources v ON(v.id=t.v) INNER JOIN resources k ON(k.id=t.k)
+			WHERE t.type="node"',
+		'node_id'=>'SELECT CONCAT("base:node/",node_id,"#id") AS id, CONCAT(id,"#id") AS "memberOfWay->way", sequence_id FROM way_nodes WHERE 1',
+		'n.id'=>'SELECT CONCAT("base:node/",n.id,"#id"), cb.id AS "locatedNear->way" FROM closedway_boundaries cb INNER JOIN nodes n
+			WHERE n.latitude BETWEEN minlat AND maxlat AND n.longitude BETWEEN minlon AND maxlon',
+                'SELECT CONCAT("base:node/",id,"#id"), CONCAT("dbp:",article) AS "owl:sameAs->" FROM `lgd-dbp` WHERE type="node"'
+	),
+
+
+	'/^node\/(.+)\/?$/'=>array(
+		'SELECT CONCAT("base:node/",n.id,"#id") AS id,'.$latlon.' FROM nodes n WHERE id = $1',
+		'SELECT CONCAT("base:node/",t.id,"#id") AS id,
+				CONCAT(IF(p.type="datatype","","vocabulary:"),IF(v.label LIKE "yes" AND p.type!="datatype",REPLACE(k.label,":","%25"),v.label)) AS "t:unc",
+				IF(p.type="classification" OR (p.type!="datatype" AND v.label LIKE "yes"),"rdf:type",
+					CONCAT(REPLACE(k.label,":","%25"),IF(p.type="datatype","","->"))
+				) a
+			FROM tags t INNER JOIN properties p ON(t.k=p.id)
+				INNER JOIN resources v ON(v.id=t.v) INNER JOIN resources k ON(k.id=t.k)
+			WHERE t.type="node" AND t.id = $1'
+			,
+		'SELECT CONCAT("base:node/",node_id,"#id") AS id, CONCAT(id,"#id") AS "memberOfWay->way", sequence_id FROM way_nodes WHERE node_id = $1',
+		'SELECT CONCAT("base:node/",n.id,"#id"), cb.id AS "locatedNear->way" FROM closedway_boundaries cb INNER JOIN nodes n
+			WHERE n.latitude BETWEEN minlat AND maxlat AND n.longitude BETWEEN minlon AND maxlon',
+                'SELECT CONCAT("base:node/",id,"#id"), CONCAT("dbp:",article) AS "owl:sameAs->" FROM `lgd-dbp` WHERE type="node" AND n.id = $1',
+		$georssNodeQuery
+	),
+
+
+	'/^way\/(.+)\/?$/'=>array(
+		't.id'=>'SELECT CONCAT("base:way/",t.id,"#id") AS id,
+				CONCAT(IF(p.type="datatype","","vocabulary:"),IF(v.label LIKE "yes" AND p.type!="datatype",REPLACE(k.label,":","%25"),v.label)) AS "t:unc",
+				IF(p.type="classification" OR (p.type!="datatype" AND v.label LIKE "yes"),"rdf:type",
+					CONCAT(REPLACE(k.label,":","%25"),IF(p.type="datatype","","->"))
+				) a
+			FROM tags t INNER JOIN properties p ON(t.k=p.id)
+				INNER JOIN resources v ON(v.id=t.v) INNER JOIN resources k ON(k.id=t.k)
+			WHERE t.type="way" AND t.id = $1',
+		'SELECT CONCAT("base:way/",id,"#id") AS id, CONCAT(node_id,"#id") AS "hasNode->node" FROM way_nodes WHERE id = $1',
+		$georssWayQuery
+	),
+
+/*	'/^node\/([0-9]+)\/?$/'=>'
+SELECT CONCAT("base:node/",n.id) AS id,longitude/10000000 AS longitude,latitude/10000000 AS latitude,
+	rv.label AS "t:unc", REPLACE(rk.label,":","%25")
+FROM nodes n
+  INNER JOIN tags t ON(n.id=t.id AND t.type="node")
+  INNER JOIN resources rk ON(rk.id=t.k)
+  INNER JOIN resources rv ON(rv.id=t.v)
+WHERE n.id=$1',
+
+	'point'=>'
+SELECT CONCAT("http://linkedgeodata.org/triplify/point/",n.id) AS id,longitude/10000000 AS longitude,latitude/10000000 AS latitude,
+	value AS "t:unc",REPLACE(property,":","%25")
+FROM tag_nodes n
+  INNER JOIN tags USING(id)'*/
+);
+
+$triplify['objectProperties']=array(
+	'sioc:has_creator'=>'user',
+	'rdf:type'=>'',
+	'dc:publisher'=>'',
+);
+
+$triplify['classMap']=array(
+	'user'=>'foaf:person'
+);
+
+$triplify['license']='http://creativecommons.org/licenses/by-sa/2.0/';
+
+$triplify['metadata']=array(
+	'vocabulary:attribution'=>'This data is derived from information collected by the OpenStreetMap project (http://www.openstreetmap.org).',
+	'dc:title'=>'',
+	'dc:publisher'=>'AKSW research group (http://aksw.org)'
+);
+
+#$triplify['register']=true;
+
+$triplify['TTL']=36000;
+
+$triplify['cachedir']='cache/';
+
+$triplify['LinkedDataDepth']='3';
+
+$triplify['CallbackFunctions']=array(
+);
+?>
