@@ -1,0 +1,283 @@
+http://postgis.refractions.net/documentation/manual-1.3/ch03.html
+
+Distance(), ST_Intersects(), ST_Contains() and ST_Within(),
+WHERE the_geom && 'BOX3D(90900 190900, 100100 200100)'::box3d
+
+create index idx_test on nodes using gist(geom) WHERE user_id > 1000 and user_id < 2000;
+explain select * from nodes where Distance(geom, 'POINT(0.0 0.0)', 1000) and user_id > 4;
+
+This query doesn't use indices:
+Ok, the reference clearifies: http://postgis.refractions.net/documentation/manual-1.3/ch06.html
+Its just the cartesian distance between two vectors - so nothing geo specific.
+SELECT * FROM view_geoms g WHERE Distance(g.geom, GeomFromEWKT('SRID=4326;POINT(13.828.0 50.99)')) < 1000;
+
+
+This query seems to work efficiently:
+SELECT * FROM view_geoms g WHERE ST_DWithin(g.geom, GeomFromEWKT('SRID=4326;POINT(13.828 50.99)'), 10);
+
+
+Resource table
+-------------------------------------------------------------------------------
+DROP TABLE IF EXISTS lgd_resources;
+CREATE TABLE lgd_resources (
+	id    BIGSERIAL,
+	label TEXT NOT NULL UNIQUE
+);
+
+
+
+INSERT
+	INTO lgd_resources(label)
+		SELECT
+			DISTINCT tmp.label
+		FROM
+			((SELECT tk.k AS label FROM tags AS tk)
+			UNION ALL (SELECT tv.v AS label FROM tags AS tv)) tmp
+		WHERE
+			NOT EXISTS(SELECT r.id FROM lgd_resources r WHERE r.label = tmp.label)
+;
+
+
+Tile statistics (key only)
+-------------------------------------------------------------------------------
+DROP TABLE IF EXISTS lgd_stats_tile_key_count;
+CREATE TABLE lgd_stats_tile_key_count (
+	tile BIGINT(10)   NOT NULL,
+	k    BIGINT       NOT NULL,
+	c    UNSIGNED INT NOT NULL,
+	
+	PRIMARY KEY(tile, key)
+);
+
+
+Tile statistics (key-value)
+-------------------------------------------------------------------------------
+DROP TABLE IF EXISTS lgd_stats_tile_key_value_freq;
+CREATE TABLE lgd_stats_tile_key_value_freq (
+	tile  BIGINT(10)   NOT NULL,
+	k     BIGINT       NOT NULL,
+	v     BIGINT       NOT NULL,
+	c    UNSIGNED INT NOT NULL,
+	
+	PRIMARY KEY(tile, key)
+);
+
+
+
+View for ways and nodes
+-------------------------------------------------------------------------------
+CREATE VIEW view_geoms AS
+	SELECT
+		t.type, t.id, t.geom
+	FROM
+		((SELECT OSMEntityType('node') AS type, n.id AS id, n.geom FROM nodes n) UNION ALL
+		 (SELECT OSMEntityType('way') AS type, w.id AS id, w.linestring AS geom FROM ways w)) AS t;
+
+
+-------------------------------------------------------------------------------
+
+
+trigger
+Enabling/Disabling of triggers:
+DISABLE TRIGGER [ trigger_name | ALL | USER ]
+ENABLE TRIGGER [ trigger_name | ALL | USER ]
+
+
+OSMEntityType
+-------------------------------------------------------------------------------
+DROP TYPE IF EXISTS OSMEntityType;
+CREATE TYPE OSMEntityType AS ENUM ('node', 'way', 'relation');
+-------------------------------------------------------------------------------
+
+
+OntologyEntityType
+-------------------------------------------------------------------------------
+DROP TYPE IF EXISTS OntologyEntityType;
+CREATE TYPE OntologyEntityType AS ENUM ('Class', 'ObjectProperty', 'DatatypeProperty');
+-------------------------------------------------------------------------------
+
+
+
+elements table definition
+-------------------------------------------------------------------------------
+
+
+
+-------------------------------------------------------------------------------
+
+
+elements table initialization
+
+('created_by','ele','time','layer','source','tiger:tlid','tiger:county','tiger:upload_uuid','attribution','source_ref','KSJ2:coordinate','KSJ2:lat','KSJ2:long','KSJ2:curve_id','AND_nodes','converted_by');
+
+
+properties table creation
+-------------------------------------------------------------------------------
+CREATE TABLE properties(
+	k                    TEXT               NOT NULL,
+	ontology_entity_type OntologyEntityType,
+	usage_count          BIGINT             NOT NULL,
+	distinct_value_count BIGINT             NOT NULL,
+	PRIMARY KEY(k)
+)
+
+
+property table initialization
+-------------------------------------------------------------------------------
+INSERT INTO
+	properties(k, ontology_entity_type, usage_count, distinct_value_count)
+SELECT
+	t.k, NULL, COUNT(t.k), COUNT(DISTINCT t.v)
+FROM 
+	tags AS t
+GROUP BY
+	t.k
+
+
+Classification query (for properties)
+-------------------------------------------------------------------------------
+UPDATE
+	properties p
+SET ontology_entity_type = 'Class'
+WHERE p.k IN (
+	'highway','barrier','cycleway','waterway','lock','railway','aeroway','aerialway','power','man_made','building','leisure','amenity','shop','tourism','historic','landuse','military','natural','route','boundary','sport'
+);
+
+
+
+
+-------------------------------------------------------------------------------
+
+ id           | bigint                      | not null
+ version      | integer                     | not null
+
+
+
+
+
+view_tags [FINAL]
+Note: Using strings instead of enums or integers doesn't work with the optimizer
+-------------------------------------------------------------------------------
+CREATE VIEW tags AS
+	SELECT
+		t.osm_entity_type, t.osm_entity_id, t.k, t.v
+	FROM
+		((SELECT OSMEntityType('node') AS osm_entity_type, node_id AS osm_entity_id, k, v FROM node_tags) UNION ALL
+		 (SELECT OSMEntityType('way') AS osm_entity_type, way_id AS osm_entity_id, k, v FROM way_tags) UNION ALL
+		 (SELECT OSMEntityType('relation') AS osm_entity_type, relation_id AS osm_entity_id, k, v FROM relation_tags)) AS t;
+-------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+CREATE VIEW view_tags AS SELECT
+type, id, k, v
+FROM
+((SELECT 1 AS type, node_id AS id, k, v FROM node_tags) UNION ALL
+(SELECT 2 AS type, way_id AS id, k, v FROM way_tags) UNION ALL
+(SELECT 3 AS type, relation_id AS id, k, v FROM relation_tags)) AS tags;
+
+
+
+
+
+
+CREATE VIEW view_tags AS SELECT
+*
+FROM
+((SELECT 'node' AS type, node_id AS id, k, v FROM node_tags) UNION ALL
+(SELECT 'way' AS type, way_id AS id, k, v FROM way_tags) UNION ALL
+(SELECT 'relation' AS type, relation_id AS id, k, v FROM relation_tags)) AS tags;
+
+CREATE VIEW view_tags AS SELECT
+type, id, k, v
+FROM
+((SELECT 'node' AS type, id, k, v FROM (SELECT node_id AS id, k, v FROM node_tags) AS a) UNION ALL
+(SELECT 'way'  AS type, id, k, v FROM (SELECT way_id  AS id, k, v FROM way_tags) AS b) UNION ALL
+(SELECT 'relation' AS type, id, k, v FROM (SELECT relation_id AS id, k, v FROM relation_tags) AS c)) AS tags;
+
+
+
+
+SELECT
+	COUNT(*)
+FROM
+	((SELECT 'node' AS type, node_id AS id, k, v FROM node_tags) UNION ALL
+	(SELECT 'way' AS type, way_id AS id, k, v FROM way_tags) UNION ALL
+	(SELECT 'relation' AS type, relation_id AS id, k, v FROM relation_tags)) AS tags
+;
+
+
+
+		SELECT
+			mm.way_id,
+			CASE WHEN wn_min.node_id = wn_max.node_id THEN
+				CASE WHEN mm.node_count >= 4 THEN 'polygon' ELSE 'error' END
+			ELSE
+				CASE WHEN mm.node_count >= 2 THEN 'line' ELSE 'error' END
+			END
+			AS way_type
+		FROM (
+			SELECT
+				wn.way_id,
+				MIN(wn.sequence_id) AS min_seq_id,
+				MAX(wn.sequence_id) AS max_seq_id,
+				COUNT(*) AS node_count
+			FROM
+				way_nodes wn
+			WHERE
+				wn.way_id = 92
+			GROUP BY
+				wn.way_id
+		) mm
+			INNER JOIN way_nodes wn_min ON ((wn_min.way_id, wn_min.sequence_id) = (mm.way_id, mm.min_seq_id))
+			INNER JOIN way_nodes wn_max ON ((wn_max.way_id, wn_max.sequence_id) = (mm.way_id, mm.max_seq_id))
+		;
+
+
+
+
+
+
+
+
+
+
+GROUP_CONCAT QUERY:
+	SELECT
+	    w.id,
+		array_to_string(array(
+			SELECT
+				X(n.geom) || ' ' || Y(n.geom)
+			FROM
+				way_nodes wn
+				INNER JOIN nodes n ON (n.id = wn.node_id)
+			WHERE
+				wn.way_id = w.id
+			ORDER BY
+				wn.sequence_id
+		), ' ') AS val
+	FROM
+		ways w
+	WHERE
+		w.id = 92
+
+
+			SELECT
+				wn.way_id, wn.sequence_id, n.id, X(n.geom) || ' ' || Y(n.geom)
+			FROM
+				way_nodes wn
+				INNER JOIN nodes n ON (n.id = wn.node_id)
+			WHERE
+				wn.way_id = 92
+			ORDER BY
+				wn.sequence_id
+
