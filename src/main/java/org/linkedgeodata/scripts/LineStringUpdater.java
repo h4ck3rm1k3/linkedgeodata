@@ -5,6 +5,9 @@ import java.sql.DriverManager;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.lang.time.StopWatch;
 import org.apache.log4j.Logger;
@@ -23,7 +26,8 @@ class Updater
 
 	enum Queries {
 		WAY_CANDIDATE_QUERY,
-		WAY_UPDATE_QUERY
+		WAY_UPDATE_QUERY,
+		WAY_BUILD_QUERY
 	}
 	
 	public Updater()
@@ -31,15 +35,69 @@ class Updater
 		init(1000);
 	}
 	
+	public Updater(int n)
+	{
+		init(n);
+	}
+	
 	public void init(int n)
 	{
 		String wayCandidateQuery = "SELECT * FROM ways w WHERE w.linestring IS NULL LIMIT " + n;
 		setPreparedStatement(Queries.WAY_CANDIDATE_QUERY, wayCandidateQuery);
 
+		//select wn.way_id, wn.sequence_id, ST_AsEWKT(n.geom) from way_nodes wn JOIN nodes n ON (n.id = wn.node_id) where wn.way_id = 2598935;
+		// For testing reasons do not update the database.
 		String placeHolders = SQLUtil.placeHolder(n, 1);		
-		String wayUpdateQuery = "UPDATE ways w SET linestring = (SELECT MakeLine(c.geom) AS way_line FROM (SELECT n.geom AS geom FROM nodes n INNER JOIN way_nodes wn ON n.id = wn.node_id WHERE (wn.way_id = w.id) ORDER BY wn.sequence_id) c) WHERE w.id IN (" + placeHolders + ")";
-		setPreparedStatement(Queries.WAY_UPDATE_QUERY, wayUpdateQuery);		
+		String waySelectQuery =
+				"SELECT\n" +
+				"	c.way_id,\n" +
+				"	MakeLine(c.geom) AS way_line\n" +
+				"FROM\n" +
+				"	(\n" +
+				"		SELECT\n" +
+				"			wn.way_id,\n" +
+				"			n.geom\n" +
+				"		FROM\n" +
+				"			way_nodes wn\n" +
+				"			INNER JOIN nodes n ON (n.id = wn.node_id)\n" +
+				"		WHERE\n" +
+				"			wn.way_id IN (" + placeHolders + ")\n" +
+				"		ORDER BY\n" +
+				"			wn.way_id,\n" +
+				"			wn.sequence_id\n" +
+				"	) AS c\n" +
+				"GROUP BY\n" +
+				"	c.way_id\n";
+		
+		String wayUpdateQuery =
+			"UPDATE\n" +
+			"	ways w\n" +
+			"SET linestring = (\n" +
+			"	SELECT\n" +
+			"		MakeLine(c.geom) AS way_line\n" +
+			"	FROM (\n" +
+			"		SELECT\n" +
+			"			n.geom\n" +
+			"		FROM\n" +
+			"			way_nodes wn\n" +
+			"			INNER JOIN nodes n ON (n.id = wn.node_id)\n" +
+			"		WHERE\n" +
+			"			wn.way_id = w.id\n" +
+			"		ORDER BY\n" +
+			"			wn.sequence_id\n" +
+			"	) AS c\n" +
+			")\n" +
+			"WHERE\n" +
+			"	w.id IN (" + placeHolders + ")\n";
+		System.out.println(wayUpdateQuery);
+		setPreparedStatement(Queries.WAY_UPDATE_QUERY, wayUpdateQuery);
 
+		/*
+		String placeHolders = SQLUtil.placeHolder(n, 1);		
+		String wayUpdateQuery = "UPDATE ways w SET linestring = (SELECT MakeLine(c.geom) AS way_line FROM (SELECT n.geom AS geom FROM nodes n INNER JOIN way_nodes wn ON n.id = wn.node_id WHERE (wn.way_id = w.id) ORDER BY wn.sequence_id) AS c) WHERE w.id IN (" + placeHolders + ")";
+		setPreparedStatement(Queries.WAY_UPDATE_QUERY, wayUpdateQuery);		
+*/
+		
 		this.n = n;
 	}
 	
@@ -80,30 +138,13 @@ public class LineStringUpdater
 {
 	private static final Logger logger = Logger.getLogger(LineStringUpdater.class);
 	
-    protected Options cliOptions;
+    protected static Options cliOptions;
 	
-    
-	/*************************************************************************/
-	/* Init                                                                  */
-	/*************************************************************************/	
-	private void initCliOptions()
-	{
-		cliOptions = new Options();
-		
-		cliOptions.addOption("t", "type", true, "Database type (posgres, mysql,...)");
-		cliOptions.addOption("db", "database", true, "Database name");
-		cliOptions.addOption("u", "user", true, "");
-		cliOptions.addOption("p", "password", true, "");
-		cliOptions.addOption("h", "host", true, "");
-	}
-
-	public void run()
+	
+	public static void run(Connection conn, int batchSize)
 		throws Exception
 	{
-		Connection conn = null;
-		logger.info("Connected to db");
-		
-		Updater updater = new Updater();
+		Updater updater = new Updater(batchSize);
 		updater.setConnection(conn);
 		
 		StopWatch sw = new StopWatch();
@@ -111,7 +152,8 @@ public class LineStringUpdater
 		long updateCounter = 0;
 		float lastTime = 0.0f;
 		for(;;) {
-			updateCounter += updater.step();
+			int stepCount = updater.step(); 
+			updateCounter += stepCount;
 			
 			float elapsed = sw.getTime() / 1000.0f;
 			float delta = elapsed - lastTime;
@@ -119,7 +161,7 @@ public class LineStringUpdater
 			float ratio = updateCounter / elapsed;
 			
 			if(delta >= 5.0f) {
-				logger.info("Elapsed: " + elapsed + ", Counter: " + updateCounter + ", Ratio = " + ratio);
+				logger.info("Elapsed: " + elapsed + ", Counter: " + updateCounter + ", Ratio = " + ratio + ", Recent step: " + stepCount);
 				
 				lastTime = elapsed;
 			}
@@ -129,6 +171,50 @@ public class LineStringUpdater
 		
 		
 	}
+
+	public static void main(String[] args)
+		throws Exception
+	{
+		PropertyConfigurator.configure("log4j.properties");
+
+		initCLIOptions();
+
+		CommandLineParser cliParser = new GnuParser();
+		CommandLine commandLine = cliParser.parse(cliOptions, args);
+
+		String hostName = commandLine.getOptionValue("h", "localhost");
+		String dbName   = commandLine.getOptionValue("d", "lgd");
+		String userName = commandLine.getOptionValue("u", "lgd");
+		String passWord = commandLine.getOptionValue("p", "lgd");
+
+		String batchSizeStr = commandLine.getOptionValue("n", "1000");
+
+		int batchSize = Integer.parseInt(batchSizeStr);
+		if(batchSize <= 0)
+			throw new RuntimeException("Invalid argument for batchsize");
+		
+		Connection conn = connectPostGIS(hostName, dbName, userName, passWord);
+		logger.info("Connected to db");
+		
+
+		run(conn, batchSize);		
+	}
+    
+	/*************************************************************************/
+	/* Init                                                                  */
+	/*************************************************************************/	
+	private static void initCLIOptions()
+	{
+		cliOptions = new Options();
+		
+		cliOptions.addOption("t", "type", true, "Database type (posgres, mysql,...)");
+		cliOptions.addOption("d", "database", true, "Database name");
+		cliOptions.addOption("u", "user", true, "");
+		cliOptions.addOption("p", "password", true, "");
+		cliOptions.addOption("h", "host", true, "");
+		cliOptions.addOption("n", "batchSize", true, "Batch size");
+	}
+
 
 	
 	private static Connection connectSQL(String hostName, String dbName, String userName, String passWord)
@@ -156,16 +242,6 @@ public class LineStringUpdater
 		Connection conn = DriverManager.getConnection(url, userName, passWord);
 		
 		return conn;
-	}
-	
-	public static void main(String[] args)
-		throws Exception
-	{
-		PropertyConfigurator.configure("log4j.properties");
-
-		LineStringUpdater o = new LineStringUpdater();
-		o.run();
-		
 	}
 	
 }

@@ -166,10 +166,13 @@ public class SQLUtil
 			stmt.setObject(i + 1, args[i]);
 		}
 		
-		// Pad with zeroes
-		for(int i = args.length; i < stmt.getParameterMetaData().getParameterCount(); ++i) {
+		// Pad with nulls
+		int n = stmt.getParameterMetaData().getParameterCount();
+		//System.out.println("x = " + n);
+		for(int i = args.length; i < n; ++i) {
 			stmt.setObject(i + 1, null);
 		}
+		//System.out.println("y = " + n);
 	}
 	
 	public static <T> T execute(PreparedStatement stmt, Class<T> clazz, Object ...args)

@@ -119,7 +119,9 @@ CREATE TABLE properties(
 	usage_count          BIGINT             NOT NULL,
 	distinct_value_count BIGINT             NOT NULL,
 	PRIMARY KEY(k)
-)
+);
+
+CREATE INDEX idx_properties_ontology_entity_type_k ON properties(ontology_entity_type, k);
 
 
 property table initialization
@@ -281,3 +283,32 @@ GROUP_CONCAT QUERY:
 			ORDER BY
 				wn.sequence_id
 
+
+
+
+
+
+Unfortunately the view is not browsable this way
+(e.g. select * from waylines LIMIT 5 does not work)
+DROP VIEW IF EXISTS waylines;
+CREATE VIEW
+	waylines
+AS
+SELECT
+	c.way_id,
+	MakeLine(c.geom) AS way_line
+FROM
+	(
+		SELECT
+			wn.way_id,
+			n.geom
+		FROM
+			way_nodes wn
+			INNER JOIN nodes n ON (n.id = wn.node_id)
+		ORDER BY
+			wn.way_id,
+			wn.sequence_id
+	) AS c
+GROUP BY
+	c.way_id
+;
