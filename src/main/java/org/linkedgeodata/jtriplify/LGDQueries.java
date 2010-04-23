@@ -7,25 +7,20 @@ import org.apache.log4j.Logger;
 import org.linkedgeodata.core.dao.AbstractDAO;
 import org.linkedgeodata.util.SQLUtil;
 
+/**
+ * Helper class for building the LGD queries.
+ * This class should only do string manips - so no database stuff
+ * should go here.
+ * 
+ * Database stuff should go to LGDDAO
+ * 
+ * @author raven
+ *
+ */
 public class LGDQueries
 {
-	private static final Logger logger = Logger.getLogger(LGDQueries.class);
 
-	private int n;
-
-	enum Queries {
-		NODE_FIND,
-		NODE_FIND_K,
-		NODE_FIND_K_AND_V,
-		NODE_FIND_K_OR_V,
-		
-		WAY_FIND,
-		WAY_FIND_K,
-		WAY_FIND_K_AND_V,
-		WAY_FIND_K_OR_V
-	}
-
-	private static String distancePostGISSphere(
+	public static String distancePostGISSphere(
 			String geomCol,
 			String latArg,
 			String lonArg)
@@ -40,7 +35,7 @@ public class LGDQueries
 		return result;
 	}
 
-	private static String predicateBBox(
+	public static String predicateBBox(
 			String distance,
 			String latArg,
 			String lonArg)
@@ -67,7 +62,7 @@ public class LGDQueries
 		return result;
 	}
 
-	private String createPredicate(String relName, String k, String v, boolean bOr)
+	public static String createPredicate(String relName, String k, String v, boolean bOr)
 	{
 		if(k == null && v == null)
 			return null;
@@ -91,7 +86,7 @@ public class LGDQueries
 		return kvPred;
 	}
 
-	private String findNodesQuery(String k, String v, boolean bOr, String distance_m)
+	public static String buildFindNodesQuery(String k, String v, boolean bOr, String distance_m)
 	{
 		String kvPred = createPredicate("snt", k, v, bOr);
 		if(kvPred != null)
@@ -119,6 +114,22 @@ public class LGDQueries
 		return result;
 	}
 
+	
+	public static String wayGeoRSSQuery =
+		"SELECT\n" +
+		"	('base:way/' || w.id || '#id') AS id,\n"  +
+		"	REPLACE(REPLACE(REPLACE(\n"  +
+		"			ST_AsText(ST_Affine(w.linestring, 0, 1, 1, 0, 0, 0))\n"  +
+		"	,'LINESTRING(', ''), ',', ' '), ')', '') AS \"t:unc\",\n"  +
+
+		"	(\n" +
+		"		'georss:' ||\n" +
+		"		CASE WHEN ST_IsClosed(w.linestring) THEN 'polygon' ELSE 'line' END\n" +		
+		"	) AS a\n" +
+		"FROM\n" +
+		"	ways w\n" +
+		"WHERE\n" +
+		"	w.id IN ($1)\n";
 	
 	
 

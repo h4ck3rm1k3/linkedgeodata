@@ -1,11 +1,16 @@
 package org.linkedgeodata.jtriplify;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.net.InetSocketAddress;
+import java.net.URI;
 import java.sql.Connection;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -15,12 +20,14 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.Options;
+import org.apache.commons.collections15.Transformer;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.linkedgeodata.scripts.LineStringUpdater;
 import org.linkedgeodata.util.ExceptionUtil;
 import org.linkedgeodata.util.StreamUtil;
 
+import com.hp.hpl.jena.rdf.model.Model;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
@@ -29,6 +36,8 @@ import com.sun.net.httpserver.HttpServer;
 
 class RegexInvocationContainer
 {
+	private static final Logger logger = Logger.getLogger(RegexInvocationContainer.class);
+
 	private Map<Pattern, IInvocable> patternToInvocable = new HashMap<Pattern, IInvocable>();
 	
 	public void put(String regex, IInvocable invocable)
@@ -41,7 +50,7 @@ class RegexInvocationContainer
 	private static Object invoke(Matcher matcher, String arg, IInvocable invocable)
 		throws Exception
 	{
-		System.out.println("invoking");
+		logger.info("Invoking: " + invocable);
 		int groupCount = matcher.groupCount();
 		Object[] args = new Object[groupCount];
 		
@@ -62,9 +71,13 @@ class RegexInvocationContainer
 			
 			Matcher matcher = pattern.matcher(arg);
 			if(matcher.matches()) {
+				logger.info("Value '" + arg + "' matched the pattern '" + pattern + "'");
+				
 				return invoke(matcher, arg, invocable);
 			}
 		}
+		
+		logger.info("No match found for '" + arg + "'");
 		
 		return null;
 	}
@@ -78,7 +91,7 @@ class MyHandler
 	private static final Logger logger = Logger.getLogger(JTriplifyServer.class);
 
 	private RegexInvocationContainer ric = null;
-	
+		
 	public void setInvocationMap(RegexInvocationContainer ric)
 	{
 		this.ric = ric;
@@ -125,12 +138,48 @@ class MyHandler
 }
 
 
+
+
+class ServerMethods
+{
+	private LinkedGeoDataDAO dao;
+	
+	public ServerMethods(LinkedGeoDataDAO dao)
+	{
+		this.dao = dao;
+	}
+	
+
+	public String getWay(String idStr)
+		throws Exception
+	{
+		Long id = Long.parseLong(idStr);
+		
+		
+		Model model = dao.getWayGeoRSS(Arrays.asList(id));
+		
+		String result = toString(model);
+		
+		return result;
+	}
+	
+	private static String toString(Model model)
+	{
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		model.write(baos, "N-TRIPLE", "");
+	
+		return baos.toString();
+	}
+}
+
+
 public class JTriplifyServer
 {
 	private static final Logger logger = Logger.getLogger(JTriplifyServer.class);
 	
 	protected static final Options cliOptions = new Options();
 	
+	private static void initCLIOptions()
 	{
 		cliOptions.addOption("p", "port", true, "Server port");
 		cliOptions.addOption("c", "context", true, "Context e.g. /triplify/");
@@ -139,7 +188,7 @@ public class JTriplifyServer
 		cliOptions.addOption("t", "type", true, "Database type (posgres, mysql,...)");
 		cliOptions.addOption("d", "database", true, "Database name");
 		cliOptions.addOption("u", "user", true, "");
-		cliOptions.addOption("p", "password", true, "");
+		cliOptions.addOption("w", "password", true, "");
 		cliOptions.addOption("h", "host", true, "");
 
 		cliOptions.addOption("n", "batchSize", true, "Batch size");
@@ -150,6 +199,7 @@ public class JTriplifyServer
 		System.out.println("In test");
 		return "Hello " + a + " and " + b + "!";
 	}
+
 
 	/*
 	public static void main(String[] args)
@@ -177,6 +227,7 @@ public class JTriplifyServer
 	{
 		PropertyConfigurator.configure("log4j.properties");
 
+		initCLIOptions();
 		CommandLineParser cliParser = new GnuParser();
 		CommandLine commandLine = cliParser.parse(cliOptions, args);
 
@@ -190,7 +241,7 @@ public class JTriplifyServer
 		String hostName = commandLine.getOptionValue("h", "localhost");
 		String dbName   = commandLine.getOptionValue("d", "lgd");
 		String userName = commandLine.getOptionValue("u", "lgd");
-		String passWord = commandLine.getOptionValue("p", "lgd");
+		String passWord = commandLine.getOptionValue("w", "lgd");
 
 		String batchSizeStr = commandLine.getOptionValue("n", "1000");
 		int batchSize = Integer.parseInt(batchSizeStr);
@@ -200,14 +251,31 @@ public class JTriplifyServer
 			throw new RuntimeException("Invalid argument for batchsize");
 		
 		// Setup
+		logger.info("Loading uri namespaces");
+		String fileName = "NamespaceResolv.ini";
+		File file = new File(fileName);
+		if(!file.exists()) {
+			throw new FileNotFoundException(fileName);
+		}
+		
+		Transformer<String, URI> uriResolver = new URIResolver(file);
+
+		
 		logger.info("Connecting to db");
 		Connection conn = LineStringUpdater.connectPostGIS(hostName, dbName, userName, passWord);
 
+		
+		LinkedGeoDataDAO dao = new LinkedGeoDataDAO(uriResolver);
+		dao.setConnection(conn);
+		
+		ServerMethods methods = new ServerMethods(dao);
+		
+		
 		RegexInvocationContainer ric = new RegexInvocationContainer();
 		
 		
-		Method m = JTriplifyServer.class.getMethod("test", String.class, String.class);
-		ric.put(".*test/([^/]*)/(.*)", new JavaMethodInvocable(m, null));
+		Method m = ServerMethods.class.getMethod("getWay", String.class);
+		ric.put(".*way/([^/]*)", new JavaMethodInvocable(m, methods));
 		
 		
 		MyHandler handler = new MyHandler();

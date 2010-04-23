@@ -101,7 +101,8 @@ public class URIResolver
 			if(prefix == null)
 				return null;
 			
-			String value = URLEncoder.encode(parts[1], "UTF-8");
+			//String value = URLEncoder.encode(parts[1], "UTF-8");
+			String value = parts[1];
 			return URI.create(prefix + value);
 		} catch(Exception e) {
 			logger.error(ExceptionUtil.toString(e));

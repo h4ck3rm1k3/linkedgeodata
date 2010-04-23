@@ -1,9 +1,11 @@
 package org.linkedgeodata.util;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -159,7 +161,7 @@ public class SQLUtil
 	}
 	
 	
-	public static <T> void executeSetArgs(PreparedStatement stmt, Class<T> clazz, Object ...args)
+	public static <T> void executeSetArgs(PreparedStatement stmt, Object ...args)
 		throws SQLException
 	{
 		for(int i = 0; i < args.length; ++i) {
@@ -175,10 +177,37 @@ public class SQLUtil
 		//System.out.println("y = " + n);
 	}
 	
+	public static <T> T execute(Connection conn, String sql, Class<T> clazz, Object ...args)
+		throws SQLException
+	{
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		
+		T result = execute(stmt, clazz, args);
+		
+		stmt.close();
+		
+		return result;
+	}
+	
+	public static ResultSet executeCore(Connection conn, String sql, Object ...args)
+		throws SQLException
+	{
+		logger.trace("Executing statement '" + sql + "' with args " + Arrays.asList(args));
+		
+		PreparedStatement stmt = conn.prepareStatement(sql);
+
+		executeSetArgs(stmt, args);
+		ResultSet result = stmt.executeQuery();
+		
+		//stmt.close();
+		
+		return result;
+	}
+	
 	public static <T> T execute(PreparedStatement stmt, Class<T> clazz, Object ...args)
 		throws SQLException
 	{
-		executeSetArgs(stmt, clazz, args);
+		executeSetArgs(stmt, args);
 	
 		T result = null;
 		if(clazz == null || Void.class.equals(clazz)) {
@@ -190,6 +219,18 @@ public class SQLUtil
 			rs.close();
 		}
 	
+		return result;
+	}
+
+	public static <T> List<T> executeList(Connection conn, String sql, Class<T> clazz, Object ...args)
+		throws SQLException
+	{
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		
+		List<T> result = executeList(stmt, clazz, args);
+		
+		stmt.close();
+		
 		return result;
 	}
 	

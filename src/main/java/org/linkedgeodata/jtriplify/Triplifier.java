@@ -53,7 +53,8 @@ public class Triplifier
 
 		List<String> result = new ArrayList<String>();
 		for(int i = 1; i <= metaData.getColumnCount(); ++i) {
-			result.add(metaData.getColumnClassName(i));
+			String columnName = metaData.getColumnName(i);
+			result.add(columnName);
 		}
 
 		return result;
@@ -115,6 +116,8 @@ public class Triplifier
 
 			
 			Triple triple = triplify(subject, p.toString(), v.toString(), uriResolver);
+			
+			result.add(triple);
 		}
 		
 		return result;
