@@ -225,6 +225,8 @@ public class SQLUtil
 	public static <T> List<T> executeList(Connection conn, String sql, Class<T> clazz, Object ...args)
 		throws SQLException
 	{
+		logger.trace("Executing statement '" + sql + "' with args " + Arrays.asList(args));
+
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		
 		List<T> result = executeList(stmt, clazz, args);

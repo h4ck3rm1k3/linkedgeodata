@@ -18,7 +18,7 @@ public class Benchmark
 
 		
 		//String prefix = "http://localhost:7000/triplify/node/";
-		String prefix = "http://localhost:80/triplify/node/";
+		String prefix = "http://localhost:7000/triplify/near/51.0,13.0/10";
 		
 		
 		//int maxNodeCount = 41101455
@@ -28,19 +28,20 @@ public class Benchmark
 		int offset = 104936;
 		//int offset = 24948370;
 		
-		for(int i = 0; i < 1000; ++i) {
+		for(int i = 0; i < 50; ++i) {
 			Random r = new Random();
 			long id = offset + r.nextInt(1000000);
 
-			URL url = new URL(prefix + id);
+			//URL url = new URL(prefix + id);
+			URL url = new URL(prefix);
 			
 			StopWatch sw = new StopWatch();
 			sw.start();
 			
 			String str = StreamUtil.toString(url.openStream());
-			
 			sw.stop();
 			
+			System.out.println(str);
 			System.out.println("Time taken: " + sw.getTime());
 			
 			sw.reset();

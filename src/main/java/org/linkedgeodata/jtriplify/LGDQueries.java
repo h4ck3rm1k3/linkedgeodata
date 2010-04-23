@@ -108,7 +108,7 @@ public class LGDQueries
 	public static String buildFindWaysQuery(String distance_m, String k, String v, boolean bOr)
 	{
 		String kvPred = createPredicate("swt", k, v, bOr);
-		if(kvPred != "")
+		if(!kvPred.isEmpty())
 			kvPred += " AND ";
 
 		String result =
@@ -119,8 +119,8 @@ public class LGDQueries
 			"	$join\n" +
 			"WHERE\n" +
 			"	$kvPred" +
-			" 	w.linestring && $predicateBBox" +
-			"	AND $distance < $distance_m" +
+			" 	w.linestring && $predicateBBox\n" +
+			"	AND $distanceFn < $distance_m\n" +
 			"LIMIT\n" +
 			"	1000\n";
 
@@ -129,7 +129,7 @@ public class LGDQueries
 		result = result.replace("$join", kvPred.isEmpty() ? "" : "INNER JOIN way_tags swt ON(swt.way_id = w.id)");
 		result = result.replace("$predicateBBox", predicateBBox(distance_m, "$1", "$2") );
 		result = result.replace("$distanceFn", distancePostGISSphere("w.linestring", "$1", "$2"));
-		result = result.replace("$distanceFn", distance_m);
+		result = result.replace("$distance_m", distance_m);
 
 		return result;
 	}
