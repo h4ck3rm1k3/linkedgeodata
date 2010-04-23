@@ -57,10 +57,7 @@ public class LGDQueries
 	}
 
 	public static String createPredicate(String relName, String k, String v, boolean bOr)
-	{
-		if(k == null && v == null)
-			return null;
-		
+	{		
 		String kvPred = "";
 		
 		String kPart = k != null ? relName + ".k = '" + k + "'" : "";
@@ -80,10 +77,10 @@ public class LGDQueries
 		return kvPred;
 	}
 
-	public static String buildFindNodesQuery(String k, String v, boolean bOr, String distance_m)
+	public static String buildFindNodesQuery(String distance_m, String k, String v, boolean bOr)
 	{
 		String kvPred = createPredicate("snt", k, v, bOr);
-		if(kvPred != null)
+		if(!kvPred.isEmpty())
 			kvPred += " AND ";
 
 		String result =
@@ -100,15 +97,15 @@ public class LGDQueries
 			"    1000";
 		
 		result = result.replace("$kvPred", kvPred);
-		result = result.replace("$join", kvPred != null ? "INNER JOIN node_tags snt ON (snt.node_id = n.id)" : "");
+		result = result.replace("$join", kvPred.isEmpty() ? "" : "INNER JOIN node_tags snt ON (snt.node_id = n.id)");
 		result = result.replace("$predicateBBox", predicateBBox(distance_m, "$1", "$2") );
 		result = result.replace("$distanceFn", distancePostGISSphere("n.geom", "$1", "$2"));
-		result = result.replace("$distanceFn", distance_m);
+		result = result.replace("$distance_m", distance_m);
 		
 		return result;
 	}
 	
-	public static String buildFindWaysQuery(String k, String v, boolean bOr, String distance_m)
+	public static String buildFindWaysQuery(String distance_m, String k, String v, boolean bOr)
 	{
 		String kvPred = createPredicate("swt", k, v, bOr);
 		if(kvPred != "")
@@ -129,7 +126,7 @@ public class LGDQueries
 
 
 		result = result.replace("$kvPred", kvPred);
-		result = result.replace("$join", kvPred != null ? "INNER JOIN way_tags swt ON(swt.way_id = w.id)" : "");
+		result = result.replace("$join", kvPred.isEmpty() ? "" : "INNER JOIN way_tags swt ON(swt.way_id = w.id)");
 		result = result.replace("$predicateBBox", predicateBBox(distance_m, "$1", "$2") );
 		result = result.replace("$distanceFn", distancePostGISSphere("w.linestring", "$1", "$2"));
 		result = result.replace("$distanceFn", distance_m);
@@ -172,8 +169,9 @@ public class LGDQueries
 
 		return result;
 	}
-
-
+	
+	
+	
 	public static final String nodeGeoRSSQuery =
 		"SELECT\n" +
 		"	('base:node/' || n.id || '#id') AS id,\n" +

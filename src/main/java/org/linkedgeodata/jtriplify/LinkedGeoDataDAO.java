@@ -11,6 +11,7 @@ import org.linkedgeodata.core.dao.AbstractDAO;
 import org.linkedgeodata.util.SQLUtil;
 
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
 
 
 public class LinkedGeoDataDAO
@@ -48,7 +49,15 @@ public class LinkedGeoDataDAO
 	}
 	*/
 	
-	public List<Long> getNodesWithinDistance(
+	enum OSMEntityType
+	{
+		NODE,
+		WAY,
+		RELATION
+	}
+	
+	public List<Long> getEntitiesWithinDistance(
+			OSMEntityType type,
 			double lat, 
 			double lon, 
 			double distance,
@@ -58,17 +67,33 @@ public class LinkedGeoDataDAO
 			int limit)
 		throws Exception
 	{
-		return null;
-		/*
-		String query = LGDQueries.findNodesQuery(k, v, bOr, distance)
+		String sql = null;
+		switch(type) {
+		case NODE:
+			sql = LGDQueries.buildFindNodesQuery("$3", k, v, bOr);
+			break;
+		case WAY:
+			sql = LGDQueries.buildFindWaysQuery("$3", k, v, bOr);
+			break;
+		default:
+			throw new RuntimeException("Not implemented");
+		}
+	
 
+		// TODO WARNING - SQL INJECTION UNSAFE CODE
+		sql = sql.replace("$1", "" + lat);
+		sql = sql.replace("$2", "" + lon);
+		sql = sql.replace("$3", "" + distance);
 		
-		List<Long> result =
-			SQLUtil.executeList(this.conn, query, Long.class,
-					lat, lon, distance);
+		if(k != null)
+			sql = sql.replace("$4", k);
 		
+		if(v != null)
+			sql = sql.replace("$5", v);
+		
+		List<Long> result = SQLUtil.executeList(conn, sql, Long.class);
+	
 		return result;
-		*/
 	}
 
 	
@@ -83,6 +108,10 @@ public class LinkedGeoDataDAO
 				public Model call()
 					throws Exception
 				{
+					if(ids.isEmpty()) {
+						return ModelFactory.createDefaultModel();
+					}
+
 					ResultSet rs = SQLUtil.executeCore(conn, finalSQL, ids.toArray());
 
 					Model result = TriplifyUtil.triplify(rs, uriResolver);
@@ -93,6 +122,7 @@ public class LinkedGeoDataDAO
 			
 		return result;
 	}
+	
 	
 	public Callable<Model> getNodeGeoRSS(Collection<Long> ids)
 		throws Exception

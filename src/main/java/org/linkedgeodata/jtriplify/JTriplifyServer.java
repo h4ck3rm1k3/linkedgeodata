@@ -32,6 +32,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.collections15.Transformer;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import org.linkedgeodata.jtriplify.LinkedGeoDataDAO.OSMEntityType;
 import org.linkedgeodata.scripts.LineStringUpdater;
 import org.linkedgeodata.util.ExceptionUtil;
 import org.linkedgeodata.util.StreamUtil;
@@ -161,16 +162,30 @@ class ServerMethods
 	}
 	
 	
-	public String getNear()
+	public String getNear(String latStr, String lonStr, String distanceStr)
+		throws Exception
 	{
-	
-		return null;
+		double lat = Double.parseDouble(latStr);
+		double lon = Double.parseDouble(lonStr);
+		double distance = Double.parseDouble(distanceStr);
+		
+		List<Model> models = getNearModels(lat, lon, distance);
+		
+		String result = toString(models);
+		
+		return result;
 	}
 	
-	public Model getNearModel(double lat, double lon, double distance, String k, String v, boolean bOr)
+	public List<Model> getNearModels(double lat, double lon, double distance)
+		throws Exception
 	{
+		List<Long> ids = dao.getEntitiesWithinDistance(OSMEntityType.NODE, lat, lon, distance, null, null, false, 1000);
 		
-		return null;
+		List<Callable<Model>> callables = getNodeModelQueries(ids);
+		
+		List<Model> result = executeAll(executor, callables);
+
+		return result;
 	}
 	
 	public String getNode(String idStr)
@@ -180,8 +195,9 @@ class ServerMethods
 		
 		final List<Long> ids = Arrays.asList(id);
 	
-		List<Model> models = getNodeModels(ids);
-		
+		List<Callable<Model>> callables = getNodeModelQueries(ids);
+		List<Model> models = executeAll(executor, callables);
+	
 		String result = toString(models);
 		
 		return result;
@@ -194,7 +210,8 @@ class ServerMethods
 		
 		final List<Long> ids = Arrays.asList(id);
 
-		List<Model> models = getWayModels(ids);
+		List<Callable<Model>> callables = getWayModelQueries(ids);
+		List<Model> models = executeAll(executor, callables);
 		
 		String result = toString(models);
 		
@@ -203,33 +220,29 @@ class ServerMethods
 
 
 	
-	public List<Model> getNodeModels(final List<Long> ids)
+	public List<Callable<Model>> getNodeModelQueries(final List<Long> ids)
 		throws Exception
 	{		
-		List<Callable<Model>> callables = new ArrayList<Callable<Model>>();
-		callables.add(dao.getNodeGeoRSS(ids));
-		callables.add(dao.getNodeWGSQuery(ids));		
-		callables.add(dao.getNodeTagsQuery(ids));
-		callables.add(dao.getNodeWayMemberQuery(ids));
-	
-		List<Model> result = executeAll(executor, callables);
-		
+		List<Callable<Model>> result = new ArrayList<Callable<Model>>();
+		result.add(dao.getNodeGeoRSS(ids));
+		result.add(dao.getNodeWGSQuery(ids));		
+		result.add(dao.getNodeTagsQuery(ids));
+		result.add(dao.getNodeWayMemberQuery(ids));
+			
 		return result;
 	}
 
 	
-	public List<Model> getWayModels(final List<Long> ids)
+	public List<Callable<Model>> getWayModelQueries(final List<Long> ids)
 		throws Exception
 	{
-		List<Callable<Model>> callables = new ArrayList<Callable<Model>>();
-		callables.add(dao.getWayGeoRSS(ids));
-		callables.add(dao.getWayTags(ids));
-		callables.add(dao.getWayNodes(ids));
+		List<Callable<Model>> result = new ArrayList<Callable<Model>>();
+		result.add(dao.getWayGeoRSS(ids));
+		result.add(dao.getWayTags(ids));
+		result.add(dao.getWayNodes(ids));
 	
-		List<Model> result = executeAll(executor, callables);
 		
 		return result;
-
 	}
 	
 	// TODO Add timeouts. Also add some features to abort queries
@@ -378,6 +391,8 @@ public class JTriplifyServer
 		m = ServerMethods.class.getMethod("getNode", String.class);
 		ric.put(".*node/([^/]*)", new JavaMethodInvocable(m, methods));
 
+		m = ServerMethods.class.getMethod("getNear", String.class, String.class, String.class);
+		ric.put(".*near/([^/]*),([^/]*)/(.*)", new JavaMethodInvocable(m, methods));
 		
 		MyHandler handler = new MyHandler();
 		handler.setInvocationMap(ric);

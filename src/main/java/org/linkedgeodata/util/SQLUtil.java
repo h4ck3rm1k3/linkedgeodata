@@ -237,7 +237,7 @@ public class SQLUtil
 	public static <T> List<T> executeList(PreparedStatement stmt, Class<T> clazz, Object ...args)
 		throws SQLException
 	{
-		executeSetArgs(stmt, clazz, args);
+		executeSetArgs(stmt, args);
 	
 		ResultSet rs = stmt.executeQuery();		
 		List<T> result = SQLUtil.list(rs, clazz);
