@@ -48,6 +48,52 @@ class Updater
 		//select wn.way_id, wn.sequence_id, ST_AsEWKT(n.geom) from way_nodes wn JOIN nodes n ON (n.id = wn.node_id) where wn.way_id = 2598935;
 		// For testing reasons do not update the database.
 		String placeHolders = SQLUtil.placeHolder(n, 1);		
+
+		// The idea is to sort the ways by the ways by their minimum node id
+		// so that the join with the node table becomes faster
+		/*
+		 * 
+		 SELECT
+		  	wn.way_id
+		 FROM
+		 	way_nodes wn
+		 ORDER BY
+		 	wn.node_id
+		 LIMIT 10
+
+		 SELECT
+		 	wn.way_id
+		 FROM
+		 	way_nodes wn
+		 GROUP BY
+		 	wn.way_id
+		 ORDER BY
+		 	MIN(wn.node_id)
+		 LIMIT 10
+		 */
+		
+		String waySelectQuery2 =
+			"SELECT\n" +
+			"	c.way_id,\n" +
+			"	MakeLine(c.geom) AS way_line\n" +
+			"FROM\n" +
+			"	(\n" +
+			"		SELECT\n" +
+			"			wn.way_id,\n" +
+			"			n.geom\n" +
+			"		FROM\n" +
+			"			way_nodes wn\n" +
+			"			INNER JOIN nodes n ON (n.id = wn.node_id)\n" +
+			"		WHERE\n" +
+			"			wn.way_id IN (" + placeHolders + ")\n" +
+			"		ORDER BY\n" +
+			"			wn.way_id,\n" +
+			"			wn.sequence_id\n" +
+			"	) AS c\n" +
+			"GROUP BY\n" +
+			"	c.way_id\n";
+		
+		
 		String waySelectQuery =
 				"SELECT\n" +
 				"	c.way_id,\n" +
@@ -234,7 +280,7 @@ public class LineStringUpdater
 		return conn;
 	}
 
-	private static Connection connectPostGIS(String hostName, String dbName, String userName, String passWord)
+	public static Connection connectPostGIS(String hostName, String dbName, String userName, String passWord)
 		throws Exception
 	{
 		String url = "jdbc:postgresql://" + hostName + "/" + dbName;

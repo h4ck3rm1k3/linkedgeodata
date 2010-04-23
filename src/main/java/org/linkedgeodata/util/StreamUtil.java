@@ -10,6 +10,12 @@ public class StreamUtil
 	public static String toString(InputStream in)
 		throws IOException
 	{
+		return toString(in, true);
+	}
+
+	public static String toString(InputStream in, boolean bClose)
+		throws IOException
+	{
 		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 	
 		String result = "";
@@ -17,6 +23,9 @@ public class StreamUtil
 		while(null != (line = reader.readLine()))
 			result += line + "\n";
 	
+		in.close();
+		reader.close();
+		
 		return result;
 	}
 }

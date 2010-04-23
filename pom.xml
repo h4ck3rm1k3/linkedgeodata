@@ -62,6 +62,20 @@
   		<type>jar</type>
   		<scope>compile</scope>
   	</dependency>
+  	<dependency>
+  		<groupId>net.sourceforge.collections</groupId>
+  		<artifactId>collections-generic</artifactId>
+  		<version>4.01</version>
+  		<type>jar</type>
+  		<scope>compile</scope>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.ini4j</groupId>
+  		<artifactId>ini4j</artifactId>
+  		<version>0.5.1</version>
+  		<type>jar</type>
+  		<scope>compile</scope>
+  	</dependency>
   </dependencies>
   <properties>
   	<maven.compiler.source>1.6</maven.compiler.source>
