@@ -1,6 +1,7 @@
 package org.linkedgeodata.jtriplify;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLEncoder;
 
@@ -72,7 +73,7 @@ public class URIResolver
 			}
 		}
 
-		try {
+		//try {
 			Section genericSection = ini.get("GENERIC");
 			String defaultPrefix  = genericSection.get("defaultPrefix");
 			
@@ -92,7 +93,12 @@ public class URIResolver
 				if(defaultPrefix == null)
 					return null;
 			
-				String value = URLEncoder.encode(parts[0], "UTF-8");
+				String value;
+				try {
+					value = URLEncoder.encode(parts[0], "UTF-8");
+				} catch (UnsupportedEncodingException e) {
+					throw new RuntimeException(e);
+				}
 				return URI.create(defaultPrefix + value);
 			}
 			// else:
@@ -104,10 +110,10 @@ public class URIResolver
 			//String value = URLEncoder.encode(parts[1], "UTF-8");
 			String value = parts[1];
 			return URI.create(prefix + value);
-		} catch(Exception e) {
-			logger.error(ExceptionUtil.toString(e));
-			return null;
-		}
+		//} catch(Exception e) {
+		//	logger.error(ExceptionUtil.toString(e));
+		//	return null;
+		//}
 	}
 	
 }

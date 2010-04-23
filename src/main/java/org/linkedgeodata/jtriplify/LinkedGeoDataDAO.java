@@ -4,6 +4,7 @@ import java.net.URI;
 import java.sql.ResultSet;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import org.apache.commons.collections15.Transformer;
 import org.linkedgeodata.core.dao.AbstractDAO;
@@ -69,22 +70,71 @@ public class LinkedGeoDataDAO
 		return result;
 		*/
 	}
-	
-	
-	// TODO handle empty id set
-	public Model getWayGeoRSS(Collection<Long> ids)
-		throws Exception
-	{
-		String sql = LGDQueries.wayGeoRSSQuery;
-		
-		String placeHolders = SQLUtil.placeHolder(ids.size(), 1);
-		sql = sql.replace("$1", placeHolders);
-		
-		
-		ResultSet rs = SQLUtil.executeCore(conn, sql, ids.toArray());
 
-		Model result = TriplifyUtil.triplify(rs, uriResolver);
+	
+	private Callable<Model> prepareSimpleIdBasedQuery(String sql, final Collection<Long> ids)
+	{
+		String placeHolders = SQLUtil.placeHolder(ids.size(), 1);
+		final String finalSQL = sql.replace("$1", placeHolders);
 		
+		Callable<Model> result =
+			new Callable<Model>() {
+				@Override
+				public Model call()
+					throws Exception
+				{
+					ResultSet rs = SQLUtil.executeCore(conn, finalSQL, ids.toArray());
+
+					Model result = TriplifyUtil.triplify(rs, uriResolver);
+					
+					return result;		
+				}
+			};
+			
 		return result;
 	}
+	
+	public Callable<Model> getNodeGeoRSS(Collection<Long> ids)
+		throws Exception
+	{
+		return prepareSimpleIdBasedQuery(LGDQueries.nodeGeoRSSQuery, ids);
+	}
+	
+	public Callable<Model> getNodeWGSQuery(Collection<Long> ids)
+		throws Exception
+	{
+		return prepareSimpleIdBasedQuery(LGDQueries.nodeWGSQuery, ids);
+	}
+	
+	
+	public Callable<Model> getNodeTagsQuery(Collection<Long> ids)
+		throws Exception
+	{
+		return prepareSimpleIdBasedQuery(LGDQueries.nodeTagsQuery, ids);
+	}
+	
+	public Callable<Model> getNodeWayMemberQuery(Collection<Long> ids)
+		throws Exception
+	{
+		return prepareSimpleIdBasedQuery(LGDQueries.nodeWayMemberQuery, ids);
+	}
+	
+	public Callable<Model> getWayGeoRSS(Collection<Long> ids)
+		throws Exception
+	{
+		return prepareSimpleIdBasedQuery(LGDQueries.wayGeoRSSQuery, ids);
+	}
+
+	public Callable<Model> getWayTags(Collection<Long> ids)
+		throws Exception
+	{
+		return prepareSimpleIdBasedQuery(LGDQueries.wayTagsQuery, ids);
+	}
+
+	public Callable<Model> getWayNodes(Collection<Long> ids)
+		throws Exception
+	{
+		return prepareSimpleIdBasedQuery(LGDQueries.wayNodeQuery, ids);
+	}
+
 }

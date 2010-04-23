@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.collections15.Transformer;
+import org.apache.log4j.Logger;
+import org.linkedgeodata.util.ExceptionUtil;
 import org.linkedgeodata.util.SinglePrefetchIterator;
 
 import com.hp.hpl.jena.graph.Node;
@@ -23,6 +25,8 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 
 public class Triplifier
 {
+	private static final Logger logger = Logger.getLogger(Triplifier.class);
+	
 	public static final String USE_NEXT_COLUMN = "t:unc";
 
 	public static void main(String[] args)
@@ -114,10 +118,14 @@ public class Triplifier
 				p = row.get(i);
 			}
 
+			try {
+				Triple triple = triplify(subject, p.toString(), v.toString(), uriResolver);
+				result.add(triple);
+			}
+			catch(Throwable e) {
+				logger.error(ExceptionUtil.toString(e));
+			}
 			
-			Triple triple = triplify(subject, p.toString(), v.toString(), uriResolver);
-			
-			result.add(triple);
 		}
 		
 		return result;
@@ -176,7 +184,7 @@ public class Triplifier
 		
 		
 		if(isPredicateAnObjectProperty) {
-			if(objectPrefix == null) {
+			if(objectPrefix.isEmpty()) {
 				object = uriResolver.transform(val);
 			}
 			else {
@@ -186,7 +194,7 @@ public class Triplifier
 				if(testResolve != null)
 					object = testResolve;
 				else
-					object = uriResolver.transform(objectPrefix) + "/" + val;
+					object = URI.create(uriResolver.transform(objectPrefix) + "/" + val);
 			}
 		}
 		else { // Datatype property

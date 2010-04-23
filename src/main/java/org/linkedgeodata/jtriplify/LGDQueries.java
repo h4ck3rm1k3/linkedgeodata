@@ -1,11 +1,5 @@
 package org.linkedgeodata.jtriplify;
 
-import java.util.Collection;
-import java.util.List;
-
-import org.apache.log4j.Logger;
-import org.linkedgeodata.core.dao.AbstractDAO;
-import org.linkedgeodata.util.SQLUtil;
 
 /**
  * Helper class for building the LGD queries.
@@ -106,16 +100,124 @@ public class LGDQueries
 			"    1000";
 		
 		result = result.replace("$kvPred", kvPred);
-		result = result.replace("$join", kvPred != "" ? "INNER JOIN node_tags snt ON (snt.node_id = n.id)" : "");
+		result = result.replace("$join", kvPred != null ? "INNER JOIN node_tags snt ON (snt.node_id = n.id)" : "");
 		result = result.replace("$predicateBBox", predicateBBox(distance_m, "$1", "$2") );
 		result = result.replace("$distanceFn", distancePostGISSphere("n.geom", "$1", "$2"));
 		result = result.replace("$distanceFn", distance_m);
 		
 		return result;
 	}
-
 	
-	public static String wayGeoRSSQuery =
+	public static String buildFindWaysQuery(String k, String v, boolean bOr, String distance_m)
+	{
+		String kvPred = createPredicate("swt", k, v, bOr);
+		if(kvPred != "")
+			kvPred += " AND ";
+
+		String result =
+			"SELECT\n" +
+			"	w.id\n" +
+			"FROM\n" +
+			"	ways w\n" +
+			"	$join\n" +
+			"WHERE\n" +
+			"	$kvPred" +
+			" 	w.linestring && $predicateBBox" +
+			"	AND $distance < $distance_m" +
+			"LIMIT\n" +
+			"	1000\n";
+
+
+		result = result.replace("$kvPred", kvPred);
+		result = result.replace("$join", kvPred != null ? "INNER JOIN way_tags swt ON(swt.way_id = w.id)" : "");
+		result = result.replace("$predicateBBox", predicateBBox(distance_m, "$1", "$2") );
+		result = result.replace("$distanceFn", distancePostGISSphere("w.linestring", "$1", "$2"));
+		result = result.replace("$distanceFn", distance_m);
+
+		return result;
+	}
+
+	public static String tagHead(
+			String osmEntityType,
+			String osmEntityId,
+			String propertyTypeCol,
+			String kCol,
+			String vCol)
+	{
+		String result = 
+				"('base:' || $osmEntityType || '/' || $osmEntityId || '#id') AS id,\n" +
+				"('vocabulary:' || $osmEntityType) AS \"rdf:type->\",\n" +
+				"(\n" +
+				"	CASE WHEN $propertyTypeCol = 'DatatypeProperty' THEN '' ELSE 'vocabulary:' END ||\n" +
+				"	CASE WHEN $vCol ~* 'yes' AND $propertyTypeCol != 'DatatypeProperty'\n" +
+				"		THEN REPLACE($kCol, ':', '%25')\n" +
+				"		ELSE $vCol\n" +
+				"	END\n" +
+				") AS \"t:unc\",\n" +
+				"(\n" +
+				"	CASE WHEN $propertyTypeCol = 'Class' OR $propertyTypeCol != 'DatatypeProperty' AND $vCol ~* 'yes'\n" +
+				"	THEN 'rdf:type->'\n" +
+				"	ELSE\n" +
+				"		CASE WHEN $propertyTypeCol = 'DatatypeProperty' THEN '' ELSE 'vocabulary:' END ||\n" +
+				"		REPLACE($kCol, ':', '%25') ||\n" +
+				"		CASE WHEN $propertyTypeCol = 'DatatypeProperty' THEN '' ELSE '->' END\n" +
+				"	END\n"  +
+				") AS a\n";
+
+		result = result.replace("$osmEntityType", osmEntityType);
+		result = result.replace("$osmEntityId", osmEntityId);
+		result = result.replace("$propertyTypeCol", propertyTypeCol);
+		result = result.replace("$kCol", kCol);
+		result = result.replace("$vCol", vCol);
+
+		return result;
+	}
+
+
+	public static final String nodeGeoRSSQuery =
+		"SELECT\n" +
+		"	('base:node/' || n.id || '#id') AS id,\n" +
+		"	(Y(n.geom) || ' ' || X(n.geom)) AS \"t:unc\" ,\n" +
+		"	'georss:point' AS a\n" +
+		"FROM\n" +
+		"	nodes n\n" +
+		"WHERE\n" +
+		"	n.id IN ($1)";
+
+		
+	public static final String nodeWGSQuery =
+			"SELECT\n" +
+			"	'base:node/' || n.id || '#id' AS id,\n" +
+			"	Y(n.geom) AS \"wgs84_pos:lat^^xsd:decimal\",\n" +
+			"	X(n.geom) AS \"wgs84_pos:long^^xsd:decimal\"\n" +
+			"FROM\n" +
+			"	nodes n\n" +
+			"WHERE n.id IN ($1)";
+
+
+	public static final String nodeWayMemberQuery =
+			"SELECT\n" +
+			"	('base:node/' || wn.node_id || '#id') AS id,\n" +
+			"	(wn.way_id || '#id') AS \"memberOfWay->way\",\n" +
+			"	sequence_id\n" +
+			"FROM\n" +
+			"	way_nodes wn\n" +
+			"WHERE\n" +
+			"	wn.node_id IN ($1)\n";
+	
+	public static final String nodeTagsQuery =
+		"SELECT\n" +
+		"	" + tagHead("t.osm_entity_type", "t.osm_entity_id", "p.ontology_entity_type", "t.k", "t.v") + "\n" +
+		"FROM\n" +
+		"	tags t\n" +
+		"	LEFT JOIN properties p ON (p.k = t.k)\n" +
+		"WHERE\n" +
+		"	t.osm_entity_type = 'node' AND\n" +
+		"	t.osm_entity_id IN ($1)";
+
+
+
+	public static final String wayGeoRSSQuery =
 		"SELECT\n" +
 		"	('base:way/' || w.id || '#id') AS id,\n"  +
 		"	REPLACE(REPLACE(REPLACE(\n"  +
@@ -131,6 +233,25 @@ public class LGDQueries
 		"WHERE\n" +
 		"	w.id IN ($1)\n";
 	
+	public static final String wayTagsQuery =
+		"SELECT\n" +
+		"	 " +  tagHead("t.osm_entity_type", "t.osm_entity_id", "p.ontology_entity_type", "t.k", "t.v") + "\n" +
+		"FROM\n" +
+		"	tags t\n" +
+		"	LEFT JOIN properties p ON (p.k = t.k)\n" +
+		"WHERE\n" +
+		"	t.osm_entity_type = 'way' AND\n" +
+		"	t.osm_entity_id IN ($1)\n";
+
+	public static final String wayNodeQuery =
+		"SELECT\n" +
+		"	('base:way/' || wn.way_id || '#id') AS id,\n" +
+		"	(wn.node_id || '#id') AS \"hasNode->node\"\n" +
+		"FROM\n" +
+		"	way_nodes wn\n" +
+		"WHERE\n" +
+		"	wn.way_id IN ($1)";
+
 	
 
 }

@@ -10,9 +10,18 @@ import java.lang.reflect.Method;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -143,26 +152,114 @@ class MyHandler
 class ServerMethods
 {
 	private LinkedGeoDataDAO dao;
+
+	private ExecutorService executor = Executors.newCachedThreadPool();
 	
 	public ServerMethods(LinkedGeoDataDAO dao)
 	{
 		this.dao = dao;
 	}
 	
+	
+	public String getNear()
+	{
+	
+		return null;
+	}
+	
+	public Model getNearModel(double lat, double lon, double distance, String k, String v, boolean bOr)
+	{
+		
+		return null;
+	}
+	
+	public String getNode(String idStr)
+		throws Exception
+	{
+		Long id = Long.parseLong(idStr);
+		
+		final List<Long> ids = Arrays.asList(id);
+	
+		List<Model> models = getNodeModels(ids);
+		
+		String result = toString(models);
+		
+		return result;
+	}
 
 	public String getWay(String idStr)
 		throws Exception
 	{
 		Long id = Long.parseLong(idStr);
 		
+		final List<Long> ids = Arrays.asList(id);
+
+		List<Model> models = getWayModels(ids);
 		
-		Model model = dao.getWayGeoRSS(Arrays.asList(id));
-		
-		String result = toString(model);
+		String result = toString(models);
 		
 		return result;
 	}
+
+
 	
+	public List<Model> getNodeModels(final List<Long> ids)
+		throws Exception
+	{		
+		List<Callable<Model>> callables = new ArrayList<Callable<Model>>();
+		callables.add(dao.getNodeGeoRSS(ids));
+		callables.add(dao.getNodeWGSQuery(ids));		
+		callables.add(dao.getNodeTagsQuery(ids));
+		callables.add(dao.getNodeWayMemberQuery(ids));
+	
+		List<Model> result = executeAll(executor, callables);
+		
+		return result;
+	}
+
+	
+	public List<Model> getWayModels(final List<Long> ids)
+		throws Exception
+	{
+		List<Callable<Model>> callables = new ArrayList<Callable<Model>>();
+		callables.add(dao.getWayGeoRSS(ids));
+		callables.add(dao.getWayTags(ids));
+		callables.add(dao.getWayNodes(ids));
+	
+		List<Model> result = executeAll(executor, callables);
+		
+		return result;
+
+	}
+	
+	// TODO Add timeouts. Also add some features to abort queries
+	public static <T> List<T> executeAll(ExecutorService executor, Collection<Callable<T>> callables)
+		throws InterruptedException, ExecutionException
+	{
+		List<Future<T>> futures = new ArrayList<Future<T>>();
+		for(Callable<T> callable : callables) {
+			futures.add(executor.submit(callable));
+		}
+		
+		List<T> result = new ArrayList<T>();
+		for(Future<T> future : futures) {
+			T value = future.get();
+			
+			result.add(value);
+		}
+		
+		return result;
+	}
+
+	public static String toString(Collection<Model> models) {
+		String result = "";
+		for(Model model : models) {
+			result += toString(model);		
+		}
+
+		return result;
+	}
+
 	private static String toString(Model model)
 	{
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -273,10 +370,14 @@ public class JTriplifyServer
 		
 		RegexInvocationContainer ric = new RegexInvocationContainer();
 		
+		Method m;
 		
-		Method m = ServerMethods.class.getMethod("getWay", String.class);
+		m = ServerMethods.class.getMethod("getWay", String.class);
 		ric.put(".*way/([^/]*)", new JavaMethodInvocable(m, methods));
 		
+		m = ServerMethods.class.getMethod("getNode", String.class);
+		ric.put(".*node/([^/]*)", new JavaMethodInvocable(m, methods));
+
 		
 		MyHandler handler = new MyHandler();
 		handler.setInvocationMap(ric);
@@ -285,8 +386,9 @@ public class JTriplifyServer
 		// Start
 		runServer(context, port, backLog, handler);
 	}
-		
-	public static void runServer(String context, int port, int backLog, HttpHandler handler)
+
+
+	private static void runServer(String context, int port, int backLog, HttpHandler handler)
 		throws IOException
 	{
 		logger.info("Starting JTriplify Server");
