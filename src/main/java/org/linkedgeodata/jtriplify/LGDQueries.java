@@ -29,6 +29,38 @@ public class LGDQueries
 		return result;
 	}
 
+	
+	public static String buildPoint(
+			String latArg,
+			String lonArg)
+	{
+		String result =
+			"ST_SetSRID(ST_MakePoint($lonArg, $latArg), 4326)";
+
+		result = result.replace("$latArg", latArg);
+		result = result.replace("$lonArg", lonArg);
+
+		return result;
+	}
+
+	public static String BBox(
+			String minLatArg,
+			String minLonArg,
+			String maxLatArg,
+			String maxLonArg)
+	{
+		String result =
+			"ST_SetSRID(ST_MakeBox2D(\n" +
+			"	$min, $max\n" +
+			"), 4326)\n";
+		
+		result = result.replace("$min", buildPoint(minLatArg, minLonArg));
+		result = result.replace("$max", buildPoint(maxLatArg, maxLonArg));
+		
+		return result;
+		
+	}
+	
 	public static String predicateBBox(
 			String distance,
 			String latArg,
@@ -77,7 +109,7 @@ public class LGDQueries
 		return kvPred;
 	}
 
-	public static String buildFindNodesQuery(String distance_m, String k, String v, boolean bOr)
+	public static String buildFindNodesQueryOld(String distance_m, String k, String v, boolean bOr)
 	{
 		String kvPred = createPredicate("snt", k, v, bOr);
 		if(!kvPred.isEmpty())
@@ -104,8 +136,34 @@ public class LGDQueries
 		
 		return result;
 	}
-	
-	public static String buildFindWaysQuery(String distance_m, String k, String v, boolean bOr)
+
+	public static String buildFindNodesQuery(String distance_m, String k, String v, boolean bOr)
+	{
+		String kvPred = createPredicate("snt", k, v, bOr);
+		if(!kvPred.isEmpty())
+			kvPred += " AND ";
+
+		String result =
+			"SELECT\n" +
+			"    n.id AS id\n" +
+			"FROM\n" +
+			"    nodes n\n" +
+			"    $join\n" +
+			"WHERE\n" +
+			"    $kvPred\n" +
+			"    ST_DWithin(n.geom, $point, $distance_m, true)\n" +
+			"LIMIT" +
+			"    1000";
+		
+		result = result.replace("$kvPred", kvPred);
+		result = result.replace("$join", kvPred.isEmpty() ? "" : "INNER JOIN node_tags snt ON (snt.node_id = n.id)");
+		result = result.replace("$point", buildPoint("$1", "$2") + "::geography");
+		result = result.replace("$distance_m", distance_m);
+		
+		return result;
+	}
+
+	public static String buildFindWaysQueryOld(String distance_m, String k, String v, boolean bOr)
 	{
 		String kvPred = createPredicate("swt", k, v, bOr);
 		if(!kvPred.isEmpty())
@@ -129,6 +187,33 @@ public class LGDQueries
 		result = result.replace("$join", kvPred.isEmpty() ? "" : "INNER JOIN way_tags swt ON(swt.way_id = w.id)");
 		result = result.replace("$predicateBBox", predicateBBox(distance_m, "$1", "$2") );
 		result = result.replace("$distanceFn", distancePostGISSphere("w.linestring", "$1", "$2"));
+		result = result.replace("$distance_m", distance_m);
+
+		return result;
+	}
+
+	public static String buildFindWaysQuery(String distance_m, String k, String v, boolean bOr)
+	{
+		String kvPred = createPredicate("swt", k, v, bOr);
+		if(!kvPred.isEmpty())
+			kvPred += " AND ";
+
+		String result =
+			"SELECT\n" +
+			"	w.id\n" +
+			"FROM\n" +
+			"	ways w\n" +
+			"	$join\n" +
+			"WHERE\n" +
+			"    $kvPred\n" +
+			"    ST_DWithin(w.linestring, $point, $distance_m, true)\n" +
+			"LIMIT\n" +
+			"	1000\n";
+
+
+		result = result.replace("$kvPred", kvPred);
+		result = result.replace("$join", kvPred.isEmpty() ? "" : "INNER JOIN way_tags swt ON(swt.way_id = w.id)");
+		result = result.replace("$point", buildPoint("$1", "$2") + "::geography");
 		result = result.replace("$distance_m", distance_m);
 
 		return result;
@@ -176,7 +261,7 @@ public class LGDQueries
 	public static final String nodeGeoRSSQuery =
 		"SELECT\n" +
 		"	('base:node/' || n.id || '#id') AS id,\n" +
-		"	(Y(n.geom) || ' ' || X(n.geom)) AS \"t:unc\" ,\n" +
+		"	(Y(n.geom::geometry) || ' ' || X(n.geom::geometry)) AS \"t:unc\" ,\n" +
 		"	'georss:point' AS a\n" +
 		"FROM\n" +
 		"	nodes n\n" +
@@ -187,8 +272,8 @@ public class LGDQueries
 	public static final String nodeWGSQuery =
 			"SELECT\n" +
 			"	'base:node/' || n.id || '#id' AS id,\n" +
-			"	Y(n.geom) AS \"wgs84_pos:lat^^xsd:decimal\",\n" +
-			"	X(n.geom) AS \"wgs84_pos:long^^xsd:decimal\"\n" +
+			"	Y(n.geom::geometry) AS \"wgs84_pos:lat^^xsd:decimal\",\n" +
+			"	X(n.geom::geometry) AS \"wgs84_pos:long^^xsd:decimal\"\n" +
 			"FROM\n" +
 			"	nodes n\n" +
 			"WHERE n.id IN ($1)";
@@ -220,12 +305,12 @@ public class LGDQueries
 		"SELECT\n" +
 		"	('base:way/' || w.id || '#id') AS id,\n"  +
 		"	REPLACE(REPLACE(REPLACE(\n"  +
-		"			ST_AsText(ST_Affine(w.linestring, 0, 1, 1, 0, 0, 0))\n"  +
+		"			ST_AsText(ST_Affine(w.linestring::geometry, 0, 1, 1, 0, 0, 0))\n"  +
 		"	,'LINESTRING(', ''), ',', ' '), ')', '') AS \"t:unc\",\n"  +
 
 		"	(\n" +
 		"		'georss:' ||\n" +
-		"		CASE WHEN ST_IsClosed(w.linestring) THEN 'polygon' ELSE 'line' END\n" +		
+		"		CASE WHEN ST_IsClosed(w.linestring::geometry) THEN 'polygon' ELSE 'line' END\n" +		
 		"	) AS a\n" +
 		"FROM\n" +
 		"	ways w\n" +

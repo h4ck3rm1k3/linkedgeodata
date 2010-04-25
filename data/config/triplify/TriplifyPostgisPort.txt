@@ -6,6 +6,62 @@ java -jar LineStringUpdater.jar -dlgd_simple_0_6_postgis_1_3 -n1000 -upostgres -
 select id, linestring into way_lines from ways where linestring IS NOT NULL;
 
 
+Relation DatabaseState
+-------------------------------------------------------------------------------
+Used for keeping track of the state of certain processes - e.g. the date of the
+most recently loaded dataset (as opposed to the date of load process)
+
+CREATE TABLE DatabaseState (
+	key TEXT NOT NULL PRIMARY KEY,
+	value TEXT
+);
+
+INSERT INTO DatabaseState(key, value) VALUES('dataset', '2010-04-07 00:00:00');
+
+
+
+Geography test
+-------------------------------------------------------------------------------
+/* Conversion of nodes table: */
+SELECT id, version, user_id, tstamp, changeset_id, geom::geography INTO geognodes FROM nodes;
+ALTER TABLE nodes RENAME TO nodes_orig;
+ALTER INDEX idx_nodes_geom RENAME TO idx_nodes_orig_geom;
+ALTER TABLE geognodes RENAME to nodes;
+ALTER TABLE nodes ADD PRIMARY KEY(id);
+CREATE INDEX idx_nodes_geom ON nodes USING GIST(geom);
+
+/* Same for ways: */
+SELECT id, version, user_id, tstamp, changeset_id, linestring::geography INTO geogways FROM ways;
+ALTER TABLE ways RENAME TO ways_orig;
+ALTER INDEX idx_ways_linestring RENAME TO idx_ways_orig_linestring;
+ALTER TABLE geogways RENAME to ways;
+ALTER TABLE ways ADD PRIMARY KEY(id);
+CREATE INDEX idx_ways_linestring ON ways USING GIST(linestring);
+
+
+
+
+create index idx_geogtest_geog on geogtest using gist(geog);
+explain select id from geogtest where ST_DWithing(
+
+
+Performance tests of real queries
+-------------------------------------------------------------------------------
+Slow counts are a known problem/feature of postgres, (mysql often uses cached counts)
+here is some reading:
+http://blog.charcoalphile.com/2007/12/12/postgresql-count-workaround/
+http://www.varlena.com/GeneralBits/49.php
+
+
+
+SELECT r.id FROM resources r WHERE r.label = 'amenity';
+SELECT t.v, COUNT(*) AS c FROM lgd_tags t WHERE k=1590 GROUP BY t.v HAVING COUNT(t.v) > 10;
+
+SELECT COUNT(*) FROM lgd_tags t WHERE k=1590 GROUP BY t.v;
+
+
+
+
 
 Distance(), ST_Intersects(), ST_Contains() and ST_Within(),
 WHERE the_geom && 'BOX3D(90900 190900, 100100 200100)'::box3d
@@ -32,6 +88,12 @@ CREATE INDEX idx_relation_tags_k_v ON relation_tags(k, v);
 
 
 
+Tokyo: http://linkedgeodata.org:7000/triplify/near/35.41,139.42/1000
+Leipzig: http://linkedgeodata.org:7000/triplify/near/51.20,12.22/1000/amenity
+
+
+
+Exception: http://localhost:7000/triplify/way/33241659 (not tried locally yet)
 -------------------------------------------------------------------------------
 
 
@@ -249,7 +311,6 @@ CREATE VIEW tags AS
 		 (SELECT OSMEntityType('way') AS osm_entity_type, way_id AS osm_entity_id, k, v FROM way_tags) UNION ALL
 		 (SELECT OSMEntityType('relation') AS osm_entity_type, relation_id AS osm_entity_id, k, v FROM relation_tags)) AS t;
 -------------------------------------------------------------------------------
-
 
 
 
