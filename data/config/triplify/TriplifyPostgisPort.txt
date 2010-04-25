@@ -39,7 +39,7 @@ CREATE INDEX idx_relation_tags_k_v ON relation_tags(k, v);
 Resource table
 -------------------------------------------------------------------------------
 DROP TABLE IF EXISTS lgd_resources;
-CREATE TABLE lgd_resources (
+CREATE TABLE resources (
 	id    BIGSERIAL,
 	label TEXT NOT NULL UNIQUE
 );
@@ -47,15 +47,76 @@ CREATE TABLE lgd_resources (
 
 
 INSERT
-	INTO lgd_resources(label)
-		SELECT
-			DISTINCT tmp.label
-		FROM
-			((SELECT tk.k AS label FROM tags AS tk)
-			UNION ALL (SELECT tv.v AS label FROM tags AS tv)) tmp
-		WHERE
-			NOT EXISTS(SELECT r.id FROM lgd_resources r WHERE r.label = tmp.label)
+	INTO resources(label)
+SELECT 
+	DISTINCT t.k
+FROM
+	way_tags t
+WHERE
+	NOT EXISTS(SELECT r.id FROM resources r WHERE r.label = t.k)
+
+
+INSERT
+	INTO resources(label)
+SELECT 
+	DISTINCT tmp.label
+FROM
+	((SELECT tk.k AS label FROM tags AS tk)
+	UNION ALL (SELECT tv.v AS label FROM tags AS tv)) tmp
+WHERE
+	NOT EXISTS(SELECT r.id FROM resources r WHERE r.label = tmp.label)
 ;
+
+
+INSERT
+	INTO resources(label)
+SELECT 
+	DISTINCT tmp.label
+FROM
+	((SELECT DISTINCT tk.k AS label FROM relation_tags AS tk)
+	UNION ALL (SELECT DISTINCT tv.v AS label FROM relation_tags AS tv)) tmp
+WHERE
+	NOT EXISTS(SELECT r.id FROM resources r WHERE r.label = tmp.label)
+;
+
+
+
+INSERT
+	INTO resources(label)
+		SELECT
+			t.k
+		FROM
+			node_tags t
+		WHERE
+			NOT EXISTS(SELECT r.id FROM resources r WHERE r.label = t.k)
+;
+
+
+LGD-Tags
+-------------------------------------------------------------------------------
+DROP TABLE IF EXISTS lgd_tags;
+CREATE TABLE lgd_tags (
+	osm_entity_type OSMEntityType,
+	id    BIGINT,
+	k     BIGINT,
+	v     BIGINT
+);
+
+CREATE INDEX idx_lgd_tags_osm_entity_type_id ON lgd_tags(osm_entity_type, id);
+CREATE INDEX idx_lgd_tags_k_v ON lgd_tags(k, v);
+
+
+
+INSERT
+	INTO lgd_tags(osm_entity_type, id, k, v)
+SELECT
+	OSMEntityType('way'), t.way_id, rk.id, rv.id
+FROM
+	way_tags t
+	INNER JOIN resources rk ON (rk.label = t.k)
+	INNER JOIN resources rv ON (rv.label = t.v)
+;
+
 
 
 Tile statistics (key only)

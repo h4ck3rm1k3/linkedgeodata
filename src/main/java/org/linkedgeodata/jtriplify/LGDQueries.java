@@ -146,9 +146,10 @@ public class LGDQueries
 				"('vocabulary:' || $osmEntityType) AS \"rdf:type->\",\n" +
 				"(\n" +
 				"	CASE WHEN $propertyTypeCol = 'DatatypeProperty' THEN '' ELSE 'vocabulary:' END ||\n" +
-				"	CASE WHEN $vCol ~* 'yes' AND $propertyTypeCol != 'DatatypeProperty'\n" +
-				"		THEN REPLACE($kCol, ':', '%25')\n" +
-				"		ELSE $vCol\n" +
+				"	CASE WHEN $vCol ~* 'yes' AND ($propertyTypeCol != 'DatatypeProperty' OR $propertyTypeCol IS NULL)\n" +
+				"	THEN REPLACE(REPLACE(REPLACE($kCol, ':', '%25'), '+', '%2B'), ' ', '+')\n" +
+				//"	ELSE $vCol\n" +
+				"	ELSE REPLACE(REPLACE(REPLACE($vCol, ':', '%25'), '+', '%2B'), ' ', '+')\n" +
 				"	END\n" +
 				") AS \"t:unc\",\n" +
 				"(\n" +
@@ -156,7 +157,7 @@ public class LGDQueries
 				"	THEN 'rdf:type->'\n" +
 				"	ELSE\n" +
 				"		CASE WHEN $propertyTypeCol = 'DatatypeProperty' THEN '' ELSE 'vocabulary:' END ||\n" +
-				"		REPLACE($kCol, ':', '%25') ||\n" +
+				"		REPLACE(REPLACE(REPLACE($kCol, ':', '%25'), '+', '%2B'), ' ', '+') ||\n" +
 				"		CASE WHEN $propertyTypeCol = 'DatatypeProperty' THEN '' ELSE '->' END\n" +
 				"	END\n"  +
 				") AS a\n";

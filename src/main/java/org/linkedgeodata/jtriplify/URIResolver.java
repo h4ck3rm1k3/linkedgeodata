@@ -23,6 +23,8 @@ import com.hp.hpl.jena.iri.IRI;
  * and the value is not assumed to be url encoded.
  * So this class does the encoding.
  * 
+ * TODO Add a timer so that the last modification date isn't always checked
+ * 
  * @author raven
  *
  */
@@ -50,6 +52,17 @@ public class URIResolver
 		return result;
 	}*/
 	
+	private synchronized void checkConfig()
+		throws Exception
+	{
+		if(ini == null || file.lastModified() != lastModified) {
+			logger.info("(Re)loading File '" + file.getAbsolutePath() + "'.");
+
+			lastModified = file.lastModified();
+			ini = new Ini(file);
+		}
+	}
+	
 	/**
 	 *
 	 */
@@ -62,10 +75,8 @@ public class URIResolver
 
 		
 		if(ini == null || file.lastModified() != lastModified) {
-			logger.info("(Re)loading File '" + file.getAbsolutePath() + "'.");
 			try {
-				lastModified = file.lastModified();
-				ini = new Ini(file);
+				checkConfig();
 			}
 			catch(Exception e) {
 				logger.error(ExceptionUtil.toString(e));

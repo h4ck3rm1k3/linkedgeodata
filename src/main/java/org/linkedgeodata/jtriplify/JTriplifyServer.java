@@ -1,6 +1,5 @@
 package org.linkedgeodata.jtriplify;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -10,19 +9,9 @@ import java.lang.reflect.Method;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.sql.Connection;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -33,41 +22,83 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.collections15.Transformer;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
-import org.linkedgeodata.jtriplify.LinkedGeoDataDAO.OSMEntityType;
+import org.linkedgeodata.jtriplify.methods.DefaultCoercions;
+import org.linkedgeodata.jtriplify.methods.FunctionUtil;
+import org.linkedgeodata.jtriplify.methods.IInvocable;
+import org.linkedgeodata.jtriplify.methods.JavaMethodInvocable;
 import org.linkedgeodata.scripts.LineStringUpdater;
 import org.linkedgeodata.util.ExceptionUtil;
 import org.linkedgeodata.util.StreamUtil;
 
-import com.hp.hpl.jena.rdf.model.Model;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 
-
+class ICPair
+{
+	private IInvocable invocable;
+	private Object[] argMap;
+	
+	public ICPair(IInvocable invocable, Object[] argMap)
+	{
+		this.invocable = invocable;
+		this.argMap = argMap;
+	}
+	
+	public IInvocable getInvocable()
+	{
+		return invocable;
+	}
+	
+	public Object[] getArgMap()
+	{
+		return argMap;
+	}
+}
 
 class RegexInvocationContainer
 {
 	private static final Logger logger = Logger.getLogger(RegexInvocationContainer.class);
 
-	private Map<Pattern, IInvocable> patternToInvocable = new HashMap<Pattern, IInvocable>();
+	private Map<Pattern, ICPair> patternToInvocable = new HashMap<Pattern, ICPair>();
 	
-	public void put(String regex, IInvocable invocable)
+	public void put(String regex, IInvocable invocable, Object ...argMap)
 	{
 		Pattern pattern = Pattern.compile(regex);
-
-		patternToInvocable.put(pattern, invocable);
+		
+		patternToInvocable.put(pattern, new ICPair(invocable, argMap));
 	}
 	
-	private static Object invoke(Matcher matcher, String arg, IInvocable invocable)
+	private static Object invoke(Matcher matcher, IInvocable invocable, Object[] argMap)
 		throws Exception
 	{
 		logger.info("Invoking: " + invocable);
 		int groupCount = matcher.groupCount();
-		Object[] args = new Object[groupCount];
+		Object[] matches = new Object[groupCount];
 		
 		for(int i = 0; i < groupCount; ++i) {
-			args[i] = matcher.group(i + 1);
+			matches[i] = matcher.group(i + 1);
 		}
+		
+		Object[] args = new Object[argMap.length];
+		for(int i = 0; i < argMap.length; ++i) {
+			
+			if(argMap[i] != null) {
+				String argStr = argMap[i].toString();
+				
+				if(argStr.startsWith("$")) {
+					String indexStr = argStr.substring(1);
+					int index = Integer.parseInt(indexStr);
+					
+					args[i] = matches[index];
+					continue;
+				}
+			}
+		
+			args[i] = argMap[i];
+		}
+
+		logger.debug("Args: " + Arrays.toString(args) + ", Types: " + Arrays.toString(FunctionUtil.getTypes(args)));
 		
 		Object result = invocable.invoke(args);
 		return result;
@@ -76,15 +107,15 @@ class RegexInvocationContainer
 	public Object invoke(String arg)
 		throws Exception
 	{
-		for(Map.Entry<Pattern, IInvocable> entry : patternToInvocable.entrySet()) {
+		for(Map.Entry<Pattern, ICPair> entry : patternToInvocable.entrySet()) {
 			Pattern pattern = entry.getKey();
-			IInvocable invocable = entry.getValue();
+			ICPair icPair = entry.getValue();
 			
 			Matcher matcher = pattern.matcher(arg);
 			if(matcher.matches()) {
 				logger.info("Value '" + arg + "' matched the pattern '" + pattern + "'");
-				
-				return invoke(matcher, arg, invocable);
+
+				return invoke(matcher, icPair.getInvocable(), icPair.getArgMap());
 			}
 		}
 		
@@ -152,179 +183,7 @@ class MyHandler
 
 
 
-class ServerMethods
-{
-	private LinkedGeoDataDAO dao;
 
-	//private ExecutorService executor = Executors.newFixedThreadPool(2);
-	private ExecutorService executor = Executors.newCachedThreadPool();
-	
-	public ServerMethods(LinkedGeoDataDAO dao)
-	{
-		this.dao = dao;
-	}
-	
-	
-	public String getNear(String latStr, String lonStr, String distanceStr)
-		throws Exception
-	{
-		double lat = Double.parseDouble(latStr);
-		double lon = Double.parseDouble(lonStr);
-		double distance = Double.parseDouble(distanceStr);
-		
-		List<Model> models = getNearModels(lat, lon, distance);
-		
-		String result = toString(models);
-		
-		return result;
-	}
-	
-	public List<Model> getNearModels(final double lat, final double lon, final double distance)
-		throws Exception
-	{
-		List<Callable<List<Model>>> callables = new ArrayList<Callable<List<Model>>>();
-		
-		callables.add(new Callable<List<Model>>() {
-			@Override
-			public List<Model> call() throws Exception
-			{
-				List<Long> ids = dao.getEntitiesWithinDistance(OSMEntityType.NODE, lat, lon, distance, null, null, false, 1000);
-			
-				List<Callable<Model>> callables = getNodeModelQueries(ids);
-				
-				List<Model> result = executeAll(executor, callables);
-				
-				return result;
-			}
-		});
-
-		
-		callables.add(new Callable<List<Model>>() {
-			@Override
-			public List<Model> call() throws Exception
-			{
-				List<Long> ids = dao.getEntitiesWithinDistance(OSMEntityType.WAY, lat, lon, distance, null, null, false, 1000);
-			
-				List<Callable<Model>> callables = getWayModelQueries(ids);
-				
-				List<Model> result = executeAll(executor, callables);
-				
-				return result;
-			}
-		});
-
-		List<List<Model>> modelsList = executeAll(executor, callables);
-
-		Iterator<List<Model>> it = modelsList.iterator();
-		
-		if(!it.hasNext()) {
-			return new ArrayList<Model>();
-		}
-		
-		List<Model> result = it.next();
-		
-		while(it.hasNext()) {
-			List<Model> tmp = it.next();
-			
-			result.addAll(tmp);
-		}
-		
-		return result;
-	}
-	
-	public String getNode(String idStr)
-		throws Exception
-	{
-		Long id = Long.parseLong(idStr);
-		
-		final List<Long> ids = Arrays.asList(id);
-	
-		List<Callable<Model>> callables = getNodeModelQueries(ids);
-		List<Model> models = executeAll(executor, callables);
-	
-		String result = toString(models);
-		
-		return result;
-	}
-
-	public String getWay(String idStr)
-		throws Exception
-	{
-		Long id = Long.parseLong(idStr);
-		
-		final List<Long> ids = Arrays.asList(id);
-
-		List<Callable<Model>> callables = getWayModelQueries(ids);
-		List<Model> models = executeAll(executor, callables);
-		
-		String result = toString(models);
-		
-		return result;
-	}
-
-
-	
-	public List<Callable<Model>> getNodeModelQueries(final List<Long> ids)
-		throws Exception
-	{		
-		List<Callable<Model>> result = new ArrayList<Callable<Model>>();
-		result.add(dao.getNodeGeoRSS(ids));
-		result.add(dao.getNodeWGSQuery(ids));		
-		result.add(dao.getNodeTagsQuery(ids));
-		result.add(dao.getNodeWayMemberQuery(ids));
-			
-		return result;
-	}
-
-	
-	public List<Callable<Model>> getWayModelQueries(final List<Long> ids)
-		throws Exception
-	{
-		List<Callable<Model>> result = new ArrayList<Callable<Model>>();
-		result.add(dao.getWayGeoRSS(ids));
-		result.add(dao.getWayTags(ids));
-		result.add(dao.getWayNodes(ids));
-	
-		
-		return result;
-	}
-	
-	// TODO Add timeouts. Also add some features to abort queries
-	public static <T> List<T> executeAll(ExecutorService executor, Collection<Callable<T>> callables)
-		throws InterruptedException, ExecutionException
-	{
-		List<Future<T>> futures = new ArrayList<Future<T>>();
-		for(Callable<T> callable : callables) {
-			futures.add(executor.submit(callable));
-		}
-		
-		List<T> result = new ArrayList<T>();
-		for(Future<T> future : futures) {
-			T value = future.get();
-			
-			result.add(value);
-		}
-		
-		return result;
-	}
-
-	public static String toString(Collection<Model> models) {
-		String result = "";
-		for(Model model : models) {
-			result += toString(model);		
-		}
-
-		return result;
-	}
-
-	private static String toString(Model model)
-	{
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		model.write(baos, "N-TRIPLE", "");
-	
-		return baos.toString();
-	}
-}
 
 
 public class JTriplifyServer
@@ -435,8 +294,16 @@ public class JTriplifyServer
 		m = ServerMethods.class.getMethod("getNode", String.class);
 		ric.put(".*node/([^/]*)", new JavaMethodInvocable(m, methods));
 
-		m = ServerMethods.class.getMethod("getNear", String.class, String.class, String.class);
-		ric.put(".*near/([^/]*),([^/]*)/(.*)", new JavaMethodInvocable(m, methods));
+		
+		
+		//m = ServerMethods.class.getMethod("getNear", String.class, String.class, String.class);
+		IInvocable nearFn = DefaultCoercions.wrap(methods, "publicNear.*");
+		
+		ric.put(".*near/([^/]*),([^/]*)/([^/]*)/?", nearFn, "$0", "$1", "$2", null, null, false);
+		ric.put(".*near/([^/]*),([^/]*)/([^/]*)/([^/]*)/?", nearFn, "$0", "$1", "$2", "$3", null, false);
+		ric.put(".*near/([^/]*),([^/]*)/([^/]*)/([^=]*)=([^/]*)/?", nearFn, "$0", "$1", "$2", "$3", "$4", false);
+		ric.put(".*near/([^/]*),([^/]*)/([^/]*)/class/([^/]*)/?", nearFn, "$0", "$1", "$2", "$3", "$3", true);
+		
 		
 		MyHandler handler = new MyHandler();
 		handler.setInvocationMap(ric);
@@ -459,4 +326,6 @@ public class JTriplifyServer
 		server.setExecutor(null);
 		server.start();
 	}
+	
+
 }

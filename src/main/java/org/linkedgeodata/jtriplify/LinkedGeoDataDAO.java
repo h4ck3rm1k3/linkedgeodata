@@ -17,7 +17,7 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 public class LinkedGeoDataDAO
 	extends AbstractDAO
 {
-	enum Queries {
+	public enum Queries {
 		NODE_FIND,
 		NODE_FIND_K,
 		NODE_FIND_K_AND_V,
@@ -49,7 +49,7 @@ public class LinkedGeoDataDAO
 	}
 	*/
 	
-	enum OSMEntityType
+	public enum OSMEntityType
 	{
 		NODE,
 		WAY,

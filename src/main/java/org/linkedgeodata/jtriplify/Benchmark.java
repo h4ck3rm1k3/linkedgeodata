@@ -18,7 +18,10 @@ public class Benchmark
 
 		
 		//String prefix = "http://localhost:7000/triplify/node/";
-		String prefix = "http://localhost:7000/triplify/near/51.0,13.0/10";
+		//String prefix = "http://localhost:80/triplify/node/";
+
+		String prefix = "http://localhost:7000/triplify/near/51.2,13.0/1000";
+		//String prefix = "http://localhost:80/triplify/near/51.0,13.0/1000";
 		
 		
 		//int maxNodeCount = 41101455

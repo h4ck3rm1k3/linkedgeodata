@@ -1,14 +1,15 @@
-package org.linkedgeodata.jtriplify;
+package org.linkedgeodata.jtriplify.methods;
 
 import java.lang.reflect.Method;
 import java.util.List;
 
-class JavaMethodInvocable
+
+public class JavaMethodInvocable
 		implements IInvocable
 {
 	private final Object	object;
 	private final Method	method;
-
+	
 	public JavaMethodInvocable(Method method, Object object)
 	{
 		this.method = method;
