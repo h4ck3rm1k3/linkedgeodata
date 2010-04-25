@@ -289,10 +289,10 @@ public class JTriplifyServer
 		Method m;
 		
 		m = ServerMethods.class.getMethod("getWay", String.class);
-		ric.put(".*way/([^/]*)", new JavaMethodInvocable(m, methods));
+		ric.put(".*way/([^/]*)", new JavaMethodInvocable(m, methods), "$0");
 		
 		m = ServerMethods.class.getMethod("getNode", String.class);
-		ric.put(".*node/([^/]*)", new JavaMethodInvocable(m, methods));
+		ric.put(".*node/([^/]*)", new JavaMethodInvocable(m, methods), "$0");
 
 		
 		
