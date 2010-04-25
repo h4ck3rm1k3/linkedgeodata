@@ -64,7 +64,7 @@ public class ServerMethods
 			@Override
 			public List<Model> call() throws Exception
 			{
-				List<Long> ids = dao.getEntitiesWithinDistance(OSMEntityType.WAY, lat, lon, distance, null, null, false, 1000);
+				List<Long> ids = dao.getEntitiesWithinDistance(OSMEntityType.WAY, lat, lon, distance, k, v, bOr, 1000);
 			
 				List<Callable<Model>> callables = getWayModelQueries(ids);
 				
