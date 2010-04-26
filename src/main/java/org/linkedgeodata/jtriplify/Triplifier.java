@@ -123,7 +123,8 @@ public class Triplifier
 				result.add(triple);
 			}
 			catch(Throwable e) {
-				logger.error(ExceptionUtil.toString(e));
+				logger.error("Error trying to create triple: " + subject + " " + p + " " + v + " Exception class: " + e.getClass());
+				//logger.error(ExceptionUtil.toString(e.getClass()));
 			}
 			
 		}

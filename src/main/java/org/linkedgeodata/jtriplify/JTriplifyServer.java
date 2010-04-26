@@ -151,13 +151,20 @@ class RDFResultFormat
 
 class SimpleResponse
 {
+	private int statusCode;
 	private String contentType;
 	private String text;
 	
-	public SimpleResponse(String contentType, String response)
+	public SimpleResponse(int statusCode, String contentType, String response)
 	{
+		this.statusCode = statusCode;
 		this.contentType = contentType;
 		this.text = response;
+	}
+	
+	public int getStatusCode()
+	{
+		return statusCode;
 	}
 
 	public String getContentType()
@@ -171,6 +178,25 @@ class SimpleResponse
 	}
 }
 
+class HTTPErrorException
+	extends Exception
+{
+	/**
+	 * 
+	 */
+	private static final long	serialVersionUID	= 1L;
+	private int errorCode;
+	
+	public HTTPErrorException(int errorCode)
+	{
+		this.errorCode = errorCode;
+	}
+	
+	public int getErrorCode()
+	{
+		return errorCode;
+	}
+}
 
 class MyHandler
 	implements HttpHandler
@@ -261,7 +287,7 @@ class MyHandler
 		throws Exception
 	{
 	   	String request = t.getRequestURI().toString();
-    	logger.info("Received request: " + request);
+    	logger.info("Received request from " + t.getRemoteAddress() + ": "+ request);
 
    
     	// Check if a particular format was requested via the query string
@@ -276,7 +302,7 @@ class MyHandler
     	String requestFormat = formatToJenaFormat.get(rawFormat);
        	if(rawFormat != null && requestFormat == null) {
     		// FIXME Respect the accept header when returning an error
-       		return new SimpleResponse("text/plain", "Unsupported format");    			
+       		return new SimpleResponse(400, "text/plain", "Unsupported format");    			
     	}
 
     	// Content negotiation
@@ -293,13 +319,25 @@ class MyHandler
     	
     	boolean exitLoop = false;
 
+    	int acceptCounter = 0;
     	for(String accept : accepts) {
     		String[] items = accept.split(",");
     		for(String item : items) {
-	    		ContentType ct = new ContentType(item);
-	    		
+    			++acceptCounter;
+    			
+    			ContentType ct = null;
+    			try {
+    				ct = new ContentType(item);
+    			}
+    			catch(Throwable e) {
+    				// Error parsing header - assume bad request
+    				return new SimpleResponse(400, "text/plain", "Error parsing accept header: '" + item + "'");
+    			}
+    			
+    			
 	    		// This if statement is a hack right now
-	    		if(ct.match("text/plain") || ct.match("text/html")) {
+	    		//if(ct.match("text/plain") || ct.match("text/html")) {
+	    		if(ct.match("text/plain") || ct.match("text/html") || ct.match("*/*")) {
 	    			contentFormat = StringUtil.coalesce(requestFormat, "N-TRIPLE");
 	    			responseContentType = "text/plain";
 	    			exitLoop = true;
@@ -337,13 +375,18 @@ class MyHandler
     			break;
     	}
 
+    	if(acceptCounter == 0) {
+    		logger.info("No accept header. Defaulting to 'text/plain'");
+			contentFormat = StringUtil.coalesce(requestFormat, "N-TRIPLE");
+			responseContentType = "text/plain";   		
+    	}
     	
     	if(contentFormat == null) {
     		if(requestFormat != null) {
-    			return new SimpleResponse("text/plain", "No suitable format found (Maybe you used ?format=... with incompatible accept header?)");
+    			return new SimpleResponse(406, "text/plain", "No suitable format found (Maybe you used ?format=... with incompatible accept header?)");
     		}
     		else {
-    			return new SimpleResponse("text/plain", "Not acceptable (This message will be changed to http code 406)");
+    			return new SimpleResponse(406, "text/plain", "No suitable format found");
     		}
     	}
 
@@ -359,10 +402,10 @@ class MyHandler
     		Model model = (Model)o;
     		String responseText = ModelUtil.toString(model, contentFormat);
     	
-    		return new SimpleResponse(responseContentType, responseText);
+    		return new SimpleResponse(200, responseContentType, responseText);
     	}
     	
-		return new SimpleResponse("text/plain", "Unsupported result type");   			
+		return new SimpleResponse(500, "text/plain", "Unsupported result type");   			
 	}
 	
 	public void handle(HttpExchange x)
@@ -371,17 +414,40 @@ class MyHandler
 		SimpleResponse response = null;
     	try {
     		response = process(x);
-    	} catch(Throwable t) {
-    		response = new SimpleResponse("text/plain", ExceptionUtil.toString(t));
+    	}
+    	catch(HTTPErrorException e) {
+    		// TODO Can be removed
+    		logger.info("Sending http status code: " + e.getErrorCode());
+    		response = new SimpleResponse(e.getErrorCode(), null, null);
+    	}
+    	catch(Throwable t) {
     		logger.error(response.getText());
+    		response = new SimpleResponse(500, null, null);
     	}
 
-    	Headers responseHeaders = x.getResponseHeaders();
-    	responseHeaders.set("Content-Type", response.getContentType()); 
     	
-        x.sendResponseHeaders(200, 0);//response.length());
+    	if(response == null) {
+    		response = new SimpleResponse(500, null, null);
+    		logger.error("No response object was created");
+    	}
+    	
+    	Headers responseHeaders = x.getResponseHeaders();
+
+
+    	if(response.getContentType() != null)
+    		responseHeaders.set("Content-Type", response.getContentType()); 
+
+    	logger.info("Sending http status code: " + response.getStatusCode());
+    	
+    	int responseLength = 0;
+    	if(response.getText() == null)
+    		responseLength = -1;
+
+        x.sendResponseHeaders(response.getStatusCode(), responseLength);
         OutputStream os = x.getResponseBody();
-        os.write(response.getText().getBytes());
+        
+        if(responseLength != -1)
+        	os.write(response.getText().getBytes());
         os.close();
     }
 }
@@ -513,8 +579,7 @@ public class JTriplifyServer
 		
 		MyHandler handler = new MyHandler();
 		handler.setInvocationMap(ric);
-		
-		
+
 		// Start
 		runServer(context, port, backLog, handler);
 	}
