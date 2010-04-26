@@ -288,7 +288,8 @@ class MyHandler
     	String responseContentType = null;
     	String contentFormat = null;
     	
-    	    	
+    	boolean exitLoop = false;
+
     	for(String accept : accepts) {
     		String[] items = accept.split(",");
     		for(String item : items) {
@@ -298,6 +299,7 @@ class MyHandler
 	    		if(ct.match("text/plain") || ct.match("text/html")) {
 	    			contentFormat = StringUtil.coalesce(requestFormat, "N-TRIPLE");
 	    			responseContentType = "text/plain";
+	    			exitLoop = true;
 	    			break;
 	    		}
 	    		
@@ -316,12 +318,23 @@ class MyHandler
 		    			
 		    			contentFormat = tmp;
 		    			responseContentType = item;
+		    			exitLoop = true;
 		    			break;
 		    		}
+		    		// FIXME This is ugly here
+		    		if(exitLoop)
+		    			break;
 	    		}
+
+	    		if(exitLoop)
+	    			break;
 	    	}
+
+    		if(exitLoop)
+    			break;
     	}
 
+    	
     	if(contentFormat == null) {
     		if(requestFormat != null) {
     			return new SimpleResponse("text/plain", "No suitable format found (Maybe you used ?format=... with incompatible accept header?)");
