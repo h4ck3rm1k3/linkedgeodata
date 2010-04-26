@@ -22,10 +22,12 @@ public class StreamUtil
 		String line;
 		while(null != (line = reader.readLine()))
 			result += line + "\n";
-	
-		in.close();
-		reader.close();
-		
+
+		if(bClose) {
+			reader.close();
+			in.close();
+		}
+
 		return result;
 	}
 }

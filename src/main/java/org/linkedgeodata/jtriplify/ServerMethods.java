@@ -15,6 +15,7 @@ import java.util.concurrent.Future;
 import org.linkedgeodata.jtriplify.LinkedGeoDataDAO.OSMEntityType;
 
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
 
 public class ServerMethods
 {
@@ -29,12 +30,12 @@ public class ServerMethods
 	}
 	
 	
-	public String publicNear(Double lat, Double lon, Double distance, String k, String v, Boolean bOr)
+	public Model publicNear(Double lat, Double lon, Double distance, String k, String v, Boolean bOr)
 		throws Exception
 	{
 		List<Model> models = getNearModels(lat, lon, distance, k, v, bOr);
 		
-		String result = toString(models);
+		Model result = ModelUtil.combine(models);
 		
 		return result;
 	}
@@ -93,7 +94,7 @@ public class ServerMethods
 		return result;
 	}
 	
-	public String getNode(String idStr)
+	public Model getNode(String idStr)
 		throws Exception
 	{
 		Long id = Long.parseLong(idStr);
@@ -103,12 +104,12 @@ public class ServerMethods
 		List<Callable<Model>> callables = getNodeModelQueries(ids);
 		List<Model> models = executeAll(executor, callables);
 	
-		String result = toString(models);
+		Model result = ModelUtil.combine(models);
 		
 		return result;
 	}
 
-	public String getWay(String idStr)
+	public Model getWay(String idStr)
 		throws Exception
 	{
 		Long id = Long.parseLong(idStr);
@@ -118,7 +119,7 @@ public class ServerMethods
 		List<Callable<Model>> callables = getWayModelQueries(ids);
 		List<Model> models = executeAll(executor, callables);
 		
-		String result = toString(models);
+		Model result = ModelUtil.combine(models);
 		
 		return result;
 	}
@@ -169,20 +170,4 @@ public class ServerMethods
 		return result;
 	}
 
-	public static String toString(Collection<Model> models) {
-		String result = "";
-		for(Model model : models) {
-			result += toString(model);		
-		}
-
-		return result;
-	}
-
-	private static String toString(Model model)
-	{
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		model.write(baos, "N-TRIPLE", "");
-	
-		return baos.toString();
-	}
 }
