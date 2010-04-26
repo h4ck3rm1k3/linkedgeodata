@@ -191,6 +191,9 @@ class MyHandler
 			contentTypeToJenaFormat.put(new ContentType("application/rdf+xml"), "RDF/XML");
 			//text/plain -> N-TRIPLE
 			contentTypeToJenaFormat.put(new ContentType("application/x-turtle"), "TURTLE");
+			contentTypeToJenaFormat.put(new ContentType("text/turtle"), "TURTLE");
+			
+			contentTypeToJenaFormat.put(new ContentType("text/n3"), "N3");
 			contentTypeToJenaFormat.put(new ContentType("text/rdf+n3"), "N3");
 		}
 		catch(Exception e) {
@@ -201,7 +204,7 @@ class MyHandler
 		formatToJenaFormat.put("rdfxml", "RDF/XML");
 		formatToJenaFormat.put("n3", "N3");
 		formatToJenaFormat.put("nt", "N-TRIPLE");		
-		formatToJenaFormat.put("turtle", "TURTLE");		
+		formatToJenaFormat.put("turtle", "TURTLE");
 	}
 	
 	public void setInvocationMap(RegexInvocationContainer ric)
@@ -503,7 +506,7 @@ public class JTriplifyServer
 		IInvocable nearFn = DefaultCoercions.wrap(methods, "publicNear.*");
 		
 		ric.put(".*near/([^/]*),([^/]*)/([^/?]*)/?(\\?.*)?", nearFn, "$0", "$1", "$2", null, null, false);
-		ric.put(".*near/([^/]*),([^/]*)/([^/]*)/([^/?]*)/?(\\?.*)?", nearFn, "$0", "$1", "$2", "$3", null, false);
+		ric.put(".*near/([^/]*),([^/]*)/([^/]*)/([^/=?]*)/?(\\?.*)?", nearFn, "$0", "$1", "$2", "$3", null, false);
 		ric.put(".*near/([^/]*),([^/]*)/([^/]*)/([^=]*)=([^/?]*)/?(\\?.*)?", nearFn, "$0", "$1", "$2", "$3", "$4", false);
 		ric.put(".*near/([^/]*),([^/]*)/([^/]*)/class/([^/?]*)/?(\\?.*)?", nearFn, "$0", "$1", "$2", "$3", "$3", true);
 		
