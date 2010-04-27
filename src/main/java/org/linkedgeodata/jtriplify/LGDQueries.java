@@ -230,20 +230,20 @@ public class LGDQueries
 				"('base:' || $osmEntityType || '/' || $osmEntityId || '#id') AS id,\n" +
 				"('vocabulary:' || $osmEntityType) AS \"rdf:type->\",\n" +
 				"(\n" +
-				"	CASE WHEN $propertyTypeCol = 'DatatypeProperty' THEN '' ELSE 'vocabulary:' END ||\n" +
-				"	CASE WHEN $vCol ~* 'yes' AND ($propertyTypeCol != 'DatatypeProperty' OR $propertyTypeCol IS NULL)\n" +
+				"	CASE WHEN COALESCE($propertyTypeCol, 'DatatypeProperty') = 'DatatypeProperty' THEN '' ELSE 'vocabulary:' END ||\n" +
+				"	CASE WHEN $vCol ~* 'yes' AND COALESCE($propertyTypeCol, 'DatatypeProperty') != 'DatatypeProperty'\n" +
 				"	THEN REPLACE(REPLACE(REPLACE($kCol, ':', '%25'), '+', '%2B'), ' ', '+')\n" +
 				//"	ELSE $vCol\n" +
 				"	ELSE REPLACE(REPLACE(REPLACE($vCol, ':', '%25'), '+', '%2B'), ' ', '+')\n" +
 				"	END\n" +
 				") AS \"t:unc\",\n" +
 				"(\n" +
-				"	CASE WHEN $propertyTypeCol = 'Class' OR $propertyTypeCol != 'DatatypeProperty' AND $vCol ~* 'yes'\n" +
+				"	CASE WHEN $propertyTypeCol = 'Class' OR COALESCE($propertyTypeCol, 'DatatypeProperty') != 'DatatypeProperty' AND $vCol ~* 'yes'\n" +
 				"	THEN 'rdf:type->'\n" +
 				"	ELSE\n" +
-				"		CASE WHEN $propertyTypeCol = 'DatatypeProperty' THEN '' ELSE 'vocabulary:' END ||\n" +
+				"		CASE WHEN COALESCE($propertyTypeCol, 'DatatypeProperty') = 'DatatypeProperty' THEN '' ELSE 'vocabulary:' END ||\n" +
 				"		REPLACE(REPLACE(REPLACE($kCol, ':', '%25'), '+', '%2B'), ' ', '+') ||\n" +
-				"		CASE WHEN $propertyTypeCol = 'DatatypeProperty' THEN '' ELSE '->' END\n" +
+				"		CASE WHEN COALESCE($propertyTypeCol, 'DatatypeProperty') = 'DatatypeProperty' THEN '' ELSE '->' END\n" +
 				"	END\n"  +
 				") AS a\n";
 

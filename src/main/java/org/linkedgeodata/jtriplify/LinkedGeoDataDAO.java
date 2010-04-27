@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import org.apache.commons.collections15.Transformer;
+import org.apache.log4j.Logger;
 import org.linkedgeodata.core.dao.AbstractDAO;
+import org.linkedgeodata.util.ExceptionUtil;
 import org.linkedgeodata.util.SQLUtil;
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -17,6 +19,8 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 public class LinkedGeoDataDAO
 	extends AbstractDAO
 {
+	private static final Logger logger = Logger.getLogger(LinkedGeoDataDAO.class);
+	
 	public enum Queries {
 		NODE_FIND,
 		NODE_FIND_K,
@@ -108,13 +112,20 @@ public class LinkedGeoDataDAO
 				public Model call()
 					throws Exception
 				{
-					if(ids.isEmpty()) {
-						return ModelFactory.createDefaultModel();
+					Model result = null;
+
+					try {
+						if(ids.isEmpty()) {
+							return ModelFactory.createDefaultModel();
+						}
+	
+						ResultSet rs = SQLUtil.executeCore(conn, finalSQL, ids.toArray());
+	
+						
+						result = TriplifyUtil.triplify(rs, uriResolver);
+					} catch(Throwable t) {
+						logger.error(ExceptionUtil.toString(t));
 					}
-
-					ResultSet rs = SQLUtil.executeCore(conn, finalSQL, ids.toArray());
-
-					Model result = TriplifyUtil.triplify(rs, uriResolver);
 					
 					return result;		
 				}
