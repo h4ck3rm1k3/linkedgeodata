@@ -4,7 +4,11 @@ java -jar LineStringUpdater.jar -dlgd_simple_0_6_postgis_1_3 -n1000 -upostgres -
 
 
 select id, linestring into way_lines from ways where linestring IS NOT NULL;
-
+CREATE FUNCTION add(integer, integer) RETURNS integer
+    AS 'select $1 + $2;'
+    LANGUAGE SQL
+    IMMUTABLE
+    RETURNS NULL ON NULL INPUT;
 
 Relation DatabaseState
 -------------------------------------------------------------------------------
@@ -454,3 +458,203 @@ FROM
 GROUP BY
 	c.way_id
 ;
+
+
+DROP FUNCTION LGD_test(val INT8);
+CREATE FUNCTION LGD_test(val INT8) RETURNS INT8 AS
+'
+DECLARE
+	result INT4 := 0;
+BEGIN
+
+    FOR i IN 0..val LOOP
+        result := i;
+    END LOOP;
+    RETURN result;
+END;
+'
+    LANGUAGE 'plpgsql'
+    IMMUTABLE
+    RETURNS NULL ON NULL INPUT;
+
+
+What i want now is a function that assigns a point to its tile.
+
+Test data:
+lat=50.1359444
+lon=8.3013034
+expected tile: 3493312635
+
+
+DROP FUNCTION LGD_WidenBits(INT4, INT4);
+CREATE FUNCTION LGD_WidenBits(val INT4, n INT4) RETURNS INT8 AS
+'
+DECLARE
+	tmp INT8;
+	result INT8 := 0;
+BEGIN
+
+    FOR i IN 0..n LOOP
+        tmp := (val >> i) & 1;
+        tmp := tmp << (i * 2);
+        result := result | tmp;
+    END LOOP;
+    RETURN result;
+END;
+'
+    LANGUAGE 'plpgsql'
+    IMMUTABLE
+    RETURNS NULL ON NULL INPUT;
+
+
+DROP FUNCTION LGD_ShrinkBits(INT8, INT4);
+CREATE FUNCTION LGD_ShrinkBits(val INT8, n INT4) RETURNS INT4 AS
+'
+DECLARE
+	tmp INT4;
+	result INT4 := 0;
+BEGIN
+
+    FOR i IN 0..n LOOP
+        tmp := (val >> (i * 2)) & 1;
+        tmp := tmp << i;
+        result := result | tmp;
+    END LOOP;
+    RETURN result;
+END;
+'
+    LANGUAGE 'plpgsql'
+    IMMUTABLE
+    RETURNS NULL ON NULL INPUT;
+
+
+
+
+DROP FUNCTION LGD_BitZip(INT4, INT4);
+CREATE FUNCTION LGD_BitZip(lat INT4, lon INT4) RETURNS INT8 AS
+'
+DECLARE
+	tmpLat INT4;
+	tmpLon INT4;
+BEGIN
+    IF lat > 65535 THEN tmpLat := 65535; ELSE tmpLat := lat; END IF;
+    IF lon > 65535 THEN tmpLon := 65535; ELSE tmpLon := lon; END IF;
+    
+    RETURN (LGD_WidenBits(tmpLon, 15) << 1) | LGD_WidenBits(tmpLat, 15); 
+END;
+'
+    LANGUAGE 'plpgsql'
+    IMMUTABLE
+    RETURNS NULL ON NULL INPUT;
+
+
+DROP FUNCTION LGD_ToTile(Geometry);
+CREATE FUNCTION LGD_ToTile(geom Geometry) RETURNS INT8 AS
+'
+DECLARE
+	lat INT4;
+	lon INT4;
+BEGIN
+    lat := TRUNC((Y(geom) + 90.0) / 180.0 * 65536.0)::INT4;
+	lon := TRUNC((X(geom) + 180.0) / 360.0 * 65536.0)::INT4;
+    
+    RETURN LGD_BitZip(lat, lon); 
+END;
+'
+    LANGUAGE 'plpgsql'
+    IMMUTABLE
+    RETURNS NULL ON NULL INPUT;
+
+
+
+
+
+DROP FUNCTION LGD_ToBBox(tile INT8);
+CREATE FUNCTION LGD_ToBBox(tile INT8) RETURNS Geometry AS
+'
+DECLARE
+    lat    INT4;
+    lon    INT4;
+	latMin FLOAT;
+	latMax FLOAT;
+	lonMin FLOAT;
+	lonMax FLOAT;
+BEGIN
+    lat := LGD_ShrinkBits(tile, 15);
+    lon := LGD_ShrinkBits(tile >> 1, 15);
+    
+    latMin := lat / 65536.0 * 180.0 - 90.0;
+	latMax := (lat + 1) / 65536.0 * 180.0 - 90.0;
+
+	lonMin := lon / 65536.0 * 360.0 - 180.0;
+	lonMax := (lon + 1) / 65536.0 * 360.0 - 180.0;
+
+
+    RETURN ST_SetSRID(ST_MakeBox2D(ST_MakePoint(lonMin, latMin), ST_MakePoint(lonMax, latMax)), 4326); 
+END;
+'
+    LANGUAGE 'plpgsql'
+    IMMUTABLE
+    RETURNS NULL ON NULL INPUT;
+
+
+
+
+
+
+/* Black list table: Tags with those keys should be ignored for various tasks */
+CREATE TABLE BlackListK (
+	k TEXT PRIMARY KEY
+)
+	IF latMin < -180 THEN latMin = -180 END IF;
+	IF lonMin < -180 THEN latMin = -180 END IF;
+	IF latMin < -180 THEN latMin = -180 END IF;
+	IF latMin < -180 THEN latMin = -180 END IF;
+*/
+
+
+
+BlackListKV
+
+// Step 1: Find all tiles that are there
+// Step 2: For each tile create the bounding box
+
+
+// for a tile, how often the value k appears in tags
+CREATE TABLE TilesK16 (
+	tile_id INTEGER PRIMARY KEY,
+	k TEXT NOT NULL,
+	c INTEGER count
+)
+
+So the next step is: For each tile we need to aggregate the keys that are in there.
+INSERT
+	INTO TilesK16
+SELECT
+	
+
+
+
+Some test
+------
+DROP FUNCTION LGD_ToT(Geometry);
+CREATE FUNCTION LGD_ToT(geom Geometry) RETURNS Geometry AS
+'
+DECLARE
+	lat INT4;
+	lon INT4;
+BEGIN
+    lat := TRUNC((Y(geom) + 90.0) / 180.0 * 65536.0)::int4;
+	lon := TRUNC((X(geom) + 180.0) / 360.0 * 65536.0)::int4; 
+    
+    RETURN MakePoint(lat, lon);
+END;
+'
+    LANGUAGE 'plpgsql'
+    IMMUTABLE
+    RETURNS NULL ON NULL INPUT;
+
+
+
+
+
