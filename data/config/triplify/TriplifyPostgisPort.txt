@@ -480,21 +480,19 @@ END;
 
 What i want now is a function that assigns a point to its tile.
 
-Test data:
-lat=50.1359444
-lon=8.3013034
-expected tile: 3493312635
 
 
-DROP FUNCTION LGD_WidenBits(INT4, INT4);
+DROP FUNCTION LGD_WidenBits(val INT4, n INT4);
 CREATE FUNCTION LGD_WidenBits(val INT4, n INT4) RETURNS INT8 AS
 '
 DECLARE
+    m INT4;
 	tmp INT8;
 	result INT8 := 0;
 BEGIN
+    m = n - 1;
 
-    FOR i IN 0..n LOOP
+    FOR i IN 0..m LOOP
         tmp := (val >> i) & 1;
         tmp := tmp << (i * 2);
         result := result | tmp;
@@ -511,11 +509,13 @@ DROP FUNCTION LGD_ShrinkBits(INT8, INT4);
 CREATE FUNCTION LGD_ShrinkBits(val INT8, n INT4) RETURNS INT4 AS
 '
 DECLARE
+    m   INT4;
 	tmp INT4;
 	result INT4 := 0;
 BEGIN
+    m = n - 1;
 
-    FOR i IN 0..n LOOP
+    FOR i IN 0..m LOOP
         tmp := (val >> (i * 2)) & 1;
         tmp := tmp << i;
         result := result | tmp;
@@ -530,17 +530,36 @@ END;
 
 
 
-DROP FUNCTION LGD_BitZip(INT4, INT4);
-CREATE FUNCTION LGD_BitZip(lat INT4, lon INT4) RETURNS INT8 AS
+DROP FUNCTION LGD_BitZip(lon INT4, lat INT4, n INT4);
+CREATE FUNCTION LGD_BitZip(lon INT4, lat INT4, n INT4) RETURNS INT8 AS
+'
+BEGIN    
+    RETURN (LGD_WidenBits(lon, n) << 1) | LGD_WidenBits(lat, n); 
+END;
+'
+    LANGUAGE 'plpgsql'
+    IMMUTABLE
+    RETURNS NULL ON NULL INPUT;
+
+
+DROP FUNCTION LGD_ToTile(geom Geometry, zoom INT);
+CREATE FUNCTION LGD_ToTile(geom Geometry, zoom INT) RETURNS INT8 AS
 '
 DECLARE
+	f   INT4;
+	lat INT4;
+	lon INT4;
 	tmpLat INT4;
 	tmpLon INT4;
 BEGIN
-    IF lat > 65535 THEN tmpLat := 65535; ELSE tmpLat := lat; END IF;
-    IF lon > 65535 THEN tmpLon := 65535; ELSE tmpLon := lon; END IF;
+    f   := POW(2, zoom);
+    lat := TRUNC((Y(geom) + 90.0) / 180.0 * f)::INT4;
+	lon := TRUNC((X(geom) + 180.0) / 360.0 * f)::INT4;
     
-    RETURN (LGD_WidenBits(tmpLon, 15) << 1) | LGD_WidenBits(tmpLat, 15); 
+    IF lat >= f THEN tmpLat := f - 1; ELSE tmpLat := lat; END IF;
+    IF lon >= f THEN tmpLon := f - 1; ELSE tmpLon := lon; END IF;
+
+    RETURN LGD_BitZip(tmpLon, tmpLat, zoom); 
 END;
 '
     LANGUAGE 'plpgsql'
@@ -548,17 +567,34 @@ END;
     RETURNS NULL ON NULL INPUT;
 
 
-DROP FUNCTION LGD_ToTile(Geometry);
-CREATE FUNCTION LGD_ToTile(geom Geometry) RETURNS INT8 AS
+
+DROP FUNCTION LGD_ToTile(geog Geography, zoom INT);
+CREATE FUNCTION LGD_ToTile(geog Geography, zoom INT) RETURNS INT8 AS
+'
+
+BEGIN
+    RETURN LGD_ToTile(geog::geometry, zoom); 
+END;
+'
+    LANGUAGE 'plpgsql'
+    IMMUTABLE
+    RETURNS NULL ON NULL INPUT;
+
+
+
+DROP FUNCTION LGD_ToTileLegacy(geom Geometry, zoom INT);
+CREATE FUNCTION LGD_ToTileLegacy(geom Geometry, zoom INT) RETURNS INT8 AS
 '
 DECLARE
+	f   INT4;
 	lat INT4;
 	lon INT4;
 BEGIN
-    lat := TRUNC((Y(geom) + 90.0) / 180.0 * 65536.0)::INT4;
-	lon := TRUNC((X(geom) + 180.0) / 360.0 * 65536.0)::INT4;
-    
-    RETURN LGD_BitZip(lat, lon); 
+    f   := POW(2, zoom) - 1;
+    lat := TRUNC((Y(geom) + 90.0) / 180.0 * f);
+	lon := TRUNC((X(geom) + 180.0) / 360.0 * f);
+
+    RETURN LGD_BitZip(lon, lat, zoom); 
 END;
 '
     LANGUAGE 'plpgsql'
@@ -568,11 +604,11 @@ END;
 
 
 
-
-DROP FUNCTION LGD_ToBBox(tile INT8);
-CREATE FUNCTION LGD_ToBBox(tile INT8) RETURNS Geometry AS
+DROP FUNCTION LGD_ToBBox(tile INT8, zoom INT);
+CREATE FUNCTION LGD_ToBBox(tile INT8, zoom INT) RETURNS Geometry AS
 '
 DECLARE
+    f      FLOAT;
     lat    INT4;
     lon    INT4;
 	latMin FLOAT;
@@ -580,14 +616,15 @@ DECLARE
 	lonMin FLOAT;
 	lonMax FLOAT;
 BEGIN
-    lat := LGD_ShrinkBits(tile, 15);
-    lon := LGD_ShrinkBits(tile >> 1, 15);
+    f := POW(2, zoom);
+    lat := LGD_ShrinkBits(tile, zoom);
+    lon := LGD_ShrinkBits(tile >> 1, zoom);
     
-    latMin := lat / 65536.0 * 180.0 - 90.0;
-	latMax := (lat + 1) / 65536.0 * 180.0 - 90.0;
+    latMin := lat / f * 180.0 - 90.0;
+	latMax := (lat + 1) / f * 180.0 - 90.0;
 
-	lonMin := lon / 65536.0 * 360.0 - 180.0;
-	lonMax := (lon + 1) / 65536.0 * 360.0 - 180.0;
+	lonMin := lon / f * 360.0 - 180.0;
+	lonMax := (lon + 1) / f * 360.0 - 180.0;
 
 
     RETURN ST_SetSRID(ST_MakeBox2D(ST_MakePoint(lonMin, latMin), ST_MakePoint(lonMax, latMax)), 4326); 
@@ -644,8 +681,8 @@ DECLARE
 	lat INT4;
 	lon INT4;
 BEGIN
-    lat := TRUNC((Y(geom) + 90.0) / 180.0 * 65536.0)::int4;
-	lon := TRUNC((X(geom) + 180.0) / 360.0 * 65536.0)::int4; 
+    lat := TRUNC((Y(geom) + 90.0) / 180.0 * 65536.0);
+	lon := TRUNC((X(geom) + 180.0) / 360.0 * 65536.0); 
     
     RETURN MakePoint(lat, lon);
 END;
@@ -656,5 +693,55 @@ END;
 
 
 
+TEST CASES FOR THESE POSTGRES FUNCTIONS
+lgd=# SELECT ST_AsText(LGD_ToBBox(0, 0));
+                      st_astext                      
+-----------------------------------------------------
+ POLYGON((-180 -90,-180 90,180 90,180 -90,-180 -90))
+(1 Zeile)
+
+lgd=# SELECT ST_AsText(LGD_ToBBox(1, 0));
+                      st_astext                      
+-----------------------------------------------------
+ POLYGON((-180 -90,-180 90,180 90,180 -90,-180 -90))
+(1 Zeile)
+
+lgd=# SELECT ST_AsText(LGD_ToBBox(0, 1));
+                   st_astext                   
+-----------------------------------------------
+ POLYGON((-180 -90,-180 0,0 0,0 -90,-180 -90))
+(1 Zeile)
+ 
+lgd=# SELECT ST_AsText(LGD_ToBBox(1, 1));
+                 st_astext
+-------------------------------------------
+ POLYGON((-180 0,-180 90,0 90,0 0,-180 0))
+(1 Zeile)
+ 
+lgd=# SELECT ST_AsText(LGD_ToBBox(2, 1));
+                st_astext
+------------------------------------------
+ POLYGON((0 -90,0 0,180 0,180 -90,0 -90))
+(1 Zeile)
+ 
+lgd=# SELECT ST_AsText(LGD_ToBBox(3, 1));
+              st_astext
+--------------------------------------
+ POLYGON((0 0,0 90,180 90,180 0,0 0))
+(1 Zeile)
+
+
+
+Test data:
+lat=50.1359444
+lon=8.3013034
+expected tile: 3493312635
+
+select LGD_ToTileLegacy(ST_MakePoint(8.3013034, 50.1359444), 16);
+select ST_AsText(LGD_ToBBox(3493312635, 16));
+
+select ST_AsText(LGD_ToBBox(LGD_ToTile(ST_MakePoint(8.3013034, 50.1359444), 16), 16));
+
+select ST_AsText(LGD_ToBBox(LGD_ToTile(ST_MakePoint(8.3013034, 50.1359444), 4), 4));
 
 
