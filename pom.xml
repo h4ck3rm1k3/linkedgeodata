@@ -5,6 +5,15 @@
   <version>0.0.1-SNAPSHOT</version>
   <name>LinkedGeoData</name>
   <description>LinkedGeoData.org - Adding a spatial dimension to the Web of Data.</description>
+  <build>
+  	<plugins>
+  		<plugin>
+  			<groupId>org.codehaus.groovy.maven</groupId>
+  			<artifactId>gmaven-plugin</artifactId>
+  			<version>1.0</version>
+  		</plugin>
+  	</plugins>
+  </build>
   <repositories>
   	<repository>
   		<snapshots>
@@ -80,6 +89,13 @@
   		<groupId>javax.mail</groupId>
   		<artifactId>mail</artifactId>
   		<version>1.4.1</version>
+  		<type>jar</type>
+  		<scope>compile</scope>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.codehaus.groovy</groupId>
+  		<artifactId>groovy</artifactId>
+  		<version>1.7.2</version>
   		<type>jar</type>
   		<scope>compile</scope>
   	</dependency>

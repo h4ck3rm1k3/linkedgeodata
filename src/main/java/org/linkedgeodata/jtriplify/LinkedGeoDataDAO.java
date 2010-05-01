@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.linkedgeodata.core.dao.AbstractDAO;
 import org.linkedgeodata.util.ExceptionUtil;
 import org.linkedgeodata.util.SQLUtil;
+import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -34,10 +35,13 @@ public class LinkedGeoDataDAO
 	}
 
 	private Transformer<String, URI> uriResolver;
+	private TagMapper tagMapper;
 	
-	public LinkedGeoDataDAO(Transformer<String, URI> uriResolver)
+	public LinkedGeoDataDAO(Transformer<String, URI> uriResolver, TagMapper tagMapper)
 	{
 		this.uriResolver = uriResolver;
+		
+		this.tagMapper = tagMapper;
 	}
 
 	/*
@@ -134,6 +138,52 @@ public class LinkedGeoDataDAO
 		return result;
 	}
 	
+
+	private Callable<Model> prepareIdBasedTagQuery(String sql, final String osmEntityType, final Collection<Long> ids)
+	{
+		String placeHolders = SQLUtil.placeHolder(ids.size(), 1);
+		final String finalSQL = sql.replace("$1", placeHolders);
+		
+		Callable<Model> result =
+			new Callable<Model>() {
+				@Override
+				public Model call()
+					throws Exception
+				{
+					Model result = null;
+
+					try {
+						if(ids.isEmpty()) {
+							return ModelFactory.createDefaultModel();
+						}
+	
+						String prefix = "http://linkedgeodata/triplify/" + osmEntityType + "/";
+						
+						result = ModelFactory.createDefaultModel();
+						ResultSet rs = SQLUtil.executeCore(conn, finalSQL, ids.toArray());
+						while(rs.next()) {
+							Long id = rs.getLong("id");
+							String k = rs.getString("k");
+							String v = rs.getString("v");
+							
+							URI uri = URI.create(prefix + id + "#id");
+							
+							Model model = tagMapper.map(uri, new Tag(k, v));
+							result.add(model);
+						}
+
+					} catch(Throwable t) {
+						logger.error(ExceptionUtil.toString(t));
+					}
+					
+					return result;		
+				}
+			};
+			
+		return result;
+	}
+	
+	
 	
 	public Callable<Model> getNodeGeoRSS(Collection<Long> ids)
 		throws Exception
@@ -151,7 +201,7 @@ public class LinkedGeoDataDAO
 	public Callable<Model> getNodeTagsQuery(Collection<Long> ids)
 		throws Exception
 	{
-		return prepareSimpleIdBasedQuery(LGDQueries.nodeTagsQuery, ids);
+		return prepareIdBasedTagQuery(LGDQueries.nodeTagsQuery, "node", ids);
 	}
 	
 	public Callable<Model> getNodeWayMemberQuery(Collection<Long> ids)
@@ -169,7 +219,7 @@ public class LinkedGeoDataDAO
 	public Callable<Model> getWayTags(Collection<Long> ids)
 		throws Exception
 	{
-		return prepareSimpleIdBasedQuery(LGDQueries.wayTagsQuery, ids);
+		return prepareIdBasedTagQuery(LGDQueries.wayTagsQuery, "way", ids);
 	}
 
 	public Callable<Model> getWayNodes(Collection<Long> ids)

@@ -100,6 +100,107 @@ Leipzig: http://linkedgeodata.org:7000/triplify/near/51.20,12.22/1000/amenity
 Exception: http://localhost:7000/triplify/way/33241659 (not tried locally yet)
 -------------------------------------------------------------------------------
 
+Statistics
+-------------------------------------------------------------------------------
+Global count of how many times each key is used.
+Rationale: Determine how many tags could be removed for optimization.
+(e.g. how much reducation would be gain by removing all "source" tags?)
+SELECT nt.k, COUNT(*) INTO stats_k_node_tags FROM node_tags nt GROUP BY nt.k;
+
+
+Count of absolute URIS per k. Determine which links to other datasources exists.
+SELECT nt.k, COUNT(*) INTO stats_k_count_uris FROM node_tags nt WHERE nt.v LIKE '%://%' GROUP BY nt.k;
+
+
+DROP FUNCTION LGD_TryParseInt(str TEXT);
+CREATE FUNCTION LGD_TryParseInt(str TEXT) RETURNS INT8 AS
+'
+DECLARE
+BEGIN
+    RETURN str::int8;
+EXCEPTION
+	WHEN OTHERS THEN
+		RETURN NULL;
+END;
+'
+    LANGUAGE 'plpgsql'
+    IMMUTABLE
+    RETURNS NULL ON NULL INPUT;
+
+
+DROP FUNCTION LGD_TryParseFloat(str TEXT);
+CREATE FUNCTION LGD_TryParseFloat(str TEXT) RETURNS FLOAT AS
+'
+DECLARE
+BEGIN
+    RETURN str::float;
+EXCEPTION
+	WHEN OTHERS THEN
+		RETURN NULL;
+END;
+'
+    LANGUAGE 'plpgsql'
+    IMMUTABLE
+    RETURNS NULL ON NULL INPUT;
+
+SELECT
+	k,
+	SUM(1) AS count_total,
+	SUM(CASE WHEN LGD_TryParseInt(v) IS NOT NULL THEN 1 ELSE 0 END) AS count_int,
+	SUM(CASE WHEN LGD_TryParseFloat(v) IS NOT NULL THEN 1 ELSE 0 END) AS count_float
+INTO
+	lgd_stats_datatypes
+FROM
+	node_tags
+GROUP BY
+	k;
+
+
+// Count bools
+SELECT
+	k,
+	SUM(1) AS count_total,
+	SUM(CASE WHEN v ~* 'yes'   THEN 1 ELSE 0 END) AS count_yes,
+	SUM(CASE WHEN v ~* 'no'    THEN 1 ELSE 0 END) AS count_no,
+	SUM(CASE WHEN v ~* 'true'  THEN 1 ELSE 0 END) AS count_true,
+	SUM(CASE WHEN v ~* 'false' THEN 1 ELSE 0 END) AS count_false,
+	SUM(CASE WHEN v ~* '1'     THEN 1 ELSE 0 END) AS count_one,
+	SUM(CASE WHEN v ~* '0'     THEN 1 ELSE 0 END) AS count_zero
+INTO
+	lgd_stats_boolean
+FROM
+	node_tags
+GROUP BY
+	k;
+
+// Count bools
+SELECT
+	k,
+	SUM(1) AS count_total,
+	SUM(CASE WHEN v ~* 'yes'   THEN 1 ELSE 0 END) AS count_,
+INTO
+	lgd_stats_uris
+FROM
+	node_tags
+GROUP BY
+	k;
+
+
+// Count URIs
+SELECT
+	k,
+	SUM(1) AS count_total,
+	SUM(CASE WHEN v SIMILAR TO ' *[^ ]+(.[^ ]+)+' THEN 1 ELSE 0 END) AS count_uri
+INTO
+	lgd_stats_uris
+FROM
+	node_tags
+GROUP BY
+	k;
+
+	
+Old pattern with http: ' *[^ ]+://[^ ]+ *'
+select k, count_total, count_int / count_total::float as ratio_int, count_float / count_total::float as ratio_float from stats_datatypes order by ratio_int desc;
 
 
 Resource table
@@ -743,5 +844,62 @@ select ST_AsText(LGD_ToBBox(3493312635, 16));
 select ST_AsText(LGD_ToBBox(LGD_ToTile(ST_MakePoint(8.3013034, 50.1359444), 16), 16));
 
 select ST_AsText(LGD_ToBBox(LGD_ToTile(ST_MakePoint(8.3013034, 50.1359444), 4), 4));
+
+
+
+
+Tile Tables
+-------------------------------------------------------------------------------
+Tile k count
+Tile k v cout
+
+
+SELECT
+	LGD_ToTile(nt.geom, 16) AS tile_id, k, COUNT(*) AS count
+INTO
+	node_tiles_k_16
+FROM
+	node_tags nt
+GROUP BY
+	tile_id, k;
+
+CREATE INDEX idx_node_tiles_k_16_tile_id_k ON node_tiles_k_16 (tile_id, k);
+
+
+SELECT
+	ntk.tile_id >> (2 * 2) as tile_id, ntk.k, SUM(ntk.count) AS count
+INTO
+	node_tiles_k_$child
+FROM
+	node_tiles_k_$parent ntk
+GROUP BY
+	tile_id, k
+CREATE INDEX idx_node_tiles_k_$child_tile_id_k ON node_tiles_k_$child (tile_id, k);
+	
+	
+
+
+
+Property Mappings
+-------------------------------------------------------------------------------
+
+CREATE TABLE LGD_SimplePropertyMap(
+	id       INTEGER PRIMARY KEY
+	resource TEXT,
+);
+
+CREATE TABLE LGD_TagDependency(
+	resource TEXT,
+	k TEXT,
+	v TEXT
+);
+
+
+
+// Vocab for addresses
+http://www.freebase.com/view/m/05yvtm6/-/base/vocab/vocabulary/prop_spec
+
+
+
 
 

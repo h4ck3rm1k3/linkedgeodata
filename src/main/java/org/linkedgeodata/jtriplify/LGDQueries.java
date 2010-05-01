@@ -291,6 +291,15 @@ public class LGDQueries
 	
 	public static final String nodeTagsQuery =
 		"SELECT\n" +
+		"	nt.node_id AS id, nt.k, nt.v\n" +
+		"FROM\n" +
+		"	node_tags nt\n" +
+		"WHERE\n" +
+		"	nt.node_id IN ($1)";
+
+	/*
+	public static final String nodeTagsQuery =
+		"SELECT\n" +
 		"	" + tagHead("t.osm_entity_type", "t.osm_entity_id", "p.ontology_entity_type", "t.k", "t.v") + "\n" +
 		"FROM\n" +
 		"	tags t\n" +
@@ -298,7 +307,7 @@ public class LGDQueries
 		"WHERE\n" +
 		"	t.osm_entity_type = 'node' AND\n" +
 		"	t.osm_entity_id IN ($1)";
-
+	*/
 
 
 	public static final String wayGeoRSSQuery =
@@ -319,6 +328,16 @@ public class LGDQueries
 	
 	public static final String wayTagsQuery =
 		"SELECT\n" +
+		"	t.way_id AS id, t.k, t.v\n" +
+		"FROM\n" +
+		"	way_tags t\n" +
+		"WHERE\n" +
+		"	t.way_id IN ($1)\n";
+
+	
+	/*
+	public static final String wayTagsQuery =
+		"SELECT\n" +
 		"	 " +  tagHead("t.osm_entity_type", "t.osm_entity_id", "p.ontology_entity_type", "t.k", "t.v") + "\n" +
 		"FROM\n" +
 		"	tags t\n" +
@@ -326,7 +345,7 @@ public class LGDQueries
 		"WHERE\n" +
 		"	t.osm_entity_type = 'way' AND\n" +
 		"	t.osm_entity_id IN ($1)\n";
-
+*/
 	public static final String wayNodeQuery =
 		"SELECT\n" +
 		"	('base:way/' || wn.way_id || '#id') AS id,\n" +

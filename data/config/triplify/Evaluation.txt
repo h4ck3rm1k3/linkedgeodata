@@ -1,0 +1,25 @@
+
+
+
+
+
+lgd=# select * from node_tags where k = 'wikipedia:en' limit 10;
+  node_id  |      k       |                        v                        |                        geom                        
+-----------+--------------+-------------------------------------------------+----------------------------------------------------
+ 581375602 | wikipedia:en | 2008 Shandong train collision                   | 0101000020E6100000E6971CD203725D405F7935E5AF584240
+  26559136 | wikipedia:en | Aakirkeby                                       | 0101000020E61000002B0B708B43D72D403F52E9CCE2884B40
+  26608613 | wikipedia:en | Aalborg_Airport                                 | 0101000020E61000000DE2033BFEB3234055CB8C6D088C4C40
+ 295434989 | wikipedia:en | Abadan_Airport                                  | 0101000020E6100000000B4F9E681D4840EC8909C5B15D3E40
+ 191657470 | wikipedia:en | Abakan                                          | 0101000020E610000054DF9E8C16DC564010DB27918EDB4A40
+ 316844539 | wikipedia:en | Aba_Tenna_Dejazmach_Yilma_International_Airport | 0101000020E6100000D7D0178C5BED4440D274D1EBAA3F2340
+ 429822892 | wikipedia:en | Abbey_St_Bathans                                | 0101000020E6100000BAC1AB40881F03C040344E9E0DEC4B40
+ 373352989 | wikipedia:en | Abbey_St_Bathans                                | 0101000020E6100000B47977BF651903C0BB05B75ACCEC4B40
+ 259849778 | wikipedia:en | Abel_Santa_Mar%C3%ADa_Airport                   | 0101000020E6100000378364A659FC53C093D4F83BCA7D3640
+ 368393220 | wikipedia:en | Aberdeen_Regional_Airport                       | 0101000020E61000008DF1BCAF259B58C09BB1C3F3ADB94640
+
+> There are at least some keys which imply uris.
+So a simple scan for absolute URIs doesn't reveal everything.
+
+
+
+SELECT ST_AsText(nt.geom), nt.k, nt.v FROM node_tags nt WHERE LGD_ToTile(nt.geom, 16) = LGD_ToTile(Point(8, 50), 16);

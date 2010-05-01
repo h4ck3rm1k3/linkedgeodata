@@ -1,4 +1,4 @@
-package org.linkedgeodata.jtriplify;
+package org.linkedgeodata.util;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Collection;

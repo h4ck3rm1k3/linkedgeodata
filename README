@@ -15,3 +15,7 @@ SPARQL, REST interface, LGD Browser).
 We are in the progress of migrating code to the project. Until this phase is
 completed, the code is likely to not work as expected.
 
+
+TODO:
+Use maven or svn-external for osmosis, following link might be useful
+http://lists.openstreetmap.org/pipermail/osmosis-dev/2009-November/000324.html

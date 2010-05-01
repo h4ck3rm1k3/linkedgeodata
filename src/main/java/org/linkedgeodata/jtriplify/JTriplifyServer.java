@@ -10,7 +10,6 @@ import java.net.InetSocketAddress;
 import java.net.URI;
 import java.sql.Connection;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -19,14 +18,14 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.mail.internet.ContentType;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.collections15.MultiMap;
 import org.apache.commons.collections15.Transformer;
-import org.apache.commons.collections15.multimap.MultiHashMap;
-import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.linkedgeodata.jtriplify.methods.DefaultCoercions;
@@ -35,15 +34,16 @@ import org.linkedgeodata.jtriplify.methods.IInvocable;
 import org.linkedgeodata.jtriplify.methods.JavaMethodInvocable;
 import org.linkedgeodata.scripts.LineStringUpdater;
 import org.linkedgeodata.util.ExceptionUtil;
+import org.linkedgeodata.util.ModelUtil;
 import org.linkedgeodata.util.StreamUtil;
 import org.linkedgeodata.util.StringUtil;
+import org.linkedgeodata.util.URIUtil;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
-import javax.mail.internet.ContentType;
 
 class ICPair
 {
@@ -239,33 +239,7 @@ class MyHandler
 	}
 	
 	
-	public static MultiMap<String, String> getQueryMap(String query)  
-	{  
-	    MultiMap<String, String> result = new MultiHashMap<String, String>();  
-	    if(query == null)
-	    	return result;
-	    
-	    String[] params = query.split("&");  
-	    for (String param : params)  
-	    {
-	    	String[] kv = param.split("=", 2);
-	        String key = kv[0];  
-	        String value = kv.length == 2 ? kv[1] : null;
 
-	        result.put(key, value);
-	    }  
-	    return result;  
-	}
-	
-	public static <K, V> Collection<V> safeGet(MultiMap<K, V> map, K key)
-	{
-		Collection<V> value = map.get(key);
-		if(value == null)
-			return Collections.emptyList();
-		
-		return value;
-	}
-	
 	public static <T> T getFirst(Iterable<T> iterable)
 	{
 		if(iterable == null)
@@ -294,7 +268,7 @@ class MyHandler
     	// As this excludes some of the content types that may be used
     	URI requestURI = t.getRequestURI();
     	String query = requestURI.getQuery();
-    	MultiMap<String, String> params = getQueryMap(query);
+    	MultiMap<String, String> params = URIUtil.getQueryMap(query);
  
  
     	String rawFormat = getFirst(params.get("format"));
@@ -549,8 +523,10 @@ public class JTriplifyServer
 		logger.info("Connecting to db");
 		Connection conn = LineStringUpdater.connectPostGIS(hostName, dbName, userName, passWord);
 
+		TagMapper tagMapper = new TagMapper();
+		tagMapper.load(new File("LGDMappingRules.txt"));
 		
-		LinkedGeoDataDAO dao = new LinkedGeoDataDAO(uriResolver);
+		LinkedGeoDataDAO dao = new LinkedGeoDataDAO(uriResolver, tagMapper);
 		dao.setConnection(conn);
 		
 		ServerMethods methods = new ServerMethods(dao);
