@@ -361,7 +361,7 @@ elements table initialization
 
 properties table creation
 -------------------------------------------------------------------------------
-CREATE TABLE properties(
+CREATE TABLE lgd_properties(
 	k                    TEXT               NOT NULL,
 	ontology_entity_type OntologyEntityType,
 	usage_count          BIGINT             NOT NULL,
@@ -369,7 +369,7 @@ CREATE TABLE properties(
 	PRIMARY KEY(k)
 );
 
-CREATE INDEX idx_properties_ontology_entity_type_k ON properties(ontology_entity_type, k);
+CREATE INDEX idx_lgd_properties_k ON lgd_properties(k);
 
 
 property table initialization

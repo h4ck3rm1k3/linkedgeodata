@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import org.apache.log4j.Logger 
 import org.apache.log4j.PropertyConfigurator 
 import org.linkedgeodata.util.ModelUtil
+import org.linkedgeodata.util.StringUtil 
 import org.linkedgeodata.jtriplify.TagEntityMap 
 import org.linkedgeodata.jtriplify.mapping.IOneOneTagMapper 
 import org.linkedgeodata.jtriplify.mapping.SimpleClassTagMapper
@@ -25,6 +26,8 @@ import com.hp.hpl.jena.vocabulary.OWL
 import com.hp.hpl.jena.vocabulary.RDF 
 import com.hp.hpl.jena.vocabulary.RDFS
 import com.hp.hpl.jena.vocabulary.XSD 
+import org.apache.commons.collections15.MultiMap
+import org.apache.commons.collections15.multimap.MultiHashMap
 
 
 /***
@@ -165,8 +168,28 @@ class MyClass
 	}
 	
 	
+	def String toCamelCase(String s)
+	{
+		int offset = 0;
+		String result = "";
+		for(;;) {
+			int newOffset = s.indexOf('_', offset);
+			if(newOffset == -1) {
+				result += StringUtil.ucFirst(s.substring(offset));
+				break;
+			}
+			
+			result += StringUtil.ucFirst(s.substring(offset + 1));
+			offset = newOffset;
+		}
+		
+		return result;
+	}
+	
 	def registerClass(String k)
 	{
+		//k = StringUtil.ucFirst(toCamelCase(k));
+
 		URI resource = keyToURI(k);
 
 		SimpleClassTagMapper tagMapper = new SimpleClassTagMapper(resource, new Tag(k, null))
@@ -360,6 +383,97 @@ class MyClass
 		// Phase 0.5 Determine keys that end with a language tag
 		loadKeys();
 		
+		// Gather classes
+		/**
+		 * The default rule for classes is:
+		 * id | k | v -> id type k (k, null)
+		 * 
+		 * For each frequently used value a new rule is created:
+		 * id | k | v - > id type v(k, v)
+		 * in this case v becomes a sub-class of k
+		 * 
+		 * 
+		 * 
+		 */
+
+		
+
+		MultiMap<String, String> kv = new MultiHashMap<String, String>();
+		MultiMap<String, String> vk = new MultiHashMap<String, String>();
+		List<String> classes = new ArrayList<String>(["highway","barrier","cycleway","waterway","lock","railway","aeroway","aerialway","power","man_made","building","leisure","amenity","shop","tourism","historic","landuse","military","natural","route","boundary","sport"])
+		rs = conn.createStatement().executeQuery(
+				"""\
+				SELECT 
+						k, distinct_value_count
+				FROM
+						lgd_properties
+				""")
+		while(rs.next())
+		{
+			def(String k, int dvc) = [rs.getString("k"), rs.getInt("distinct_value_count")];
+
+			if(!keys.contains(k))
+				continue;
+			
+			if(!classes.contains(k))
+				continue;
+
+			registerClass(k);
+			logger.debug("Registered class: $k");
+
+			
+			String escapedK = k.replace("'", "''");
+			ResultSet rs2 = conn.createStatement().executeQuery(
+					"""\
+					SELECT 
+						v, COUNT(*) AS count
+					FROM
+						node_tags
+					WHERE
+						k = '$escapedK'
+					GROUP BY
+						v
+					""")
+		
+			while(rs2.next()) {
+				def(String v, int c) = [rs2.getString("v"), rs2.getInt("count")];
+
+				if(c > 10) {
+					kv.put(k, v);
+					vk.put(v, k);
+				}
+			}
+
+			keys.remove(k);
+		}
+
+		for(Map.Entry<String, Collection<String>> item : kv.entrySet()) {
+			def(String k, Collection<String> vs) = [item.getKey(), item.getValue()];
+			
+			for(String v : vs) {
+				// This avoids values we use as subclasses here to become
+				// datatype properties later
+				// (e.g. amenity biergarten ; biergarten yes)
+				keys.remove(v);
+				
+				if(vk.get(v).size() != 1) {
+					logger.info("Disambiguating: $k $v: $vk");
+					// arialway, tower becomes arialwayTower
+					// the register(sub)class method than makes the first letter of
+					// the class upper case too
+					//v = k + StringUtil.ucFirst(v);
+					
+					// or better leave case as is, and separate with underscore
+					// TODO Check if compound name is unique
+					v = k + "_" + v;
+				}
+			                           
+				registerSubClass(k, v)
+				logger.debug("Registered Sub-class: $k, $v");
+			}
+		}
+		kv = null;
+		vk = null;
 		
 		
 		// Phase 1: Identify integer and float datatype properties
@@ -455,6 +569,8 @@ class MyClass
 			if(!keys.contains(k))
 				continue;
 		 
+			if(countTotal < 20)
+				continue;
 		
 			int countBool  = countYes + countTrue + countNo + countFalse;	
 				 
@@ -522,63 +638,6 @@ class MyClass
 		logger.info("Identified {$numLangProps} as language properties, counted " + prefixSet.size() + " distinct prefixes")
 		
 		
-		// Gather classes
-		/**
-		 * The default rule for classes is:
-		 * id | k | v -> id type k (k, null)
-		 * 
-		 * For each frequently used value a new rule is created:
-		 * id | k | v - > id type v(k, v)
-		 * in this case v becomes a sub-class of k
-		 * 
-		 * 
-		 * 
-		 */
-		
-		List<String> classes = new ArrayList<String>(["highway","barrier","cycleway","waterway","lock","railway","aeroway","aerialway","power","man_made","building","leisure","amenity","shop","tourism","historic","landuse","military","natural","route","boundary","sport"])
-		rs = conn.createStatement().executeQuery(
-				"""\
-				SELECT 
-						k, distinct_value_count
-				FROM
-						lgd_properties
-				""")
-		while(rs.next())
-		{
-			def(String k, int dvc) = [rs.getString("k"), rs.getInt("distinct_value_count")];
-
-			if(!keys.contains(k))
-				continue;
-			
-			if(!classes.contains(k))
-				continue;
-			
-			registerClass(k);
-			logger.debug("Registered class: $k");
-
-			
-			String escapedK = k.replace("'", "''");
-			ResultSet rs2 = conn.createStatement().executeQuery(
-					"""\
-					SELECT 
-						v, COUNT(*) AS count
-					FROM
-						node_tags
-					WHERE
-						k = '$escapedK'
-					GROUP BY
-						v
-					""")
-		
-			while(rs2.next()) {
-				def(String v, int c) = [rs2.getString("v"), rs2.getInt("count")];
-
-				if(c > 10) {
-					registerSubClass(k, v)
-					logger.debug("Registered Sub-class: $k, $v");
-				}
-			}
-		}
 
 		/*
 		
