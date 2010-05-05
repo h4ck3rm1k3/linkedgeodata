@@ -199,12 +199,17 @@ class MyClass
 	}
 	
 	
-	def registerSubClass(String k, String v)
+	def registerSubClass(String k, String v, String subClassStr)
 	{
 		URI parentClass = keyToURI(k);
-		URI subClass = keyToURI(v);
+		
+		//String subClassStr = v;
+		//if(isCombined)
+		//	subClassStr = k + "_" + v;
 
-		SimpleClassTagMapper tagMapper = new SimpleClassTagMapper(parentClass, new Tag(k, v))
+		URI subClass = keyToURI(subClassStr);
+
+		SimpleClassTagMapper tagMapper = new SimpleClassTagMapper(subClass, new Tag(k, v))
 		tagMappers.add(tagMapper);
 		
 		createClass(model, subClass);
@@ -456,6 +461,7 @@ class MyClass
 				// (e.g. amenity biergarten ; biergarten yes)
 				keys.remove(v);
 				
+				String subClassStr = v;
 				if(vk.get(v).size() != 1) {
 					logger.info("Disambiguating: $k $v: $vk");
 					// arialway, tower becomes arialwayTower
@@ -465,10 +471,10 @@ class MyClass
 					
 					// or better leave case as is, and separate with underscore
 					// TODO Check if compound name is unique
-					v = k + "_" + v;
+					subClassStr = k + "_" + v;
 				}
 			                           
-				registerSubClass(k, v)
+				registerSubClass(k, v, subClassStr)
 				logger.debug("Registered Sub-class: $k, $v");
 			}
 		}
