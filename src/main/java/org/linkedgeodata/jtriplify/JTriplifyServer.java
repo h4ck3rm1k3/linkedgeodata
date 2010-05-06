@@ -313,7 +313,7 @@ class MyHandler
 	    		//if(ct.match("text/plain") || ct.match("text/html")) {
 	    		if(ct.match("text/plain") || ct.match("text/html") || ct.match("*/*")) {
 	    			contentFormat = StringUtil.coalesce(requestFormat, "N-TRIPLE");
-	    			responseContentType = "text/plain";
+	    			responseContentType = "text/plain; charset=UTF-8";
 	    			exitLoop = true;
 	    			break;
 	    		}
