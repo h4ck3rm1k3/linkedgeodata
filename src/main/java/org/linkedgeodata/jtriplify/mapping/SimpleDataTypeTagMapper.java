@@ -52,15 +52,15 @@ public class SimpleDataTypeTagMapper
 		String str = tag.getValue().trim().toLowerCase();
 		
 		TypeMapper tm = TypeMapper.getInstance();
-		RDFDatatype dataType = tm.getSafeTypeByName(XSD.xboolean.toString());
-		if(dataType.equals(dataType)) {
+		RDFDatatype booleanDataType = tm.getSafeTypeByName(XSD.xboolean.toString());
+		if(dataType.equals(booleanDataType)) {
 			if(str.equals("yes")) str = "true";
 			if(str.equals("no")) str = "false";
 		}
 				
 				
 		if(!dataType.isValid(str)) {
-			logger.info("Failed to parse to'" + dataType + "', value: '" + str + "'");		
+			//logger.info("Failed to parse to'" + dataType + "', value: '" + str + "'");		
 			return null;
 		}
 

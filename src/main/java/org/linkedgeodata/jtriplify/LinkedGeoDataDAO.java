@@ -63,7 +63,48 @@ public class LinkedGeoDataDAO
 		WAY,
 		RELATION
 	}
+
+
+	public List<Long> getEntitiesWithinBBox(
+			OSMEntityType type,
+			float latMin, 
+			float latMax, 
+			float lonMin,
+			float lonMax,
+			Integer limit,
+			String k,
+			String v,
+			boolean bOr)
+		throws Exception
+	{
+		String sql = null;
+		switch(type) {
+		case NODE:
+			sql = LGDQueries.buildFindTaggedNodesQuery(latMin, latMax, lonMin, lonMax, limit, k, v, bOr);
+			break;
+		/*
+		case WAY:
+			//sql = LGDQueries.buildFindTaggedWaysQuery("$3", k, v, bOr);
+			break;
+		*/
+		default:
+			throw new RuntimeException("Not implemented");
+		}
+
+		/*
+		if(k != null)
+			sql = sql.replace("$4", k);
+		
+		if(v != null)
+			sql = sql.replace("$5", v);
+		*/
+
+		List<Long> result = SQLUtil.executeList(conn, sql, Long.class);
 	
+		return result;
+	}
+
+
 	public List<Long> getEntitiesWithinDistance(
 			OSMEntityType type,
 			double lat, 

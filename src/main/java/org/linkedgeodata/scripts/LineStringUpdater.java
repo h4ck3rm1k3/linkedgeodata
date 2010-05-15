@@ -283,7 +283,8 @@ public class LineStringUpdater
 	public static Connection connectPostGIS(String hostName, String dbName, String userName, String passWord)
 		throws Exception
 	{
-		String url = "jdbc:postgresql://" + hostName + "/" + dbName;
+		Class.forName("org.postgis.DriverWrapper");
+		String url = "jdbc:postgresql_postGIS://" + hostName + "/" + dbName;
 		//Connection connection = DriverManager.getConnection(url);
 		Connection conn = DriverManager.getConnection(url, userName, passWord);
 		

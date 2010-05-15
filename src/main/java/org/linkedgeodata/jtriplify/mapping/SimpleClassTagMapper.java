@@ -5,6 +5,7 @@ import java.net.URI;
 import org.apache.log4j.Logger;
 import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 
+import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.vocabulary.RDF;
@@ -37,6 +38,10 @@ public class SimpleClassTagMapper
 	
 	public Model map(URI subject, Tag tag)
 	{
+		if(!super.matches(super.getTagPattern(), tag)) {
+			return null;
+		}
+		
 		String suffix = "";
 		
 		if(super.getTagPattern().getValue() == null) {
@@ -52,6 +57,40 @@ public class SimpleClassTagMapper
 		
 		return result;
 	}
+	
+
+	public Tag reverseMap(Triple triple)
+	{
+		// Predicate must be rdf:type
+		if(!RDF.type.equals(triple.getPredicate()) && !triple.getObject().isURI())
+		{
+			return null;
+		}
+		
+		String classURI = triple.getObject().getURI();
+
+		String v = super.getTagPattern().getValue();
+		if(v == null) {
+			if(!classURI.startsWith(super.getResource().toString())) {
+				return null;
+			}
+			
+			v = classURI.substring(super.getResource().toString().length());
+		}
+		else {
+			if(!classURI.equals(super.getResource().toString())) {
+				return null;
+			}
+		}
+
+		Tag result = new Tag(super.getTagPattern().getKey(), v);
+		
+		if(!super.matches(super.getTagPattern(), result))
+			result = null;
+			
+		return result;
+	}
+
 	
 	@Override
 	public String toString()

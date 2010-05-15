@@ -31,23 +31,20 @@ public class LGDQueries
 
 	
 	public static String buildPoint(
-			String latArg,
-			String lonArg)
+			Object latArg,
+			Object lonArg)
 	{
 		String result =
-			"ST_SetSRID(ST_MakePoint($lonArg, $latArg), 4326)";
-
-		result = result.replace("$latArg", latArg);
-		result = result.replace("$lonArg", lonArg);
+			"ST_SetSRID(ST_MakePoint(" + lonArg + ", " + latArg + ", 4326)";
 
 		return result;
 	}
 
 	public static String BBox(
-			String minLatArg,
-			String minLonArg,
-			String maxLatArg,
-			String maxLonArg)
+			Object minLatArg,
+			Object minLonArg,
+			Object maxLatArg,
+			Object maxLonArg)
 	{
 		String result =
 			"ST_SetSRID(ST_MakeBox2D(\n" +
@@ -136,6 +133,44 @@ public class LGDQueries
 		
 		return result;
 	}
+	
+
+	/**
+	 * Finds all tagged nodes within a given bounding box.
+	 * This query only returns the ids of such nodes.
+	 * 
+	 * 
+	 * @param latMin
+	 * @param latMax
+	 * @param lonMin
+	 * @param lonMax
+	 * @param k
+	 * @param v
+	 * @param bOr
+	 * @return
+	 */
+	public static String buildFindTaggedNodesQuery(float latMin, float latMax, float lonMin, float lonMax, Integer limit, String k, String v, boolean bOr)
+	{
+		String kvPred = createPredicate("snt", k, v, bOr);
+		if(!kvPred.isEmpty())
+			kvPred += " AND ";
+
+		String limitStr = limit == null ? "" : "LIMIT " + limit + "\n"; 
+		
+		String result =
+			"SELECT\n" +
+			"    id\n" +
+			"FROM\n" +
+			"    node_tags\n" +
+			"WHERE\n" +
+			"    geom && " + BBox(latMin, latMax, lonMin, lonMax) + "\n" +
+			"    " + kvPred + "\n" +
+			limitStr;
+
+		return result;
+	}
+
+	
 
 	public static String buildFindNodesQuery(String distance_m, String k, String v, boolean bOr)
 	{

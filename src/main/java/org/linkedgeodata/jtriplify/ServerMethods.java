@@ -42,6 +42,20 @@ public class ServerMethods
 	}
 	
 
+	/* TODO Write this method
+	public Model publicFindEntitiesByBBox(Double latMin, Double latMax, Double lonMin, Double lonMax, String k, String v, Boolean bOr)
+		throws Exception
+	{
+		List<Model> models = getNearModels(lat, lon, distance, k, v, bOr);
+	
+		Model result = ModelUtil.combine(models);
+	
+		return result;
+	}
+	*/
+
+	
+	
 	public List<Model> getNearModels(final double lat, final double lon, final double distance, final String k, final String v, final boolean bOr)
 		throws Exception
 	{
@@ -94,7 +108,8 @@ public class ServerMethods
 		
 		return result;
 	}
-	
+
+
 	public Model getNode(String idStr)
 		throws Exception
 	{

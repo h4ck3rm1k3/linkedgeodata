@@ -19,9 +19,17 @@ public class ModelUtil
 		return result;
 	}
 	
+	
+	public static String toString(Model model)
+	{
+		return toString(model, "N3");
+	}
 
 	public static String toString(Model model, String format)
 	{
+		if(model == null)
+			return "null";
+
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		//model.write(baos, "N-TRIPLE", "");
 		model.write(baos, format, "");

@@ -547,11 +547,14 @@ public class JTriplifyServer
 		//m = ServerMethods.class.getMethod("getNear", String.class, String.class, String.class);
 		IInvocable nearFn = DefaultCoercions.wrap(methods, "publicNear.*");
 		
-		ric.put(".*near/([^/]*),([^/]*)/([^/?]*)/?(\\?.*)?", nearFn, "$0", "$1", "$2", null, null, false);
-		ric.put(".*near/([^/]*),([^/]*)/([^/]*)/([^/=?]*)/?(\\?.*)?", nearFn, "$0", "$1", "$2", "$3", null, false);
-		ric.put(".*near/([^/]*),([^/]*)/([^/]*)/([^=]*)=([^/?]*)/?(\\?.*)?", nearFn, "$0", "$1", "$2", "$3", "$4", false);
-		ric.put(".*near/([^/]*),([^/]*)/([^/]*)/class/([^/?]*)/?(\\?.*)?", nearFn, "$0", "$1", "$2", "$3", "$3", true);
+		ric.put(".*near/([^,]*),([^/]*)/([^/?]*)/?(\\?.*)?", nearFn, "$0", "$1", "$2", null, null, false);
+		ric.put(".*near/([^,]*),([^/]*)/([^/]*)/([^/=?]*)/?(\\?.*)?", nearFn, "$0", "$1", "$2", "$3", null, false);
+		ric.put(".*near/([^,]*),([^/]*)/([^/]*)/([^=]*)=([^/?]*)/?(\\?.*)?", nearFn, "$0", "$1", "$2", "$3", "$4", false);
+		ric.put(".*near/([^,]*),([^/]*)/([^/]*)/class/([^/?]*)/?(\\?.*)?", nearFn, "$0", "$1", "$2", "$3", "$3", true);
 		
+		
+		IInvocable bboxFn = DefaultCoercions.wrap(methods, "publicFindEntitiesByBBox.*");
+		ric.put(".*near/([^,]*),([^/]*)/([^,]*),([^/]*)/?(\\?.*)?", bboxFn, "$0", "$1", "$2", "$3", 1000, null, null, false);
 		
 		MyHandler handler = new MyHandler();
 		handler.setInvocationMap(ric);

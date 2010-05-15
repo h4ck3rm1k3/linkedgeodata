@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 
 import com.hp.hpl.jena.datatypes.RDFDatatype;
+import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.vocabulary.RDF;
@@ -41,6 +42,17 @@ public class SimpleTextTagMapper
 		this.langTag = langTag;
 	}
 
+	/*
+	public Tag reverseMap(Triple triple)
+	{
+		if(!triple.getObject().isLiteral())
+			return false;
+		
+		if(super.getTagPattern().getKey() != null) {
+			
+		}
+	}*/
+	
 	
 	public Model map(URI subject, Tag tag)
 	{
