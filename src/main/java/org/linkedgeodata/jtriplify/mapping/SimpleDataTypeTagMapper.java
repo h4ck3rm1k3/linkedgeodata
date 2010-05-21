@@ -15,10 +15,16 @@ import com.hp.hpl.jena.vocabulary.XSD;
 public class SimpleDataTypeTagMapper
 	extends AbstractOneOneTagMapper
 {		
-	private static final Logger logger = Logger.getLogger(SimpleDataTypeTagMapper.class);
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	//private static final Logger logger = Logger.getLogger(SimpleDataTypeTagMapper.class);
 	private RDFDatatype dataType;
 
 	// TODO add switch for yes/no - true/false representations
+
 
 	/**
 	 * Valid types are:
@@ -33,19 +39,22 @@ public class SimpleDataTypeTagMapper
 	 * @param method
 	 * @param tag
 	 */
-	public SimpleDataTypeTagMapper(URI property, Tag tag, RDFDatatype dataType)
+	public SimpleDataTypeTagMapper(String property, TagPattern tagPattern, RDFDatatype dataType, boolean isOSMEntity)
 		throws Exception
 	{
 		//URI.create("http://linkedgeodata.org/method/simple?type=dt&dataType=" + URLEncoder.encode(dataType.toString(), "UTF-8")),
-		super(property, tag);
+		super(property, tagPattern, isOSMEntity);
 
 		this.dataType = dataType;
 		// TODO Check the function type
 		
 	}
 
-	public Model map(URI subject, Tag tag)
+	public Model map(String subject, Tag tag)
 	{
+		if(!isOSMEntity())
+			subject += "#id";
+		
 		if(!matches(this.getTagPattern(), tag))
 			return null;
 
@@ -66,7 +75,7 @@ public class SimpleDataTypeTagMapper
 
 		Model result = ModelFactory.createDefaultModel();
 		result.add(
-				result.getResource(subject.toString()),
+				result.getResource(subject),
 				result.getProperty(super.getResource().toString()),
 				str,
 				dataType);
@@ -74,6 +83,7 @@ public class SimpleDataTypeTagMapper
 		return result;
 	}
 
+	/*
 	@Override
 	public String toString()
 	{
@@ -84,6 +94,6 @@ public class SimpleDataTypeTagMapper
 			return "";
 		}
 	}
-	
+	*/
 }
 

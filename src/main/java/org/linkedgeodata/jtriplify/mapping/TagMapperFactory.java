@@ -1,23 +1,30 @@
+/**
+ * Copyright (C) 2009-2010, LinkedGeoData team at the MOLE research
+ * group at AKSW / University of Leipzig
+ *
+ * This file is part of LinkedGeoData.
+ *
+ * LinkedGeoData is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * LinkedGeoData is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
 package org.linkedgeodata.jtriplify.mapping;
 
-import java.net.URI;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-
-import org.apache.commons.collections15.MultiMap;
-import org.apache.log4j.PropertyConfigurator;
-import org.linkedgeodata.util.ModelUtil;
-import org.linkedgeodata.util.MultiMapUtil;
-import org.linkedgeodata.util.URIUtil;
-import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
-
-import com.hp.hpl.jena.datatypes.RDFDatatype;
-import com.hp.hpl.jena.datatypes.TypeMapper;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.vocabulary.XSD;
 
 
 /**
+ * Deprecated class. Not used anymore and subject to removal.
+ * 
  * Currently tag mappers are serialized to URIs.
  * 
  * However, similar to the D2R config it might be nicer having the mapping
@@ -31,10 +38,10 @@ import com.hp.hpl.jena.vocabulary.XSD;
  * 		tagPattern ("seats", nil)
  * 
  *
- * @author raven
+ * @author Claus Stadler
  *
  */
-
+/*
 public class TagMapperFactory
 {
 	public static void main(String[] args)
@@ -64,7 +71,7 @@ public class TagMapperFactory
 		IOneOneTagMapper mapper =
 			f.createInstance(str);
 		
-		Model model = mapper.map(URI.create("http://test.org"), tag);
+		Model model = mapper.map("http://test.org", tag);
 		
 		if(model == null)
 			System.out.println("No model");
@@ -110,7 +117,7 @@ public class TagMapperFactory
 	}
 		
 	//public IOneOneTagMapper createInstance(String, 
-	
+	/*
 	public IOneOneTagMapper createInstance(String methodStr)
 		throws Exception
 	{		
@@ -165,3 +172,4 @@ public class TagMapperFactory
 //		return null;
 	}
 }
+*/

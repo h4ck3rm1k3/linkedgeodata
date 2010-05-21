@@ -15,7 +15,12 @@ import com.hp.hpl.jena.vocabulary.RDF;
 public class SimpleTextTagMapper
 	extends AbstractOneOneTagMapper
 {		
-	private static final Logger logger = Logger.getLogger(SimpleTextTagMapper.class);
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	//private static final Logger logger = Logger.getLogger(SimpleTextTagMapper.class);
 
 	private String langTag;
 	
@@ -33,11 +38,11 @@ public class SimpleTextTagMapper
 	 * @param method
 	 * @param tag
 	 */
-	public SimpleTextTagMapper(URI property, Tag tag, String langTag)
+	public SimpleTextTagMapper(String property, TagPattern tagPattern, String langTag, boolean isOSMEntity)
 		throws Exception
 	{
 		//URI.create("http://linkedgeodata.org/method/simple?type=dt&dataType=" + URLEncoder.encode(dataType.toString(), "UTF-8")),
-		super(property, tag);
+		super(property, tagPattern, isOSMEntity);
 
 		this.langTag = langTag;
 	}
@@ -54,8 +59,11 @@ public class SimpleTextTagMapper
 	}*/
 	
 	
-	public Model map(URI subject, Tag tag)
+	public Model map(String subject, Tag tag)
 	{
+		if(!isOSMEntity())
+			subject += "#id";
+		
 		if(!matches(this.getTagPattern(), tag))
 			return null;
 
@@ -75,7 +83,7 @@ public class SimpleTextTagMapper
 		}
 		else {*/
 		result.add(
-				result.getResource(subject.toString()),
+				result.getResource(subject),
 				result.getProperty(super.getResource().toString() + suffix),
 				tag.getValue(),
 				langTag);
@@ -85,6 +93,7 @@ public class SimpleTextTagMapper
 		return result;
 	}
 	
+	/*
 	@Override
 	public String toString()
 	{
@@ -95,7 +104,6 @@ public class SimpleTextTagMapper
 			return "";
 		}
 	}
-
-	
+	 */
 }
 

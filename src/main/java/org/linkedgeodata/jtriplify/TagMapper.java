@@ -1,23 +1,26 @@
 package org.linkedgeodata.jtriplify;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
+import java.io.IOException;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.xml.bind.JAXBException;
+
 import org.linkedgeodata.jtriplify.mapping.IOneOneTagMapper;
-import org.linkedgeodata.jtriplify.mapping.TagMapperFactory;
+import org.linkedgeodata.util.SerializationUtil;
 import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 
 public class TagMapper
+//	implements ITagMapper
 {
 	// k -> v -> property
 	private Map<String, Map<String, Set<IOneOneTagMapper>>> kvp = new HashMap<String, Map<String, Set<IOneOneTagMapper>>>();
@@ -26,19 +29,37 @@ public class TagMapper
 	{
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void load(File file)
 		throws Exception
 	{
-		BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
-		
-		TagMapperFactory factory = new TagMapperFactory();
-		
-		String line = null;
-		while((line = reader.readLine()) != null) {
-			IOneOneTagMapper mapper = factory.createInstance(line);
-		
-			index(mapper);
+		List<IOneOneTagMapper> list = (List<IOneOneTagMapper>)
+			SerializationUtil.deserializeXML(file);
+
+		for(IOneOneTagMapper item : list) {
+			index(item);
 		}
+	}
+	
+	public void save(File file)
+		throws IOException, JAXBException
+	{
+		List<IOneOneTagMapper> list = asList();
+		
+		SerializationUtil.serializeXML(list, file);
+	}
+	
+	private List<IOneOneTagMapper> asList()
+	{
+		List<IOneOneTagMapper> list = new ArrayList<IOneOneTagMapper>();
+		
+		for(Map<String, Set<IOneOneTagMapper>> a : kvp.values()) {
+			for(Set<IOneOneTagMapper> b : a.values()) {
+				list.addAll(b);
+			}
+		}
+		
+		return list;
 	}
 	
 	public  void index(IOneOneTagMapper tagMapper)
@@ -84,7 +105,7 @@ public class TagMapper
 		return null;
 	}
 	
-	public Model map(URI subject, Tag tag)
+	public Model map(String subject, Tag tag)
 	{
 		Set<IOneOneTagMapper> candidates = get(tag.getKey(), tag.getValue());
 		if(candidates == null)
@@ -105,6 +126,7 @@ public class TagMapper
 		
 		return result;
 	}
+
 	
 	/*
 	public Set<TagEntityMap> get(Set<Tag> tags)

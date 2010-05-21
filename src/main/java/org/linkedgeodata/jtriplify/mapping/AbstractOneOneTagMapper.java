@@ -1,10 +1,11 @@
 package org.linkedgeodata.jtriplify.mapping;
 
+import java.io.Serializable;
 import java.net.URI;
-import java.util.Collections;
-import java.util.Set;
 
 import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
+
+import com.hp.hpl.jena.rdf.model.Model;
 
 /**
  * Abstract Mapping rule between a single tag pattern and a resource.
@@ -15,45 +16,65 @@ import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
  * @author raven
  *
  */
-public abstract class AbstractOneOneTagMapper
-	implements IOneOneTagMapper
+public class AbstractOneOneTagMapper
+	implements IOneOneTagMapper, Serializable
 {
-	private URI resource;
-	private URI method;
-	private Tag tagPattern;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	private String resource;
+	private String method;
+	private TagPattern tagPattern;
 
-	public AbstractOneOneTagMapper(URI resource, Tag tagPattern)
+	// Whether the tag pertains to the OSM entity, or the concept that
+	// the resource represents
+	private boolean isOSMEntity = false;
+	
+	protected AbstractOneOneTagMapper(String resource, TagPattern tagPattern, boolean isOSMEntity)
 	{
 		this.resource = resource;
 		this.method = null;
 		this.tagPattern = tagPattern;
+		this.isOSMEntity = isOSMEntity;
 	}
 
-	public AbstractOneOneTagMapper(URI resource, URI method, Tag tagPattern)
+	protected AbstractOneOneTagMapper(String resource, String method, TagPattern tagPattern, boolean isOSMEntity)
 	{
 		this.resource = resource;
 		this.method = method;
 		this.tagPattern = tagPattern;
+		this.isOSMEntity = isOSMEntity;
+	}
+	
+	public boolean isOSMEntity()
+	{
+		return isOSMEntity;
 	}
 
-	public URI getResource()
+	public String getResource()
 	{
 		return resource;
 	}
 
-	public Tag getTagPattern()
+	public TagPattern getTagPattern()
 	{
 		return tagPattern;
 	}
 
 
-	public URI getMethod()
+	public String getMethod()
 	{
 		return method;
 	}
 
-
-	protected boolean matches(Tag pattern, Tag given)
+	protected boolean matches(Tag given)
+	{
+		return matches(tagPattern, given);
+	}
+	
+	protected boolean matches(TagPattern pattern, Tag given)
 	{
 		boolean matchKey = pattern.getKey() == null
 			? true
@@ -67,5 +88,11 @@ public abstract class AbstractOneOneTagMapper
 			pattern.getValue().equals(given.getValue());
 
 		return matchValue;
+	}
+
+	@Override
+	public Model map(String subject, Tag tag) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

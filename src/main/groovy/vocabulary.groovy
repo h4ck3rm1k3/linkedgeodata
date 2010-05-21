@@ -9,8 +9,10 @@ import org.apache.log4j.Logger
 import org.apache.log4j.PropertyConfigurator 
 import org.linkedgeodata.util.ModelUtil
 import org.linkedgeodata.util.StringUtil 
+import org.linkedgeodata.util.SerializationUtil
 import org.linkedgeodata.jtriplify.TagEntityMap 
 import org.linkedgeodata.jtriplify.mapping.IOneOneTagMapper 
+import org.linkedgeodata.jtriplify.mapping.TagPattern
 import org.linkedgeodata.jtriplify.mapping.SimpleClassTagMapper
 import org.linkedgeodata.jtriplify.mapping.SimpleDataTypeTagMapper 
 import org.linkedgeodata.jtriplify.mapping.SimpleTextTagMapper 
@@ -151,9 +153,9 @@ class MyClass
 			listProperties(RDFS.range).collect{item -> item.getObject()}
 	}
 
-	def createDataTypeProperty(Model model, URI subject, Resource range)
+	def createDataTypeProperty(Model model, String subject, Resource range)
 	{
-		Property prop = model.getProperty(subject.toString())
+		Property prop = model.getProperty(subject)
 		prop.addProperty(RDFS.domain, range)
 		prop.addProperty(RDF.type, OWL.DatatypeProperty)
 		//model.add(subject, RDFS.domain, range)
@@ -161,9 +163,9 @@ class MyClass
 	}
 
 
-	def createClass(Model model, URI subject)
+	def createClass(Model model, String subject)
 	{
-		Resource sub = model.getResource(subject.toString());
+		Resource sub = model.getResource(subject);
 		sub.addProperty(RDF.type, OWL.Class);
 	}
 	
@@ -190,9 +192,9 @@ class MyClass
 	{
 		//k = StringUtil.ucFirst(toCamelCase(k));
 
-		URI resource = keyToURI(k);
+		String resource = keyToURI(k);
 
-		SimpleClassTagMapper tagMapper = new SimpleClassTagMapper(resource, new Tag(k, null))
+		SimpleClassTagMapper tagMapper = new SimpleClassTagMapper(resource, new TagPattern(k, null), false)
 		tagMappers.add(tagMapper);
 		
 		createClass(model, resource);
@@ -201,40 +203,40 @@ class MyClass
 	
 	def registerSubClass(String k, String v, String subClassStr)
 	{
-		URI parentClass = keyToURI(k);
+		String parentClass = keyToURI(k);
 		
 		//String subClassStr = v;
 		//if(isCombined)
 		//	subClassStr = k + "_" + v;
 
-		URI subClass = keyToURI(subClassStr);
+		String subClass = keyToURI(subClassStr);
 
-		SimpleClassTagMapper tagMapper = new SimpleClassTagMapper(subClass, new Tag(k, v))
+		SimpleClassTagMapper tagMapper = new SimpleClassTagMapper(subClass, new TagPattern(k, v), false)
 		tagMappers.add(tagMapper);
 		
 		createClass(model, subClass);
 		
-		Resource sub = model.getResource(subClass.toString());
-		sub.addProperty(RDFS.subClassOf, model.getResource(parentClass.toString()));
+		Resource sub = model.getResource(subClass);
+		sub.addProperty(RDFS.subClassOf, model.getResource(parentClass));
 	}
 	
 	def registerTextProperty(String k, String prefix, String lang)
 	{
-		URI resource = keyToURI(prefix);
+		String resource = keyToURI(prefix);
 		
-		SimpleTextTagMapper tagMapper = new SimpleTextTagMapper(resource, new Tag(k, null), lang);
+		SimpleTextTagMapper tagMapper = new SimpleTextTagMapper(resource, new TagPattern(k, null), lang, false);
 		
 		tagMappers.add(tagMapper);
 	}
 
 	def registerDatatypeProperty(String k, Resource range)
 	{
-		URI resource = keyToURI(k);
+		String resource = keyToURI(k);
 
 		TypeMapper tm = TypeMapper.getInstance();
 		RDFDatatype dataType = tm.getSafeTypeByName(range.toString());
 
-		SimpleDataTypeTagMapper tagMapper = new SimpleDataTypeTagMapper(resource, new Tag(k, null), dataType)
+		SimpleDataTypeTagMapper tagMapper = new SimpleDataTypeTagMapper(resource, new TagPattern(k, null), dataType, false);
 		tagMappers.add(tagMapper);
 		
 		createDataTypeProperty(model, resource, range);
@@ -243,9 +245,9 @@ class MyClass
 	
 	
 	
-	def URI keyToURI(String key)
+	def String keyToURI(String key)
 	{
-		return new URI(LGD_VOCAB + URLEncoder.encode(key, "UTF-8"))
+		return LGD_VOCAB + URLEncoder.encode(key, "UTF-8");
 	}
 
 	def Connection connectPostGIS(String hostName, String dbName, String userName, String passWord)
@@ -662,8 +664,8 @@ class MyClass
 		
 		
 		// Rule for defaulting everthing to text-datatype properties
-		Tag tag = new Tag((String)null, (String)null);
-		SimpleTextTagMapper tagMapper = new SimpleTextTagMapper(URI.create(LGD_VOCAB), tag, null);
+		TagPattern tagPattern = new TagPattern((String)null, (String)null);
+		SimpleTextTagMapper tagMapper = new SimpleTextTagMapper(LGD_VOCAB, tagPattern, null, false);
 		tagMappers.add(tagMapper);
 		
 		println "Rules registered: " + tagMappers.size();
@@ -673,14 +675,9 @@ class MyClass
 		PrintStream out = new PrintStream(new File("Schema.n3"));
 		out.println(ModelUtil.toString(model, "N3"));
 		
-		
+
 		// Serialize the rules
-		out = new PrintStream(new File("LGDMappingRules.txt"));
-		
-		for(TagMapper mapper : tagMappers) {
-			out.println(mapper.toString());
-		}
-		
+		SerializationUtil.serializeXML(tagMappers, new File("LGDMappingRules.xml"));
 		
 		//println ModelUtil.toString(model, "N3")
 	}

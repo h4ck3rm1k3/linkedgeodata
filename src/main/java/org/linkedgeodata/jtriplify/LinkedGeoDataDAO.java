@@ -207,7 +207,7 @@ public class LinkedGeoDataDAO
 							String k = rs.getString("k");
 							String v = rs.getString("v");
 							
-							URI uri = URI.create(prefix + id + "#id");
+							String uri = prefix + id;
 							
 							Model model = tagMapper.map(uri, new Tag(k, v));
 							result.add(model);

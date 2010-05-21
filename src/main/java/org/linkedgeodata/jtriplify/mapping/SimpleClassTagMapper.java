@@ -1,6 +1,8 @@
 package org.linkedgeodata.jtriplify.mapping;
 
+import java.io.Serializable;
 import java.net.URI;
+import java.util.Random;
 
 import org.apache.log4j.Logger;
 import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
@@ -13,8 +15,14 @@ import com.hp.hpl.jena.vocabulary.RDF;
 
 public class SimpleClassTagMapper
 	extends AbstractOneOneTagMapper
-{		
-	private static final Logger logger = Logger.getLogger(SimpleDataTypeTagMapper.class);
+	implements Serializable
+{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	//private static final Logger logger = Logger.getLogger(SimpleDataTypeTagMapper.class);
 	
 	
 	/**
@@ -30,15 +38,18 @@ public class SimpleClassTagMapper
 	 * @param method
 	 * @param tag
 	 */
-	public SimpleClassTagMapper(URI clazz, Tag tag)
+	public SimpleClassTagMapper(String clazz, TagPattern tagPattern, boolean isOSMEntity)
 		throws Exception
 	{
-		super(clazz, tag);	
+		super(clazz, tagPattern, isOSMEntity);	
 	}
 	
-	public Model map(URI subject, Tag tag)
+	public Model map(String subject, Tag tag)
 	{
-		if(!super.matches(super.getTagPattern(), tag)) {
+		if(!isOSMEntity())
+			subject += "#id";
+
+		if(!super.matches(tag)) {
 			return null;
 		}
 		
@@ -91,7 +102,7 @@ public class SimpleClassTagMapper
 		return result;
 	}
 
-	
+	/*
 	@Override
 	public String toString()
 	{
@@ -102,4 +113,5 @@ public class SimpleClassTagMapper
 			return "";
 		}
 	}
+	*/
 }

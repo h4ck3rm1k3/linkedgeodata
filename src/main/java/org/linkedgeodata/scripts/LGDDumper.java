@@ -1,10 +1,28 @@
+/**
+ * Copyright (C) 2009-2010, LinkedGeoData team at the MOLE research
+ * group at AKSW / University of Leipzig
+ *
+ * This file is part of LinkedGeoData.
+ *
+ * LinkedGeoData is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * LinkedGeoData is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */ 
 package org.linkedgeodata.scripts;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
-import java.net.URI;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.util.Collection;
 import java.util.Date;
@@ -17,12 +35,11 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.collections15.Transformer;
-import org.apache.commons.lang.time.StopWatch;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
-import org.junit.Test;
 import org.linkedgeodata.jtriplify.TagMapper;
 import org.linkedgeodata.util.PrefetchIterator;
+import org.linkedgeodata.util.stats.SimpleStatsTracker;
 import org.openstreetmap.osmosis.core.domain.v0_6.Node;
 import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 
@@ -31,56 +48,9 @@ import com.hp.hpl.jena.datatypes.TypeMapper;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.vocabulary.RDF;
 import com.hp.hpl.jena.vocabulary.XSD;
 
 
-class SimpleStatsTracker
-{
-	private static final Logger logger = Logger.getLogger(SimpleStatsTracker.class);
-
-	// TODO Make this a weak map
-	private static Map<String, SimpleStatsTracker> nameToTracker =
-		new HashMap<String, SimpleStatsTracker>();
-	
-	public static SimpleStatsTracker get(String name)
-	{
-		SimpleStatsTracker result = nameToTracker.get(name);
-		if(result == null) {
-			result = new SimpleStatsTracker();
-			nameToTracker.put(name, result);
-		}
-		
-		return result;
-	}
-
-	
-	private StopWatch stopWatch = new StopWatch();
-	private float lastTime = 0.0f;
-	private long counter = 0;
-	boolean isStarted = false;
-	
-	
-	public void update(int delta)
-	{
-		if(!isStarted)
-			start();
-		
-		counter += delta;
-		float time = stopWatch.getTime() / 1000.0f;
-		if(time - lastTime > 5.0f) {
-			float ratio = counter / time;	
-			logger.info("Time: " + time + ", Counter: " + counter + ", ratio = " + ratio);
-			lastTime = time;
-		}		
-	}
-	
-	public void start()
-	{
-		stopWatch.start();
-		isStarted = true;
-	}
-}
 
 
 /**
@@ -93,7 +63,7 @@ class SimpleStatsTracker
  * v    : String
  * geom : geometry
  * 
- * @author raven
+ * @author Claus Stadler
  *
  */
 class NodeTagIterator
@@ -195,23 +165,23 @@ class SimpleNodeToRDFTransformer
 	public Model transform(Node node) {
 		Model model = ModelFactory.createDefaultModel();
 		
-		URI subjectURI = getSubject(node);
-		Resource subject = model.getResource(subjectURI.toString());
+		String subject = getSubject(node);
+		Resource subjectRes = model.getResource(subject + "#id");
 		
-		generateWGS84(model, subject, node);
-		generateGeoRSS(model, subject, node);
+		generateWGS84(model, subjectRes, node);
+		generateGeoRSS(model, subjectRes, node);
 		generateTags(model, subject, node.getTags());
 
 		return model;
 	}
 	
-	private void generateTags(Model model, Resource subject, Collection<Tag> tags)
+	private void generateTags(Model model, String subject, Collection<Tag> tags)
 	{
 		//if(tags == null)
 
 		// Generate RDF for the tags
 		for(Tag tag : tags) {
-			Model subModel = tagMapper.map(URI.create(subject.getURI()), tag);
+			Model subModel = tagMapper.map(subject, tag);
 			if(subModel == null) {
 				++parseErrorCount;
 				logger.warn("Failed mapping: " + tag + ", Failed mapping count: " + parseErrorCount);
@@ -222,12 +192,12 @@ class SimpleNodeToRDFTransformer
 		}		
 	}
 	
-	private URI getSubject(Node node)
+	private String getSubject(Node node)
 	{
 		String prefix = "http://linkedgeodata.org/";
-		URI subject = URI.create(prefix + "node/" + node.getId() + "#id");
+		String result = prefix + "node/" + node.getId();
 		
-		return subject;
+		return result;
 	}
 
 	
