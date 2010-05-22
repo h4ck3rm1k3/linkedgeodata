@@ -18,7 +18,9 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import org.linkedgeodata.jtriplify.TagMapper;
 import org.linkedgeodata.util.SinglePrefetchIterator;
+import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -27,6 +29,7 @@ import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.vocabulary.RDF;
 import com.hp.hpl.jena.vocabulary.RDFS;
 
 /**
@@ -36,7 +39,7 @@ import com.hp.hpl.jena.vocabulary.RDFS;
  * exporter for Translate Wiki.
  * 
  * 
- * @author raven
+ * @author Claus Stadler
  * 
  */
 
@@ -159,7 +162,40 @@ class GetTextRecord
 
 interface IEntityResolver
 {
-	public URI resolve(String key, String value);
+	public String resolve(String key, String value);
+}
+
+class EntityResolver2
+	implements IEntityResolver
+{
+	private TagMapper tagMapper;
+	
+	public EntityResolver2(TagMapper tagMapper)
+	{
+		this.tagMapper = tagMapper;
+	}
+	
+	@Override
+	public String resolve(String key, String value)
+	{		
+		Model model = tagMapper.map("http://ex.org", new Tag(key, value));
+	
+		Iterator<Statement> it = model.listStatements();
+
+		while(it.hasNext()) {
+			Statement stmt = it.next();
+			
+			if(!stmt.getPredicate().equals(RDF.type))
+				continue;
+			
+			String classRes = stmt.getObject().asNode().getURI();
+			
+			return classRes;			
+		}
+		
+		return null;
+	}
+	
 }
 
 class EntityResolverImpl
@@ -215,7 +251,7 @@ class EntityResolverImpl
 	}
 
 	@Override
-	public URI resolve(String key, String value)
+	public String resolve(String key, String value)
 	{		
 		String k = key.trim().toLowerCase();
 		String v = value.trim().toLowerCase();
@@ -226,9 +262,10 @@ class EntityResolverImpl
 		
 		URI result = map.get(list);
 
-		return result;
+		return result.toString();
 	}
 }
+
 
 /**
  * Ok, simply loading the po.file seems to be out of scope of the
@@ -268,8 +305,12 @@ public class TranslateWikiExporter
 	{
 		PropertyConfigurator.configure("log4j.properties");
 	
+		logger.info("Loading tag mappings");
+		TagMapper tagMapper = new TagMapper();
+		tagMapper.load(new File("LGDMappingRules.xml"));
+		
 		logger.info("Initializing EntityResolver");
-		IEntityResolver resolver = new EntityResolverImpl();
+		IEntityResolver resolver = new EntityResolver2(tagMapper);
 
 		logger.info("Starting export");
 		//export("de", false, null, resolver);
@@ -409,7 +450,7 @@ public class TranslateWikiExporter
 				String key = kv[0];
 				String value = kv[1]; //.trim();
 
-				URI uri = resolver.resolve(key, value);
+				String uri = resolver.resolve(key, value);
 				if(uri == null) {
 					logger.warn("Skipping: (" + key + ", " + value + ")");
 					continue;
