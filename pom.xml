@@ -113,6 +113,13 @@
   		<type>jar</type>
   		<scope>compile</scope>
   	</dependency>
+	<dependency>
+	    <groupId>org.openstreetmap.osmosis</groupId>
+	    <artifactId>osmosis</artifactId>
+	    <version>0.34</version>
+	    <scope>system</scope>
+	    <systemPath>${basedir}/lib/osmosis/0.34/osmosis.jar</systemPath>
+	</dependency>
   </dependencies>
   <properties>
   	<maven.compiler.source>1.6</maven.compiler.source>
