@@ -524,7 +524,7 @@ public class JTriplifyServer
 		Connection conn = LineStringUpdater.connectPostGIS(hostName, dbName, userName, passWord);
 
 		TagMapper tagMapper = new TagMapper();
-		tagMapper.load(new File("LGDMappingRules.txt"));
+		tagMapper.load(new File("LGDMappingRules.xml"));
 		
 		LinkedGeoDataDAO dao = new LinkedGeoDataDAO(uriResolver, tagMapper);
 		dao.setConnection(conn);

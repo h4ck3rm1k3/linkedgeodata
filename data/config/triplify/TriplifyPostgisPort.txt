@@ -118,6 +118,33 @@ Count of absolute URIS per k. Determine which links to other datasources exists.
 SELECT nt.k, COUNT(*) INTO stats_k_count_uris FROM node_tags nt WHERE nt.v LIKE '%://%' GROUP BY nt.k;
 
 
+
+	SUM(CASE WHEN v ~* 'yes'   THEN 1 ELSE 0 END) AS count_yes,
+	SUM(CASE WHEN v ~* 'no'    THEN 1 ELSE 0 END) AS count_no,
+	SUM(CASE WHEN v ~* 'true'  THEN 1 ELSE 0 END) AS count_true,
+	SUM(CASE WHEN v ~* 'false' THEN 1 ELSE 0 END) AS count_false,
+	SUM(CASE WHEN v ~* '1'     THEN 1 ELSE 0 END) AS count_one,
+	SUM(CASE WHEN v ~* '0'     THEN 1 ELSE 0 END) AS count_zero
+
+
+DROP FUNCTION LGD_TryParseBoolean(v TEXT);
+CREATE FUNCTION LGD_TryParseBoolean(v TEXT) RETURNS BOOL AS
+'
+DECLARE
+BEGIN
+    RETURN
+    	CASE
+    		WHEN (v ~* ''true''  OR v ~* ''yes'' OR v = ''1'') THEN TRUE
+    		WHEN (v ~* ''false'' OR v ~* ''no''  OR v = ''0'') THEN FALSE
+    		ELSE NULL
+    	END;
+END;
+'
+    LANGUAGE 'plpgsql'
+    IMMUTABLE
+    RETURNS NULL ON NULL INPUT;
+
+
 DROP FUNCTION LGD_TryParseInt(str TEXT);
 CREATE FUNCTION LGD_TryParseInt(str TEXT) RETURNS INT8 AS
 '
@@ -178,6 +205,72 @@ FROM
 	node_tags
 GROUP BY
 	k;
+
+
+
+SELECT
+	k,
+	SUM(1) AS count_total,
+	SUM(CASE WHEN LGD_TryParseInt(v) IS NOT NULL THEN 1 ELSE 0 END) AS count_int,
+	SUM(CASE WHEN LGD_TryParseFloat(v) IS NOT NULL THEN 1 ELSE 0 END) AS count_float
+INTO
+	lgd_stats_datatypes
+FROM
+	node_tags
+GROUP BY
+	k;
+
+
+// Complete
+SELECT
+	k,
+	SUM(1) AS count_total,
+	SUM(CASE WHEN LGD_TryParseInt(v) IS NOT NULL THEN 1 ELSE 0 END) AS count_int,
+	SUM(CASE WHEN LGD_TryParseFloat(v) IS NOT NULL THEN 1 ELSE 0 END) AS count_float,
+	SUM(CASE WHEN LGD_TryParseBoolean(v) IS NOT NULL THEN 1 ELSE 0 END) as count_boolean
+INTO
+	lgd_stats_node_tags_datatypes
+FROM
+	node_tags
+GROUP BY
+	k;
+
+SELECT
+	k,
+	SUM(1) AS count_total,
+	SUM(CASE WHEN LGD_TryParseInt(v) IS NOT NULL THEN 1 ELSE 0 END) AS count_int,
+	SUM(CASE WHEN LGD_TryParseFloat(v) IS NOT NULL THEN 1 ELSE 0 END) AS count_float,
+	SUM(CASE WHEN LGD_TryParseBoolean(v) IS NOT NULL THEN 1 ELSE 0 END) as count_boolean
+INTO
+	lgd_stats_way_tags_datatypes
+FROM
+	way_tags
+GROUP BY
+	k;
+
+
+SELECT
+	k,
+	SUM(count_total) AS count_total,
+	SUM(count_int) AS count_int,
+	SUM(count_float) AS count_float,
+	SUM(count_boolean) AS count_boolean
+INTO lgd_stats_datatypes
+FROM
+	((SELECT * FROM lgd_stats_node_tags_datatypes) UNION ALL
+	(SELECT * FROM lgd_stats_way_tags_datatypes)) AS b
+GROUP BY
+	k;
+
+
+/*
+	SUM(CASE WHEN v ~* 'yes'   THEN 1 ELSE 0 END) AS count_yes,
+	SUM(CASE WHEN v ~* 'no'    THEN 1 ELSE 0 END) AS count_no,
+	SUM(CASE WHEN v ~* 'true'  THEN 1 ELSE 0 END) AS count_true,
+	SUM(CASE WHEN v ~* 'false' THEN 1 ELSE 0 END) AS count_false,
+	SUM(CASE WHEN v ~* '1'     THEN 1 ELSE 0 END) AS count_one,
+	SUM(CASE WHEN v ~* '0'     THEN 1 ELSE 0 END) AS count_zero
+*/
 
 // Count bools
 SELECT
@@ -381,7 +474,7 @@ CREATE INDEX idx_lgd_properties_k ON lgd_properties(k);
 property table initialization
 -------------------------------------------------------------------------------
 INSERT INTO
-	properties(k, ontology_entity_type, usage_count, distinct_value_count)
+	lgd_properties(k, ontology_entity_type, usage_count, distinct_value_count)
 SELECT
 	t.k, NULL, COUNT(t.k), COUNT(DISTINCT t.v)
 FROM 

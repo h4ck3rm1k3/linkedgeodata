@@ -486,14 +486,14 @@ class MyClass
 		
 		// Phase 1: Identify integer and float datatype properties
 		// TODO Create table lgd_stats_datatypes if it doesn't exist
-		logger.info("Analyzing integers and float")
+		logger.info("Analyzing integers, floats and boolean")
 		
 		rs = conn.createStatement().executeQuery(
 		"""\
 		SELECT 
-				sd.k, sd.count_total, sd.count_int, sd.count_float
+				k, count_total, count_int, count_float, count_boolean
 		FROM
-				lgd_stats_datatypes sd
+				lgd_stats_datatypes
 		""")
 		
 		
@@ -508,10 +508,12 @@ class MyClass
 		 */
 		int numFloats = 0;
 		int numInts = 0;
+		int numBooleans = 0
+
 		while(rs.next())
 		{			
-			def(String k, int countTotal, int countInt, int countFloat) =
-				[rs.getString("k"), rs.getInt("count_total"), rs.getInt("count_int"), rs.getInt("count_float")]
+			def(String k, int countTotal, int countInt, int countFloat, int countBoolean) =
+				[rs.getString("k"), rs.getInt("count_total"), rs.getInt("count_int"), rs.getInt("count_float"), rs.getInt("count_boolean")]
 		
 			if(!keys.contains(k))
 				continue;
@@ -524,6 +526,20 @@ class MyClass
 			// and a datatype property
 			if(countTotal < 20)
 				continue;
+			
+			
+			// Test boolean errors
+			int boolErrorAbs = countTotal - countBoolean;	
+			float boolErrorRatio = boolErrorAbs / (float)countTotal
+			
+			if(boolErrorRatio < 0.01f && boolErrorAbs < 5000) {
+				logger.info "Identified datatype property (bool): {$k}"
+				//createDatatypeProperty(model, keyToURI(k), XSD.xboolean)
+				registerDatatypeProperty(k, XSD.xboolean);
+				++numBooleans
+				keys.remove(k);
+				continue;
+			}
 			
 			// Test float errors
 			int floatErrorAbs = countTotal - countFloat;	
@@ -555,56 +571,10 @@ class MyClass
 			}
 		}
 		
-		logger.info("Identified {$numInts} integers, {$numFloats} floats")
+		logger.info("Identified {$numInts} integers, {$numFloats} floats, {$numBooleans} booleans")
 		
 		
-		logger.info("Analyzing bools")
-		rs = conn.createStatement().executeQuery(
-		"""\
-		SELECT 
-				sb.k, sb.count_total, sb.count_yes, sb.count_no, sb.count_true, sb.count_false
-		FROM
-				lgd_stats_boolean sb
-		""")
-		
-		int numBools = 0
-		while(rs.next())
-		{
-			def(String k, int countTotal, int countYes, int countNo, int countTrue, int countFalse) =
-				[rs.getString("k"), rs.getInt("count_total"), rs.getInt("count_yes"), rs.getInt("count_no"),
-				 rs.getInt("count_true"), rs.getInt("count_false")]
-		
-			if(!keys.contains(k))
-				continue;
-		 
-			if(countTotal < 20)
-				continue;
-		
-			int countBool  = countYes + countTrue + countNo + countFalse;	
-				 
-			// Test float errors
-			int boolErrorAbs = countTotal - countBool;	
-			float boolErrorRatio = boolErrorAbs / (float)countTotal
-			
-			if(!(boolErrorRatio < 0.01f && boolErrorAbs < 5000)) {
-				// Non-value property
-				continue
-			}
-		
-			logger.info "Identified datatype property (bool): {$k}"
-			//createDatatypeProperty(model, keyToURI(k), XSD.xboolean)
-			registerDatatypeProperty(k, XSD.xboolean);
-			++numBools
-
-			keys.remove(k);
-		}
-		logger.info("Identified {$numBools} as booleans")
-		
-		
-		
-		// TODO Analyze URIs
-		
-		
+		// TODO Analyze URIs		
 		// Wiki links
 		/*
 		for(String key : keys) {

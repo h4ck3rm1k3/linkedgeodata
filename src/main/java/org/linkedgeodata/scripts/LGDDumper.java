@@ -399,12 +399,34 @@ public class LGDDumper
 		SimpleWayToRDFTransformer wayTransformer =
 			new SimpleWayToRDFTransformer(tagMapper);
 
+		runNodeTags(conn, batchSize, nodeTransformer, out);		
 		runWayTags(conn, batchSize, wayTransformer, out);		
 		
 		out.flush();
 		out.close();
 	}
+
+	public static void runNodeTags(Connection conn, int batchSize, Transformer<Node, Model> nodeTransformer, OutputStream out)
+		throws Exception
+	{	
+		NodeTagIterator it = new NodeTagIterator(conn, batchSize);
 	
+		SimpleStatsTracker tracker = new SimpleStatsTracker();
+	
+		while(it.hasNext()) {
+			Node node = it.next();
+	
+			Model model = nodeTransformer.transform(node);
+	
+			model.write(out, "N3");
+			out.write('\n');
+	
+			//System.out.println(ModelUtil.toString(model));
+			
+			tracker.update(1);
+		}
+	}
+
 	public static void runWayTags(Connection conn, int batchSize, Transformer<Way, Model> wayTransformer, OutputStream out)
 		throws Exception
 	{	
@@ -426,26 +448,6 @@ public class LGDDumper
 		}
 	}
 
-	public static void run(Connection conn, int batchSize, Transformer<Node, Model> nodeTransformer, OutputStream out)
-		throws Exception
-	{	
-		NodeTagIterator it = new NodeTagIterator(conn, batchSize);
-	
-		SimpleStatsTracker tracker = new SimpleStatsTracker();
-	
-		while(it.hasNext()) {
-			Node node = it.next();
-	
-			Model model = nodeTransformer.transform(node);
-	
-			model.write(out, "N3");
-			out.write('\n');
-	
-			//System.out.println(ModelUtil.toString(model));
-			
-			tracker.update(1);
-		}
-	}
 
 	/*************************************************************************/
 	/* Init                                                                  */
