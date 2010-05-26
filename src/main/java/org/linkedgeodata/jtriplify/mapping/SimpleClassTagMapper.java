@@ -46,7 +46,7 @@ public class SimpleClassTagMapper
 	
 	public Model map(String subject, Tag tag)
 	{
-		if(!isOSMEntity())
+		if(!describesOSMEntity())
 			subject += "#id";
 
 		if(!super.matches(tag)) {

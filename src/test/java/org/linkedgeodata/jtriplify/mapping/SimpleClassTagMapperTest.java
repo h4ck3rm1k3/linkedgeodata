@@ -107,10 +107,10 @@ public class SimpleClassTagMapperTest
 		String classURI = "http://c";
 		
 		//IOneOneTagMapper obj = new SimpleClassTagMapper(classURI, new TagPattern("a", "b"), false);
-		TypeMapper typeMapper = new TypeMapper();
-		RDFDatatype dt = typeMapper.getSafeTypeByName(XSD.xint.toString());
+		//TypeMapper typeMapper = new TypeMapper();
+		//RDFDatatype dt = typeMapper.getSafeTypeByName();
 		
-		IOneOneTagMapper obj = new SimpleDataTypeTagMapper(classURI, new TagPattern("a", "b"), dt, false);
+		IOneOneTagMapper obj = new SimpleDataTypeTagMapper(classURI, new TagPattern("a", "b"), XSD.xint.toString(), false);
 
 		TagMapper tm = new TagMapper();
 		tm.index(obj);

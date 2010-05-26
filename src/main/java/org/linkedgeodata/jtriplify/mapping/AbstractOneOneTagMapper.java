@@ -30,27 +30,27 @@ public class AbstractOneOneTagMapper
 
 	// Whether the tag pertains to the OSM entity, or the concept that
 	// the resource represents
-	private boolean isOSMEntity = false;
+	private boolean describesOSMEntity = false;
 	
-	protected AbstractOneOneTagMapper(String resource, TagPattern tagPattern, boolean isOSMEntity)
+	protected AbstractOneOneTagMapper(String resource, TagPattern tagPattern, boolean describesOSMEntity)
 	{
 		this.resource = resource;
 		this.method = null;
 		this.tagPattern = tagPattern;
-		this.isOSMEntity = isOSMEntity;
+		this.describesOSMEntity = describesOSMEntity;
 	}
 
-	protected AbstractOneOneTagMapper(String resource, String method, TagPattern tagPattern, boolean isOSMEntity)
+	protected AbstractOneOneTagMapper(String resource, String method, TagPattern tagPattern, boolean describesOSMEntity)
 	{
 		this.resource = resource;
 		this.method = method;
 		this.tagPattern = tagPattern;
-		this.isOSMEntity = isOSMEntity;
+		this.describesOSMEntity = describesOSMEntity;
 	}
 	
-	public boolean isOSMEntity()
+	public boolean describesOSMEntity()
 	{
-		return isOSMEntity;
+		return describesOSMEntity;
 	}
 
 	public String getResource()

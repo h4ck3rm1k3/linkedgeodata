@@ -42,6 +42,11 @@ import org.linkedgeodata.util.PrefetchIterator;
 import org.linkedgeodata.util.stats.SimpleStatsTracker;
 import org.openstreetmap.osmosis.core.domain.v0_6.Node;
 import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
+import org.openstreetmap.osmosis.core.domain.v0_6.Way;
+import org.postgis.Geometry;
+import org.postgis.LineString;
+import org.postgis.PGgeometry;
+import org.postgis.Point;
 
 import com.hp.hpl.jena.datatypes.RDFDatatype;
 import com.hp.hpl.jena.datatypes.TypeMapper;
@@ -51,7 +56,92 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.XSD;
 
 
+class WayTagIterator
+	extends PrefetchIterator<Way>
+{
+	private Connection conn;
+	private Long offset = null;
+	
+	private Integer batchSize = 1000;
+	
+	public WayTagIterator(Connection conn)
+	{
+		this.conn = conn;
+	}
+	
+	public WayTagIterator(Connection conn, int batchSize)
+	{
+		this.conn = conn;
+		this.batchSize = batchSize;
+	}
+	
+	@Override
+	protected Iterator<Way> prefetch()
+		throws Exception
+	{
+		String sql = "SELECT DISTINCT way_id FROM way_tags ";
+		if(offset != null)
+			sql += "WHERE way_id > " + offset + " ";
+		
+		sql += "ORDER BY way_id ASC ";
+		
+		if(batchSize != null)
+			sql += "LIMIT " + batchSize + " ";
 
+		String s = "SELECT way_id, k, v, linestring::geometry FROM way_tags WHERE way_id IN (" + sql + ")";
+
+		//System.out.println(s);
+		ResultSet rs = conn.createStatement().executeQuery(s);
+
+		Map<Long, Way> idToWay = new HashMap<Long, Way>();
+		
+		int counter = 0;
+		while(rs.next()) {
+			++counter;
+
+			long wayId = rs.getLong("way_id");		
+			String k = rs.getString("k");
+			String v = rs.getString("v");
+			PGgeometry g = (PGgeometry)rs.getObject("linestring");
+			
+			offset = offset == null ? wayId : Math.max(offset, wayId);
+			
+			Way way = idToWay.get(wayId);
+			if(way == null) {
+				way = new Way(wayId, 0, (Date)null, null, -1);
+				idToWay.put(wayId, way);
+			}
+
+			Tag tag = new Tag(k, v);
+			way.getTags().add(tag);
+
+			if(g != null) {
+				LineString ls = new LineString(g.getValue());
+				String value = "";
+				for(Point point : ls.getPoints()) {
+					value += point.getY() + " " + point.getX();
+				}
+
+				String key =
+					(ls.getFirstPoint().equals(ls.getLastPoint()) && ls.getPoints().length > 2)
+					? "@@geoRSSLine"
+					: "@@geoRSSPolygon";
+				
+				tag = new Tag(key, value);
+				//System.out.println(tag);
+				
+				if(!way.getTags().contains(tag)) {
+					way.getTags().add(tag);
+				}
+			}
+		}
+		
+		if(counter == 0)
+			return null;
+		else
+			return idToWay.values().iterator();
+	}
+}
 
 /**
  * An iterator for the modified node_tags table.
@@ -139,6 +229,42 @@ class NodeTagIterator
 
 
 
+class SimpleWayToRDFTransformer
+	implements Transformer<Way, Model>
+{
+	private TagMapper tagMapper;
+
+	public SimpleWayToRDFTransformer(TagMapper tagMapper)
+	{
+		this.tagMapper = tagMapper;
+	}
+
+	@Override
+	public Model transform(Way node) {
+		Model model = ModelFactory.createDefaultModel();
+		
+		String subject = getSubject(node);
+		//Resource subjectRes = model.getResource(subject + "#id");
+		
+		//generateWGS84(model, subjectRes, node);
+		//generateGeoRSS(model, subjectRes, node);
+		SimpleNodeToRDFTransformer.generateTags(tagMapper, model, subject, node.getTags());
+
+		return model;
+	}
+	
+	private String getSubject(Way way)
+	{
+		String prefix = "http://linkedgeodata.org/";
+		String result = prefix + "node/" + way.getId();
+		
+		return result;
+	}
+
+	//public static void generateGeoRSS(Model model, Resource subjectRes, node);
+
+}
+
 
 /**
  * TODO Move the transformation functions into a static utility class so they
@@ -154,7 +280,7 @@ class SimpleNodeToRDFTransformer
 	private TagMapper tagMapper;
 
 	
-	private int parseErrorCount = 0;
+	private static int parseErrorCount = 0;
 	
 	public SimpleNodeToRDFTransformer(TagMapper tagMapper)
 	{
@@ -170,12 +296,12 @@ class SimpleNodeToRDFTransformer
 		
 		generateWGS84(model, subjectRes, node);
 		generateGeoRSS(model, subjectRes, node);
-		generateTags(model, subject, node.getTags());
+		generateTags(tagMapper, model, subject, node.getTags());
 
 		return model;
 	}
 	
-	private void generateTags(Model model, String subject, Collection<Tag> tags)
+	public static void generateTags(TagMapper tagMapper, Model model, String subject, Collection<Tag> tags)
 	{
 		//if(tags == null)
 
@@ -185,6 +311,7 @@ class SimpleNodeToRDFTransformer
 			if(subModel == null) {
 				++parseErrorCount;
 				logger.warn("Failed mapping: " + tag + ", Failed mapping count: " + parseErrorCount);
+				
 				continue;
 			}
 
@@ -260,7 +387,7 @@ public class LGDDumper
 	
 		logger.info("Loading mapping rules");
 		TagMapper tagMapper = new TagMapper();
-		tagMapper.load(new File("LGDMappingRules.txt"));
+		tagMapper.load(new File("LGDMappingRules.xml"));
 
 		SimpleNodeToRDFTransformer nodeTransformer =
 			new SimpleNodeToRDFTransformer(tagMapper);
@@ -269,12 +396,36 @@ public class LGDDumper
 		OutputStream out = new FileOutputStream(outFileName);
 
 
-		run(conn, batchSize, nodeTransformer, out);		
+		SimpleWayToRDFTransformer wayTransformer =
+			new SimpleWayToRDFTransformer(tagMapper);
+
+		runWayTags(conn, batchSize, wayTransformer, out);		
 		
 		out.flush();
 		out.close();
 	}
 	
+	public static void runWayTags(Connection conn, int batchSize, Transformer<Way, Model> wayTransformer, OutputStream out)
+		throws Exception
+	{	
+		WayTagIterator it = new WayTagIterator(conn, batchSize);
+	
+		SimpleStatsTracker tracker = new SimpleStatsTracker();
+	
+		while(it.hasNext()) {
+			Way way = it.next();
+	
+			Model model = wayTransformer.transform(way);
+	
+			model.write(out, "N3");
+			out.write('\n');
+
+			//System.out.println(ModelUtil.toString(model));
+			
+			tracker.update(1);
+		}
+	}
+
 	public static void run(Connection conn, int batchSize, Transformer<Node, Model> nodeTransformer, OutputStream out)
 		throws Exception
 	{	
@@ -289,7 +440,7 @@ public class LGDDumper
 	
 			model.write(out, "N3");
 			out.write('\n');
-
+	
 			//System.out.println(ModelUtil.toString(model));
 			
 			tracker.update(1);

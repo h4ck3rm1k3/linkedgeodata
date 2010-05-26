@@ -233,10 +233,10 @@ class MyClass
 	{
 		String resource = keyToURI(k);
 
-		TypeMapper tm = TypeMapper.getInstance();
-		RDFDatatype dataType = tm.getSafeTypeByName(range.toString());
+		//TypeMapper tm = TypeMapper.getInstance();
+		//RDFDatatype dataType = tm.getSafeTypeByName(range.toString());
 
-		SimpleDataTypeTagMapper tagMapper = new SimpleDataTypeTagMapper(resource, new TagPattern(k, null), dataType, false);
+		SimpleDataTypeTagMapper tagMapper = new SimpleDataTypeTagMapper(resource, new TagPattern(k, null), range.toString(), false);
 		tagMappers.add(tagMapper);
 		
 		createDataTypeProperty(model, resource, range);

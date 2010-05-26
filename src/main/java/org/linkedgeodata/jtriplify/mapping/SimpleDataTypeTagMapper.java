@@ -1,9 +1,5 @@
 package org.linkedgeodata.jtriplify.mapping;
 
-import java.net.URI;
-import java.net.URLEncoder;
-
-import org.apache.log4j.Logger;
 import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 
 import com.hp.hpl.jena.datatypes.RDFDatatype;
@@ -21,10 +17,19 @@ public class SimpleDataTypeTagMapper
 	private static final long serialVersionUID = 1L;
 
 	//private static final Logger logger = Logger.getLogger(SimpleDataTypeTagMapper.class);
-	private RDFDatatype dataType;
+
+	private String dataType;
+	private transient RDFDatatype rdfDataType;
 
 	// TODO add switch for yes/no - true/false representations
 
+	private Object readResolve()
+	{
+		TypeMapper tm = TypeMapper.getInstance();
+		rdfDataType = tm.getSafeTypeByName(dataType);
+		
+		return this;
+	}
 
 	/**
 	 * Valid types are:
@@ -39,20 +44,21 @@ public class SimpleDataTypeTagMapper
 	 * @param method
 	 * @param tag
 	 */
-	public SimpleDataTypeTagMapper(String property, TagPattern tagPattern, RDFDatatype dataType, boolean isOSMEntity)
+	public SimpleDataTypeTagMapper(String property, TagPattern tagPattern, String dataType, boolean isOSMEntity)
 		throws Exception
 	{
 		//URI.create("http://linkedgeodata.org/method/simple?type=dt&dataType=" + URLEncoder.encode(dataType.toString(), "UTF-8")),
 		super(property, tagPattern, isOSMEntity);
 
 		this.dataType = dataType;
-		// TODO Check the function type
 		
+		readResolve();
 	}
 
+	
 	public Model map(String subject, Tag tag)
 	{
-		if(!isOSMEntity())
+		if(!describesOSMEntity())
 			subject += "#id";
 		
 		if(!matches(this.getTagPattern(), tag))
@@ -60,15 +66,14 @@ public class SimpleDataTypeTagMapper
 
 		String str = tag.getValue().trim().toLowerCase();
 		
-		TypeMapper tm = TypeMapper.getInstance();
-		RDFDatatype booleanDataType = tm.getSafeTypeByName(XSD.xboolean.toString());
-		if(dataType.equals(booleanDataType)) {
+		// If the datatype is boolean
+		if(rdfDataType.getURI().equals(XSD.xboolean.getURI())) {
 			if(str.equals("yes")) str = "true";
 			if(str.equals("no")) str = "false";
 		}
 				
 				
-		if(!dataType.isValid(str)) {
+		if(!rdfDataType.isValid(str)) {
 			//logger.info("Failed to parse to'" + dataType + "', value: '" + str + "'");		
 			return null;
 		}
@@ -78,7 +83,7 @@ public class SimpleDataTypeTagMapper
 				result.getResource(subject),
 				result.getProperty(super.getResource().toString()),
 				str,
-				dataType);
+				rdfDataType);
 		
 		return result;
 	}
