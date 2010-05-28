@@ -389,13 +389,15 @@ class MyHandler
     	try {
     		response = process(x);
     	}
+    	/*
     	catch(HTTPErrorException e) {
     		// TODO Can be removed
     		logger.info("Sending http status code: " + e.getErrorCode());
     		response = new SimpleResponse(e.getErrorCode(), null, null);
     	}
+    	*/
     	catch(Throwable t) {
-    		logger.error(response.getText());
+    		logger.error(ExceptionUtil.toString(t));
     		response = new SimpleResponse(500, null, null);
     	}
 
@@ -523,6 +525,7 @@ public class JTriplifyServer
 		logger.info("Connecting to db");
 		Connection conn = LineStringUpdater.connectPostGIS(hostName, dbName, userName, passWord);
 
+		logger.info("Loading mapping rules");
 		TagMapper tagMapper = new TagMapper();
 		tagMapper.load(new File("LGDMappingRules.xml"));
 		

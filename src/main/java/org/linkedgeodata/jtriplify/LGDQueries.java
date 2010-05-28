@@ -35,7 +35,7 @@ public class LGDQueries
 			Object lonArg)
 	{
 		String result =
-			"ST_SetSRID(ST_MakePoint(" + lonArg + ", " + latArg + ", 4326)";
+			"ST_SetSRID(ST_MakePoint(" + lonArg + ", " + latArg + "), 4326)";
 
 		return result;
 	}

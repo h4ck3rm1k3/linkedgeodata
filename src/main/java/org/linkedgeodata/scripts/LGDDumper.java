@@ -39,6 +39,7 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.linkedgeodata.jtriplify.TagMapper;
 import org.linkedgeodata.util.PrefetchIterator;
+import org.linkedgeodata.util.StringUtil;
 import org.linkedgeodata.util.stats.SimpleStatsTracker;
 import org.openstreetmap.osmosis.core.domain.v0_6.Node;
 import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
@@ -56,7 +57,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.XSD;
 
 
-class WayTagIterator
+class WayTagIteratorSchemaDenorm1
 	extends PrefetchIterator<Way>
 {
 	private Connection conn;
@@ -64,12 +65,12 @@ class WayTagIterator
 	
 	private Integer batchSize = 1000;
 	
-	public WayTagIterator(Connection conn)
+	public WayTagIteratorSchemaDenorm1(Connection conn)
 	{
 		this.conn = conn;
 	}
 	
-	public WayTagIterator(Connection conn, int batchSize)
+	public WayTagIteratorSchemaDenorm1(Connection conn, int batchSize)
 	{
 		this.conn = conn;
 		this.batchSize = batchSize;
@@ -119,6 +120,9 @@ class WayTagIterator
 				LineString ls = new LineString(g.getValue());
 				String value = "";
 				for(Point point : ls.getPoints()) {
+					if(!value.isEmpty())
+						value += " ";
+
 					value += point.getY() + " " + point.getX();
 				}
 
@@ -142,6 +146,110 @@ class WayTagIterator
 			return idToWay.values().iterator();
 	}
 }
+
+
+
+
+
+
+class WayTagIterator
+	extends PrefetchIterator<Way>
+{
+	private Connection conn;
+	private Long offset = null;
+	
+	private Integer batchSize = 1000;
+	
+	public WayTagIterator(Connection conn)
+	{
+		this.conn = conn;
+	}
+	
+	public WayTagIterator(Connection conn, int batchSize)
+	{
+		this.conn = conn;
+		this.batchSize = batchSize;
+	}
+	
+	@Override
+	protected Iterator<Way> prefetch()
+		throws Exception
+	{
+		Map<Long, Way> idToWay = new HashMap<Long, Way>();
+
+		String sql = "SELECT id, linestring::geometry FROM ways ";
+		if(offset != null)
+			sql += "WHERE id > " + offset + " ";
+		
+		sql += "ORDER BY id ASC ";
+		
+		if(batchSize != null)
+			sql += "LIMIT " + batchSize + " ";
+	
+
+		ResultSet rs = conn.createStatement().executeQuery(sql);
+		
+		while(rs.next()) {
+			long id = rs.getLong("id");
+			PGgeometry g = (PGgeometry)rs.getObject("linestring");
+
+			offset = offset == null ? id : Math.max(offset, id);
+
+			Way way = new Way(id, 0, (Date)null, null, -1);
+			idToWay.put(id, way);
+	
+			if(g != null) {
+				LineString ls = new LineString(g.getValue());
+				String value = "";
+				for(Point point : ls.getPoints()) {
+					if(!value.isEmpty())
+						value += " ";
+
+					value += point.getY() + " " + point.getX();
+				}
+	
+				String key =
+					(ls.getFirstPoint().equals(ls.getLastPoint()) && ls.getPoints().length > 2)
+					? "@@geoRSSLine"
+					: "@@geoRSSPolygon";
+				
+				Tag tag = new Tag(key, value);
+
+				way.getTags().add(tag);
+			}
+			
+		}
+		
+		if(idToWay.isEmpty())
+			return null;
+	
+		String s = "SELECT way_id, k, v FROM way_tags WHERE way_id IN (" + 
+		StringUtil.implode(", ", idToWay.keySet()) + ")";
+	
+		//System.out.println(s);
+		rs = conn.createStatement().executeQuery(s);
+	
+		
+		int counter = 0;
+		while(rs.next()) {
+			++counter;
+	
+			long wayId = rs.getLong("way_id");
+			String k = rs.getString("k");
+			String v = rs.getString("v");
+			
+			Way way = idToWay.get(wayId);	
+			Tag tag = new Tag(k, v);
+			way.getTags().add(tag);
+		}
+		
+		return idToWay.values().iterator();
+	}
+}
+
+
+
+
 
 /**
  * An iterator for the modified node_tags table.
@@ -256,7 +364,7 @@ class SimpleWayToRDFTransformer
 	private String getSubject(Way way)
 	{
 		String prefix = "http://linkedgeodata.org/";
-		String result = prefix + "node/" + way.getId();
+		String result = prefix + "way/" + way.getId();
 		
 		return result;
 	}
@@ -290,6 +398,10 @@ class SimpleNodeToRDFTransformer
 	@Override
 	public Model transform(Node node) {
 		Model model = ModelFactory.createDefaultModel();
+		//model.setNsPrefix("lgd", "http://linkedgeodata.org/");
+		//model.setNsPrefix("lgdn", "http://linkedgeodata.org/node/");
+		//model.setNsPrefix("lgdw", "http://linkedgeodata.org/way/");
+		//model.setNsPrefix("lgdv", "http://linkedgeodata.org/vocabulary#");
 		
 		String subject = getSubject(node);
 		Resource subjectRes = model.getResource(subject + "#id");
@@ -380,27 +492,42 @@ public class LGDDumper
 		int batchSize = Integer.parseInt(batchSizeStr);
 		if(batchSize <= 0)
 			throw new RuntimeException("Invalid argument for batchsize");
+	
+		
+		boolean exportNodeTags = commandLine.hasOption("xnt");
+		boolean exportWayTags = commandLine.hasOption("xwt");
+		
+		logger.info("ExportNodeTags: " + exportNodeTags);
+		logger.info("ExportWayTags: " + exportWayTags);
+		
+		
 		
 		Connection conn = LineStringUpdater.connectPostGIS(hostName, dbName, userName, passWord);
 		logger.info("Connected to db");
+	
 		
 	
 		logger.info("Loading mapping rules");
 		TagMapper tagMapper = new TagMapper();
 		tagMapper.load(new File("LGDMappingRules.xml"));
 
-		SimpleNodeToRDFTransformer nodeTransformer =
-			new SimpleNodeToRDFTransformer(tagMapper);
 
 		logger.info("Opening output stream: " + outFileName);
 		OutputStream out = new FileOutputStream(outFileName);
 
+		if(exportNodeTags) {
+			SimpleNodeToRDFTransformer nodeTransformer =
+				new SimpleNodeToRDFTransformer(tagMapper);
+			
+			runNodeTags(conn, batchSize, nodeTransformer, out);		
+		}
+		
+		if(exportWayTags) {
+			SimpleWayToRDFTransformer wayTransformer =
+				new SimpleWayToRDFTransformer(tagMapper);
 
-		SimpleWayToRDFTransformer wayTransformer =
-			new SimpleWayToRDFTransformer(tagMapper);
-
-		runNodeTags(conn, batchSize, nodeTransformer, out);		
-		runWayTags(conn, batchSize, wayTransformer, out);		
+			runWayTags(conn, batchSize, wayTransformer, out);
+		}
 		
 		out.flush();
 		out.close();
@@ -418,6 +545,7 @@ public class LGDDumper
 	
 			Model model = nodeTransformer.transform(node);
 	
+
 			model.write(out, "N3");
 			out.write('\n');
 	
@@ -439,6 +567,11 @@ public class LGDDumper
 	
 			Model model = wayTransformer.transform(way);
 	
+			/*
+			model.setNsPrefix("lgd", "http://linkedgeodata.org/");
+			model.setNsPrefix("lgdv", "http://linkedgeodata.org/vocabulary#");
+			*/
+
 			model.write(out, "N3");
 			out.write('\n');
 
@@ -463,5 +596,8 @@ public class LGDDumper
 		cliOptions.addOption("h", "host", true, "");
 		cliOptions.addOption("n", "batchSize", true, "Batch size");
 		cliOptions.addOption("o", "outfile", true, "Output filename");		
+
+		cliOptions.addOption("xnt", "tagsn", false, "eXport node tags");
+		cliOptions.addOption("xwt", "tagsw", false, "eXport way tags");
 	}
 }
