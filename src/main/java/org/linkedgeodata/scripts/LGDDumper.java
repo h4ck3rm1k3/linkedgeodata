@@ -24,11 +24,15 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -37,24 +41,21 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.collections15.Transformer;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import org.linkedgeodata.jtriplify.LGDOSMEntityBuilder;
 import org.linkedgeodata.jtriplify.TagMapper;
+import org.linkedgeodata.jtriplify.mapping.SimpleNodeToRDFTransformer;
 import org.linkedgeodata.util.PrefetchIterator;
 import org.linkedgeodata.util.StringUtil;
 import org.linkedgeodata.util.stats.SimpleStatsTracker;
 import org.openstreetmap.osmosis.core.domain.v0_6.Node;
 import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 import org.openstreetmap.osmosis.core.domain.v0_6.Way;
-import org.postgis.Geometry;
 import org.postgis.LineString;
 import org.postgis.PGgeometry;
 import org.postgis.Point;
 
-import com.hp.hpl.jena.datatypes.RDFDatatype;
-import com.hp.hpl.jena.datatypes.TypeMapper;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.vocabulary.XSD;
 
 
 class WayTagIteratorSchemaDenorm1
@@ -264,20 +265,20 @@ class WayTagIterator
  * @author Claus Stadler
  *
  */
-class NodeTagIterator
+class NodeTagIteratorDenorm1
 	extends PrefetchIterator<Node>
 {
 	private Connection conn;
 	private Long offset = null;
 	
 	private Integer batchSize = 1000;
-	
-	public NodeTagIterator(Connection conn)
+
+	public NodeTagIteratorDenorm1(Connection conn)
 	{
 		this.conn = conn;
 	}
 	
-	public NodeTagIterator(Connection conn, int batchSize)
+	public NodeTagIteratorDenorm1(Connection conn, int batchSize)
 	{
 		this.conn = conn;
 		this.batchSize = batchSize;
@@ -295,45 +296,23 @@ class NodeTagIterator
 		
 		if(batchSize != null)
 			sql += "LIMIT " + batchSize + " ";
-
-		String s = "SELECT node_id, k, v, Y(geom::geometry) AS lat, X(geom::geometry) AS lon FROM node_tags WHERE node_id IN (" + sql + ")";
-
+	
+		String s = "SELECT node_id, k, v, geom::geometry FROM node_tags WHERE node_id IN (" + sql + ")";
+	
 		//System.out.println(s);
 		ResultSet rs = conn.createStatement().executeQuery(s);
 		
-		//List<Node> result = new ArrayList<Node>();
+		Collection<Node> coll = LGDOSMEntityBuilder.processResultSet(rs, null).values();
 
-		Map<Long, Node> idToNode = new HashMap<Long, Node>();
-		
-		int counter = 0;
-		while(rs.next()) {
-			++counter;
-
-			long nodeId = rs.getLong("node_id");		
-			String k = rs.getString("k");
-			String v = rs.getString("v");
-			double lat = rs.getFloat("lat");
-			double lon = rs.getFloat("lon");
-
-			offset = offset == null ? nodeId : Math.max(offset, nodeId);
-			
-			Node node = idToNode.get(nodeId);
-			if(node == null) {
-				node = new Node(nodeId, 0, (Date)null, null, -1, lat, lon);
-				idToNode.put(nodeId, node);
-			}
-
-			Tag tag = new Tag(k, v);
-			node.getTags().add(tag);
+		for(Node node : coll) {
+			offset = offset == null ? node.getId() : Math.max(offset, node.getId());
 		}
-		
-		if(counter == 0)
-			return null;
-		else
-			return idToNode.values().iterator();
-	}
-	
+
+		return coll.iterator();
+	}	
 }
+
+
 
 
 
@@ -374,95 +353,6 @@ class SimpleWayToRDFTransformer
 }
 
 
-/**
- * TODO Move the transformation functions into a static utility class so they
- * can be reused
- * 
- * @author raven
- *
- */
-class SimpleNodeToRDFTransformer
-	implements Transformer<Node, Model>
-{
-	private static final Logger logger = Logger.getLogger(SimpleNodeToRDFTransformer.class);
-	private TagMapper tagMapper;
-
-	
-	private static int parseErrorCount = 0;
-	
-	public SimpleNodeToRDFTransformer(TagMapper tagMapper)
-	{
-		this.tagMapper = tagMapper;
-	}
-	
-	@Override
-	public Model transform(Node node) {
-		Model model = ModelFactory.createDefaultModel();
-		//model.setNsPrefix("lgd", "http://linkedgeodata.org/");
-		//model.setNsPrefix("lgdn", "http://linkedgeodata.org/node/");
-		//model.setNsPrefix("lgdw", "http://linkedgeodata.org/way/");
-		//model.setNsPrefix("lgdv", "http://linkedgeodata.org/vocabulary#");
-		
-		String subject = getSubject(node);
-		Resource subjectRes = model.getResource(subject + "#id");
-		
-		generateWGS84(model, subjectRes, node);
-		generateGeoRSS(model, subjectRes, node);
-		generateTags(tagMapper, model, subject, node.getTags());
-
-		return model;
-	}
-	
-	public static void generateTags(TagMapper tagMapper, Model model, String subject, Collection<Tag> tags)
-	{
-		//if(tags == null)
-
-		// Generate RDF for the tags
-		for(Tag tag : tags) {
-			Model subModel = tagMapper.map(subject, tag);
-			if(subModel == null) {
-				++parseErrorCount;
-				logger.warn("Failed mapping: " + tag + ", Failed mapping count: " + parseErrorCount);
-				
-				continue;
-			}
-
-			model.add(subModel);
-		}		
-	}
-	
-	private String getSubject(Node node)
-	{
-		String prefix = "http://linkedgeodata.org/";
-		String result = prefix + "node/" + node.getId();
-		
-		return result;
-	}
-
-	
-	private static final String geoRSSPoint = "http://www.georss.org/georss/point";
-	
-	public static void generateGeoRSS(Model model, Resource subject, Node node)
-	{
-		String str = node.getLatitude() + " " + node.getLongitude();		
-		model.add(subject, model.getProperty(geoRSSPoint), str);
-	}
-	
-	
-	private static final String wgs84NS = "http://www.w3.org/2003/01/geo/wgs84_pos#";
-	private static final String wgs84Lat = wgs84NS + "lat";
-	private static final String wgs84Long = wgs84NS + "long";
-	
-	public static  void generateWGS84(Model model, Resource subject, Node node)
-	{
-		TypeMapper tm = TypeMapper.getInstance();
-		RDFDatatype dataType = tm.getSafeTypeByName(XSD.decimal.getURI());
-
-		model.add(subject, model.getProperty(wgs84Lat), Double.toString(node.getLatitude()), dataType);
-		model.add(subject, model.getProperty(wgs84Long), Double.toString(node.getLongitude()), dataType);		
-	}
-
-}
 
 
 public class LGDDumper
@@ -536,7 +426,7 @@ public class LGDDumper
 	public static void runNodeTags(Connection conn, int batchSize, Transformer<Node, Model> nodeTransformer, OutputStream out)
 		throws Exception
 	{	
-		NodeTagIterator it = new NodeTagIterator(conn, batchSize);
+		NodeTagIteratorDenorm1 it = new NodeTagIteratorDenorm1(conn, batchSize);
 	
 		SimpleStatsTracker tracker = new SimpleStatsTracker();
 	

@@ -42,8 +42,8 @@ public class LGDQueries
 
 	public static String BBox(
 			Object minLatArg,
-			Object minLonArg,
 			Object maxLatArg,
+			Object minLonArg,
 			Object maxLonArg)
 	{
 		String result =
@@ -149,7 +149,7 @@ public class LGDQueries
 	 * @param bOr
 	 * @return
 	 */
-	public static String buildFindTaggedNodesQuery(float latMin, float latMax, float lonMin, float lonMax, Integer limit, String k, String v, boolean bOr)
+	public static String buildFindTaggedNodesQuery(double latMin, double latMax, double lonMin, double lonMax, Integer limit, String k, String v, boolean bOr)
 	{
 		String kvPred = createPredicate("snt", k, v, bOr);
 		if(!kvPred.isEmpty())
@@ -159,14 +159,14 @@ public class LGDQueries
 		
 		String result =
 			"SELECT\n" +
-			"    id\n" +
+			"    node_id, k, v, geom::geometry\n" +
 			"FROM\n" +
 			"    node_tags\n" +
 			"WHERE\n" +
 			"    geom && " + BBox(latMin, latMax, lonMin, lonMax) + "\n" +
 			"    " + kvPred + "\n" +
 			limitStr;
-
+System.out.println(result);
 		return result;
 	}
 

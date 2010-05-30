@@ -9,8 +9,10 @@ import java.util.concurrent.Callable;
 import org.apache.commons.collections15.Transformer;
 import org.apache.log4j.Logger;
 import org.linkedgeodata.core.dao.AbstractDAO;
+import org.linkedgeodata.jtriplify.mapping.SimpleNodeToRDFTransformer;
 import org.linkedgeodata.util.ExceptionUtil;
 import org.linkedgeodata.util.SQLUtil;
+import org.openstreetmap.osmosis.core.domain.v0_6.Node;
 import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -64,43 +66,69 @@ public class LinkedGeoDataDAO
 		RELATION
 	}
 
+	
+	
+	private static Model mapNodeTags(ResultSet rs, TagMapper tagMapper, Model model)
+		throws Exception
+	{
+		while(rs.next()) {
+			
+		}
 
-	public List<Long> getEntitiesWithinBBox(
+		return model;
+	}
+
+	/**
+	 * Options:
+	 * 	Sources: n, nt, w, wt
+	 * 
+	 * 
+	 * @param type
+	 * @param latMin
+	 * @param latMax
+	 * @param lonMin
+	 * @param lonMax
+	 * @param limit
+	 * @param k
+	 * @param v
+	 * @param bOr
+	 * @return
+	 * @throws Exception
+	 */
+	public Callable<Model> getEntitiesWithinBBox(
 			OSMEntityType type,
-			float latMin, 
-			float latMax, 
-			float lonMin,
-			float lonMax,
+			double latMin, 
+			double latMax, 
+			double lonMin,
+			double lonMax,
 			Integer limit,
 			String k,
 			String v,
 			boolean bOr)
 		throws Exception
 	{
-		String sql = null;
-		switch(type) {
-		case NODE:
-			sql = LGDQueries.buildFindTaggedNodesQuery(latMin, latMax, lonMin, lonMax, limit, k, v, bOr);
-			break;
-		/*
-		case WAY:
-			//sql = LGDQueries.buildFindTaggedWaysQuery("$3", k, v, bOr);
-			break;
-		*/
-		default:
-			throw new RuntimeException("Not implemented");
-		}
+		final String sql = LGDQueries.buildFindTaggedNodesQuery(latMin, latMax, lonMin, lonMax, limit, k, v, bOr);
 
-		/*
-		if(k != null)
-			sql = sql.replace("$4", k);
-		
-		if(v != null)
-			sql = sql.replace("$5", v);
-		*/
+		Callable<Model> result = new Callable<Model>() {
+			@Override
+			public Model call() throws Exception {
+				SimpleNodeToRDFTransformer nodeTransformer = new SimpleNodeToRDFTransformer(tagMapper);
 
-		List<Long> result = SQLUtil.executeList(conn, sql, Long.class);
-	
+				
+				ResultSet rs = conn.createStatement().executeQuery(sql);
+				
+				Collection<Node> nodes = LGDOSMEntityBuilder.processResultSet(rs, null).values();
+				
+				Model result = ModelFactory.createDefaultModel();
+				
+				for(Node node : nodes) {
+					nodeTransformer.transform(result, node);
+				}
+				
+				return result;
+			}
+		};
+			
 		return result;
 	}
 

@@ -557,7 +557,7 @@ public class JTriplifyServer
 		
 		
 		IInvocable bboxFn = DefaultCoercions.wrap(methods, "publicFindEntitiesByBBox.*");
-		ric.put(".*near/([^,]*),([^/]*)/([^,]*),([^/]*)/?(\\?.*)?", bboxFn, "$0", "$1", "$2", "$3", 1000, null, null, false);
+		ric.put(".*near/(-?[^-]+)-(-?[^,]+),(-?[^-]+)-(-?[^/]+)/?(\\?.*)?", bboxFn, "$0", "$1", "$2", "$3", null, null, false);
 		
 		MyHandler handler = new MyHandler();
 		handler.setInvocationMap(ric);

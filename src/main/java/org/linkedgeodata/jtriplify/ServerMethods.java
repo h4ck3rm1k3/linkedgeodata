@@ -42,17 +42,18 @@ public class ServerMethods
 	}
 	
 
-	/* TODO Write this method
+	// TODO Write this method
 	public Model publicFindEntitiesByBBox(Double latMin, Double latMax, Double lonMin, Double lonMax, String k, String v, Boolean bOr)
 		throws Exception
 	{
-		List<Model> models = getNearModels(lat, lon, distance, k, v, bOr);
+		Callable<Model> callable = dao.getEntitiesWithinBBox(OSMEntityType.NODE, latMin, latMax, lonMin, lonMax, 1000, k, v, bOr);
+
+		Future<Model> model = executor.submit(callable);
 	
-		Model result = ModelUtil.combine(models);
-	
+		Model result = model.get();
+		
 		return result;
 	}
-	*/
 
 	
 	
