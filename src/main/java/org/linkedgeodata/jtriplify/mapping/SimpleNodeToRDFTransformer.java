@@ -3,9 +3,9 @@ package org.linkedgeodata.jtriplify.mapping;
 import java.util.Collection;
 import java.util.Date;
 
-import org.apache.commons.collections15.Transformer;
 import org.apache.log4j.Logger;
 import org.linkedgeodata.jtriplify.TagMapper;
+import org.linkedgeodata.util.ITransformer;
 import org.openstreetmap.osmosis.core.domain.v0_6.Node;
 import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 
@@ -17,6 +17,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.XSD;
 
 
+
 /**
  * Transforms osm nodes (v0.6) into RDF using a tagMapper.
  * 
@@ -25,7 +26,7 @@ import com.hp.hpl.jena.vocabulary.XSD;
  *
  */
 public class SimpleNodeToRDFTransformer
-	implements Transformer<Node, Model>
+	implements ITransformer<Node, Model>
 {
 	private static final Logger logger = Logger.getLogger(SimpleNodeToRDFTransformer.class);
 	private TagMapper tagMapper;
@@ -38,6 +39,7 @@ public class SimpleNodeToRDFTransformer
 		this.tagMapper = tagMapper;
 	}
 	
+	@Override
 	public Model transform(Model model, Node node)
 	{
 		//model.setNsPrefix("lgd", "http://linkedgeodata.org/");
@@ -82,7 +84,7 @@ public class SimpleNodeToRDFTransformer
 	
 	private String getSubject(Node node)
 	{
-		String prefix = "http://linkedgeodata.org/";
+		String prefix = "http://linkedgeodata.org/triplify/";
 		String result = prefix + "node/" + node.getId();
 		
 		return result;

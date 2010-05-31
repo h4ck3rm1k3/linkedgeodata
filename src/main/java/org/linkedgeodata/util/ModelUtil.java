@@ -1,6 +1,10 @@
 package org.linkedgeodata.util;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collection;
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -19,6 +23,22 @@ public class ModelUtil
 		return result;
 	}
 	
+	
+	// FIXME: Automatically detect file type from extension
+	// On failure retry different parser
+	public static Model read(Model model, File file, String lang)
+	throws IOException
+	{
+		InputStream in = new FileInputStream(file);
+		try {
+			model.read(in, null, lang);
+		}
+		finally {
+			in.close();
+		}
+		
+		return model;
+	}
 	
 	public static String toString(Model model)
 	{

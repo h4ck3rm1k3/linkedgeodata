@@ -21,18 +21,17 @@
 package org.linkedgeodata.scripts;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -44,6 +43,8 @@ import org.apache.log4j.PropertyConfigurator;
 import org.linkedgeodata.jtriplify.LGDOSMEntityBuilder;
 import org.linkedgeodata.jtriplify.TagMapper;
 import org.linkedgeodata.jtriplify.mapping.SimpleNodeToRDFTransformer;
+import org.linkedgeodata.util.ITransformer;
+import org.linkedgeodata.util.ModelUtil;
 import org.linkedgeodata.util.PrefetchIterator;
 import org.linkedgeodata.util.StringUtil;
 import org.linkedgeodata.util.stats.SimpleStatsTracker;
@@ -317,7 +318,7 @@ class NodeTagIteratorDenorm1
 
 
 class SimpleWayToRDFTransformer
-	implements Transformer<Way, Model>
+	implements ITransformer<Way, Model>
 {
 	private TagMapper tagMapper;
 
@@ -327,17 +328,25 @@ class SimpleWayToRDFTransformer
 	}
 
 	@Override
-	public Model transform(Way node) {
-		Model model = ModelFactory.createDefaultModel();
+	public Model transform(Model model, Way way)
+	{
 		
-		String subject = getSubject(node);
+		String subject = getSubject(way);
 		//Resource subjectRes = model.getResource(subject + "#id");
 		
 		//generateWGS84(model, subjectRes, node);
 		//generateGeoRSS(model, subjectRes, node);
-		SimpleNodeToRDFTransformer.generateTags(tagMapper, model, subject, node.getTags());
+		SimpleNodeToRDFTransformer.generateTags(tagMapper, model, subject, way.getTags());
 
 		return model;
+	}
+
+	@Override
+	public Model transform(Way way)
+	{
+		Model model = ModelFactory.createDefaultModel();
+		
+		return transform(model, way);
 	}
 	
 	private String getSubject(Way way)
@@ -389,88 +398,118 @@ public class LGDDumper
 		
 		logger.info("ExportNodeTags: " + exportNodeTags);
 		logger.info("ExportWayTags: " + exportWayTags);
-		
-		
-		
-		Connection conn = LineStringUpdater.connectPostGIS(hostName, dbName, userName, passWord);
-		logger.info("Connected to db");
 	
 		
-	
+		
+		logger.info("Loading namespace prefixes");
+		// Create a model containing the namespace prefixes
+		Model baseModel = ModelFactory.createDefaultModel();
+		ModelUtil.read(baseModel, new File("Namespaces.ttl"), "TTL");
+		Map<String, String> prefixMap = baseModel.getNsPrefixMap();
+		//System.exit(0);
+		
 		logger.info("Loading mapping rules");
 		TagMapper tagMapper = new TagMapper();
 		tagMapper.load(new File("LGDMappingRules.xml"));
 
+		
+		
+		Connection conn = LineStringUpdater.connectPostGIS(hostName, dbName, userName, passWord);
+		logger.info("Connected to db");
 
+		
+		
 		logger.info("Opening output stream: " + outFileName);
 		OutputStream out = new FileOutputStream(outFileName);
+
+		baseModel.write(out, "N3");
+
 
 		if(exportNodeTags) {
 			SimpleNodeToRDFTransformer nodeTransformer =
 				new SimpleNodeToRDFTransformer(tagMapper);
 			
-			runNodeTags(conn, batchSize, nodeTransformer, out);		
+			runNodeTags(conn, batchSize, nodeTransformer, prefixMap, out);		
 		}
 		
 		if(exportWayTags) {
 			SimpleWayToRDFTransformer wayTransformer =
 				new SimpleWayToRDFTransformer(tagMapper);
 
-			runWayTags(conn, batchSize, wayTransformer, out);
+			runWayTags(conn, batchSize, wayTransformer, prefixMap, out);
 		}
 		
 		out.flush();
 		out.close();
 	}
 
-	public static void runNodeTags(Connection conn, int batchSize, Transformer<Node, Model> nodeTransformer, OutputStream out)
+	public static void runNodeTags(Connection conn, int batchSize, ITransformer<Node, Model> nodeTransformer, Map<String, String> prefixMap, OutputStream out)
 		throws Exception
 	{	
 		NodeTagIteratorDenorm1 it = new NodeTagIteratorDenorm1(conn, batchSize);
 	
 		SimpleStatsTracker tracker = new SimpleStatsTracker();
 	
+		Model model = ModelFactory.createDefaultModel();
+		model.setNsPrefixes(prefixMap);
+		
 		while(it.hasNext()) {
-			Node node = it.next();
-	
-			Model model = nodeTransformer.transform(node);
-	
-
-			model.write(out, "N3");
-			out.write('\n');
-	
-			//System.out.println(ModelUtil.toString(model));
+			Node way = it.next();
 			
+			nodeTransformer.transform(model, way);
+
+			if(model.size() > 10000) {
+				writeModel(model, out);
+			}
+
 			tracker.update(1);
 		}
+		writeModel(model, out);
+		
 	}
-
-	public static void runWayTags(Connection conn, int batchSize, Transformer<Way, Model> wayTransformer, OutputStream out)
+	
+	public static void runWayTags(Connection conn, int batchSize, ITransformer<Way, Model> wayTransformer, Map<String, String> prefixMap, OutputStream out)
 		throws Exception
 	{	
 		WayTagIterator it = new WayTagIterator(conn, batchSize);
 	
 		SimpleStatsTracker tracker = new SimpleStatsTracker();
-	
+
+		Model model = ModelFactory.createDefaultModel();
+		model.setNsPrefixes(prefixMap);
+		
 		while(it.hasNext()) {
 			Way way = it.next();
-	
-			Model model = wayTransformer.transform(way);
-	
-			/*
-			model.setNsPrefix("lgd", "http://linkedgeodata.org/");
-			model.setNsPrefix("lgdv", "http://linkedgeodata.org/vocabulary#");
-			*/
-
-			model.write(out, "N3");
-			out.write('\n');
-
-			//System.out.println(ModelUtil.toString(model));
 			
+			wayTransformer.transform(model, way);
+
+			if(model.size() > 10000) {
+				writeModel(model, out);
+			}
+
 			tracker.update(1);
 		}
+		writeModel(model, out);
 	}
 
+	private static Pattern directivePattern = Pattern.compile("^@.*$.?\\n?", Pattern.MULTILINE);
+
+	private static void writeModel(Model model, OutputStream out)
+		throws IOException
+	{
+		if(model.isEmpty())
+			return;
+		
+		String str = ModelUtil.toString(model, "N3");
+		
+		Matcher matcher = directivePattern.matcher(str); 
+		str = matcher.replaceAll("");
+		str += "\n";
+		
+		out.write(str.getBytes());
+		
+		model.removeAll();
+	}
 
 	/*************************************************************************/
 	/* Init                                                                  */
