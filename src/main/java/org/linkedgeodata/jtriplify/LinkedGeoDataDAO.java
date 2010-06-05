@@ -226,7 +226,7 @@ public class LinkedGeoDataDAO
 							return ModelFactory.createDefaultModel();
 						}
 	
-						String prefix = "http://linkedgeodata/triplify/" + osmEntityType + "/";
+						String prefix = "http://linkedgeodata.org/triplify/" + osmEntityType + "/";
 						
 						result = ModelFactory.createDefaultModel();
 						ResultSet rs = SQLUtil.executeCore(conn, finalSQL, ids.toArray());
