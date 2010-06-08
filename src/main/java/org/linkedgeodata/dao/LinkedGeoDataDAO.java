@@ -1,4 +1,4 @@
-package org.linkedgeodata.jtriplify;
+package org.linkedgeodata.dao;
 
 import java.net.URI;
 import java.sql.ResultSet;
@@ -8,7 +8,9 @@ import java.util.concurrent.Callable;
 
 import org.apache.commons.collections15.Transformer;
 import org.apache.log4j.Logger;
-import org.linkedgeodata.core.dao.AbstractDAO;
+import org.linkedgeodata.jtriplify.LGDOSMEntityBuilder;
+import org.linkedgeodata.jtriplify.TagMapper;
+import org.linkedgeodata.jtriplify.TriplifyUtil;
 import org.linkedgeodata.jtriplify.mapping.SimpleNodeToRDFTransformer;
 import org.linkedgeodata.util.ExceptionUtil;
 import org.linkedgeodata.util.SQLUtil;
@@ -59,12 +61,6 @@ public class LinkedGeoDataDAO
 	}
 	*/
 	
-	public enum OSMEntityType
-	{
-		NODE,
-		WAY,
-		RELATION
-	}
 
 	
 	
@@ -237,7 +233,7 @@ public class LinkedGeoDataDAO
 							
 							String uri = prefix + id;
 							
-							Model model = tagMapper.map(uri, new Tag(k, v));
+							Model model = tagMapper.map(uri, new Tag(k, v), null);
 							result.add(model);
 						}
 
@@ -297,4 +293,9 @@ public class LinkedGeoDataDAO
 		return prepareSimpleIdBasedQuery(LGDQueries.wayNodeQuery, ids);
 	}
 
+	
+	
+	
+	
+	
 }

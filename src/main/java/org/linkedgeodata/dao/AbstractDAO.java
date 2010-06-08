@@ -1,4 +1,4 @@
-package org.linkedgeodata.core.dao;
+package org.linkedgeodata.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

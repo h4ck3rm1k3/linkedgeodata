@@ -1,16 +1,28 @@
+/**
+ * Copyright (C) 2009-2010, LinkedGeoData team at the MOLE research
+ * group at AKSW / University of Leipzig
+ *
+ * This file is part of LinkedGeoData.
+ *
+ * LinkedGeoData is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * LinkedGeoData is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
 package org.linkedgeodata.jtriplify.mapping;
 
-import java.net.URI;
-import java.net.URLEncoder;
-
-import org.apache.log4j.Logger;
 import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 
-import com.hp.hpl.jena.datatypes.RDFDatatype;
-import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.vocabulary.RDF;
 
 public class SimpleTextTagMapper
 	extends AbstractOneOneTagMapper
@@ -59,11 +71,8 @@ public class SimpleTextTagMapper
 	}*/
 	
 	
-	public Model map(String subject, Tag tag)
+	public Model _map(String subject, Tag tag, Model model)
 	{
-		if(!describesOSMEntity())
-			subject += "#id";
-		
 		if(!matches(this.getTagPattern(), tag))
 			return null;
 
@@ -73,7 +82,6 @@ public class SimpleTextTagMapper
 			suffix = tag.getKey();
 		}
 
-		Model result = ModelFactory.createDefaultModel();
 		/*
 		if(langTag == null) {
 			result.add(
@@ -82,15 +90,15 @@ public class SimpleTextTagMapper
 					tag.getValue());
 		}
 		else {*/
-		result.add(
-				result.getResource(subject),
-				result.getProperty(super.getResource().toString() + suffix),
+		model.add(
+				model.getResource(subject),
+				model.getProperty(super.getResource().toString() + suffix),
 				tag.getValue(),
 				langTag);
 			
 		//}
 
-		return result;
+		return model;
 	}
 	
 	/*

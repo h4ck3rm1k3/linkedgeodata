@@ -34,7 +34,7 @@ public class SimpleTextTagMapperTest
 		
 		Tag tag = new Tag("@@geoRSSLine", "0 1 2 3 4 5");
 		
-		Model model = m.map("http://ex.org", tag);
+		Model model = m.map("http://ex.org", tag, null);
 	
 		logger.trace(ModelUtil.toString(model));
 	}
@@ -51,7 +51,7 @@ public class SimpleTextTagMapperTest
 		
 		Tag tag = new Tag("@@geoRSSPolygon", "0 1 2 3 4 5");
 		
-		Model model = m.map("http://ex.org", tag);
+		Model model = m.map("http://ex.org", tag, null);
 	
 		logger.trace(ModelUtil.toString(model));
 	}

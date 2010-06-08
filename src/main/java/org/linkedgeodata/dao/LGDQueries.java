@@ -1,4 +1,4 @@
-package org.linkedgeodata.jtriplify;
+package org.linkedgeodata.dao;
 
 
 /**

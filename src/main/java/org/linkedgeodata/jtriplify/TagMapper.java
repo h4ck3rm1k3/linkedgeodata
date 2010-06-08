@@ -2,7 +2,6 @@ package org.linkedgeodata.jtriplify;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -105,7 +104,7 @@ public class TagMapper
 		return null;
 	}
 	
-	public Model map(String subject, Tag tag)
+	public Model map(String subject, Tag tag, Model model)
 	{
 		Set<IOneOneTagMapper> candidates = get(tag.getKey(), tag.getValue());
 		if(candidates == null)
@@ -113,7 +112,7 @@ public class TagMapper
 		
 		Model result = null; 
 		for(IOneOneTagMapper mapper : candidates) {
-			Model tmp = mapper.map(subject, tag);
+			Model tmp = mapper.map(subject, tag, model);
 			
 			if(tmp != null) {
 				// Only set the result to non-null if there was at least some partial result

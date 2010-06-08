@@ -28,6 +28,7 @@ import org.apache.commons.collections15.MultiMap;
 import org.apache.commons.collections15.Transformer;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import org.linkedgeodata.dao.LinkedGeoDataDAO;
 import org.linkedgeodata.jtriplify.methods.DefaultCoercions;
 import org.linkedgeodata.jtriplify.methods.FunctionUtil;
 import org.linkedgeodata.jtriplify.methods.IInvocable;

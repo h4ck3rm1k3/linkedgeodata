@@ -7,9 +7,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Stack;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
-import org.linkedgeodata.core.dao.IQuery;
 
 
 //http://stackoverflow.com/questions/1497569/how-to-execute-sql-script-file-using-jdbc
@@ -41,32 +43,68 @@ public class SQLUtil
 		return result;
 	}
 	
+	private static Pattern singleLineCommentPattern = Pattern.compile("^--.*$", Pattern.MULTILINE);
+	
+	private static Pattern functionPattern = Pattern.compile("CREATE\\s+FUNCTION.*\\sAS\\s+(.*)\\s", Pattern.CASE_INSENSITIVE);
 	/**
 	 * 
 	 * @param in
 	 */
-	/*
-	public static void importSQLScript(InputStream in, ISimpleConnection conn)
-		throws Exception
-	{
-		String data = StringUtil.toString(in);
+	public static List<String> parseSQLScript(String data)
+	{		
+		//data = data.replaceAll("/\\*.*\\*<remove>/", "");
+		data = data.replaceAll("/\\*.*\\*/", "");
+
+		Matcher matcher = singleLineCommentPattern.matcher(data); 
+		data = matcher.replaceAll("");
 		
-		data = data.replaceAll("/\\*.*\\*<remove>/", "");
+		String[] parts = data.split(";");
+
+		Stack<String> stack = new Stack<String>();
 		
-		String[] sqls = data.split(";");
-		
-		for(String sql : sqls) {
-			sql = sql.trim();
+		List<String> result = new ArrayList<String>();
+		String current = "";
+		for(String part : parts) {
+			part = part.trim();
 			
-			if(sql.isEmpty())
+			// While the stack is not empty, check if the part contains
+			// matching tokens
+			// This routine does not consider the order of the tokens
+			while(!stack.isEmpty()) {
+				String tos = stack.peek();
+				if(part.contains(tos)) {
+					stack.pop();
+				}
+				else {
+					break;
+				}
+			}
+			
+			if(!current.isEmpty()) {
+				current += ";";
+			}
+			
+			if(part.isEmpty())
 				continue;
+
+			current += part;
+
+			Matcher m = functionPattern.matcher(part);
+			if(m.find()) {
+				String delim = m.group(1);
+				stack.push(delim);
+			}
 			
-			logger.debug("Executing SQL Statement:\n" + sql);
-			conn.update(sql);
+			if(stack.isEmpty()) {
+				result.add(current);
+				current = "";
+			}
 		}
+		
+		return result;
 	}
 	
-	
+	/*
 	public static String multiImplode(Collection<? extends Collection<?>> rows)
 	{
 		MultiRowString result = new MultiRowString();

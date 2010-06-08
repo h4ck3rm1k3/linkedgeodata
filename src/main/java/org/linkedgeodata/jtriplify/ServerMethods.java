@@ -12,7 +12,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import org.linkedgeodata.jtriplify.LinkedGeoDataDAO.OSMEntityType;
+import org.linkedgeodata.dao.LinkedGeoDataDAO;
+import org.linkedgeodata.dao.OSMEntityType;
 import org.linkedgeodata.util.ModelUtil;
 
 import com.hp.hpl.jena.rdf.model.Model;

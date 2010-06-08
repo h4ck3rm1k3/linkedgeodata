@@ -70,7 +70,7 @@ public class SimpleNodeToRDFTransformer
 
 		// Generate RDF for the tags
 		for(Tag tag : tags) {
-			Model subModel = tagMapper.map(subject, tag);
+			Model subModel = tagMapper.map(subject, tag, model);
 			if(subModel == null) {
 				++parseErrorCount;
 				logger.warn("Failed mapping: " + tag + ", Failed mapping count: " + parseErrorCount);

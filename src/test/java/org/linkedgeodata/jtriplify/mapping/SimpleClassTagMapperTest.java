@@ -42,10 +42,10 @@ public class SimpleClassTagMapperTest
 	
 		
 		
-		Model model = mapper.map("http://s.org", new Tag("aerial", "tower"));
+		Model model = mapper.map("http://s.org", new Tag("aerial", "tower"), null);
 		System.out.println(ModelUtil.toString(model, "N3"));
 
-		model = mapper.map("http://s.org", new Tag("aerial", "airport"));
+		model = mapper.map("http://s.org", new Tag("aerial", "airport"), null);
 		System.out.println(ModelUtil.toString(model, "N3"));
 
 		
@@ -67,10 +67,10 @@ public class SimpleClassTagMapperTest
 		SimpleClassTagMapper mapper = new SimpleClassTagMapper(classURI, new TagPattern("aerial", null), false);
 	
 		
-		Model model = mapper.map("http://s.org", new Tag("aerial", "tower"));
+		Model model = mapper.map("http://s.org", new Tag("aerial", "tower"), null);
 		System.out.println(ModelUtil.toString(model, "N3"));
 
-		model = mapper.map("http://s.org", new Tag("aerial", "airport"));
+		model = mapper.map("http://s.org", new Tag("aerial", "airport"), null);
 		System.out.println(ModelUtil.toString(model, "N3"));
 
 		
@@ -120,11 +120,11 @@ public class SimpleClassTagMapperTest
 		TagMapper tm2 = new TagMapper();
 		tm2.load(new File("/tmp/TagMapping.xml"));
 		
-		Model m = tm.map("www.x.org", new Tag("a", "b"));		
+		Model m = tm.map("www.x.org", new Tag("a", "b"), null);		
 		System.out.println(ModelUtil.toString(m));
 
 		
-		m = tm2.map("www.x.org", new Tag("a", "b"));		
+		m = tm2.map("www.x.org", new Tag("a", "b"), null);		
 		System.out.println(ModelUtil.toString(m));
 	}
 

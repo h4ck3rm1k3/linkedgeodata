@@ -1,3 +1,23 @@
+/**
+ * Copyright (C) 2009-2010, LinkedGeoData team at the MOLE research
+ * group at AKSW / University of Leipzig
+ *
+ * This file is part of LinkedGeoData.
+ *
+ * LinkedGeoData is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * LinkedGeoData is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
 package org.linkedgeodata.jtriplify.mapping;
 
 import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
@@ -55,15 +75,9 @@ public class SimpleDataTypeTagMapper
 		readResolve();
 	}
 
-	
-	public Model map(String subject, Tag tag)
+	@Override
+	public Model _map(String subject, Tag tag, Model model)
 	{
-		if(!describesOSMEntity())
-			subject += "#id";
-		
-		if(!matches(this.getTagPattern(), tag))
-			return null;
-
 		String str = tag.getValue().trim().toLowerCase();
 		
 		// If the datatype is boolean
@@ -78,14 +92,14 @@ public class SimpleDataTypeTagMapper
 			return null;
 		}
 
-		Model result = ModelFactory.createDefaultModel();
-		result.add(
-				result.getResource(subject),
-				result.getProperty(super.getResource().toString()),
+		model = ModelFactory.createDefaultModel();
+		model.add(
+				model.getResource(subject),
+				model.getProperty(super.getResource().toString()),
 				str,
 				rdfDataType);
 		
-		return result;
+		return model;
 	}
 
 	/*

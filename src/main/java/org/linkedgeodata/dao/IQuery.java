@@ -1,4 +1,4 @@
-package org.linkedgeodata.core.dao;
+package org.linkedgeodata.dao;
 
 public interface IQuery
 {

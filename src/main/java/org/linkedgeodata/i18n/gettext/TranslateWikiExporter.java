@@ -177,8 +177,8 @@ class EntityResolver2
 	
 	@Override
 	public String resolve(String key, String value)
-	{		
-		Model model = tagMapper.map("http://ex.org", new Tag(key, value));
+	{
+		Model model = tagMapper.map("http://ex.org", new Tag(key, value), null);
 	
 		Iterator<Statement> it = model.listStatements();
 

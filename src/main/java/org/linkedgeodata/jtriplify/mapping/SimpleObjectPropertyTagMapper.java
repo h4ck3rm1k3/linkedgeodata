@@ -29,7 +29,7 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.vocabulary.RDF;
 
 
-public class SimpleClassTagMapper
+public class SimpleObjectPropertyTagMapper
 	extends AbstractOneOneTagMapper
 	implements Serializable
 {
@@ -39,7 +39,7 @@ public class SimpleClassTagMapper
 	private static final long serialVersionUID = 1L;
 
 	//private static final Logger logger = Logger.getLogger(SimpleDataTypeTagMapper.class);
-	
+	private final String object;
 	
 	/**
 	 * Valid types are:
@@ -54,15 +54,17 @@ public class SimpleClassTagMapper
 	 * @param method
 	 * @param tag
 	 */
-	public SimpleClassTagMapper(String clazz, TagPattern tagPattern, boolean isOSMEntity)
+	public SimpleObjectPropertyTagMapper(String property, String object, TagPattern tagPattern, boolean isOSMEntity)
 		throws Exception
 	{
-		super(clazz, tagPattern, isOSMEntity);	
+		super(property, tagPattern, isOSMEntity);
+		this.object = object;
 	}
+	
 	
 	@Override
 	public Model _map(String subject, Tag tag, Model model)
-	{		
+	{
 		String suffix = "";
 		
 		if(super.getTagPattern().getValue() == null) {
@@ -71,7 +73,7 @@ public class SimpleClassTagMapper
 		
 		model.add(
 				model.getResource(subject.toString()),
-				RDF.type,
+				model.getProperty(this.object + suffix),
 				model.getResource(super.getResource().toString() + suffix)
 		);
 		

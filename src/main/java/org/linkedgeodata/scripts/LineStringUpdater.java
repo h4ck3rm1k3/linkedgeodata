@@ -12,7 +12,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.lang.time.StopWatch;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
-import org.linkedgeodata.core.dao.AbstractDAO;
+import org.linkedgeodata.dao.AbstractDAO;
 import org.linkedgeodata.util.SQLUtil;
 
 
