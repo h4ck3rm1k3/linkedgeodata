@@ -3,7 +3,7 @@ package org.linkedgeodata.access;
 import java.awt.geom.Point2D;
 import java.awt.geom.RectangularShape;
 
-import org.linkedgeodata.dao.OSMEntityType;
+import org.linkedgeodata.core.OSMEntityType;
 
 public interface IURLBuilder
 {

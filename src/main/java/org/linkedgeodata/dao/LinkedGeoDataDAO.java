@@ -8,6 +8,7 @@ import java.util.concurrent.Callable;
 
 import org.apache.commons.collections15.Transformer;
 import org.apache.log4j.Logger;
+import org.linkedgeodata.core.OSMEntityType;
 import org.linkedgeodata.jtriplify.LGDOSMEntityBuilder;
 import org.linkedgeodata.jtriplify.TagMapper;
 import org.linkedgeodata.jtriplify.TriplifyUtil;

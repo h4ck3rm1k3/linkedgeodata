@@ -1,4 +1,4 @@
-package org.linkedgeodata.dao;
+package org.linkedgeodata.core;
 
 // TODO: Move to core
 public enum OSMEntityType
