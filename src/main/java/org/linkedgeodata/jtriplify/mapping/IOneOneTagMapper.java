@@ -12,4 +12,7 @@ public interface IOneOneTagMapper
 	
 	
 	Model map(String subject, Tag tag, Model model);
+	
+	
+	<T> T accept(IOneOneTagMapperVisitor<T> visitor);
 }

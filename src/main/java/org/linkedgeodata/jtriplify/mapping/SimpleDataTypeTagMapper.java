@@ -74,6 +74,11 @@ public class SimpleDataTypeTagMapper
 		
 		readResolve();
 	}
+	
+	public String getDataType()
+	{
+		return dataType;
+	}
 
 	@Override
 	public Model _map(String subject, Tag tag, Model model)
@@ -100,6 +105,12 @@ public class SimpleDataTypeTagMapper
 				rdfDataType);
 		
 		return model;
+	}
+
+	@Override
+	public <T> T accept(IOneOneTagMapperVisitor<T> visitor)
+	{
+		return visitor.accept(this);
 	}
 
 	/*

@@ -52,9 +52,9 @@ public class SimpleClassTagMapperTest
 		Triple t = TripleUtil.auto(URI.create("http://s.org"), RDF.type, URI.create("http://linkedgeodata.org/AirportTower"));
 		
 		//System.out.println(new Tag("aerial", "airport"));
-		Tag tag = mapper.reverseMap(t);
+		//Tag tag = mapper.reverseMap(t);
 		
-		System.out.println(tag);
+		//System.out.println(tag);
 	}
 	
 	
@@ -77,9 +77,9 @@ public class SimpleClassTagMapperTest
 		Triple t = TripleUtil.auto(URI.create("http://s.org"), RDF.type, URI.create("http://linkedgeodata.org/AirportTower"));
 		
 		//System.out.println(new Tag("aerial", "airport"));
-		Tag tag = mapper.reverseMap(t);
+		//Tag tag = mapper.reverseMap(t);
 		
-		System.out.println(tag);
+		//System.out.println(tag);
 	}
 	
 	@Test

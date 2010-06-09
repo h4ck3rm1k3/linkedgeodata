@@ -58,6 +58,13 @@ import org.postgis.Point;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 
+/*
+class RelationTagIterator
+	extends PrefetchIterator<Object>
+{
+}
+*/
+
 
 class WayTagIteratorSchemaDenorm1
 	extends PrefetchIterator<Way>

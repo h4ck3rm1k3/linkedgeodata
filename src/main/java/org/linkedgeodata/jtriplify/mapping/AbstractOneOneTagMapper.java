@@ -89,31 +89,10 @@ public abstract class AbstractOneOneTagMapper
 		return method;
 	}
 
-	protected boolean matches(Tag given)
-	{
-		return matches(tagPattern, given);
-	}
-	
-	protected boolean matches(TagPattern pattern, Tag given)
-	{
-		boolean matchKey = pattern.getKey() == null
-			? true
-			: pattern.getKey().equals(given.getKey());
-
-		if(matchKey == false)
-			return false;
-		
-		boolean matchValue = pattern.getValue() == null
-			? true :
-			pattern.getValue().equals(given.getValue());
-
-		return matchValue;
-	}
-
 	@Override
 	public Model map(String subject, Tag tag, Model model)
 	{
-		if(!matches(tag)) {
+		if(!tagPattern.matches(tag)) {
 			return null;
 		}
 

@@ -61,6 +61,10 @@ public class SimpleObjectPropertyTagMapper
 		this.object = object;
 	}
 	
+	public String getObject()
+	{
+		return object;
+	}
 	
 	@Override
 	public Model _map(String subject, Tag tag, Model model)
@@ -80,37 +84,10 @@ public class SimpleObjectPropertyTagMapper
 		return model;
 	}
 	
-
-	public Tag reverseMap(Triple triple)
+	@Override
+	public <T> T accept(IOneOneTagMapperVisitor<T> visitor)
 	{
-		// Predicate must be rdf:type
-		if(!RDF.type.equals(triple.getPredicate()) && !triple.getObject().isURI())
-		{
-			return null;
-		}
-		
-		String classURI = triple.getObject().getURI();
-
-		String v = super.getTagPattern().getValue();
-		if(v == null) {
-			if(!classURI.startsWith(super.getResource().toString())) {
-				return null;
-			}
-			
-			v = classURI.substring(super.getResource().toString().length());
-		}
-		else {
-			if(!classURI.equals(super.getResource().toString())) {
-				return null;
-			}
-		}
-
-		Tag result = new Tag(super.getTagPattern().getKey(), v);
-		
-		if(!super.matches(super.getTagPattern(), result))
-			result = null;
-			
-		return result;
+		return visitor.accept(this);
 	}
 
 	/*

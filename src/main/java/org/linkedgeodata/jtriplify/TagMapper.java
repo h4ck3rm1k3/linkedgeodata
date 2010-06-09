@@ -48,7 +48,7 @@ public class TagMapper
 		SerializationUtil.serializeXML(list, file);
 	}
 	
-	private List<IOneOneTagMapper> asList()
+	public List<IOneOneTagMapper> asList()
 	{
 		List<IOneOneTagMapper> list = new ArrayList<IOneOneTagMapper>();
 		

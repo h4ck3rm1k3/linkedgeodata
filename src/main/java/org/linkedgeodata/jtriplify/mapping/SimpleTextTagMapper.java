@@ -59,6 +59,11 @@ public class SimpleTextTagMapper
 		this.langTag = langTag;
 	}
 
+	public String getLanguageTag()
+	{
+		return langTag;
+	}
+	
 	/*
 	public Tag reverseMap(Triple triple)
 	{
@@ -73,10 +78,6 @@ public class SimpleTextTagMapper
 	
 	public Model _map(String subject, Tag tag, Model model)
 	{
-		if(!matches(this.getTagPattern(), tag))
-			return null;
-
-
 		String suffix = "";
 		if(super.getTagPattern().getKey() == null) {
 			suffix = tag.getKey();
@@ -101,6 +102,12 @@ public class SimpleTextTagMapper
 		return model;
 	}
 	
+	@Override
+	public <T> T accept(IOneOneTagMapperVisitor<T> visitor)
+	{
+		return visitor.accept(this);
+	}
+
 	/*
 	@Override
 	public String toString()

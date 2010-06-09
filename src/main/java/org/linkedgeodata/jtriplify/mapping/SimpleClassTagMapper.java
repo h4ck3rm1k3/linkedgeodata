@@ -77,8 +77,14 @@ public class SimpleClassTagMapper
 		
 		return model;
 	}
-	
 
+	@Override
+	public <T> T accept(IOneOneTagMapperVisitor<T> visitor)
+	{
+		return visitor.accept(this);
+	}
+	
+/*
 	public Tag reverseMap(Triple triple)
 	{
 		// Predicate must be rdf:type
@@ -110,6 +116,7 @@ public class SimpleClassTagMapper
 			
 		return result;
 	}
+*/
 
 	/*
 	@Override
