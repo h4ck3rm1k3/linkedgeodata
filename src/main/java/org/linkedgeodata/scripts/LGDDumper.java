@@ -24,11 +24,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.sql.Connection;
-import java.sql.ResultSet;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -37,23 +32,18 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.Options;
-import org.apache.commons.collections15.Transformer;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
-import org.linkedgeodata.jtriplify.LGDOSMEntityBuilder;
+import org.linkedgeodata.dump.NodeTagIteratorDenorm1;
+import org.linkedgeodata.dump.WayTagIterator;
 import org.linkedgeodata.jtriplify.TagMapper;
 import org.linkedgeodata.jtriplify.mapping.SimpleNodeToRDFTransformer;
+import org.linkedgeodata.jtriplify.mapping.SimpleWayToRDFTransformer;
 import org.linkedgeodata.util.ITransformer;
 import org.linkedgeodata.util.ModelUtil;
-import org.linkedgeodata.util.PrefetchIterator;
-import org.linkedgeodata.util.StringUtil;
 import org.linkedgeodata.util.stats.SimpleStatsTracker;
 import org.openstreetmap.osmosis.core.domain.v0_6.Node;
-import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 import org.openstreetmap.osmosis.core.domain.v0_6.Way;
-import org.postgis.LineString;
-import org.postgis.PGgeometry;
-import org.postgis.Point;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -64,311 +54,6 @@ class RelationTagIterator
 {
 }
 */
-
-
-class WayTagIteratorSchemaDenorm1
-	extends PrefetchIterator<Way>
-{
-	private Connection conn;
-	private Long offset = null;
-	
-	private Integer batchSize = 1000;
-	
-	public WayTagIteratorSchemaDenorm1(Connection conn)
-	{
-		this.conn = conn;
-	}
-	
-	public WayTagIteratorSchemaDenorm1(Connection conn, int batchSize)
-	{
-		this.conn = conn;
-		this.batchSize = batchSize;
-	}
-	
-	@Override
-	protected Iterator<Way> prefetch()
-		throws Exception
-	{
-		String sql = "SELECT DISTINCT way_id FROM way_tags ";
-		if(offset != null)
-			sql += "WHERE way_id > " + offset + " ";
-		
-		sql += "ORDER BY way_id ASC ";
-		
-		if(batchSize != null)
-			sql += "LIMIT " + batchSize + " ";
-
-		String s = "SELECT way_id, k, v, linestring::geometry FROM way_tags WHERE way_id IN (" + sql + ")";
-
-		//System.out.println(s);
-		ResultSet rs = conn.createStatement().executeQuery(s);
-
-		Map<Long, Way> idToWay = new HashMap<Long, Way>();
-		
-		int counter = 0;
-		while(rs.next()) {
-			++counter;
-
-			long wayId = rs.getLong("way_id");		
-			String k = rs.getString("k");
-			String v = rs.getString("v");
-			PGgeometry g = (PGgeometry)rs.getObject("linestring");
-			
-			offset = offset == null ? wayId : Math.max(offset, wayId);
-			
-			Way way = idToWay.get(wayId);
-			if(way == null) {
-				way = new Way(wayId, 0, (Date)null, null, -1);
-				idToWay.put(wayId, way);
-			}
-
-			Tag tag = new Tag(k, v);
-			way.getTags().add(tag);
-
-			if(g != null) {
-				LineString ls = new LineString(g.getValue());
-				String value = "";
-				for(Point point : ls.getPoints()) {
-					if(!value.isEmpty())
-						value += " ";
-
-					value += point.getY() + " " + point.getX();
-				}
-
-				String key =
-					(ls.getFirstPoint().equals(ls.getLastPoint()) && ls.getPoints().length > 2)
-					? "@@geoRSSLine"
-					: "@@geoRSSPolygon";
-				
-				tag = new Tag(key, value);
-				//System.out.println(tag);
-				
-				if(!way.getTags().contains(tag)) {
-					way.getTags().add(tag);
-				}
-			}
-		}
-		
-		if(counter == 0)
-			return null;
-		else
-			return idToWay.values().iterator();
-	}
-}
-
-
-
-
-
-
-class WayTagIterator
-	extends PrefetchIterator<Way>
-{
-	private Connection conn;
-	private Long offset = null;
-	
-	private Integer batchSize = 1000;
-	
-	public WayTagIterator(Connection conn)
-	{
-		this.conn = conn;
-	}
-	
-	public WayTagIterator(Connection conn, int batchSize)
-	{
-		this.conn = conn;
-		this.batchSize = batchSize;
-	}
-	
-	@Override
-	protected Iterator<Way> prefetch()
-		throws Exception
-	{
-		Map<Long, Way> idToWay = new HashMap<Long, Way>();
-
-		String sql = "SELECT id, linestring::geometry FROM ways ";
-		if(offset != null)
-			sql += "WHERE id > " + offset + " ";
-		
-		sql += "ORDER BY id ASC ";
-		
-		if(batchSize != null)
-			sql += "LIMIT " + batchSize + " ";
-	
-
-		ResultSet rs = conn.createStatement().executeQuery(sql);
-		
-		while(rs.next()) {
-			long id = rs.getLong("id");
-			PGgeometry g = (PGgeometry)rs.getObject("linestring");
-
-			offset = offset == null ? id : Math.max(offset, id);
-
-			Way way = new Way(id, 0, (Date)null, null, -1);
-			idToWay.put(id, way);
-	
-			if(g != null) {
-				LineString ls = new LineString(g.getValue());
-				String value = "";
-				for(Point point : ls.getPoints()) {
-					if(!value.isEmpty())
-						value += " ";
-
-					value += point.getY() + " " + point.getX();
-				}
-	
-				String key =
-					(ls.getFirstPoint().equals(ls.getLastPoint()) && ls.getPoints().length > 2)
-					? "@@geoRSSLine"
-					: "@@geoRSSPolygon";
-				
-				Tag tag = new Tag(key, value);
-
-				way.getTags().add(tag);
-			}
-			
-		}
-		
-		if(idToWay.isEmpty())
-			return null;
-	
-		String s = "SELECT way_id, k, v FROM way_tags WHERE way_id IN (" + 
-		StringUtil.implode(", ", idToWay.keySet()) + ")";
-	
-		//System.out.println(s);
-		rs = conn.createStatement().executeQuery(s);
-	
-		
-		int counter = 0;
-		while(rs.next()) {
-			++counter;
-	
-			long wayId = rs.getLong("way_id");
-			String k = rs.getString("k");
-			String v = rs.getString("v");
-			
-			Way way = idToWay.get(wayId);	
-			Tag tag = new Tag(k, v);
-			way.getTags().add(tag);
-		}
-		
-		return idToWay.values().iterator();
-	}
-}
-
-
-
-
-
-/**
- * An iterator for the modified node_tags table.
- * Modified means, that the geom column was added to this table.
- * 
- * Assumes the following columns:
- * id   : long
- * k    : String
- * v    : String
- * geom : geometry
- * 
- * @author Claus Stadler
- *
- */
-class NodeTagIteratorDenorm1
-	extends PrefetchIterator<Node>
-{
-	private Connection conn;
-	private Long offset = null;
-	
-	private Integer batchSize = 1000;
-
-	public NodeTagIteratorDenorm1(Connection conn)
-	{
-		this.conn = conn;
-	}
-	
-	public NodeTagIteratorDenorm1(Connection conn, int batchSize)
-	{
-		this.conn = conn;
-		this.batchSize = batchSize;
-	}
-	
-	@Override
-	protected Iterator<Node> prefetch()
-		throws Exception
-	{
-		String sql = "SELECT DISTINCT node_id FROM node_tags ";
-		if(offset != null)
-			sql += "WHERE node_id > " + offset + " ";
-		
-		sql += "ORDER BY node_id ASC ";
-		
-		if(batchSize != null)
-			sql += "LIMIT " + batchSize + " ";
-	
-		String s = "SELECT node_id, k, v, geom::geometry FROM node_tags WHERE node_id IN (" + sql + ")";
-	
-		//System.out.println(s);
-		ResultSet rs = conn.createStatement().executeQuery(s);
-		
-		Collection<Node> coll = LGDOSMEntityBuilder.processResultSet(rs, null).values();
-
-		for(Node node : coll) {
-			offset = offset == null ? node.getId() : Math.max(offset, node.getId());
-		}
-
-		return coll.iterator();
-	}	
-}
-
-
-
-
-
-class SimpleWayToRDFTransformer
-	implements ITransformer<Way, Model>
-{
-	private TagMapper tagMapper;
-
-	public SimpleWayToRDFTransformer(TagMapper tagMapper)
-	{
-		this.tagMapper = tagMapper;
-	}
-
-	@Override
-	public Model transform(Model model, Way way)
-	{
-		
-		String subject = getSubject(way);
-		//Resource subjectRes = model.getResource(subject + "#id");
-		
-		//generateWGS84(model, subjectRes, node);
-		//generateGeoRSS(model, subjectRes, node);
-		SimpleNodeToRDFTransformer.generateTags(tagMapper, model, subject, way.getTags());
-
-		return model;
-	}
-
-	@Override
-	public Model transform(Way way)
-	{
-		Model model = ModelFactory.createDefaultModel();
-		
-		return transform(model, way);
-	}
-	
-	private String getSubject(Way way)
-	{
-		String prefix = "http://linkedgeodata.org/";
-		String result = prefix + "way/" + way.getId();
-		
-		return result;
-	}
-
-	//public static void generateGeoRSS(Model model, Resource subjectRes, node);
-
-}
-
-
 
 
 public class LGDDumper
@@ -487,6 +172,7 @@ public class LGDDumper
 		
 		while(it.hasNext()) {
 			Way way = it.next();
+			//way.getWayNodes().get(0).get
 			
 			wayTransformer.transform(model, way);
 

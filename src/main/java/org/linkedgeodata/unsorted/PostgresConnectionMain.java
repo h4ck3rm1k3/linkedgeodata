@@ -50,6 +50,10 @@ public class PostgresConnectionMain
 				basePath + "pgsql_simple_schema_0.6.sql",
 				basePath + "pgsql_simple_schema_0.6_linestring.sql",
 				basePath + "pgsql_simple_schema_0.6_action.sql",
+
+				"data/lgd/sql/Core.sql",
+				"data/lgd/sql/GeographyConversion.sql",
+				"data/lgd/sql/Denormalization.sql"
 		};
 		
 		for(String fileName : fileNames) {
@@ -181,8 +185,8 @@ public class PostgresConnectionMain
 		*/
 		
 
-		//String hostName = "localhost";
-		String hostName = "hobbit.local";
+		String hostName = "localhost";
+		//String hostName = "hobbit.local";
 		String dbName = "unittest_lgd";
 		String userName = "postgres";
 		String passWord = "postgres";
