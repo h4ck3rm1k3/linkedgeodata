@@ -103,10 +103,9 @@ public class DefaultCoercions
 	}
 
 
-
-	public static Integer toLong(Long a)
+	public static Long toLong(Integer a)
 	{
-		return a.intValue();
+		return a.longValue();
 	}
 	
 	public static Long toLong(Float a)

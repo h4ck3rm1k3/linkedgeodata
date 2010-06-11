@@ -1,5 +1,26 @@
+/**
+ * Copyright (C) 2009-2010, LinkedGeoData team at the MOLE research
+ * group at AKSW / University of Leipzig
+ *
+ * This file is part of LinkedGeoData.
+ *
+ * LinkedGeoData is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * LinkedGeoData is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
 package org.linkedgeodata.jtriplify.mapping;
 
+import org.linkedgeodata.core.LGDVocab;
 import org.linkedgeodata.jtriplify.TagMapper;
 import org.linkedgeodata.util.ITransformer;
 import org.openstreetmap.osmosis.core.domain.v0_6.Way;
@@ -41,11 +62,7 @@ public class SimpleWayToRDFTransformer
 	
 	public static String getSubject(long id)
 	{
-		String prefix = "http://linkedgeodata.org/";
-		//String result = prefix + "way/" + way.getId();
-		String result = prefix + "way" + id;
-		
-		return result;
+		return LGDVocab.createNIRWayURI(id);
 	}
 	
 	public static String getSubject(Way way)

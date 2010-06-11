@@ -1,5 +1,7 @@
 package org.linkedgeodata.dao;
 
+import java.awt.geom.RectangularShape;
+
 
 /**
  * Helper class for building the LGD queries.
@@ -40,6 +42,13 @@ public class LGDQueries
 		return result;
 	}
 
+	public static String BBox(RectangularShape rect)
+	{
+		return BBox(rect.getMinY(), rect.getMaxY(), rect.getMinX(), rect.getMaxX());		
+	}
+	
+
+	
 	public static String BBox(
 			Object minLatArg,
 			Object maxLatArg,
@@ -48,11 +57,9 @@ public class LGDQueries
 	{
 		String result =
 			"ST_SetSRID(ST_MakeBox2D(\n" +
-			"	$min, $max\n" +
+				buildPoint(minLatArg, minLonArg) + ", " +
+				buildPoint(maxLatArg, maxLonArg) +
 			"), 4326)\n";
-		
-		result = result.replace("$min", buildPoint(minLatArg, minLonArg));
-		result = result.replace("$max", buildPoint(maxLatArg, maxLonArg));
 		
 		return result;
 		
@@ -149,24 +156,23 @@ public class LGDQueries
 	 * @param bOr
 	 * @return
 	 */
-	public static String buildFindTaggedNodesQuery(double latMin, double latMax, double lonMin, double lonMax, Integer limit, String k, String v, boolean bOr)
-	{
-		String kvPred = createPredicate("snt", k, v, bOr);
-		if(!kvPred.isEmpty())
-			kvPred += " AND ";
-
-		String limitStr = limit == null ? "" : "LIMIT " + limit + "\n"; 
+	public static String buildFindTaggedNodesQuery(RectangularShape rect, Integer limit, String entityFilter)
+	{		
+		String limitStr = limit == null
+			? ""
+			: "LIMIT " + limit + "\n"; 
 		
 		String result =
 			"SELECT\n" +
-			"    node_id, k, v, geom::geometry\n" +
+			"    osm_entity_type, osm_entity_id\n" +
 			"FROM\n" +
-			"    node_tags\n" +
+			"    lgd_tags lt\n" +
 			"WHERE\n" +
-			"    geom && " + BBox(latMin, latMax, lonMin, lonMax) + "\n" +
-			"    " + kvPred + "\n" +
+			"	 osm_entity_type = 'node'\n" +
+			"    geom && " + BBox(rect) + "\n" +
+			"    " + entityFilter + "\n" +
 			limitStr;
-System.out.println(result);
+
 		return result;
 	}
 

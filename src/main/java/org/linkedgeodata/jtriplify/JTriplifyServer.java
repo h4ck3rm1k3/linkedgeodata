@@ -28,7 +28,8 @@ import org.apache.commons.collections15.MultiMap;
 import org.apache.commons.collections15.Transformer;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
-import org.linkedgeodata.dao.LinkedGeoDataDAO;
+import org.linkedgeodata.dao.LGDDAO;
+import org.linkedgeodata.dao.LGDRDFDAO;
 import org.linkedgeodata.jtriplify.methods.DefaultCoercions;
 import org.linkedgeodata.jtriplify.methods.FunctionUtil;
 import org.linkedgeodata.jtriplify.methods.IInvocable;
@@ -528,10 +529,11 @@ public class JTriplifyServer
 
 		logger.info("Loading mapping rules");
 		TagMapper tagMapper = new TagMapper();
-		tagMapper.load(new File("LGDMappingRules.xml"));
+		tagMapper.load(new File("output/LGDMappingRules.xml"));
 		
-		LinkedGeoDataDAO dao = new LinkedGeoDataDAO(uriResolver, tagMapper);
-		dao.setConnection(conn);
+		LGDDAO innerDAO = new LGDDAO(conn);
+		
+		LGDRDFDAO dao = new LGDRDFDAO(innerDAO, tagMapper);
 		
 		ServerMethods methods = new ServerMethods(dao);
 		
@@ -540,16 +542,17 @@ public class JTriplifyServer
 		
 		Method m;
 		
+		m = ServerMethods.class.getMethod("getNode", String.class);
+		ric.put(".*node/([^/?]*)/?(\\?.*)?", new JavaMethodInvocable(m, methods), "$0");
+
 		m = ServerMethods.class.getMethod("getWay", String.class);
 		ric.put(".*way/([^/?]*)/?(\\?.*)?", new JavaMethodInvocable(m, methods), "$0");
 		
-		m = ServerMethods.class.getMethod("getNode", String.class);
-		ric.put(".*node/([^/?]*)/?(\\?.*)?", new JavaMethodInvocable(m, methods), "$0");
 
 		
 		
 		//m = ServerMethods.class.getMethod("getNear", String.class, String.class, String.class);
-		IInvocable nearFn = DefaultCoercions.wrap(methods, "publicNear.*");
+		IInvocable nearFn = DefaultCoercions.wrap(methods, "publicGetEntitiesWithinRadius.*");
 		
 		ric.put(".*near/([^,]*),([^/]*)/([^/?]*)/?(\\?.*)?", nearFn, "$0", "$1", "$2", null, null, false);
 		ric.put(".*near/([^,]*),([^/]*)/([^/]*)/([^/=?]*)/?(\\?.*)?", nearFn, "$0", "$1", "$2", "$3", null, false);
@@ -557,7 +560,7 @@ public class JTriplifyServer
 		ric.put(".*near/([^,]*),([^/]*)/([^/]*)/class/([^/?]*)/?(\\?.*)?", nearFn, "$0", "$1", "$2", "$3", "$3", true);
 		
 		
-		IInvocable bboxFn = DefaultCoercions.wrap(methods, "publicFindEntitiesByBBox.*");
+		IInvocable bboxFn = DefaultCoercions.wrap(methods, "publicGetEntitiesWithinRect.*");
 		ric.put(".*near/(-?[^-]+)-(-?[^,]+),(-?[^-]+)-(-?[^/]+)/?(\\?.*)?", bboxFn, "$0", "$1", "$2", "$3", null, null, false);
 		
 		MyHandler handler = new MyHandler();

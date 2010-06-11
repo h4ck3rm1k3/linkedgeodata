@@ -186,15 +186,19 @@ public class SQLUtil
 	{		
 		List<T> result = new ArrayList<T>();
 		
-		while(rs.next()) {
-			Object o = rs.getObject(1);;
-			//System.out.println("Result = " + o);
-			T item = (T)o;
-			result.add(item);
+		try {
+			while(rs.next()) {
+				Object o = rs.getObject(1);
+				//System.out.println("Result = " + o);
+				T item = (T)o;
+				result.add(item);
+			}
 		}
-	
-		if(bClose)
-			rs.close();
+		finally {	
+			if(bClose)
+				rs.close();
+		}
+
 		return result;
 		
 	}

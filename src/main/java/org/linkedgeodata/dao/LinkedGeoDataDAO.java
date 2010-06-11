@@ -91,7 +91,7 @@ public class LinkedGeoDataDAO
 	 * @param bOr
 	 * @return
 	 * @throws Exception
-	 */
+	 * /
 	public Callable<Model> getEntitiesWithinBBox(
 			OSMEntityType type,
 			double latMin, 
@@ -128,6 +128,7 @@ public class LinkedGeoDataDAO
 			
 		return result;
 	}
+	*/
 
 
 	public List<Long> getEntitiesWithinDistance(

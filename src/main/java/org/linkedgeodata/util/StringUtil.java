@@ -64,4 +64,23 @@ public class StringUtil
 	{
 		return implode(separator, items.iterator());
 	}
+	
+	
+	public static String toCamelCase(String s)
+	{
+		int offset = 0;
+		String result = "";
+		for(;;) {
+			int newOffset = s.indexOf('_', offset);
+			if(newOffset == -1) {
+				result += StringUtil.ucFirst(s.substring(offset));
+				break;
+			}
+			
+			result += StringUtil.ucFirst(s.substring(offset + 1));
+			offset = newOffset;
+		}
+		
+		return result;
+	}
 }

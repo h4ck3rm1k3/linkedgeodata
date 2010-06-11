@@ -24,9 +24,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -38,9 +40,11 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.collections15.MultiMap;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
-import org.linkedgeodata.dao.LinkedGeoDataDAO2;
-import org.linkedgeodata.dump.NodeTagIterator;
-import org.linkedgeodata.dump.WayTagIterator;
+import org.linkedgeodata.core.LGDVocab;
+import org.linkedgeodata.dao.LGDDAO;
+import org.linkedgeodata.dao.LGDRDFDAO;
+import org.linkedgeodata.dump.NodeIdIterator;
+import org.linkedgeodata.dump.WayIdIterator;
 import org.linkedgeodata.jtriplify.TagMapper;
 import org.linkedgeodata.jtriplify.mapping.SimpleNodeToRDFTransformer;
 import org.linkedgeodata.jtriplify.mapping.SimpleWayToRDFTransformer;
@@ -50,17 +54,12 @@ import org.linkedgeodata.util.stats.SimpleStatsTracker;
 import org.openstreetmap.osmosis.core.domain.v0_6.Node;
 import org.openstreetmap.osmosis.core.domain.v0_6.Way;
 
+import com.hp.hpl.jena.rdf.model.AnonId;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.RDF;
 
-/*
-class RelationTagIterator
-	extends PrefetchIterator<Object>
-{
-}
-*/
 
 
 public class LGDDumper
@@ -100,6 +99,10 @@ public class LGDDumper
 		String tagFilter = commandLine.getOptionValue("tf", null);
 		
 		
+		//entityFilter = null;
+		//tagFilter = null;
+
+		
 		String mappingRulesPath = "output/LGDMappingRules.xml";
 		String rootModelPath    = "Namespaces.ttl";
 		
@@ -126,8 +129,8 @@ public class LGDDumper
 		Connection conn = LineStringUpdater.connectPostGIS(hostName, dbName, userName, passWord);
 		logger.info("Connected to db");
 
-		LinkedGeoDataDAO2 dao = new LinkedGeoDataDAO2(conn);
-
+		LGDDAO innerDao = new LGDDAO(conn);
+		LGDRDFDAO dao = new LGDRDFDAO(innerDao, tagMapper);
 		
 		logger.info("Opening output stream: " + outFileName);
 		OutputStream out = new FileOutputStream(outFileName);
@@ -140,107 +143,64 @@ public class LGDDumper
 				new SimpleNodeToRDFTransformer(tagMapper);
 		
 			//NodeTagIteratorDenorm1 it = new NodeTagIteratorDenorm1(conn, batchSize);
-			Iterator<Node> it = new NodeTagIterator(conn, batchSize, entityFilter, tagFilter);
+			Iterator<Collection<Long>> it = new NodeIdIterator(conn, batchSize, entityFilter);
 
-			runNodeTags(it, nodeTransformer, prefixMap, dao, out);		
+			runNodeTags(it, tagFilter, prefixMap, dao, out);		
 		}
 		
 		if(exportWayTags) {
 			SimpleWayToRDFTransformer wayTransformer =
 				new SimpleWayToRDFTransformer(tagMapper);
 
-			Iterator<Way> it = new WayTagIterator(conn, batchSize, entityFilter, tagFilter);
+			Iterator<Collection<Long>> it = new WayIdIterator(conn, batchSize, entityFilter);
 
-			runWayTags(it, wayTransformer, prefixMap, dao, out);
+			runWayTags(it, tagFilter, prefixMap, dao, out);
 		}
 		
 		out.flush();
 		out.close();
 	}
 
-	public static void runNodeTags(Iterator<Node> it, ITransformer<Node, Model> nodeTransformer, Map<String, String> prefixMap, LinkedGeoDataDAO2 dao, OutputStream out)
+	public static void runNodeTags(Iterator<Collection<Long>> it, String tagFilter, Map<String, String> prefixMap, LGDRDFDAO dao, OutputStream out)
 		throws Exception
 	{	
 		SimpleStatsTracker tracker = new SimpleStatsTracker();
 	
 		Model model = ModelFactory.createDefaultModel();
 		model.setNsPrefixes(prefixMap);
-		
+	
 		while(it.hasNext()) {
-			Node node = it.next();
+			Collection<Long> ids = it.next();
 
-			nodeTransformer.transform(model, node);
-
+			int count = dao.resolveNodes(model, ids, true, tagFilter);
 			
-			MultiMap<Long, Long> members = dao.getWayMemberships(Collections.singleton(node.getId()));
-			for(Map.Entry<Long, Collection<Long>> entry : members.entrySet()) {
-				for(Long wayId : entry.getValue()) {
-					model.add(
-							model.createResource(SimpleNodeToRDFTransformer.getSubject(entry.getKey())),
-							model.createProperty("http://linkedgeodata.org/vocab/memberOfWay"),
-							model.createResource(SimpleWayToRDFTransformer.getSubject(wayId))
-							);
-				}
-			}
-			
-			
-			
-			
+			tracker.update(count);			
 			if(model.size() > 10000) {
 				writeModel(model, out);
 			}
-
-			tracker.update(1);
 		}
 		writeModel(model, out);
 		
 	}
+
 	
-	public static void runWayTags(Iterator<Way> it, ITransformer<Way, Model> wayTransformer, Map<String, String> prefixMap, LinkedGeoDataDAO2 dao, OutputStream out)
+	public static void runWayTags(Iterator<Collection<Long>> it, String tagFilter, Map<String, String> prefixMap, LGDRDFDAO dao, OutputStream out)
 		throws Exception
 	{	
 		SimpleStatsTracker tracker = new SimpleStatsTracker();
 
 		Model model = ModelFactory.createDefaultModel();
 		model.setNsPrefixes(prefixMap);
-		
-		while(it.hasNext()) {
-			Way way = it.next();
-			//way.getWayNodes().get(0).get
-			
-			wayTransformer.transform(model, way);
 
-			
-			MultiMap<Long, Long> members = dao.getNodeMemberships(Collections.singleton(way.getId()));
-			if(!members.isEmpty()) { 
-				Resource memberRes = model.createResource("http://linkedgeodata.org/triplify/way_nodes" + way.getId());
-				//Resource memberRes = model.createResource("http://linkedgeodata.org/vocab/hasNodes");
-							
-				for(Map.Entry<Long, Collection<Long>> entry : members.entrySet()) {
-					model.add(
-							model.createResource(SimpleNodeToRDFTransformer.getSubject(entry.getKey())),
-							model.createProperty("http://linkedgeodata.org/vocab/hasNodes"),
-							model.createResource(memberRes)
-							);
-				
-					
-					int i = 0;
-					for(Long nodeId : entry.getValue()) {
-						model.add(
-								model.createResource(memberRes),
-								model.createProperty(RDF.getURI() + "_" + (++i)),
-								model.createResource(SimpleNodeToRDFTransformer.getSubject(nodeId))
-								);
-					}
-				}
-			}
-			
+		while(it.hasNext()) {
+			Collection<Long> ids = it.next();
+
+			int count = dao.resolveWays(model, ids, true, tagFilter);			
+			tracker.update(count);
 			
 			if(model.size() > 10000) {
 				writeModel(model, out);
 			}
-
-			tracker.update(1);
 		}
 		writeModel(model, out);
 	}

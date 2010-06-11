@@ -1,11 +1,9 @@
 package org.linkedgeodata.jtriplify;
 
-import java.awt.Rectangle;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -15,93 +13,55 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import org.linkedgeodata.core.OSMEntityType;
-import org.linkedgeodata.dao.LGDQueries;
-import org.linkedgeodata.dao.LGDRDFDAO;
+import org.linkedgeodata.dao.LinkedGeoDataDAO;
+import org.linkedgeodata.util.ModelUtil;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 
-/**
- * 
- * TODO: All methods consisting of more than 1 line should be put into the 
- * LGDRDFDAO
- * 
- * @author raven
- *
- */
-public class ServerMethods
+/*
+public class ServerMethodsOld
 {
-	private LGDRDFDAO dao;
+	private LinkedGeoDataDAO dao;
 
 	//private ExecutorService executor = Executors.newFixedThreadPool(2);
-	//private ExecutorService executor = Executors.newCachedThreadPool();
+	private ExecutorService executor = Executors.newCachedThreadPool();
 	
-	public ServerMethods(LGDRDFDAO dao)
+	public ServerMethodsOld(LinkedGeoDataDAO dao)
 	{
 		this.dao = dao;
 	}
 	
 	
-	public Model getNode(String idStr)
+	public Model publicNear(Double lat, Double lon, Double distance, String k, String v, Boolean bOr)
 		throws Exception
 	{
-		Long id = Long.parseLong(idStr);
-
-		Model result = ModelFactory.createDefaultModel();
-		dao.resolveNodes(result, Collections.singleton(id), false, null);
-	
-		return result;
-	}
-	
-	public Model getWay(String idStr)
-		throws Exception
-	{
-		Long id = Long.parseLong(idStr);
+		List<Model> models = getNearModels(lat, lon, distance, k, v, bOr);
 		
-		Model result = ModelFactory.createDefaultModel();
-		dao.resolveWays(result, Collections.singleton(id), false, null);
-	
-		return result;
-	}
-	
-	public Model publicGetEntitiesWithinRadius(Double lat, Double lon, Double radius, String k, String v, Boolean bOr)
-		throws Exception
-	{
-		String tagFilter = LGDQueries.createPredicate("", k, v, bOr);
-		if(tagFilter.isEmpty())
-			tagFilter = null;
-
-		Model result = ModelFactory.createDefaultModel();
-		dao.getNodesWithinRadius(result, new Point2D.Double(lon, lat), radius, false, tagFilter, null, null);
-		dao.getWaysWithinRadius(result, new Point2D.Double(lon, lat), radius, false, tagFilter, null, null);
+		Model result = ModelUtil.combine(models);
 		
 		return result;
 	}
 	
 
-	public Model publicGetEntitiesWithinRect(Double latMin, Double latMax, Double lonMin, Double lonMax, String k, String v, Boolean bOr)
+	// TODO Write this method
+	public Model publicFindEntitiesByBBox(Double latMin, Double latMax, Double lonMin, Double lonMax, String k, String v, Boolean bOr)
 		throws Exception
 	{
-		String tagFilter = LGDQueries.createPredicate("", k, v, bOr);
-		if(tagFilter.isEmpty())
-			tagFilter = null;
+		Callable<Model> callable = dao.getEntitiesWithinBBox(OSMEntityType.NODE, latMin, latMax, lonMin, lonMax, 1000, k, v, bOr);
 
-		Rectangle2D rect = new Rectangle2D.Double(lonMin, latMin, lonMax - lonMin, latMax - latMin);
-		
-		Model result = ModelFactory.createDefaultModel();
-		dao.getNodesWithinRect(result, rect, false, tagFilter, null, null);
-		dao.getWaysWithinRect(result, rect, false, tagFilter, null, null);
+		Future<Model> model = executor.submit(callable);
+	
+		Model result = model.get();
 		
 		return result;
 	}
 
 	
-	/*
-	public List<Model> publicGetEntitiesWithinRadius(final double lat, final double lon, final double distance, final String k, final String v, final boolean bOr)
+	
+	public List<Model> getNearModels(final double lat, final double lon, final double distance, final String k, final String v, final boolean bOr)
 		throws Exception
 	{
-		String tagFilter = LGDQueries.createPredicate("", k, v, bOr);
-
 		List<Callable<List<Model>>> callables = new ArrayList<Callable<List<Model>>>();
 		
 		callables.add(new Callable<List<Model>>() {
@@ -153,10 +113,38 @@ public class ServerMethods
 	}
 
 
+	public Model getNode(String idStr)
+		throws Exception
+	{
+		Long id = Long.parseLong(idStr);
+		
+		final List<Long> ids = Arrays.asList(id);
+	
+		List<Callable<Model>> callables = getNodeModelQueries(ids);
+		List<Model> models = executeAll(executor, callables);
+	
+		Model result = ModelUtil.combine(models);
+		
+		return result;
+	}
+
+	public Model getWay(String idStr)
+		throws Exception
+	{
+		Long id = Long.parseLong(idStr);
+		
+		final List<Long> ids = Arrays.asList(id);
+
+		List<Callable<Model>> callables = getWayModelQueries(ids);
+		List<Model> models = executeAll(executor, callables);
+		
+		Model result = ModelUtil.combine(models);
+		
+		return result;
+	}
 
 
-
-/*
+	
 	public List<Callable<Model>> getNodeModelQueries(final List<Long> ids)
 		throws Exception
 	{		
@@ -181,8 +169,7 @@ public class ServerMethods
 		
 		return result;
 	}
-	* /
-
+	
 	// TODO Add timeouts. Also add some features to abort queries
 	public static <T> List<T> executeAll(ExecutorService executor, Collection<Callable<T>> callables)
 		throws InterruptedException, ExecutionException
@@ -201,5 +188,6 @@ public class ServerMethods
 		
 		return result;
 	}
-	*/
+
 }
+*/
