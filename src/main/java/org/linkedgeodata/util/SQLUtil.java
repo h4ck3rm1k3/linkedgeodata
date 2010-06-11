@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -214,6 +215,27 @@ public class SQLUtil
 		}
 		//System.out.println("y = " + n);
 	}
+	
+	/* Closing the statements also closes the resultset...
+	public static ResultSet execute(Connection conn, String sql)
+		throws SQLException
+	{
+		ResultSet result = null;
+		Statement stmt = null;
+		try {
+			stmt = conn.createStatement();
+			result = stmt.executeQuery(sql);
+		}
+		finally {
+			if(stmt != null) {
+				stmt.close();
+			}
+		}
+		
+		return result;
+	}
+	*/
+
 	
 	public static <T> T execute(Connection conn, String sql, Class<T> clazz, Object ...args)
 		throws SQLException

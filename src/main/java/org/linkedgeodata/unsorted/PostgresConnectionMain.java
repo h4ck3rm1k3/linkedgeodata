@@ -23,6 +23,9 @@ import org.linkedgeodata.util.SQLUtil;
 import org.linkedgeodata.util.StreamUtil;
 import org.openstreetmap.osmosis.core.Osmosis;
 
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
+
 public class PostgresConnectionMain
 {
 	private static final Logger logger = Logger.getLogger(PostgresConnectionMain.class);
@@ -41,21 +44,25 @@ public class PostgresConnectionMain
 	public static List<String> getUnitDBSQLStatements()
 		throws FileNotFoundException, IOException
 	{
-		List<String> result = new ArrayList<String>();
-		
-		// Load the osmosis schema
-		String basePath = "lib/osmosis/0.34/script/";
-		
-		String[] fileNames = {
-				basePath + "pgsql_simple_schema_0.6.sql",
-				basePath + "pgsql_simple_schema_0.6_linestring.sql",
-				basePath + "pgsql_simple_schema_0.6_action.sql",
+			// Load the osmosis schema
+			String lgdPath = "data/lgd/sql/";
+			String osmPath = "lib/osmosis/0.34/script/";
+			
+			String[] fileNames = {
+					lgdPath + "pgsql_simple_schema_0.6_geography.sql",
+					osmPath + "pgsql_simple_schema_0.6_action.sql",
 
-				"data/lgd/sql/Core.sql",
-				"data/lgd/sql/GeographyConversion.sql",
-				"data/lgd/sql/Denormalization.sql"
-		};
-		
+					"data/lgd/sql/Core.sql",
+					//"data/lgd/sql/Denormalization.sql"
+			};
+			
+		return loadSQLFiles(fileNames);
+	}
+	
+	private static List<String> loadSQLFiles(String[] fileNames)
+		throws FileNotFoundException, IOException
+	{
+		List<String> result = new ArrayList<String>();
 		for(String fileName : fileNames) {
 			File file = new File(fileName);
 			
@@ -66,6 +73,23 @@ public class PostgresConnectionMain
 		}
 		
 		return result;
+	}
+	
+	
+	public static List<String> getPostLoadStatements()
+		throws FileNotFoundException, IOException
+	{
+		// Load the osmosis schema
+		String lgdPath = "data/lgd/sql/";
+		String osmPath = "lib/osmosis/0.34/script/";
+		
+		String[] fileNames = {
+				lgdPath + "pgsql_simple_schema_0.6_linestring_geography.sql",
+
+				"data/lgd/sql/Denormalization.sql"
+		};
+		
+		return loadSQLFiles(fileNames);		
 	}
 
 	
@@ -99,7 +123,7 @@ public class PostgresConnectionMain
 	public static void createUnitTestDB(String hostName, String dbName, String userName, String passWord)
 		throws Exception
 	{
-		logger.info("Attempting to create database '" + dbName + "'");
+		logger.info("Attempting to drop database '" + dbName + "'");
 		Connection conn = connectPostGIS(hostName, "", userName, passWord);
 
 		execute(conn, "CREATE DATABASE " + dbName + " WITH TEMPLATE \"template_postgis_1.5\"");
@@ -126,7 +150,7 @@ public class PostgresConnectionMain
 		Connection conn = connectPostGIS(hostName, dbName, userName, passWord);
 		Statement stmt = conn.createStatement();
 		
-		List<String> sqls = getUnitDBSQLStatements();
+		List<String> sqls = getUnitDBSQLStatements();		
 		for(String sql : sqls) {
 			logger.trace("Executing statement: " + sql);
 			stmt.execute(sql);
@@ -135,6 +159,27 @@ public class PostgresConnectionMain
 		stmt.close();
 		conn.close();
 	}
+	
+
+	public static void postLoadUnitTestDB(String hostName, String dbName, String userName, String passWord)
+		throws Exception
+	{
+		logger.info("Post Loading database '" + dbName + "'");
+	
+		Connection conn = connectPostGIS(hostName, dbName, userName, passWord);
+		Statement stmt = conn.createStatement();
+		
+		List<String> sqls = getPostLoadStatements();		
+		for(String sql : sqls) {
+			logger.trace("Executing statement: " + sql);
+			stmt.execute(sql);
+		}
+	
+		stmt.close();
+		conn.close();
+	}
+
+	
 	
 	public static File extract(File in)
 		throws IOException
@@ -185,12 +230,13 @@ public class PostgresConnectionMain
 		*/
 		
 
-		String hostName = "localhost";
+		String hostName = "139.18.251.5";
 		//String hostName = "hobbit.local";
 		String dbName = "unittest_lgd";
 		String userName = "postgres";
 		String passWord = "postgres";
-		
+
+		String osmosisPath = "/opt/osmosis/0.35.1/bin/osmosis";
 		
 		String zippedFile = "data/test/osm/bremen.osm.bz2";
 		
@@ -204,18 +250,37 @@ public class PostgresConnectionMain
 		createUnitTestDB(hostName, dbName, userName, passWord);
 		loadUnitTestDB(hostName, dbName, userName, passWord);
 
+
 		logger.info("Loading dataset using osmosis");
 		String[] options = {
 				"--read-xml",
-				"file=" + dataFile,
+				"file=" + dataFile, // FIXME Escape whitespaces in filename
 				"--write-pgsql",
 				"host=" + hostName,
 				"database=" + dbName,
 				"user=" + userName,
 				"password=" + passWord,
 		};
-							
-		Osmosis.main(options);
+		
+		Runtime runtime = Runtime.getRuntime();
+		String command =
+			//"java -classpath lib/osmosis/0.34/lib -jar lib/osmosis/0.34/osmosis.jar  " +
+			osmosisPath + " " +
+			org.linkedgeodata.util.StringUtil.implode(" ", options);
+			
+		logger.debug("Executing system call: " + command);
+		Process p = runtime.exec(command);
+
+		logger.debug("Waiting for process to terminate...");
+		p.waitFor();
+		InputStream in = p.getInputStream();
+		logger.trace("Console output of process:\n" + StreamUtil.toString(in));
+		in.close();
+		
+		logger.debug("Process terminated with exit code '" + p.exitValue() + "'");
+
+		logger.info("Performing post-load actions");
+		postLoadUnitTestDB(hostName, dbName, userName, passWord);
 		
 		//Connection conn = connectPostGIS("dwarf.local", "unittest_lgd", "lgd", "lgd");
 	}

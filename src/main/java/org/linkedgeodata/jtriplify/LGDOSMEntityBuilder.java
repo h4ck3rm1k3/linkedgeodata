@@ -3,6 +3,7 @@ package org.linkedgeodata.jtriplify;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,13 +15,19 @@ import org.postgis.Point;
 
 public class LGDOSMEntityBuilder
 {
+	public static Collection<Node> processResultSet(ResultSet rs)
+		throws SQLException
+	{
+		Map<Long, Node> map = processResultSet(rs, null);
+		return (map == null)
+			? null
+			: map.values();
+	}
 
 	public static Map<Long, Node>  processResultSet(ResultSet rs, Map<Long, Node> idToNode)
 		throws SQLException
 	{
-		if(idToNode == null) {
-			idToNode = new HashMap<Long, Node>();
-		}
+		Map<Long, Node> result = null;
 		
 		ResultSetMetaData md = rs.getMetaData();
 	
@@ -37,6 +44,12 @@ public class LGDOSMEntityBuilder
 		
 		//int counter = 0;
 		while(rs.next()) {
+			
+			if(result == null) {
+				result = (idToNode == null)
+					? new HashMap<Long, Node>()
+					: idToNode;
+			}
 			//++counter;
 	
 			long nodeId = rs.getLong(col[0]);
@@ -55,10 +68,10 @@ public class LGDOSMEntityBuilder
 				lon = p.getX();
 			}
 			
-			Node node = idToNode.get(nodeId);
+			Node node = result.get(nodeId);
 			if(node == null) {
 				node = new Node(nodeId, 0, (Date)null, null, -1, lat, lon);
-				idToNode.put(nodeId, node);
+				result.put(nodeId, node);
 			}
 			else {
 				if(g != null) {
@@ -71,6 +84,6 @@ public class LGDOSMEntityBuilder
 			node.getTags().add(tag);
 		}
 		
-		return idToNode;
+		return result;
 	}	
 }

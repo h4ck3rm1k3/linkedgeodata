@@ -77,17 +77,26 @@ public class SimpleNodeToRDFTransformer
 				
 				continue;
 			}
+			else if(model == null) {
+				model = subModel;
+			}
 
-			model.add(subModel);
+			//model.add(subModel);
 		}		
 	}
-	
-	private String getSubject(Node node)
+
+	public static String getSubject(long id)
 	{
 		String prefix = "http://linkedgeodata.org/triplify/";
-		String result = prefix + "node/" + node.getId();
+		//String result = prefix + "node/" + node.getId();
+		String result = prefix + "node" + id;
 		
 		return result;
+	}
+	
+	public static String getSubject(Node node)
+	{		
+		return getSubject(node.getId());
 	}
 
 	

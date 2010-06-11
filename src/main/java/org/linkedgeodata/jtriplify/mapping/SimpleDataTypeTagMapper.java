@@ -97,7 +97,6 @@ public class SimpleDataTypeTagMapper
 			return null;
 		}
 
-		model = ModelFactory.createDefaultModel();
 		model.add(
 				model.getResource(subject),
 				model.getProperty(super.getResource().toString()),

@@ -30,7 +30,7 @@ public class StringUtil
 			: str.substring(0,1).toLowerCase() + str.substring(1); 
 	}
 	
-	public static String implode(Object separator, Object ... items)
+	public static <T> String implode(Object separator, T ... items)
 	{
 		return implode(separator, Arrays.asList(items));
 	}

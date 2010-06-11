@@ -1,6 +1,7 @@
 package org.linkedgeodata.dump;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Collection;
 import java.util.Iterator;
@@ -22,7 +23,7 @@ import org.openstreetmap.osmosis.core.domain.v0_6.Node;
  * @author Claus Stadler
  *
  */
-public class NodeTagIteratorDenorm1
+public class NodeTagIterator
 	extends PrefetchIterator<Node>
 {
 	private Connection conn;
@@ -33,18 +34,20 @@ public class NodeTagIteratorDenorm1
 	private String entityFilterStr;
 	private String tagFilterStr;
 	
-	public NodeTagIteratorDenorm1(Connection conn)
+	private PreparedStatement prepStmt = null;
+	
+	public NodeTagIterator(Connection conn)
 	{
 		this.conn = conn;
 	}
 	
-	public NodeTagIteratorDenorm1(Connection conn, int batchSize)
+	public NodeTagIterator(Connection conn, int batchSize)
 	{
 		this.conn = conn;
 		this.batchSize = batchSize;
 	}
 	
-	public NodeTagIteratorDenorm1(Connection conn, int batchSize, String entityFilterStr, String tagFilterStr)
+	public NodeTagIterator(Connection conn, int batchSize, String entityFilterStr, String tagFilterStr)
 	{
 		this.conn = conn;
 		this.batchSize = batchSize;
@@ -53,13 +56,11 @@ public class NodeTagIteratorDenorm1
 	}
 	
 	
-	@Override
-	protected Iterator<Node> prefetch()
-		throws Exception
+	public String buildQuery()
 	{
-		String sql = "SELECT DISTINCT node_id FROM node_tags ";
+		String sql = "SELECT DISTINCT nt2.node_id FROM node_tags nt2 ";
 		if(offset != null)
-			sql += "WHERE node_id > " + offset + " ";
+			sql += "WHERE nt2.node_id > ? ";
 				
 
 		if(entityFilterStr != null) {
@@ -68,28 +69,52 @@ public class NodeTagIteratorDenorm1
 				? "WHERE "
 				: "AND ";
 			
-			sql += "NOT EXISTS (SELECT filter.node_id FROM node_tags filter WHERE filter.node_id = nt.node_id AND " + entityFilterStr + ")";
+			sql += "NOT EXISTS (SELECT filter.node_id FROM node_tags filter WHERE filter.node_id = nt2.node_id AND " + entityFilterStr + ") ";
 		}
 
-		
 		sql += " ORDER BY node_id ASC ";
 		
 		if(batchSize != null)
 			sql += "LIMIT " + batchSize + " ";
 
-		String s = "SELECT node_id, k, v, geom::geometry FROM node_tags WHERE node_id IN (" + sql + ")";
+		String s = "SELECT node_id, k, v, n.geom::geometry FROM node_tags JOIN nodes n ON (node_id = id) WHERE node_id IN (" + sql + ") ";
 	
 		
 		if(tagFilterStr != null) {
-			s += " AND " + tagFilterStr;
+			s += "AND " + tagFilterStr + " ";
 		}
 		
+		return s;
+	}
+	
+	@Override
+	protected Iterator<Node> prefetch()
+		throws Exception
+	{	
+		ResultSet rs;		
+		if(offset == null) {
+			String s = buildQuery();
+			System.out.println(s);
+			rs = conn.createStatement().executeQuery(s);
+		}
+		else  {
+			if(prepStmt == null) {
+				String s = buildQuery();
+				System.out.println(s);
+				prepStmt = conn.prepareStatement(s);
+			}
+			
+			prepStmt.setLong(1, offset);
+			rs = prepStmt.executeQuery();
+		}
 		
-		//System.out.println(s);
-		ResultSet rs = conn.createStatement().executeQuery(s);
-		
-		Collection<Node> coll = LGDOSMEntityBuilder.processResultSet(rs, null).values();
+		Collection<Node> coll = LGDOSMEntityBuilder.processResultSet(rs);
 
+		if(coll == null) {
+			prepStmt.close();
+			return null;
+		}
+		
 		for(Node node : coll) {
 			offset = offset == null ? node.getId() : Math.max(offset, node.getId());
 		}

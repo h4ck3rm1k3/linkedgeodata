@@ -24,6 +24,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.sql.Connection;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -32,9 +35,11 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.Options;
+import org.apache.commons.collections15.MultiMap;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
-import org.linkedgeodata.dump.NodeTagIteratorDenorm1;
+import org.linkedgeodata.dao.LinkedGeoDataDAO2;
+import org.linkedgeodata.dump.NodeTagIterator;
 import org.linkedgeodata.dump.WayTagIterator;
 import org.linkedgeodata.jtriplify.TagMapper;
 import org.linkedgeodata.jtriplify.mapping.SimpleNodeToRDFTransformer;
@@ -47,6 +52,8 @@ import org.openstreetmap.osmosis.core.domain.v0_6.Way;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.vocabulary.RDF;
 
 /*
 class RelationTagIterator
@@ -79,7 +86,7 @@ public class LGDDumper
 		String outFileName = commandLine.getOptionValue("o", "out.n3");
 	
 		String batchSizeStr = commandLine.getOptionValue("n", "1000");
-	
+
 		int batchSize = Integer.parseInt(batchSizeStr);
 		if(batchSize <= 0)
 			throw new RuntimeException("Invalid argument for batchsize");
@@ -87,29 +94,40 @@ public class LGDDumper
 		
 		boolean exportNodeTags = commandLine.hasOption("xnt");
 		boolean exportWayTags = commandLine.hasOption("xwt");
+
+		
+		String entityFilter =commandLine.getOptionValue("ef", null);
+		String tagFilter = commandLine.getOptionValue("tf", null);
+		
+		
+		String mappingRulesPath = "output/LGDMappingRules.xml";
+		String rootModelPath    = "Namespaces.ttl";
+		
 		
 		logger.info("ExportNodeTags: " + exportNodeTags);
 		logger.info("ExportWayTags: " + exportWayTags);
-	
+		logger.info("EntityFilter: " + entityFilter);
+		logger.info("TagFilter: " + tagFilter);
 		
 		
 		logger.info("Loading namespace prefixes");
 		// Create a model containing the namespace prefixes
 		Model baseModel = ModelFactory.createDefaultModel();
-		ModelUtil.read(baseModel, new File("Namespaces.ttl"), "TTL");
+		ModelUtil.read(baseModel, new File(rootModelPath), "TTL");
 		Map<String, String> prefixMap = baseModel.getNsPrefixMap();
 		//System.exit(0);
 		
 		logger.info("Loading mapping rules");
 		TagMapper tagMapper = new TagMapper();
-		tagMapper.load(new File("LGDMappingRules.xml"));
+		tagMapper.load(new File(mappingRulesPath));
 
 		
 		
 		Connection conn = LineStringUpdater.connectPostGIS(hostName, dbName, userName, passWord);
 		logger.info("Connected to db");
 
-		
+		LinkedGeoDataDAO2 dao = new LinkedGeoDataDAO2(conn);
+
 		
 		logger.info("Opening output stream: " + outFileName);
 		OutputStream out = new FileOutputStream(outFileName);
@@ -120,36 +138,54 @@ public class LGDDumper
 		if(exportNodeTags) {
 			SimpleNodeToRDFTransformer nodeTransformer =
 				new SimpleNodeToRDFTransformer(tagMapper);
-			
-			runNodeTags(conn, batchSize, nodeTransformer, prefixMap, out);		
+		
+			//NodeTagIteratorDenorm1 it = new NodeTagIteratorDenorm1(conn, batchSize);
+			Iterator<Node> it = new NodeTagIterator(conn, batchSize, entityFilter, tagFilter);
+
+			runNodeTags(it, nodeTransformer, prefixMap, dao, out);		
 		}
 		
 		if(exportWayTags) {
 			SimpleWayToRDFTransformer wayTransformer =
 				new SimpleWayToRDFTransformer(tagMapper);
 
-			runWayTags(conn, batchSize, wayTransformer, prefixMap, out);
+			Iterator<Way> it = new WayTagIterator(conn, batchSize, entityFilter, tagFilter);
+
+			runWayTags(it, wayTransformer, prefixMap, dao, out);
 		}
 		
 		out.flush();
 		out.close();
 	}
 
-	public static void runNodeTags(Connection conn, int batchSize, ITransformer<Node, Model> nodeTransformer, Map<String, String> prefixMap, OutputStream out)
+	public static void runNodeTags(Iterator<Node> it, ITransformer<Node, Model> nodeTransformer, Map<String, String> prefixMap, LinkedGeoDataDAO2 dao, OutputStream out)
 		throws Exception
 	{	
-		NodeTagIteratorDenorm1 it = new NodeTagIteratorDenorm1(conn, batchSize);
-	
 		SimpleStatsTracker tracker = new SimpleStatsTracker();
 	
 		Model model = ModelFactory.createDefaultModel();
 		model.setNsPrefixes(prefixMap);
 		
 		while(it.hasNext()) {
-			Node way = it.next();
-			
-			nodeTransformer.transform(model, way);
+			Node node = it.next();
 
+			nodeTransformer.transform(model, node);
+
+			
+			MultiMap<Long, Long> members = dao.getWayMemberships(Collections.singleton(node.getId()));
+			for(Map.Entry<Long, Collection<Long>> entry : members.entrySet()) {
+				for(Long wayId : entry.getValue()) {
+					model.add(
+							model.createResource(SimpleNodeToRDFTransformer.getSubject(entry.getKey())),
+							model.createProperty("http://linkedgeodata.org/vocab/memberOfWay"),
+							model.createResource(SimpleWayToRDFTransformer.getSubject(wayId))
+							);
+				}
+			}
+			
+			
+			
+			
 			if(model.size() > 10000) {
 				writeModel(model, out);
 			}
@@ -160,11 +196,9 @@ public class LGDDumper
 		
 	}
 	
-	public static void runWayTags(Connection conn, int batchSize, ITransformer<Way, Model> wayTransformer, Map<String, String> prefixMap, OutputStream out)
+	public static void runWayTags(Iterator<Way> it, ITransformer<Way, Model> wayTransformer, Map<String, String> prefixMap, LinkedGeoDataDAO2 dao, OutputStream out)
 		throws Exception
 	{	
-		WayTagIterator it = new WayTagIterator(conn, batchSize);
-	
 		SimpleStatsTracker tracker = new SimpleStatsTracker();
 
 		Model model = ModelFactory.createDefaultModel();
@@ -176,6 +210,32 @@ public class LGDDumper
 			
 			wayTransformer.transform(model, way);
 
+			
+			MultiMap<Long, Long> members = dao.getNodeMemberships(Collections.singleton(way.getId()));
+			if(!members.isEmpty()) { 
+				Resource memberRes = model.createResource("http://linkedgeodata.org/triplify/way_nodes" + way.getId());
+				//Resource memberRes = model.createResource("http://linkedgeodata.org/vocab/hasNodes");
+							
+				for(Map.Entry<Long, Collection<Long>> entry : members.entrySet()) {
+					model.add(
+							model.createResource(SimpleNodeToRDFTransformer.getSubject(entry.getKey())),
+							model.createProperty("http://linkedgeodata.org/vocab/hasNodes"),
+							model.createResource(memberRes)
+							);
+				
+					
+					int i = 0;
+					for(Long nodeId : entry.getValue()) {
+						model.add(
+								model.createResource(memberRes),
+								model.createProperty(RDF.getURI() + "_" + (++i)),
+								model.createResource(SimpleNodeToRDFTransformer.getSubject(nodeId))
+								);
+					}
+				}
+			}
+			
+			
 			if(model.size() > 10000) {
 				writeModel(model, out);
 			}
@@ -221,5 +281,9 @@ public class LGDDumper
 
 		cliOptions.addOption("xnt", "tagsn", false, "eXport node tags");
 		cliOptions.addOption("xwt", "tagsw", false, "eXport way tags");
+		cliOptions.addOption("xrt", "tagsr", false, "eXport relation tags");
+		
+		cliOptions.addOption("ef", "entityfilter", true, "");
+		cliOptions.addOption("tf", "tagfilter", true, "");
 	}
 }

@@ -39,12 +39,18 @@ public class SimpleWayToRDFTransformer
 		return transform(model, way);
 	}
 	
-	private String getSubject(Way way)
+	public static String getSubject(long id)
 	{
 		String prefix = "http://linkedgeodata.org/";
-		String result = prefix + "way/" + way.getId();
+		//String result = prefix + "way/" + way.getId();
+		String result = prefix + "way" + id;
 		
 		return result;
+	}
+	
+	public static String getSubject(Way way)
+	{
+		return getSubject(way.getId());
 	}
 	
 	//public static void generateGeoRSS(Model model, Resource subjectRes, node);

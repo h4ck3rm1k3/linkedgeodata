@@ -19,13 +19,16 @@ public class StreamUtil
 		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 	
 		String result = "";
-		String line;
-		while(null != (line = reader.readLine()))
-			result += line + "\n";
-
-		if(bClose) {
-			reader.close();
-			in.close();
+		try {
+			String line;
+			while(null != (line = reader.readLine()))
+				result += line + "\n";
+		}
+		finally {
+			if(bClose) {
+				reader.close();
+				in.close();
+			}
 		}
 
 		return result;

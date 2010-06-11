@@ -96,8 +96,10 @@ public abstract class AbstractOneOneTagMapper
 			return null;
 		}
 
+		/* Disable this feature for now
 		if(!describesOSMEntity())
 			subject += "#id";
+		*/
 
 		if(model == null)
 			model = ModelFactory.createDefaultModel(); 

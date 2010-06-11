@@ -1,0 +1,1 @@
+java -jar LGDDumper.jar -hlocalhost -dunittest_lgd -upostgres -wpostgres -xnt -xwt -ooutput/NodeTags.n3 -tf "k NOT IN ('created_by','ele','time','layer','source','tiger:tlid','tiger:county','tiger:upload_uuid','attribution','source_ref','KSJ2:coordinate','KSJ2:lat','KSJ2:long','KSJ2:curve_id','AND_nodes','converted_by')" -ef "filter.k = 'highway'"

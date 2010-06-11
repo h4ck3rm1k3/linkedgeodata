@@ -110,16 +110,25 @@ public class TagMapper
 		if(candidates == null)
 			return null;
 		
-		Model result = null; 
+		// Only set the result to non-null if there was at least some partial result
+		Model result = null;
 		for(IOneOneTagMapper mapper : candidates) {
 			Model tmp = mapper.map(subject, tag, model);
 			
 			if(tmp != null) {
-				// Only set the result to non-null if there was at least some partial result
-				if(result == null)
+				result = tmp;
+				
+				if(model == null)
+					model = result;
+				/*
+				if(result == null) {
+					if(model == null) {
 					result = ModelFactory.createDefaultModel();
+				}
 
+				if(model == null)
 				result.add(tmp);
+				*/
 			}
 		}
 		
