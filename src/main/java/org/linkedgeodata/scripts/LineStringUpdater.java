@@ -13,6 +13,7 @@ import org.apache.commons.lang.time.StopWatch;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.linkedgeodata.dao.AbstractDAO;
+import org.linkedgeodata.util.PostGISUtil;
 import org.linkedgeodata.util.SQLUtil;
 
 
@@ -231,7 +232,7 @@ public class LineStringUpdater
 		String hostName = commandLine.getOptionValue("h", "localhost");
 		String dbName   = commandLine.getOptionValue("d", "lgd");
 		String userName = commandLine.getOptionValue("u", "lgd");
-		String passWord = commandLine.getOptionValue("p", "lgd");
+		String passWord = commandLine.getOptionValue("w", "lgd");
 
 		String batchSizeStr = commandLine.getOptionValue("n", "1000");
 
@@ -239,7 +240,7 @@ public class LineStringUpdater
 		if(batchSize <= 0)
 			throw new RuntimeException("Invalid argument for batchsize");
 		
-		Connection conn = connectPostGIS(hostName, dbName, userName, passWord);
+		Connection conn = PostGISUtil.connectPostGIS(hostName, dbName, userName, passWord);
 		logger.info("Connected to db");
 		
 
@@ -256,7 +257,7 @@ public class LineStringUpdater
 		cliOptions.addOption("t", "type", true, "Database type (posgres, mysql,...)");
 		cliOptions.addOption("d", "database", true, "Database name");
 		cliOptions.addOption("u", "user", true, "");
-		cliOptions.addOption("p", "password", true, "");
+		cliOptions.addOption("w", "password", true, "");
 		cliOptions.addOption("h", "host", true, "");
 		cliOptions.addOption("n", "batchSize", true, "Batch size");
 	}
@@ -274,17 +275,6 @@ public class LineStringUpdater
 		//http://www.giswiki.org/wiki/PostGIS_Tutorial
 		
 		String url = "jdbc:mysql://" + hostName + "/" + dbName;
-		//Connection connection = DriverManager.getConnection(url);
-		Connection conn = DriverManager.getConnection(url, userName, passWord);
-		
-		return conn;
-	}
-
-	public static Connection connectPostGIS(String hostName, String dbName, String userName, String passWord)
-		throws Exception
-	{
-		Class.forName("org.postgis.DriverWrapper");
-		String url = "jdbc:postgresql_postGIS://" + hostName + "/" + dbName;
 		//Connection connection = DriverManager.getConnection(url);
 		Connection conn = DriverManager.getConnection(url, userName, passWord);
 		

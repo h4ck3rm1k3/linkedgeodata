@@ -51,7 +51,6 @@ public class SimpleTextTagMapper
 	 * @param tag
 	 */
 	public SimpleTextTagMapper(String property, TagPattern tagPattern, String langTag, boolean isOSMEntity)
-		throws Exception
 	{
 		//URI.create("http://linkedgeodata.org/method/simple?type=dt&dataType=" + URLEncoder.encode(dataType.toString(), "UTF-8")),
 		super(property, tagPattern, isOSMEntity);

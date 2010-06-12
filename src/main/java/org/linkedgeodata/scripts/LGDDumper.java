@@ -50,6 +50,7 @@ import org.linkedgeodata.jtriplify.mapping.SimpleNodeToRDFTransformer;
 import org.linkedgeodata.jtriplify.mapping.SimpleWayToRDFTransformer;
 import org.linkedgeodata.util.ITransformer;
 import org.linkedgeodata.util.ModelUtil;
+import org.linkedgeodata.util.PostGISUtil;
 import org.linkedgeodata.util.stats.SimpleStatsTracker;
 import org.openstreetmap.osmosis.core.domain.v0_6.Node;
 import org.openstreetmap.osmosis.core.domain.v0_6.Way;
@@ -126,7 +127,7 @@ public class LGDDumper
 
 		
 		
-		Connection conn = LineStringUpdater.connectPostGIS(hostName, dbName, userName, passWord);
+		Connection conn = PostGISUtil.connectPostGIS(hostName, dbName, userName, passWord);
 		logger.info("Connected to db");
 
 		LGDDAO innerDao = new LGDDAO(conn);

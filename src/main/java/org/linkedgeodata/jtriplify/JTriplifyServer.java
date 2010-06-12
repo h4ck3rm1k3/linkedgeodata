@@ -34,14 +34,15 @@ import org.linkedgeodata.jtriplify.methods.DefaultCoercions;
 import org.linkedgeodata.jtriplify.methods.FunctionUtil;
 import org.linkedgeodata.jtriplify.methods.IInvocable;
 import org.linkedgeodata.jtriplify.methods.JavaMethodInvocable;
-import org.linkedgeodata.scripts.LineStringUpdater;
 import org.linkedgeodata.util.ExceptionUtil;
 import org.linkedgeodata.util.ModelUtil;
+import org.linkedgeodata.util.PostGISUtil;
 import org.linkedgeodata.util.StreamUtil;
 import org.linkedgeodata.util.StringUtil;
 import org.linkedgeodata.util.URIUtil;
 
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -256,7 +257,7 @@ class MyHandler
 		return result;
 	}
 
-
+	
 	
 	// HTTP error 406: Not acceptable
 	private SimpleResponse process(HttpExchange t)
@@ -513,8 +514,14 @@ public class JTriplifyServer
 		if(batchSize <= 0)
 			throw new RuntimeException("Invalid argument for batchsize");
 		
+		String prefixModelPath = "Namespaces.ttl";
+		
 		// Setup
 		logger.info("Loading uri namespaces");
+		Model prefixModel = ModelFactory.createDefaultModel();
+		ModelUtil.read(prefixModel, new File(prefixModelPath), "TTL");
+		Map<String, String> prefixMap = prefixModel.getNsPrefixMap();
+		/*
 		String fileName = "NamespaceResolv.ini";
 		File file = new File(fileName);
 		if(!file.exists()) {
@@ -522,10 +529,11 @@ public class JTriplifyServer
 		}
 		
 		Transformer<String, URI> uriResolver = new URIResolver(file);
-
+*/
+		
 		
 		logger.info("Connecting to db");
-		Connection conn = LineStringUpdater.connectPostGIS(hostName, dbName, userName, passWord);
+		Connection conn = PostGISUtil.connectPostGIS(hostName, dbName, userName, passWord);
 
 		logger.info("Loading mapping rules");
 		TagMapper tagMapper = new TagMapper();
@@ -535,20 +543,28 @@ public class JTriplifyServer
 		
 		LGDRDFDAO dao = new LGDRDFDAO(innerDAO, tagMapper);
 		
-		ServerMethods methods = new ServerMethods(dao);
+		ServerMethods methods = new ServerMethods(dao, prefixMap);
 		
 		
 		RegexInvocationContainer ric = new RegexInvocationContainer();
 		
 		Method m;
+
 		
 		m = ServerMethods.class.getMethod("getNode", String.class);
-		ric.put(".*node/([^/?]*)/?(\\?.*)?", new JavaMethodInvocable(m, methods), "$0");
+		ric.put(".*node/?([^/?]*)/?(\\?.*)?", new JavaMethodInvocable(m, methods), "$0");
 
 		m = ServerMethods.class.getMethod("getWay", String.class);
-		ric.put(".*way/([^/?]*)/?(\\?.*)?", new JavaMethodInvocable(m, methods), "$0");
-		
+		ric.put(".*way/?([^/?]*)/?(\\?.*)?", new JavaMethodInvocable(m, methods), "$0");
 
+
+		/*
+		m = ServerMethods.class.getMethod("getNode", String.class);
+		ric.put(".*node([^/?]*)/?(\\?.*)?", new JavaMethodInvocable(m, methods), "$0");
+
+		m = ServerMethods.class.getMethod("getWay", String.class);
+		ric.put(".*way([^/?]*)/?(\\?.*)?", new JavaMethodInvocable(m, methods), "$0");
+		*/
 		
 		
 		//m = ServerMethods.class.getMethod("getNear", String.class, String.class, String.class);

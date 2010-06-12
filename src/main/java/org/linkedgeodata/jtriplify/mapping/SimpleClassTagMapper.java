@@ -55,7 +55,7 @@ public class SimpleClassTagMapper
 	 * @param tag
 	 */
 	public SimpleClassTagMapper(String clazz, TagPattern tagPattern, boolean isOSMEntity)
-		throws Exception
+		//throws Exception
 	{
 		super(clazz, tagPattern, isOSMEntity);	
 	}
