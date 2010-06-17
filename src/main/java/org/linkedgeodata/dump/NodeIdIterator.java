@@ -82,9 +82,9 @@ public class NodeIdIterator
 	
 	public String buildQuery()
 	{
-		String sql = "SELECT DISTINCT nt2.node_id FROM node_tags nt2 ";
+		String sql = "SELECT DISTINCT nt.node_id FROM node_tags nt ";
 		if(offset != null)
-			sql += "WHERE nt2.node_id > ? ";
+			sql += "WHERE nt.node_id > ? ";
 				
 
 		if(entityFilterStr != null) {
@@ -93,7 +93,7 @@ public class NodeIdIterator
 				? "WHERE "
 				: "AND ";
 			
-			sql += "NOT EXISTS (SELECT filter.node_id FROM node_tags filter WHERE filter.node_id = nt2.node_id AND " + entityFilterStr + ") ";
+			sql += "nt.node_id NOT IN (SELECT filter.node_id FROM node_tags filter WHERE filter.node_id = nt.node_id AND " + entityFilterStr + ") ";
 		}
 
 		sql += " ORDER BY node_id ASC ";

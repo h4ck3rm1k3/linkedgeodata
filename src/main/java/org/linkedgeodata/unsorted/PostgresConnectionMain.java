@@ -230,7 +230,8 @@ public class PostgresConnectionMain
 		*/
 		
 
-		String hostName = "139.18.251.5";
+		String hostName = "localhost";
+		//String hostName = "139.18.251.5";
 		//String hostName = "hobbit.local";
 		String dbName = "unittest_lgd";
 		String userName = "postgres";

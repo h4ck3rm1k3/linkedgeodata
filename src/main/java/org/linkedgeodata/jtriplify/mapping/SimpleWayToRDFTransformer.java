@@ -20,6 +20,7 @@
  */
 package org.linkedgeodata.jtriplify.mapping;
 
+import org.linkedgeodata.core.ILGDVocab;
 import org.linkedgeodata.core.LGDVocab;
 import org.linkedgeodata.jtriplify.TagMapper;
 import org.linkedgeodata.util.ITransformer;
@@ -27,15 +28,20 @@ import org.openstreetmap.osmosis.core.domain.v0_6.Way;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.vocabulary.RDF;
 
 public class SimpleWayToRDFTransformer
 	implements ITransformer<Way, Model>
 {
+	//private static final String WGS84_WAY = "";
+
 	private TagMapper tagMapper;
+	private ILGDVocab vocab;
 	
-	public SimpleWayToRDFTransformer(TagMapper tagMapper)
+	public SimpleWayToRDFTransformer(TagMapper tagMapper, ILGDVocab vocab)
 	{
 		this.tagMapper = tagMapper;
+		this.vocab = vocab;
 	}
 	
 	@Override
@@ -48,7 +54,9 @@ public class SimpleWayToRDFTransformer
 		//generateWGS84(model, subjectRes, node);
 		//generateGeoRSS(model, subjectRes, node);
 		SimpleNodeToRDFTransformer.generateTags(tagMapper, model, subject, way.getTags());
-	
+
+		//model.createResource(subject).addProperty(RDF.type, model.createResource(WGS84_WAY));
+		
 		return model;
 	}
 	
@@ -60,12 +68,12 @@ public class SimpleWayToRDFTransformer
 		return transform(model, way);
 	}
 	
-	public static String getSubject(long id)
+	private String getSubject(long id)
 	{
-		return LGDVocab.createNIRWayURI(id);
+		return vocab.createNIRWayURI(id);
 	}
 	
-	public static String getSubject(Way way)
+	private String getSubject(Way way)
 	{
 		return getSubject(way.getId());
 	}

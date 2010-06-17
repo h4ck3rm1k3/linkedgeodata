@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.linkedgeodata.dao.LGDQueries;
 import org.linkedgeodata.dao.LGDRDFDAO;
+import org.linkedgeodata.util.ModelUtil;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -75,7 +76,11 @@ public class ServerMethods
 
 		Model result = createModel();
 		dao.getNodesWithinRadius(result, new Point2D.Double(lon, lat), radius, false, tagFilter, null, null);
+		
+		//System.out.println(ModelUtil.toString(result));
+		
 		dao.getWaysWithinRadius(result, new Point2D.Double(lon, lat), radius, false, tagFilter, null, null);
+		//System.out.println(ModelUtil.toString(result));
 		
 		return result;
 	}

@@ -106,11 +106,11 @@ public class CustomizableCostFunctionCollection
 	public Pair<IInvocable, Float> lookupCheapest(Class<?> returnType, Class<?>... args)
 	{
 		Pair<IInvocable, Float> tmp = FunctionUtil.lookupCheapest(returnType, args, methods.keySet(), coercions);
-		if(tmp == null || tmp.getFirst() == null)
+		if(tmp == null || tmp.getKey() == null)
 			return null;
 		
-		Float cost = methods.get(tmp.getFirst());
-		return new Pair<IInvocable, Float>(tmp.getFirst(), cost);
+		Float cost = methods.get(tmp.getKey());
+		return new Pair<IInvocable, Float>(tmp.getKey(), cost);
 	}
 	
 	

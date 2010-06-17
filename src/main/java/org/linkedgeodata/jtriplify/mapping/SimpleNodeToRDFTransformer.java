@@ -24,6 +24,7 @@ import java.util.Collection;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
+import org.linkedgeodata.core.ILGDVocab;
 import org.linkedgeodata.core.LGDVocab;
 import org.linkedgeodata.jtriplify.TagMapper;
 import org.linkedgeodata.util.ITransformer;
@@ -51,13 +52,14 @@ public class SimpleNodeToRDFTransformer
 {
 	private static final Logger logger = Logger.getLogger(SimpleNodeToRDFTransformer.class);
 	private TagMapper tagMapper;
-
+	private ILGDVocab vocab;
 	
 	private static int parseErrorCount = 0;
 	
-	public SimpleNodeToRDFTransformer(TagMapper tagMapper)
+	public SimpleNodeToRDFTransformer(TagMapper tagMapper, ILGDVocab vocab)
 	{
 		this.tagMapper = tagMapper;
+		this.vocab = vocab;
 	}
 	
 	@Override
@@ -107,12 +109,12 @@ public class SimpleNodeToRDFTransformer
 	}
 
 
-	public static String getSubject(long id)
+	private String getSubject(long id)
 	{
-		return LGDVocab.createNIRNodeURI(id);
+		return vocab.createNIRNodeURI(id);
 	}
 	
-	public static String getSubject(Node node)
+	private String getSubject(Node node)
 	{		
 		return getSubject(node.getId());
 	}

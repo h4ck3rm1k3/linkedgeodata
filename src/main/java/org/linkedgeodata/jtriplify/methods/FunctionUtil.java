@@ -100,11 +100,11 @@ public class FunctionUtil
 					break;
 				}
 
-				if (pair.getFirst() != null)
+				if (pair.getKey() != null)
 					hasTransforms = true;
 
-				transforms[i] = pair.getFirst();
-				currentCost += pair.getSecond();
+				transforms[i] = pair.getKey();
+				currentCost += pair.getValue();
 			}
 
 			if (skip)

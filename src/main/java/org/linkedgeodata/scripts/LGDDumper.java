@@ -40,6 +40,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.collections15.MultiMap;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import org.linkedgeodata.core.ILGDVocab;
 import org.linkedgeodata.core.LGDVocab;
 import org.linkedgeodata.dao.LGDDAO;
 import org.linkedgeodata.dao.LGDRDFDAO;
@@ -131,7 +132,9 @@ public class LGDDumper
 		logger.info("Connected to db");
 
 		LGDDAO innerDao = new LGDDAO(conn);
-		LGDRDFDAO dao = new LGDRDFDAO(innerDao, tagMapper);
+		
+		ILGDVocab vocab = new LGDVocab();
+		LGDRDFDAO dao = new LGDRDFDAO(innerDao, tagMapper, vocab);
 		
 		logger.info("Opening output stream: " + outFileName);
 		OutputStream out = new FileOutputStream(outFileName);
@@ -139,10 +142,7 @@ public class LGDDumper
 		baseModel.write(out, "N3");
 
 
-		if(exportNodeTags) {
-			SimpleNodeToRDFTransformer nodeTransformer =
-				new SimpleNodeToRDFTransformer(tagMapper);
-		
+		if(exportNodeTags) {		
 			//NodeTagIteratorDenorm1 it = new NodeTagIteratorDenorm1(conn, batchSize);
 			Iterator<Collection<Long>> it = new NodeIdIterator(conn, batchSize, entityFilter);
 
@@ -150,9 +150,6 @@ public class LGDDumper
 		}
 		
 		if(exportWayTags) {
-			SimpleWayToRDFTransformer wayTransformer =
-				new SimpleWayToRDFTransformer(tagMapper);
-
 			Iterator<Collection<Long>> it = new WayIdIterator(conn, batchSize, entityFilter);
 
 			runWayTags(it, tagFilter, prefixMap, dao, out);

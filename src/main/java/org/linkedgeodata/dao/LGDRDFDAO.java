@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections15.MultiMap;
+import org.linkedgeodata.core.ILGDVocab;
 import org.linkedgeodata.core.LGDVocab;
 import org.linkedgeodata.core.OSMEntityType;
 import org.linkedgeodata.jtriplify.TagMapper;
@@ -43,6 +44,7 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.RDF;
 
+
 public class LGDRDFDAO
 {
 	private LGDDAO dao;
@@ -51,38 +53,41 @@ public class LGDRDFDAO
 	private ITransformer<Node, Model> nodeTransformer;
 	private ITransformer<Way, Model> wayTransformer;
 	
-	public LGDRDFDAO(LGDDAO dao, TagMapper tagMapper)
+	private ILGDVocab vocab;
+	
+	public LGDRDFDAO(LGDDAO dao, TagMapper tagMapper, ILGDVocab vocab)
 	{
 		this.dao = dao;
 		this.tagMapper = tagMapper;
-		
-		this.nodeTransformer = new SimpleNodeToRDFTransformer(tagMapper);
-		this.wayTransformer = new SimpleWayToRDFTransformer(tagMapper);
+		this.vocab = vocab;
+
+		this.nodeTransformer = new SimpleNodeToRDFTransformer(tagMapper, vocab);
+		this.wayTransformer = new SimpleWayToRDFTransformer(tagMapper, vocab);
 	}
 	
 	
 
-	private static void writeNodeWays(Model model, MultiMap<Long, Long> members)
+	private void writeNodeWays(Model model, MultiMap<Long, Long> members)
 	{
 		for(Map.Entry<Long, Collection<Long>> entry : members.entrySet()) {
 			for(Long wayId : entry.getValue()) {
 				model.add(
-						model.createResource(LGDVocab.createOSMNodeURI(entry.getKey())),
-						model.createProperty(LGDVocab.MEMBER_OF_WAY),
-						model.createResource(LGDVocab.createOSMWayURI(wayId))
+						model.createResource(vocab.createOSMNodeURI(entry.getKey())),
+						model.createProperty(vocab.getHasNodesPred()),
+						model.createResource(vocab.createOSMWayURI(wayId))
 						);
 			}
 		}
 	}
 
-	private static void writeWayNodes(Model model, MultiMap<Long, Long> members)
+	private void writeWayNodes(Model model, MultiMap<Long, Long> members)
 	{
 		for(Map.Entry<Long, Collection<Long>> entry : members.entrySet()) {
 			Resource memberRes = model.createResource(new AnonId());
 			
 			model.add(
-					model.createResource(LGDVocab.createOSMWayURI(entry.getKey())),
-					model.createProperty(LGDVocab.HAS_NODES),
+					model.createResource(vocab.createOSMWayURI(entry.getKey())),
+					model.createProperty(vocab.getHasNodesPred()),
 					memberRes);
 	
 			model.add(memberRes,
@@ -94,7 +99,7 @@ public class LGDRDFDAO
 				model.add(
 						memberRes,
 						model.createProperty(RDF.getURI() + "_" + (++i)),
-						model.createResource(LGDVocab.createOSMNodeURI(nodeId)));
+						model.createResource(vocab.createOSMNodeURI(nodeId)));
 			}
 		}	
 	}

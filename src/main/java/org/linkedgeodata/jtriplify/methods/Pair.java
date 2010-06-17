@@ -1,28 +1,37 @@
 package org.linkedgeodata.jtriplify.methods;
 
-public class Pair<F, S>
-{
-	  private final F first;
-	  private final S second;
+import java.util.Map;
 
-	  public Pair(F first, S second)
-	  { 
-		  this.first = first;
-		  this.second = second;   
-	  }
-	 
-	  public F getFirst()
-	  {
-		  return first;
-	  }
-	 
-	  public S getSecond()
-	  {
-		  return second;
-	  }
-	 
-	  public String toString()
-	  { 
-		  return "(" + first + ", " + second + ")"; 
-	  }
+public class Pair<K, V>
+	implements Map.Entry<K, V>
+{
+	private final K key;
+	private final V value;
+
+	public Pair(K key, V value)
+	{ 
+		this.key = key;
+		this.value = value;   
+	}
+ 
+	public K getKey()
+	{
+		return key;
+	}
+ 
+	public V getValue()
+	{
+		return value;
+	}
+ 
+	public String toString()
+	{ 
+		return "(" + key + ", " + value + ")"; 
+	}
+
+	@Override
+	public V setValue(V arg0)
+	{
+		throw new UnsupportedOperationException();
+	}
 }

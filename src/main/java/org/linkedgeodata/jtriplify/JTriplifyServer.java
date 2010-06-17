@@ -1,7 +1,6 @@
 package org.linkedgeodata.jtriplify;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -9,6 +8,7 @@ import java.lang.reflect.Method;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -18,27 +18,31 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.activation.UnsupportedDataTypeException;
 import javax.mail.internet.ContentType;
+import javax.mail.internet.ParseException;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.collections15.MultiMap;
-import org.apache.commons.collections15.Transformer;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import org.linkedgeodata.core.ILGDVocab;
+import org.linkedgeodata.core.LGDVocab;
 import org.linkedgeodata.dao.LGDDAO;
 import org.linkedgeodata.dao.LGDRDFDAO;
 import org.linkedgeodata.jtriplify.methods.DefaultCoercions;
 import org.linkedgeodata.jtriplify.methods.FunctionUtil;
 import org.linkedgeodata.jtriplify.methods.IInvocable;
 import org.linkedgeodata.jtriplify.methods.JavaMethodInvocable;
+import org.linkedgeodata.jtriplify.methods.Pair;
 import org.linkedgeodata.util.ExceptionUtil;
 import org.linkedgeodata.util.ModelUtil;
 import org.linkedgeodata.util.PostGISUtil;
 import org.linkedgeodata.util.StreamUtil;
-import org.linkedgeodata.util.StringUtil;
 import org.linkedgeodata.util.URIUtil;
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -47,6 +51,187 @@ import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
+
+
+interface IMyHandler
+{
+	/**
+	 * 
+	 * @param x
+	 * @return true if accepted, false otherwise
+	 */
+	boolean handle(HttpExchange x)
+		throws Exception;
+}
+
+
+class MyHttpHandler
+	implements HttpHandler
+{
+	private static final Logger logger = Logger.getLogger(MyHttpHandler.class);
+	private List<IMyHandler> subHandlers = new ArrayList<IMyHandler>();
+	
+	public List<IMyHandler> getSubHandlers()
+	{
+		return subHandlers;
+	}
+
+	@Override
+	public void handle(HttpExchange x)
+	{
+		try {
+			_handle(x);
+		} catch(Throwable t) {
+			logger.error(ExceptionUtil.toString(t));
+		}
+	}
+
+
+	public void _handle(HttpExchange x)
+		throws Exception
+	{
+		for(IMyHandler item : subHandlers) {
+			if(item.handle(x)) {
+				return;
+			}
+		}
+		
+		MyHandler.sendResponse(x, 500, null, null);
+	}
+}
+
+
+
+class Model2Handler
+	implements IMyHandler
+{
+	private static final Logger logger = Logger.getLogger(Model2Handler.class);
+	
+	private RegexInvocationContainer ric = new RegexInvocationContainer();
+	
+	/*
+	public Model2Handler(RegexInvocationContainer ric)
+	{
+		this.ric = ric;
+	}
+	*/
+	
+	public RegexInvocationContainer getRIC()
+	{
+		return ric;
+	}
+	
+	@Override
+	public boolean handle(HttpExchange x)
+	{
+		try {
+			return _handle(x);
+		} catch(Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private boolean _handle(HttpExchange x)
+		throws Exception
+	{
+		// Check if the content negotiation is ok
+		Map<String, ContentType> accepts = MyHandler.getPreferredFormats(x.getRequestHeaders());
+		String requestedFormat = MyHandler.getJenaFormatByExtension(x.getRequestURI());
+
+		Map.Entry<String, ContentType> resultType = MyHandler.getContentType(requestedFormat, accepts);
+		
+		Model model = null;
+		try {
+			model = (Model)ric.invoke(x.getRequestURI().toString());
+		}
+		catch(Throwable t) {
+			logger.error(ExceptionUtil.toString(t));
+		}
+		
+		if(model == null)
+			return false;
+
+		String body = ModelUtil.toString(model, resultType.getKey());
+
+		if(resultType.getValue().match("text/html"))
+			body = StringEscapeUtils.escapeHtml(body);
+		
+		if(resultType != null) {
+			MyHandler.sendResponse(x, 200, resultType.getValue().toString(), body);
+			return true;
+		}
+		
+		return false;
+	}
+}
+
+
+class Model3Handler
+	implements IMyHandler
+{
+	private static final Logger logger = Logger.getLogger(Model2Handler.class);
+	
+	private RegexInvocationContainer ric = new RegexInvocationContainer();
+	
+	/*
+	public Model3Handler(RegexInvocationContainer ric)
+	{
+		this.ric = ric;
+	}*/
+	
+	public RegexInvocationContainer getRIC()
+	{
+		return ric;
+	}
+
+	
+	@Override
+	public boolean handle(HttpExchange x)
+	{
+		try {
+			return _handle(x);
+		} catch(Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	private boolean _handle(HttpExchange x)
+		throws Exception
+	{
+		// Check if the content negotiation is ok
+		Map<String, ContentType> accepts = MyHandler.getPreferredFormats(x.getRequestHeaders());
+		String requestedFormat = MyHandler.getJenaFormatByQueryString(x.getRequestURI());
+	
+		Map.Entry<String, ContentType> resultType = MyHandler.getContentType(requestedFormat, accepts);
+		
+		Model model = null;
+		try {
+			model = (Model)ric.invoke(x.getRequestURI().toString());
+		}
+		catch(Throwable t) {
+			logger.error(ExceptionUtil.toString(t));
+		}
+		
+		if(model == null) {
+			return false;
+		}
+	
+		String body = ModelUtil.toString(model, resultType.getKey());
+	
+		if(resultType.getValue().match("text/html"))
+			body = StringEscapeUtils.escapeHtml(body);
+
+		if(resultType != null) {
+			MyHandler.sendResponse(x, 200, resultType.getValue().toString(), body);
+			return true;
+		}
+		
+		return false;
+	}
+}
+
+
+
 
 class ICPair
 {
@@ -70,74 +255,83 @@ class ICPair
 	}
 }
 
-class RegexInvocationContainer
+
+
+class RedirectInvocable
+	implements IInvocable
 {
-	private static final Logger logger = Logger.getLogger(RegexInvocationContainer.class);
-
-	private Map<Pattern, ICPair> patternToInvocable = new HashMap<Pattern, ICPair>();
+	private String pattern;
 	
-	public void put(String regex, IInvocable invocable, Object ...argMap)
+	public RedirectInvocable(String pattern)
 	{
-		Pattern pattern = Pattern.compile(regex);
-		
-		patternToInvocable.put(pattern, new ICPair(invocable, argMap));
+		this.pattern = pattern;
 	}
 	
-	private static Object invoke(Matcher matcher, IInvocable invocable, Object[] argMap)
+	@Override
+	public String invoke(Object... args)
 		throws Exception
 	{
-		logger.info("Invoking: " + invocable);
-		int groupCount = matcher.groupCount();
-		Object[] matches = new Object[groupCount];
-		
-		for(int i = 0; i < groupCount; ++i) {
-			matches[i] = matcher.group(i + 1);
+		String url = pattern;
+		for(int i = 0; i < args.length; ++i) {
+			url = url.replace("$" + i, args[i] == null ? "" : args[i].toString());
 		}
 		
-		Object[] args = new Object[argMap.length];
-		for(int i = 0; i < argMap.length; ++i) {
-			
-			if(argMap[i] != null) {
-				String argStr = argMap[i].toString();
-				
-				if(argStr.startsWith("$")) {
-					String indexStr = argStr.substring(1);
-					int index = Integer.parseInt(indexStr);
-					
-					args[i] = matches[index];
-					continue;
-				}
-			}
-		
-			args[i] = argMap[i];
-		}
-
-		logger.debug("Args: " + Arrays.toString(args) + ", Types: " + Arrays.toString(FunctionUtil.getTypes(args)));
-		
-		Object result = invocable.invoke(args);
-		return result;
-	}
-	
-	public Object invoke(String arg)
-		throws Exception
-	{
-		for(Map.Entry<Pattern, ICPair> entry : patternToInvocable.entrySet()) {
-			Pattern pattern = entry.getKey();
-			ICPair icPair = entry.getValue();
-			
-			Matcher matcher = pattern.matcher(arg);
-			if(matcher.matches()) {
-				logger.info("Value '" + arg + "' matched the pattern '" + pattern + "'");
-
-				return invoke(matcher, icPair.getInvocable(), icPair.getArgMap());
-			}
-		}
-		
-		logger.info("No match found for '" + arg + "'");
-		
-		return null;
+		return url;
 	}
 }
+
+
+class LinkedDataRedirectHandler
+	implements IMyHandler
+{
+	private RegexInvocationContainer pageRIC = new RegexInvocationContainer();
+	private RegexInvocationContainer dataRIC = new RegexInvocationContainer();
+	
+	
+	public RegexInvocationContainer getPageRIC()
+	{
+		return pageRIC;
+	}
+	
+	public RegexInvocationContainer getDataRIC()
+	{
+		return dataRIC;
+	}
+	
+	/*
+	public LinkedDataRedirectHandler(RegexInvocationContainer pageRic, RegexInvocationContainer dataRic)
+	{
+		this.pageRic = pageRic;
+		this.dataRic = dataRic;
+	}
+	*/
+	
+	@Override
+	public boolean handle(HttpExchange x)
+		throws Exception
+	{
+		Map<String, ContentType> accepts = MyHandler.getPreferredFormats(x.getRequestHeaders());
+		
+		if(accepts.isEmpty())
+			return false;
+		
+		//Map.Entry<String, ContentType> type = accepts.entrySet().iterator().next();
+		
+		RegexInvocationContainer ric = dataRIC;
+		if(accepts.containsValue(new ContentType("text/html"))) {
+			ric = pageRIC;
+		}
+
+		String targetURL = (String)ric.invoke(x.getRequestURI().toString());
+		if(targetURL == null) {
+			return false;
+		}
+
+		MyHandler.sendRedirect(x, targetURL);
+		return true;
+	}	
+}
+
 
 
 /*
@@ -155,14 +349,31 @@ class RDFResultFormat
 class SimpleResponse
 {
 	private int statusCode;
+	private Map<String, List<String>> header = new HashMap<String, List<String>>();
 	private String contentType;
-	private String text;
-	
-	public SimpleResponse(int statusCode, String contentType, String response)
+	private String body;
+
+	public SimpleResponse()
+	{
+	}
+
+	public SimpleResponse(int statusCode)
 	{
 		this.statusCode = statusCode;
-		this.contentType = contentType;
-		this.text = response;
+	}
+	
+	public static SimpleResponse redirect(String url)
+	{
+		SimpleResponse result = new SimpleResponse(303);
+		result.getHeader().put("Location", Collections.singletonList(url));
+		return result;
+	}
+	
+	public SimpleResponse(int statusCode, String contentType, String body)
+	{
+		this.statusCode = statusCode;
+		this.header.put("Content-Type", Collections.singletonList(contentType));
+		this.body = body;
 	}
 	
 	public int getStatusCode()
@@ -175,9 +386,14 @@ class SimpleResponse
 		return contentType;
 	}
 
-	public String getText()
+	public String getBody()
 	{
-		return text;
+		return body;
+	}
+	
+	public Map<String, List<String>> getHeader()
+	{
+		return header;
 	}
 }
 
@@ -201,8 +417,11 @@ class HTTPErrorException
 	}
 }
 
+
+
+
 class MyHandler
-	implements HttpHandler
+//	implements HttpHandler
 {
 	private static final Logger logger = Logger.getLogger(JTriplifyServer.class);
 
@@ -210,6 +429,7 @@ class MyHandler
 
 	private static Map<ContentType, String> contentTypeToJenaFormat = new HashMap<ContentType, String>();
 	private static Map<String, String> formatToJenaFormat = new HashMap<String, String>();
+	private static Map<String, String> extensionToJenaFormat = new HashMap<String, String>();
 	
 	{
 		//contentTypeToJenaFormat.put("text/plain", "N3");
@@ -234,6 +454,12 @@ class MyHandler
 		formatToJenaFormat.put("n3", "N3");
 		formatToJenaFormat.put("nt", "N-TRIPLE");		
 		formatToJenaFormat.put("turtle", "TURTLE");
+
+		
+		extensionToJenaFormat.put("rdf", "RDF/XML");
+		extensionToJenaFormat.put("n3", "N3");
+		extensionToJenaFormat.put("nt", "N-TRIPLE");
+		extensionToJenaFormat.put("ttl", "TURTLE");
 	}
 	
 	public void setInvocationMap(RegexInvocationContainer ric)
@@ -256,46 +482,54 @@ class MyHandler
 		
 		return result;
 	}
+	
+	
+	/**
+	 * The question is whether a specifically requested format is conforming to the
+	 * formats of the content type - therefore: This method returns a list
+	 * of RDF formats in 
+	 * @throws ParseException 
+	 * 
+	 * 
+	 **/
 
 	
-	
-	// HTTP error 406: Not acceptable
-	private SimpleResponse process(HttpExchange t)
-		throws Exception
+	/**
+	 * .rdf, .n3, .ttl, .nt 
+	 *
+	 */
+	public static String getExtension(String str)
 	{
-	   	String request = t.getRequestURI().toString();
-    	logger.info("Received request from " + t.getRemoteAddress() + ": "+ request);
-
-   
-    	// Check if a particular format was requested via the query string
-    	// As this excludes some of the content types that may be used
-    	URI requestURI = t.getRequestURI();
-    	String query = requestURI.getQuery();
-    	MultiMap<String, String> params = URIUtil.getQueryMap(query);
- 
- 
-    	String rawFormat = getFirst(params.get("format"));
-    	rawFormat = rawFormat == null ? null : rawFormat.trim().toLowerCase();
-    	String requestFormat = formatToJenaFormat.get(rawFormat);
-       	if(rawFormat != null && requestFormat == null) {
-    		// FIXME Respect the accept header when returning an error
-       		return new SimpleResponse(400, "text/plain", "Unsupported format");    			
-    	}
-
+		int index = str.lastIndexOf('.');
+		if(index == -1)
+			return null;
+		
+		return str.substring(index + 1);
+	}
+	
+	
+	public static String getFormatFromExtension(String ext)
+	{
+		if(ext == null)
+			return null;
+		
+		System.out.println(extensionToJenaFormat);
+		System.out.println(formatToJenaFormat);
+		String result = extensionToJenaFormat.get(ext);
+		return result;
+	}
+	
+	public static Map<String, ContentType> getPreferredFormats(Headers requestHeaders)
+		throws ParseException
+	{
     	// Content negotiation
-    	Headers requestHeaders = t.getRequestHeaders();    	
     	List<String> accepts = requestHeaders.get("Accept");
     	if(accepts == null)
     		accepts = Collections.emptyList();
     	
     	logger.info("Accept header: " + accepts);
-    	
-    	// Find the first accept header we can use
-    	String responseContentType = null;
-    	String contentFormat = null;
-    	
-    	boolean exitLoop = false;
 
+    	Map<String, ContentType> result = new HashMap<String, ContentType>();
     	int acceptCounter = 0;
     	for(String accept : accepts) {
     		String[] items = accept.split(",");
@@ -303,22 +537,15 @@ class MyHandler
     			++acceptCounter;
     			
     			ContentType ct = null;
-    			try {
-    				ct = new ContentType(item);
-    			}
-    			catch(Throwable e) {
-    				// Error parsing header - assume bad request
-    				return new SimpleResponse(400, "text/plain", "Error parsing accept header: '" + item + "'");
-    			}
+				ct = new ContentType(item);
     			
-    			
-	    		// This if statement is a hack right now
-	    		//if(ct.match("text/plain") || ct.match("text/html")) {
+	    		// FIXME Would be nice if this was configurable
 	    		if(ct.match("text/plain") || ct.match("text/html") || ct.match("*/*")) {
-	    			contentFormat = StringUtil.coalesce(requestFormat, "N-TRIPLE");
-	    			responseContentType = "text/plain; charset=UTF-8";
-	    			exitLoop = true;
-	    			break;
+	    			if(!result.containsKey("N-TRIPLE")) {
+	    				result.put("N-TRIPLE", ct);
+	    			}
+	    			
+	    			//responseContentType = "text/plain; charset=UTF-8";
 	    		}
 	    		
 	    		for(Map.Entry<ContentType, String> entry : contentTypeToJenaFormat.entrySet()) {
@@ -330,61 +557,141 @@ class MyHandler
 		    			// If a format was specified in the query string, we also need
 		    			// a compatible content type
 		    			// E.g. if format=N3, but accept=rdf+xml we can't use that accept type
-		    			if(requestFormat != null && !requestFormat.equalsIgnoreCase(tmp)) {
-		    				continue;
+		    			if(!result.containsKey(tmp)) {
+		    				result.put(tmp, ct);
 		    			}
-		    			
-		    			contentFormat = tmp;
-		    			responseContentType = item;
-		    			exitLoop = true;
-		    			break;
 		    		}
-		    		// FIXME This is ugly here
-		    		if(exitLoop)
-		    			break;
 	    		}
-
-	    		if(exitLoop)
-	    			break;
 	    	}
-
-    		if(exitLoop)
-    			break;
-    	}
-
-    	if(acceptCounter == 0) {
-    		logger.info("No accept header. Defaulting to 'text/plain'");
-			contentFormat = StringUtil.coalesce(requestFormat, "N-TRIPLE");
-			responseContentType = "text/plain";   		
     	}
     	
-    	if(contentFormat == null) {
-    		if(requestFormat != null) {
-    			return new SimpleResponse(406, "text/plain", "No suitable format found (Maybe you used ?format=... with incompatible accept header?)");
-    		}
-    		else {
-    			return new SimpleResponse(406, "text/plain", "No suitable format found");
-    		}
-    	}
-
-    	
-    	
-    	InputStream is = t.getRequestBody();
-    	StreamUtil.toString(is, false);
-    	
-
-    	Object o = ric.invoke(request);
-    	
-    	if(o instanceof Model) {
-    		Model model = (Model)o;
-    		String responseText = ModelUtil.toString(model, contentFormat);
-    	
-    		return new SimpleResponse(200, responseContentType, responseText);
-    	}
-    	
-		return new SimpleResponse(500, "text/plain", "Unsupported result type");   			
+    	return result;
 	}
 	
+	
+	
+
+	/*
+	return null;
+	if(acceptCounter == 0)
+	
+	if(acceptCounter == 0) {
+		logger.info("No accept header. Defaulting to 'text/plain'");
+		contentFormat = StringUtil.coalesce(requestFormat, "N-TRIPLE");
+		responseContentType = "text/plain";   		
+	}*/	
+
+	
+	
+	public static Map.Entry<String, ContentType> getContentType(String requestedFormat, Map<String, ContentType> accepts)
+		throws ParseException
+	{
+	   	if(requestedFormat == null) {
+    		if(accepts.isEmpty()) {
+    			return new Pair<String, ContentType>("N-TRIPLE", new ContentType("text/plain; charset=utf-8"));
+    		}
+    		else {
+        		return accepts.entrySet().iterator().next();
+    		}
+    	}
+		else if(!accepts.containsKey(requestedFormat)) {
+			
+			//return null;
+			//return new SimpleResponse(406, "text/plain", "Requested " + requestedFormat + " but accept-header " + formats + " is not compatible.");    			
+		//}
+    		return new Pair<String, ContentType>(requestedFormat, new ContentType("text/plain; charset=utf-8"));
+		}
+    	else {
+    		return new Pair<String, ContentType>(requestedFormat, new ContentType("text/plain; charset=utf-8"));
+    	}
+	}
+	
+	
+	public static SimpleResponse respondModel(Model model, Map.Entry<String, ContentType> contentType)
+	{
+		String response = ModelUtil.toString(model, contentType.getKey());
+		SimpleResponse result = new SimpleResponse(200, contentType.getValue().toString(), response);
+		return result;
+	}
+	
+	
+	
+	private SimpleResponse process(HttpExchange t)
+		throws Exception
+	{
+	   	String request = t.getRequestURI().toString();
+
+    	Object o = ric.invoke(request);
+		
+    	if(o instanceof SimpleResponse)
+    		return (SimpleResponse)o;
+    	
+    	throw new UnsupportedDataTypeException();
+	}
+	
+	
+	public static String getJenaFormatByExtension(URI uri)
+	{
+		// FIXME not correct
+		String host = uri.toString();
+		String ext = getExtension(host);
+		String result = getFormatFromExtension(ext);
+		
+		return result;
+	}
+	
+	
+	public static String getJenaFormatByQueryString(URI uri)
+	{
+       	// Check if a particular format was requested via the query string
+    	// As this excludes some of the content types that may be used
+    	String query = uri.getQuery();
+    	MultiMap<String, String> params = URIUtil.getQueryMap(query);
+ 
+ 
+    	String rawFormat = getFirst(params.get("format"));
+    	rawFormat = rawFormat == null ? null : rawFormat.trim().toLowerCase();
+    	String requestFormat = formatToJenaFormat.get(rawFormat);
+       	if(rawFormat != null && requestFormat == null) {
+    		// FIXME Respect the accept header when returning an error
+       		//return new SimpleResponse(400, "text/plain", "Unsupported format");
+       		return null;
+    	}
+		
+       	
+       	return requestFormat;
+	}
+	
+	public static void sendRedirect(HttpExchange x, String targetURL)
+		throws IOException
+	{
+		x.getResponseHeaders().set("Location", targetURL);
+		x.sendResponseHeaders(303, -1);
+	}
+	
+	
+	public static void sendResponse(HttpExchange x, int statusCode, String contentType, String body)
+		throws IOException
+	{
+		if(contentType == null)
+			contentType = "text/plain";
+		
+		
+		int responseLength = 0;
+		if(body == null)
+			responseLength = -1;
+		
+		x.getResponseHeaders().set("Content-Type", contentType);
+		
+		x.sendResponseHeaders(statusCode, responseLength);
+        OutputStream os = x.getResponseBody();
+    	
+    	if(responseLength != -1)
+        	os.write(body.getBytes());
+        os.close();		
+	}
+	
+	/*
 	public void handle(HttpExchange x)
 		throws IOException
 	{
@@ -392,43 +699,32 @@ class MyHandler
     	try {
     		response = process(x);
     	}
-    	/*
-    	catch(HTTPErrorException e) {
-    		// TODO Can be removed
-    		logger.info("Sending http status code: " + e.getErrorCode());
-    		response = new SimpleResponse(e.getErrorCode(), null, null);
-    	}
-    	*/
     	catch(Throwable t) {
     		logger.error(ExceptionUtil.toString(t));
     		response = new SimpleResponse(500, null, null);
     	}
 
-    	
     	if(response == null) {
     		response = new SimpleResponse(500, null, null);
-    		logger.error("No response object was created");
+    		logger.error("No response object was created.");
     	}
     	
     	Headers responseHeaders = x.getResponseHeaders();
-
-
-    	if(response.getContentType() != null)
-    		responseHeaders.set("Content-Type", response.getContentType()); 
-
-    	logger.info("Sending http status code: " + response.getStatusCode());
-    	
-    	int responseLength = 0;
-    	if(response.getText() == null)
-    		responseLength = -1;
-
-        x.sendResponseHeaders(response.getStatusCode(), responseLength);
+  
+    	responseHeaders.putAll(response.getHeader());
         OutputStream os = x.getResponseBody();
         
-        if(responseLength != -1)
-        	os.write(response.getText().getBytes());
+    	int responseLength = 0;
+    	if(response.getBody() == null)
+    		responseLength = -1;
+
+        x.sendResponseHeaders(response.getStatusCode(), -1);
+    	
+    	if(responseLength != -1)
+        	os.write(response.getBody().getBytes());
         os.close();
     }
+    */
 }
 
 
@@ -514,13 +810,6 @@ public class JTriplifyServer
 		if(batchSize <= 0)
 			throw new RuntimeException("Invalid argument for batchsize");
 		
-		String prefixModelPath = "Namespaces.ttl";
-		
-		// Setup
-		logger.info("Loading uri namespaces");
-		Model prefixModel = ModelFactory.createDefaultModel();
-		ModelUtil.read(prefixModel, new File(prefixModelPath), "TTL");
-		Map<String, String> prefixMap = prefixModel.getNsPrefixMap();
 		/*
 		String fileName = "NamespaceResolv.ini";
 		File file = new File(fileName);
@@ -530,61 +819,111 @@ public class JTriplifyServer
 		
 		Transformer<String, URI> uriResolver = new URIResolver(file);
 */
+		new MyHandler();
 		
 		
 		logger.info("Connecting to db");
 		Connection conn = PostGISUtil.connectPostGIS(hostName, dbName, userName, passWord);
 
-		logger.info("Loading mapping rules");
-		TagMapper tagMapper = new TagMapper();
-		tagMapper.load(new File("output/LGDMappingRules.xml"));
-		
-		LGDDAO innerDAO = new LGDDAO(conn);
-		
-		LGDRDFDAO dao = new LGDRDFDAO(innerDAO, tagMapper);
-		
-		ServerMethods methods = new ServerMethods(dao, prefixMap);
+		MyHttpHandler myHandler = new MyHttpHandler(); 
+
 		
 		
 		RegexInvocationContainer ric = new RegexInvocationContainer();
 		
+		//initLegacy(myHandler, conn);
+		initCurrent(myHandler, conn);
+		
+		//MyHandler handler = new MyHandler();
+		//handler.setInvocationMap(ric);
+
+		// Start
+		runServer(context, port, backLog, myHandler);
+
+	}
+	
+	
+	
+	
+	private static void initCurrent(MyHttpHandler handler, Connection conn)
+		throws Exception
+	{
+		String prefixModelPath = "Namespaces.2.0.ttl";
+		
+		// Setup
+		logger.info("Loading uri namespaces");
+		Model prefixModel = ModelFactory.createDefaultModel();
+		ModelUtil.read(prefixModel, new File(prefixModelPath), "TTL");
+		Map<String, String> prefixMap = prefixModel.getNsPrefixMap();
+	
+		logger.info("Loading mapping rules");
+		TagMapper tagMapper = new TagMapper();
+		tagMapper.load(new File("output/LGDMappingRules.2.0.xml"));
+		
+		LGDDAO innerDAO = new LGDDAO(conn);
+		
+		ILGDVocab vocab = new LGDVocab();
+		LGDRDFDAO dao = new LGDRDFDAO(innerDAO, tagMapper, vocab);
+		
+		ServerMethods methods = new ServerMethods(dao, prefixMap);
+		
 		Method m;
 
+		// Set up redirects
+		LinkedDataRedirectHandler redirectHandler = new LinkedDataRedirectHandler();
+		handler.getSubHandlers().add(redirectHandler);
 		
 		m = ServerMethods.class.getMethod("getNode", String.class);
-		ric.put(".*node/?([^/?]*)/?(\\?.*)?", new JavaMethodInvocable(m, methods), "$0");
-
-		m = ServerMethods.class.getMethod("getWay", String.class);
-		ric.put(".*way/?([^/?]*)/?(\\?.*)?", new JavaMethodInvocable(m, methods), "$0");
-
-
-		/*
+		redirectHandler.getDataRIC().put("(.*)/triplify/(.*)", new RedirectInvocable("$0/data/$1"), "$0", "$1");
+		redirectHandler.getPageRIC().put("(.*)/triplify/(.*)", new RedirectInvocable("$0/page/$1"), "$0", "$1");
+		//redirectHandler.getDataRIC().put("(.*)/resource/(.*)", new RedirectInvocable("$0/data/$1"), "$0", "$1");
+		//redirectHandler.getPageRIC().put("(.*)/resource/(.*)", new RedirectInvocable("$0/page/$1"), "$0", "$1");
+	
+		
+		// Set up actual data URIs
+		Model2Handler dataHandler = new Model2Handler();
+		handler.getSubHandlers().add(dataHandler);
+		
 		m = ServerMethods.class.getMethod("getNode", String.class);
-		ric.put(".*node([^/?]*)/?(\\?.*)?", new JavaMethodInvocable(m, methods), "$0");
-
+		dataHandler.getRIC().put(".*data/node([^.]*).*", new JavaMethodInvocable(m, methods), "$0");
+	
 		m = ServerMethods.class.getMethod("getWay", String.class);
-		ric.put(".*way([^/?]*)/?(\\?.*)?", new JavaMethodInvocable(m, methods), "$0");
-		*/
+		dataHandler.getRIC().put(".*data/way([^.]*).*", new JavaMethodInvocable(m, methods), "$0");
+		
+		
+		// Set up page URIs
+		Model3Handler pageHandler = new Model3Handler();
+		handler.getSubHandlers().add(pageHandler);
+
+		m = ServerMethods.class.getMethod("getNode", String.class);
+		dataHandler.getRIC().put(".*page/node([^/?]*)/?(\\?.*)?", new JavaMethodInvocable(m, methods), "$0");
+	
+		m = ServerMethods.class.getMethod("getWay", String.class);
+		dataHandler.getRIC().put(".*page/way([^/?]*)/?(\\?.*)?", new JavaMethodInvocable(m, methods), "$0");
+
 		
 		
 		//m = ServerMethods.class.getMethod("getNear", String.class, String.class, String.class);
 		IInvocable nearFn = DefaultCoercions.wrap(methods, "publicGetEntitiesWithinRadius.*");
 		
-		ric.put(".*near/([^,]*),([^/]*)/([^/?]*)/?(\\?.*)?", nearFn, "$0", "$1", "$2", null, null, false);
-		ric.put(".*near/([^,]*),([^/]*)/([^/]*)/([^/=?]*)/?(\\?.*)?", nearFn, "$0", "$1", "$2", "$3", null, false);
-		ric.put(".*near/([^,]*),([^/]*)/([^/]*)/([^=]*)=([^/?]*)/?(\\?.*)?", nearFn, "$0", "$1", "$2", "$3", "$4", false);
-		ric.put(".*near/([^,]*),([^/]*)/([^/]*)/class/([^/?]*)/?(\\?.*)?", nearFn, "$0", "$1", "$2", "$3", "$3", true);
+		pageHandler.getRIC().put(".*/near/([^,]*),([^/]*)/([^/?]*)/?(\\?.*)?", nearFn, "$0", "$1", "$2", null, null, false);
+		pageHandler.getRIC().put(".*/near/([^,]*),([^/]*)/([^/]*)/([^/=?]*)/?(\\?.*)?", nearFn, "$0", "$1", "$2", "$3", null, false);
+		pageHandler.getRIC().put(".*/near/([^,]*),([^/]*)/([^/]*)/([^=]*)=([^/?]*)/?(\\?.*)?", nearFn, "$0", "$1", "$2", "$3", "$4", false);
+		pageHandler.getRIC().put(".*/near/([^,]*),([^/]*)/([^/]*)/class/([^/?]*)/?(\\?.*)?", nearFn, "$0", "$1", "$2", "$3", "$3", true);
 		
 		
 		IInvocable bboxFn = DefaultCoercions.wrap(methods, "publicGetEntitiesWithinRect.*");
-		ric.put(".*near/(-?[^-]+)-(-?[^,]+),(-?[^-]+)-(-?[^/]+)/?(\\?.*)?", bboxFn, "$0", "$1", "$2", "$3", null, null, false);
+		dataHandler.getRIC().put(".*/near/(-?[^-]+)-(-?[^,]+),(-?[^-]+)-(-?[^/]+)/?(\\?.*)?", bboxFn, "$0", "$1", "$2", "$3", null, null, false);
 		
-		MyHandler handler = new MyHandler();
-		handler.setInvocationMap(ric);
-
-		// Start
-		runServer(context, port, backLog, handler);
+		
+		
 	}
+
+	
+	
+	
+	
+	
 
 
 	private static void runServer(String context, int port, int backLog, HttpHandler handler)

@@ -64,9 +64,9 @@ public class WayIdIterator
 	
 	public String buildQuery()
 	{
-		String sql = "SELECT DISTINCT wt2.way_id FROM way_tags wt2 ";
+		String sql = "SELECT DISTINCT wt.way_id FROM way_tags wt ";
 		if(offset != null)
-			sql += "WHERE wt2.way_id > ? ";
+			sql += "WHERE wt.way_id > ? ";
 				
 	
 		if(entityFilterStr != null) {
@@ -75,7 +75,7 @@ public class WayIdIterator
 				? "WHERE "
 				: "AND ";
 			
-			sql += "NOT EXISTS (SELECT filter.way_id FROM way_tags filter WHERE filter.way_id = wt2.way_id AND " + entityFilterStr + ") ";
+			sql += "wt.way_id NOT IN (SELECT filter.way_id FROM way_tags filter WHERE filter.way_id = wt.way_id AND " + entityFilterStr + ") ";
 		}
 	
 		sql += " ORDER BY way_id ASC ";

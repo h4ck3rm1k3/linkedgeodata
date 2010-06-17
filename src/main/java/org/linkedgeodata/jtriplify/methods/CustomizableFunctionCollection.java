@@ -84,7 +84,7 @@ public class CustomizableFunctionCollection
 	{
 		Pair<IInvocable, Float> tmp = FunctionUtil.lookupCheapest(returnType, args, methods, coercions);
 
-		return tmp == null ? null : tmp.getFirst();
+		return tmp == null ? null : tmp.getKey();
 	}
 
 	/**
