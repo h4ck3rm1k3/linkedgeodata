@@ -307,7 +307,7 @@ public class TranslateWikiExporter
 	
 		logger.info("Loading tag mappings");
 		TagMapper tagMapper = new TagMapper();
-		tagMapper.load(new File("LGDMappingRules.xml"));
+		tagMapper.load(new File("output/LGDMappingRules.2.0.xml"));
 		
 		logger.info("Initializing EntityResolver");
 		IEntityResolver resolver = new EntityResolver2(tagMapper);
@@ -358,7 +358,7 @@ public class TranslateWikiExporter
 		if (langCode == null)
 			langCode = detectLangCode(header);
 
-		String targetFileName = langCode + ".nt";
+		String targetFileName = "output/" + langCode + ".nt";
 
 		File targetFile = new File(targetFileName);
 

@@ -1,0 +1,15 @@
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix lgdo:    <http://linkedgeodata.org/ontology/> .
+@prefix lgd:     <http://linkedgeodata.org/triplify/> .
+@prefix wgs84_pos:  <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix georss:  <http://www.georss.org/georss/> .
+
+lgd:node20958816
+      a       lgdo:traffic_signals ;
+      lgdo:hasNodes lgd:way3999575 , lgd:way4004445 , lgd:way29310138 , lgd:way30594609 ;
+      georss:point "53.0984192 8.871013" ;
+      wgs84_pos:lat 53.0984192 ;
+      wgs84_pos:long 8.871013 .
