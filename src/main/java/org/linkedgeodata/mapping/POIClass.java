@@ -22,6 +22,12 @@ package org.linkedgeodata.mapping;
 /**
  * Contains all types of points of interests (POIs) we are
  * interested in.
+ * Provides a maximum distance (maxBox) of the nearest neighbor of the same type.
+ * For example the maxBox of a city is 50 km. This means, if city A and city B are nearest neighbours, the distance between them is at maximum 50km.
+ * The reason for this is, that it helps efficiently querying linkedgeodata with SPARQL for matching purposes.
+ * If you want to match buildings, it would be difficult to match all buildings within 50km but as the maxBox of buildings is much smaller,
+ * It is thus sufficient to match all a building from data source D with all buildings from data source E where the coordinates don't differ more than 
+ * the maxBox. 
  * 
  * @author Jens Lehmann
  *

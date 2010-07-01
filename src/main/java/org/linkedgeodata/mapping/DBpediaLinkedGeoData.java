@@ -20,11 +20,17 @@
 package org.linkedgeodata.mapping;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.RandomAccessFile;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
@@ -60,69 +66,96 @@ import com.wcohen.ss.api.StringDistance;
 public class DBpediaLinkedGeoData {
 
 	private static Logger logger = Logger.getLogger(DBpediaLinkedGeoData.class);
-	
+
 	// chose between nt and dat
 	private static String dbpediaFileFormat = "dat";
 	static File dbpediaFile =  new File("log/DBpedia_POIs." + dbpediaFileFormat);
 	private static boolean regenerateFile = false;
-	
+
 	private static File matchingFile = new File("log/DBpedia_GeoData_Links.nt");
-//	private static File matchingFileMySQL =  new File("log/DBpedia_POIs.csv");	
+	//	private static File matchingFileMySQL =  new File("log/DBpedia_POIs.csv");	
 	private static File missesFile = new File("log/DBpedia_GeoData_Misses.dat");
 	private static double scoreThreshold = 0.85;
 	private static StringDistance distance = new Jaro();
-	
+
 	private static String usedDatatype = "xsd:decimal";
-	
-//	public static SparqlEndpoint dbpediaEndpoint = SparqlEndpoint.getEndpointDBpedia();
+
+	//	public static SparqlEndpoint dbpediaEndpoint = SparqlEndpoint.getEndpointDBpedia();
 	public static SparqlEndpoint dbpediaEndpoint = SparqlEndpoint.getEndpointLOCALDBpedia();
 	private static SPARQLTasks dbpedia = new SPARQLTasks(new Cache("cache/dbpedia_file/"), dbpediaEndpoint);	
 	private static SparqlEndpoint geoDataEndpoint = SparqlEndpoint.getEndpointLOCALGeoData();
-//	private static SPARQLTasks lgd = new SPARQLTasks(new Cache("cache/lgd/"), geoDataEndpoint);
+	//	private static SPARQLTasks lgd = new SPARQLTasks(new Cache("cache/lgd/"), geoDataEndpoint);
 	private static SPARQLTasks lgd = new SPARQLTasks(geoDataEndpoint);	
-	
+
 	private static Map<POIClass, Integer> noMatchPerClass = new HashMap<POIClass, Integer>();
 	private static Map<POIClass, Integer> matchPerClass = new HashMap<POIClass, Integer>();
-	
+
 	private static DecimalFormat df = new DecimalFormat();
 	private static int skipCount = 0;
 	private static int counter = 0;
 	private static int matches = 0;
 	private static Date startDate;
-	
+
 	private static final int totalPOICount = 328232;
-	
+
 	// read in DBpedia ontology such that we perform taxonomy reasoning
-//	private static ReasonerComponent reasoner = TestOntologies.getTestOntology(TestOntology.DBPEDIA_OWL);
-//	private static ClassHierarchy hierarchy = reasoner.getClassHierarchy();
-	
+	//	private static ReasonerComponent reasoner = TestOntologies.getTestOntology(TestOntology.DBPEDIA_OWL);
+	//	private static ClassHierarchy hierarchy = reasoner.getClassHierarchy();
+
 	// true = SPARQL is used for retrieving close points;
 	// false = Triplify spatial extension is used
 	private static boolean useSparqlForGettingNearbyPoints = true;
-	
+
+	/** Checks, if all data was successfully written to the file which is written as a boolean value
+	 * at the beginning of the file.*/
+	private static boolean fileComplete(String filename) throws IOException
+	{
+		if(!new File(filename).exists()) return false;
+		DataInputStream f = new DataInputStream(new FileInputStream(filename));
+		boolean b = f.readBoolean();
+		f.close();
+		return b;
+	}
+
 	public static void main(String[] args) throws IOException {
-		
+
 		Logger.getRootLogger().setLevel(Level.WARN);
-		
+
 		// download all objects having geo-coordinates from DBpedia if necessary
-		if(!dbpediaFile.exists() || regenerateFile) {
+		if(!dbpediaFile.exists() || regenerateFile ) {
 			createDBpediaFile();
 		}
-		
+		if(!fileComplete(dbpediaFile.getAbsolutePath()))
+		{
+			System.out.println("dbpedia file not marked as complete. recreate file? (y/n)");
+			String s = new BufferedReader(new InputStreamReader(System.in)).readLine();
+			if(s.equalsIgnoreCase("y"))
+			{
+				System.out.println("recreating file...");
+				createDBpediaFile();
+			}
+			else
+			{
+				System.out.println("not recreating file");
+			}
+		}
+
 		for(POIClass poiClass : POIClass.values()) {
 			matchPerClass.put(poiClass, 0);
 			noMatchPerClass.put(poiClass, 0);
 		}
-		
+
 		Files.clearFile(matchingFile);
 		Files.clearFile(missesFile);
-		FileOutputStream fos = new FileOutputStream(matchingFile, true);
-		FileOutputStream fosMySQL = new FileOutputStream(matchingFile, true);
-		FileOutputStream fosMiss = new FileOutputStream(missesFile, true);
+		BufferedWriter fos = new BufferedWriter(new FileWriter(matchingFile, true));
+		BufferedWriter fosMySQL = new BufferedWriter(new FileWriter(matchingFile, true));
+		BufferedWriter fosMiss = new BufferedWriter(new FileWriter(missesFile, true));
 		// read file point by point
 		BufferedReader br = new BufferedReader(new FileReader(dbpediaFile));
+		// skip the first byte (the completeness byte)
+		br.skip(1);
 		String line;
-		
+
 		// temporary variables needed while reading in file
 		int itemCount = 0;
 		URI uri = null;
@@ -131,65 +164,65 @@ public class DBpediaLinkedGeoData {
 		int decimalCount = 0;
 		Double geoLat = null;
 		Double geoLong = null;
-		
+
 		startDate = new Date();
 		System.out.println("Start matching process at date " + startDate);
 		while ((line = br.readLine()) != null) {
-			
+			System.out.println(line);
 			if(line.isEmpty()) {
 				DBpediaPoint dp = new DBpediaPoint(uri, label, classes, geoLat, geoLong, decimalCount);
 				POIClass poiClass = dp.getPoiClass();
-				
-//				System.out.println("DBpedia Point: " + dp);
-				
+
+				//				System.out.println("DBpedia Point: " + dp);
+
 				if(poiClass != null) {
 					// find match (we assume there is exactly one match)
 					URI matchURI = findGeoDataMatch(dp);
 					if(matchURI == null) {
 						String missStr = dp.toString() + "\n";
-						fosMiss.write(missStr.getBytes());
+						fosMiss.write(missStr);
 						noMatchPerClass.put(poiClass, noMatchPerClass.get(poiClass)+1);
 					} else {
 						String matchStr = "<" + dp.getUri() + "> <http://www.w3.org/2002/07/owl#sameAs> <" + matchURI + "> .\n";
-						fos.write(matchStr.getBytes());	
-						
+						fos.write(matchStr);	
+
 						// strip off http://dbpedia.org/resource/
 						String dpName = dp.getUri().toString().substring(28);
 						String uriStr = matchURI.toString();
 						String nodeWay = uriStr.contains("/node/") ? "node" : "way";
 						String lgdID = uriStr.substring(uriStr.lastIndexOf("/"));
 						String matchStrMySQL = dpName + "\t" + nodeWay + "\t" + lgdID + "\n";
-						fosMySQL.write(matchStrMySQL.getBytes());
-						
+						fosMySQL.write(matchStrMySQL);
+
 						System.out.println(matchStrMySQL);
-						
+
 						matches++;
 						matchPerClass.put(poiClass, matchPerClass.get(poiClass)+1);
 					}
-//					System.out.println(poiClass);
+					//					System.out.println(poiClass);
 					counter++;
-					
+
 					if(counter % 1000 == 0) {
-//						System.out.println(new Date().toString() + ": " + counter + " points processed. " + matches + " matches found. " + skipCount + " POIs skipped.");
+						//						System.out.println(new Date().toString() + ": " + counter + " points processed. " + matches + " matches found. " + skipCount + " POIs skipped.");
 						printSummary();
 					}
 				} else {
-//					System.out.println(dp.getUri() + " " + dp.getClasses());
+					//					System.out.println(dp.getUri() + " " + dp.getClasses());
 					skipCount++;
 				}
-				
+
 				itemCount = 0;
 			} else {
 				switch(itemCount) {
 				case 0 : uri = URI.create(line); break;
 				case 1 : label = line; break;
 				case 2 : line = line.substring(1, line.length()-1); // strip brackets
-					if(line.length()>1) {
-						classes = line.split(",");
-					} else {
-						classes = new String[0];
-					}
-					break;
+				if(line.length()>1) {
+					classes = line.split(",");
+				} else {
+					classes = new String[0];
+				}
+				break;
 				case 3 : 
 					geoLat = new Double(line);
 					// we avoid "computerized scientific notation" e.g. 9.722222457639873E-4
@@ -208,29 +241,29 @@ public class DBpediaLinkedGeoData {
 					geoLong = 0.0;
 				}
 				}
-							
+
 				itemCount++;
 			}
-			
+
 		}
 		br.close();
 		fos.close();
-		
+
 		printSummary();
 		System.out.println("Finished Successfully.");
 	}
-	
+
 	private static void printSummary() {
 		Date currDate = new Date();
 		System.out.println("Summary at date " + currDate.toString());
-		
+
 		for(POIClass poiClass : POIClass.values()) {
 			int classTests = matchPerClass.get(poiClass)+noMatchPerClass.get(poiClass);
 			double per = (classTests == 0) ? 0 : 100 * matchPerClass.get(poiClass)/(double)(classTests);
 			System.out.println("POI class " + getFixedLengthString(poiClass,15) + ": " + getFixedLengthString(matchPerClass.get(poiClass),5) + " matches found from " + getFixedLengthString(classTests,5) + " POIs = " + df.format(per) + "% match rate" );
 		}
-		
-//		System.out.println("");
+
+		//		System.out.println("");
 		System.out.println("Overall:");
 		int total = skipCount + counter;
 		double skipFreq = 100*skipCount/(double)total;
@@ -238,21 +271,21 @@ public class DBpediaLinkedGeoData {
 		double matchFreq = 100*matches/(double)total;
 		double matchCountFreq = 100*matches/(double)counter;
 		long diffMs = currDate.getTime() - startDate.getTime();
-	    long diffHours = diffMs / (60 * 60 * 1000);
-	    long diffMinutes = diffMs / (60 * 1000) - diffHours * 60;	    
-	    double pointPercentage = 100 * total / (double) totalPOICount;
-	    double pointsPerMs = total / (double) diffMs;
-	    double pointsPerHour = 3600 * 1000 * pointsPerMs;
-	    long estimatedMs = totalPOICount * diffMs / total;
-	    Date estimatedDate = new Date(startDate.getTime() + estimatedMs);
-	    System.out.println("algorithm runtime: " + diffHours + " hours " + diffMinutes + " minutes, estimated to finish at " + estimatedDate);
-	    System.out.println(df.format(pointPercentage) + "% of points skipped or processed = " + df.format(pointsPerHour) + " points per hour");
+		long diffHours = diffMs / (60 * 60 * 1000);
+		long diffMinutes = diffMs / (60 * 1000) - diffHours * 60;	    
+		double pointPercentage = 100 * total / (double) totalPOICount;
+		double pointsPerMs = total / (double) diffMs;
+		double pointsPerHour = 3600 * 1000 * pointsPerMs;
+		long estimatedMs = totalPOICount * diffMs / total;
+		Date estimatedDate = new Date(startDate.getTime() + estimatedMs);
+		System.out.println("algorithm runtime: " + diffHours + " hours " + diffMinutes + " minutes, estimated to finish at " + estimatedDate);
+		System.out.println(df.format(pointPercentage) + "% of points skipped or processed = " + df.format(pointsPerHour) + " points per hour");
 		System.out.println(skipCount + " POIs skipped (cannot be assigned to a POI class) = " + df.format(skipFreq) + "%");
 		System.out.println(counter + " POIs processed = " + df.format(countFreq) + "%");
 		System.out.println(matches + " matches found = " + df.format(matchCountFreq) + "% of processed POIs, " + df.format(matchFreq) + "% of all POIs");
 		System.out.println();
 	}
-	
+
 	private static String getFixedLengthString(Object object, int length) {
 		String str = object.toString();
 		for(int i = str.length(); i < length; i++ ) {
@@ -260,21 +293,22 @@ public class DBpediaLinkedGeoData {
 		}
 		return str;
 	}	
-	
+
 	// downloads information about DBpedia into a separate file
 	private static void createDBpediaFile() throws IOException {
-		
+
 		// use this to set the "chunk size" for getting DBpedia points
 		int limit = 1000;
 		int offset = 0;
-		
+
 		int counter = 0;
 		int points = 0;
-		FileOutputStream fos = new FileOutputStream(dbpediaFile, true);
-		
+		DataOutputStream fos = new DataOutputStream(new FileOutputStream(dbpediaFile, true));
+		fos.writeBoolean(false); // mark as not complete, overwrite with true at the end
+
 		do {
 			counter = 0;
-			
+
 			// query DBpedia for all objects having geo-coordinates
 			String queryStr = "SELECT ?object, ?lat, ?long, ?label, ?type  WHERE {"; 
 			queryStr += "?object <http://www.w3.org/2003/01/geo/wgs84_pos#lat> ?lat .";
@@ -285,34 +319,34 @@ public class DBpediaLinkedGeoData {
 			queryStr += "FILTER (?type LIKE <http://dbpedia.org/ontology/%> || ?type LIKE <http://umbel.org/umbel/sc/%>) .";
 			queryStr += "} }";
 			queryStr += "LIMIT " + limit + " OFFSET " + offset;
-			
-//			SparqlQuery query = new SparqlQuery(queryStr, dbpediaEndpoint);
-//			ResultSet rs = query.send();
+
+			//			SparqlQuery query = new SparqlQuery(queryStr, dbpediaEndpoint);
+			//			ResultSet rs = query.send();
 			ResultSet rs = dbpedia.queryAsResultSet(queryStr);
 			String previousObject = null;
 			String geoLat = "";
 			String geoLong = "";
 			String label = "";
 			Collection<String> types = new LinkedList<String>();
-				
+
 			while(rs.hasNext()) {
 				QuerySolution qs = rs.nextSolution();
-				
+
 				String object = qs.get("object").toString();
-				
+
 				if(object.equals(previousObject)) {
 					// only type has changed compared to previous row
 					types.add(qs.get("type").toString());
-					
+
 					// we are only interested in the most special DBpedia class
-//					NamedClass nc = new NamedClass(typeTmp);
-//					if(hierarchy.getSubClasses(nc).size()==1) {
-						// usually there is just one type assigned in the DBpedia ontology
-//						if(!type.equals("unknown")) {
-//							throw new Error("two different types for " + object + ": " + type + " and " + typeTmp);
-//						}
-//						type = typeTmp;
-//					}						
+					//					NamedClass nc = new NamedClass(typeTmp);
+					//					if(hierarchy.getSubClasses(nc).size()==1) {
+					// usually there is just one type assigned in the DBpedia ontology
+					//						if(!type.equals("unknown")) {
+					//							throw new Error("two different types for " + object + ": " + type + " and " + typeTmp);
+					//						}
+					//						type = typeTmp;
+					//					}						
 				} else {
 					if(previousObject != null) {
 						// we have new a new point => write previous point to file
@@ -327,46 +361,68 @@ public class DBpediaLinkedGeoData {
 						} else {
 							content += previousObject + "\n" + label + "\n" + types.toString().replace(" ", "") + "\n" + geoLat + "\n" + geoLong + "\n\n"; 
 						}
-						
+
 						fos.write(content.getBytes());
-						
+
 					}
-					
+
 					// reset default values
 					types.clear();
-					
+
 					// get new data
 					geoLat = qs.getLiteral("lat").getString();
 					geoLong = qs.getLiteral("long").getString();
 					label = qs.getLiteral("label").getString();
 					if(qs.contains("type")) {
 						types.add(qs.get("type").toString());
-						
+
 						// we are only interested in the most special DBpedia class
-//						NamedClass nc = new NamedClass(typeTmp);
-//						if(hierarchy.getSubClasses(nc).size()==1) {
-							// usually there is just one type assigned in the DBpedia ontology
-//							if(!type.equals("unknown")) {
-//								throw new Error("two different types for " + object + ": " + type + " and " + typeTmp);
-//							}
-//							type = typeTmp;
-//						}							
+						//						NamedClass nc = new NamedClass(typeTmp);
+						//						if(hierarchy.getSubClasses(nc).size()==1) {
+						// usually there is just one type assigned in the DBpedia ontology
+						//							if(!type.equals("unknown")) {
+						//								throw new Error("two different types for " + object + ": " + type + " and " + typeTmp);
+						//							}
+						//							type = typeTmp;
+						//						}							
 					}
-					
+
 					previousObject = object;					
 					points++;
 				}
-				
+
 				counter++;
 			}
-			
+
 			offset += limit;
 			System.out.println(points + " points queried.");
-			
+
 		} while(counter == limit);
-			
-		fos.close();		
+
+		fos.close();
+		System.out.println("finished!");
+		// mark as complete:
+		{
+			RandomAccessFile f = new RandomAccessFile(dbpediaFile,"rw");
+			f.seek(0);
+			f.writeBoolean(true);
+			f.close();
+		}
 	}
+
+
+//	private static double correctLongitude(double geoLong)
+//	{
+//		if(geoLong>180)  return geoLong - 360;
+//		if(geoLong<-180) return geoLong + 360;
+//		return geoLong;
+//	}
+//
+//	private static double correctLatitude(double geoLat)
+//	{
+//		if(geoLong>90) return geoLong - 90;
+//		return geoLong;
+//	}
 	
 	/**
 	 * The main matching method. The matching is directed from DBpedia to LGD,
@@ -377,34 +433,40 @@ public class DBpediaLinkedGeoData {
 	 * @throws IOException Thrown if a query or linked data access does not work.
 	 */
 	public static URI findGeoDataMatch(DBpediaPoint dbpediaPoint) throws IOException {
-		
+
 		// 1 degree is about 111 km (depending on the specific point)
 		double distanceThresholdMeters = dbpediaPoint.getPoiClass().getMaxBox();
 		boolean quiet = true;
-		
+
 		if(useSparqlForGettingNearbyPoints) {
 			// deprecated: direct specification of long/lat difference
-//			double distanceThresholdLat = 0.5;
-//			double distanceThresholdLong = 0.5;
+			//			double distanceThresholdLat = 0.5;
+			//			double distanceThresholdLong = 0.5;
 			// create a box around the point
-//			double minLat2 = dbpediaPoint.getGeoLat() - distanceThresholdLat;
-//			double maxLat2 = dbpediaPoint.getGeoLat() + distanceThresholdLat;
-//			double minLong2 = dbpediaPoint.getGeoLong() - distanceThresholdLong;
-//			double maxLong2 = dbpediaPoint.getGeoLong() + distanceThresholdLong;	
- 
+			//			double minLat2 = dbpediaPoint.getGeoLat() - distanceThresholdLat;
+			//			double maxLat2 = dbpediaPoint.getGeoLat() + distanceThresholdLat;
+			//			double minLong2 = dbpediaPoint.getGeoLong() - distanceThresholdLong;
+			//			double maxLong2 = dbpediaPoint.getGeoLong() + distanceThresholdLong;	
+
 			// Triplify: $1 = latitude, $2 = longitude, $3 = distance in meters
 			// LGD uses integer for lat/long (standard values multiplied by 10000000)
 			// $box='longitude between CEIL(($2-($3/1000)/abs(cos(radians($1))*111))*10000000) and CEIL(($2+($3/1000)/abs(cos(radians($1))*111))*10000000)
 			//	AND latitude between CEIL(($1-($3/1000/111))*10000000) and CEIL(($1+($3/1000/111))*10000000)';
-			
+
+			// 1° = 111km gilt am äquator 
 			double minLat =  dbpediaPoint.getGeoLat()-(distanceThresholdMeters/1000/111);
 			double maxLat =  dbpediaPoint.getGeoLat()+(distanceThresholdMeters/1000/111);
 			double minLong = dbpediaPoint.getGeoLong()-(distanceThresholdMeters/1000)/Math.abs(Math.cos(Math.toRadians(dbpediaPoint.getGeoLat()))*111);
 			double maxLong = dbpediaPoint.getGeoLong()+(distanceThresholdMeters/1000)/Math.abs(Math.cos(Math.toRadians(dbpediaPoint.getGeoLat()))*111);
-			
-//			System.out.println("lat:  " + minLat + " < " + dbpediaPoint.getGeoLat() + " < " + maxLat);
-//			System.out.println("long: " + minLong + " < " + dbpediaPoint.getGeoLong() + " < " + maxLong);
-			
+
+//			minLat = correctLatitude(minLat);
+//			maxLat = correctLatitude(minLat);
+//			minLong = correctLongitude(minLong);
+//			maxLong = correctLongitude(minLong);
+
+			//			System.out.println("lat:  " + minLat + " < " + dbpediaPoint.getGeoLat() + " < " + maxLat);
+			//			System.out.println("long: " + minLong + " < " + dbpediaPoint.getGeoLong() + " < " + maxLong);
+
 			// query all points in the box corresponding to this class
 			// (we make sure that returned points are in the same POI class)
 			String queryStr = "select ?point ?lat ?long ?name ?name_en ?name_int where { ";
@@ -422,30 +484,30 @@ public class DBpediaLinkedGeoData {
 			// (if there is a way, there should also be a point but not vice versa)
 			// => according to OSM data model, ways do not have longitude/latitude, so we should
 			// always match nodes and not ways (TODO: discuss with Soeren)
-//			queryStr += "FILTER (?point LIKE <http://linkedgeodata.org/triplify/node/%>) .";
+			//			queryStr += "FILTER (?point LIKE <http://linkedgeodata.org/triplify/node/%>) .";
 			queryStr += "}";
-			
-//			SparqlQuery query = new SparqlQuery(queryStr, geoDataEndpoint);
-//			ResultSet rs = query.send();
+
+			//			SparqlQuery query = new SparqlQuery(queryStr, geoDataEndpoint);
+			//			ResultSet rs = query.send();
 			ResultSet rs = lgd.queryAsResultSet(queryStr);
-			
+
 			double highestScore = 0;
 			String bestURI = null;
 			String bestLabel = null;
 			while(rs.hasNext()) {
 				QuerySolution qs = rs.nextSolution();
 				String lgdURI = qs.getResource("point").toString();
-				
+
 				// step 1: string similarity
 				double stringSimilarity;
 				// from DBpedia we take the full label and an abbreviated version;
 				// from LGD we take name, name%25en, name, int_name
 				String dbpediaLabel1 = dbpediaPoint.getLabel();
 				String dbpediaLabel2 = dbpediaPoint.getPlainLabel();
-				
-//				System.out.println("label 1: " + dbpediaLabel1);
-//				System.out.println("label 2: " + dbpediaLabel2);
-				
+
+				//				System.out.println("label 1: " + dbpediaLabel1);
+				//				System.out.println("label 2: " + dbpediaLabel2);
+
 				String lgdLabel1 = qs.getLiteral("name").toString();
 				stringSimilarity = distance.score(dbpediaLabel1, lgdLabel1);
 				stringSimilarity = Math.max(distance.score(dbpediaLabel2, lgdLabel1), stringSimilarity);
@@ -461,34 +523,34 @@ public class DBpediaLinkedGeoData {
 					stringSimilarity = distance.score(dbpediaLabel1, lgdLabel3);
 					stringSimilarity = Math.max(distance.score(dbpediaLabel2, lgdLabel3), stringSimilarity);					
 				}				
-				
+
 				// step 2: spatial distance
 				double lat = qs.getLiteral("lat").getDouble();
 				double lon = qs.getLiteral("long").getDouble();
 				double distance = spatialDistance(dbpediaPoint.getGeoLat(), dbpediaPoint.getGeoLong(), lat, lon);
 				double frac = Math.min(1,distance / dbpediaPoint.getPoiClass().getMaxBox());
 				double distanceScore = Math.pow(frac-1,2);
-				
-//				System.out.println(dbpediaPoint.getPoiClass().getMaxBox());
-//				System.out.println(distance);
-//				System.out.println(frac);
-//				System.out.println(distanceScore);
-//				System.out.println("===============");
-				
+
+				//				System.out.println(dbpediaPoint.getPoiClass().getMaxBox());
+				//				System.out.println(distance);
+				//				System.out.println(frac);
+				//				System.out.println(distanceScore);
+				//				System.out.println("===============");
+
 				double score = 0.8 * stringSimilarity + 0.2 * distanceScore;
 				// if there is a node and a way, we prefer the node (better representative) 
 				if(lgdURI.contains("/way/")) {
 					score -= 0.02;
 				}
-				
+
 				if(score > highestScore) {
 					highestScore = score;
 					bestURI = lgdURI;
 					bestLabel = lgdLabel1;
 				}
-				
+
 			}
-			
+
 			if(highestScore > scoreThreshold) {
 				logger.info("Match: " + highestScore + " " + bestLabel + " (" + dbpediaPoint.getUri() + " --> " + bestURI + ")");
 				return URI.create(bestURI);
@@ -496,21 +558,21 @@ public class DBpediaLinkedGeoData {
 				logger.info("No match: " + highestScore + " " + bestLabel + " (" + dbpediaPoint.getUri() + " --/-> " + bestURI + ")");
 				return null;
 			}
-			
-		// use Tripliy spatial extension
+
+			// use Tripliy spatial extension
 		} else {
-			
+
 			if(!quiet)
 				System.out.println(dbpediaPoint.getLabel());
-			
+
 			URL linkedGeoDataURL = new URL("http://linkedgeodata.org/triplify/nearhacked/"+dbpediaPoint.getGeoLat()+","+dbpediaPoint.getGeoLong()+"/"+distanceThresholdMeters);
-			
+
 			double highestScore = 0;
 			String bestURI = null;
 			String bestLabel = null;
 			URLConnection conn = linkedGeoDataURL.openConnection();
 			BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-//			StringBuffer sb = new StringBuffer();
+			//			StringBuffer sb = new StringBuffer();
 			String line="";
 			while ((line = rd.readLine()) != null)
 			{	
@@ -518,11 +580,11 @@ public class DBpediaLinkedGeoData {
 					int first = line.indexOf("\"") + 1;
 					int last = line.lastIndexOf("\"");
 					String label = line.substring(first, last);
-					
+
 					// perform string similarity
 					// (we can use a variety of string matching heuristics)
-//					System.out.println(label);
-//					System.out.println(dbpediaPoint);
+					//					System.out.println(label);
+					//					System.out.println(dbpediaPoint);
 					double score = distance.score(label, dbpediaPoint.getLabel());
 					if(score > highestScore) {
 						highestScore = score;
@@ -530,42 +592,43 @@ public class DBpediaLinkedGeoData {
 						bestLabel = label;
 					}
 				}
-//				sb.append(line);
+				//				sb.append(line);
 			}
 			rd.close();	
-			
+
 			if(!quiet) {
 				System.out.println("  " + linkedGeoDataURL);
 				System.out.println("  " + highestScore);
 				System.out.println("  " + bestURI);
 				System.out.println("  " + bestLabel);				
 			}
-			
+
 			if(highestScore > scoreThreshold) {
-//				System.out.println("  match");
+				//				System.out.println("  match");
 				return URI.create(bestURI);
 			} else {
-//				System.out.println("  no match");
+				//				System.out.println("  no match");
 				return null;
 			}
 		}
 	}
-	
+
+
 	// returns distance between two points in meters
 	public static double spatialDistance(double lat1, double long1, double lat2, double long2) {
-//		$distance='ROUND(1000*1.609 * 3956 * 2 * ASIN(SQRT(  POWER(SIN(($1 - latitude/10000000) * pi()/180 / 2), 2) +
-//			COS($1 * pi()/180) *  COS(latitude/10000000 * pi()/180) *  POWER(SIN(($2 - longitude/10000000) * pi()
-//			/180 / 2), 2) ) )) AS distance';
-//		double distance = 1000 * 1.609 * 3956 * 2 * 
-//			Math.asin(Math.sqrt(Math.pow(Math.sin((lat1 - lat2)/1000000, b)));
-			
+		//		$distance='ROUND(1000*1.609 * 3956 * 2 * ASIN(SQRT(  POWER(SIN(($1 - latitude/10000000) * pi()/180 / 2), 2) +
+		//			COS($1 * pi()/180) *  COS(latitude/10000000 * pi()/180) *  POWER(SIN(($2 - longitude/10000000) * pi()
+		//			/180 / 2), 2) ) )) AS distance';
+		//		double distance = 1000 * 1.609 * 3956 * 2 * 
+		//			Math.asin(Math.sqrt(Math.pow(Math.sin((lat1 - lat2)/1000000, b)));
+
 		// implementation according to http://www.movable-type.co.uk/scripts/latlong.html
 		double r = 6371000; // meters
 		double dLat = Math.toRadians(lat2-lat1);
 		double dLon = Math.toRadians(long2-long1); 
 		double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-		        Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) * 
-		        Math.sin(dLon/2) * Math.sin(dLon/2);
+		Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) * 
+		Math.sin(dLon/2) * Math.sin(dLon/2);
 		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
 		double distance = r * c;
 		return distance;
