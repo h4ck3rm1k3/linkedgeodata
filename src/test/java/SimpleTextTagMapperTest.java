@@ -3,6 +3,7 @@
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.linkedgeodata.jtriplify.mapping.SimpleTextTagMapper;
 import org.linkedgeodata.jtriplify.mapping.TagPattern;
@@ -23,6 +24,7 @@ public class SimpleTextTagMapperTest
 	}
 
 	@Test
+	@Ignore
 	public void testGeoRSSLineMapping()
 		throws Exception
 	{
@@ -40,6 +42,7 @@ public class SimpleTextTagMapperTest
 	}
 
 	@Test
+	@Ignore
 	public void testGeoRSSPolygonMapping()
 		throws Exception
 	{

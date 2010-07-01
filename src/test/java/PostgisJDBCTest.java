@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.linkedgeodata.scripts.LineStringUpdater;
 import org.postgis.Geometry;
@@ -17,6 +18,7 @@ public class PostgisJDBCTest
 	private static final Logger logger = Logger.getLogger(PostgisJDBCTest.class);
 	
 	@Test
+	@Ignore
 	public void test()
 		throws Exception
 	{
