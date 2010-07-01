@@ -49,21 +49,21 @@ public class Files {
 	 * @return Content of the file.
 	 */
 	public static String readFile(File file) throws FileNotFoundException, IOException {
-			
+
 		BufferedReader br = new BufferedReader(new FileReader(file));
 		StringBuffer content = new StringBuffer();
 		try{
-		String line;
-		
-		while ((line = br.readLine()) != null) {
-			content.append(line);
-			content.append(System.getProperty("line.separator"));
-		}
+			String line;
+
+			while ((line = br.readLine()) != null) {
+				content.append(line);
+				content.append(System.getProperty("line.separator"));
+			}
 		}finally{br.close();}
 		return content.toString();
-		
+
 	}
-	
+
 	/**
 	 * Reads in a file as Array
 	 * 
@@ -77,40 +77,40 @@ public class Files {
 		List<String> l = new ArrayList<String>();
 		while (st.hasMoreTokens()) {
 			l.add((String) st.nextToken());
-			
+
 		}
-		
+
 		return l.toArray(new String[l.size()]);
-		
+
 	}
-	
+
 	/**
 	 * writes a serializable Object to a File.
 	 * @param obj
 	 * @param file
 	 */
 	public static void writeObjectToFile(Object obj, File file){
-		
+
 		ObjectOutputStream oos = null;
 		try{
 			FileOutputStream fos = new FileOutputStream(file);
 			BufferedOutputStream bos = new BufferedOutputStream(fos);
 			oos = new ObjectOutputStream(bos);
-			
+
 			oos.writeObject(obj);
 			oos.flush();
 			oos.close();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}finally{
+			try{
+				oos.close();
 			}catch (Exception e) {
-				 e.printStackTrace();
-			}finally{
-				try{
-					oos.close();
-				}catch (Exception e) {
-					 e.printStackTrace();
-				}
+				e.printStackTrace();
 			}
+		}
 	}
-	
+
 	public static Object readObjectfromFile( File file){
 		ObjectInputStream ois = null;
 		try{
@@ -119,18 +119,18 @@ public class Files {
 			ois = new ObjectInputStream(bis);
 			return ois.readObject();
 		}catch (Exception e) {
-			 e.printStackTrace();
+			e.printStackTrace();
 		}finally{
 			try {
 				ois.close();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
+
 		}
 		return null;
 	}
-		
+
 
 	/**
 	 * Creates a new file with the given content or replaces the content of a
@@ -142,11 +142,11 @@ public class Files {
 	 *            Content of the file.
 	 */
 	public static void createFile(File file, String content) {
-		
+
 		try {
 			FileOutputStream fos = new FileOutputStream(file);
 			fos.write(content.getBytes());
-			
+
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			if(debug){System.exit(0);}
@@ -177,23 +177,23 @@ public class Files {
 			if(debug){System.exit(0);}
 		}
 	}
-	
+
 	public static void clearFile(File file) {
 		try{
-		createFile(file, "");
+			createFile(file, "");
 		}catch (Exception e) {
 			e.printStackTrace();
 			if(debug){System.exit(0);}
 		}
 	}
-	
-	
+
+
 	public static void deleteFile(String file) {
 		deleteFile(new File(file));
 	}
-	
+
 	public static void deleteFile(File file) {
-		
+
 		try{
 			file.delete();
 		}catch (Exception e) {
@@ -201,19 +201,39 @@ public class Files {
 			if(debug){System.exit(0);}
 		}
 	}
-	
+
+//	public String parentDir(String dir)
+//	{
+//		if(!dir.contains(File.pathSeparator))
+//		{
+//			return dir;
+//		}
+//		
+//		return dir.substring(0,dir.lastIndexOf(File.pathSeparator));
+//	}
+
 	public static void mkdir(String dir){
 		if (!new File(dir).exists()) {
+			// create eventual not existing parent directories
+			String parentDir = new File(dir).getParent();
+			if(parentDir!=null&&!new File(parentDir).exists()) mkdir(new File(dir).getParent());
 			try{
-			new File(dir).mkdir();
+				boolean success = new File(dir).mkdir();
+				if(!success) 
+					if(debug)
+					{
+						throw new RuntimeException("Directory <"+dir+"> could not be created");
+					}
+					else
+						System.err.println("Directory <"+dir+"> could not be created");
 			}catch (Exception e) {
 				e.printStackTrace();
 				if(debug){System.exit(0);}
 				// this should not be a show stopper
-			}		
+			}
 		}
 	}
-	
+
 	/**
 	 * deletes all Files in the dir, does not delete the dir itself
 	 * no warning is issued, use with care, cannot undelete files
@@ -221,22 +241,22 @@ public class Files {
 	 * @param dir without a separator e.g. tmp/dirtodelete
 	 */
 	public static void deleteDir(String dir) {
-		
-			File f = new File(dir);
-			
-			if(debug){
-				System.out.println(dir);
-				System.exit(0);
-			}
-			
-		    String[] files = f.list();
-		   
-		    for (int i = 0; i < files.length; i++) {
-		    	
-		    	Files.deleteFile(new File(dir+File.separator+files[i]));
-		    }     
+
+		File f = new File(dir);
+
+		if(debug){
+			System.out.println(dir);
+			System.exit(0);
+		}
+
+		String[] files = f.list();
+
+		for (int i = 0; i < files.length; i++) {
+
+			Files.deleteFile(new File(dir+File.separator+files[i]));
+		}     
 	}
-	
+
 	/**
 	 * lists all files in a directory
 	 * 
@@ -245,19 +265,19 @@ public class Files {
 	 * @return a string array with filenames
 	 */
 	public static String[] listDir(String dir) {
-		
-			File f = new File(dir);
-			
-			if(debug){
-				System.out.println(dir);
-				System.exit(0);
-			}
-			
-		    return f.list();
-		   
-		   
+
+		File f = new File(dir);
+
+		if(debug){
+			System.out.println(dir);
+			System.exit(0);
+		}
+
+		return f.list();
+
+
 	}
-	
+
 	/**
 	 * copies all files in dir to "tmp/"+System.currentTimeMillis()
 	 * @param dir the dir to be backupped
@@ -267,26 +287,26 @@ public class Files {
 		String backupDir = "tmp/"+System.currentTimeMillis();
 		mkdir("tmp");
 		mkdir(backupDir);
-		
+
 		if(debug){
 			System.out.println(dir);
 			System.exit(0);
 		}
-		
-	    String[] files = f.list();
-	   try{
-	    for (int i = 0; i < files.length; i++) {
-	    	File target = new File(dir+File.separator+files[i]);
-	    	if(!target.isDirectory()){
-	    		String s = readFile(target);
-	    		createFile(new File(backupDir+File.separator+files[i]), s);
-	    	}
-	    }   
-	   }catch (Exception e) {
-		e.printStackTrace();
+
+		String[] files = f.list();
+		try{
+			for (int i = 0; i < files.length; i++) {
+				File target = new File(dir+File.separator+files[i]);
+				if(!target.isDirectory()){
+					String s = readFile(target);
+					createFile(new File(backupDir+File.separator+files[i]), s);
+				}
+			}   
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
-	}
-	
-	
+
+
 
 }
