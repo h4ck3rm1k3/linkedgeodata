@@ -98,6 +98,9 @@ public class NodeDAO
 	public Collection<Node> getNodes(Collection<Long> ids, boolean skipUntagged, String tagFilterStr)
 		throws SQLException
 	{
+		if(ids == null)
+				throw new NullPointerException();
+		
 		// First fetch way-tags - so we can skip ways that do not have any tags
 		MultiMap<Long, Tag> idToTags = getTags(ids, tagFilterStr);
 	

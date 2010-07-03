@@ -32,6 +32,7 @@ import java.util.Set;
 import javax.xml.bind.JAXBException;
 
 import org.linkedgeodata.jtriplify.mapping.IOneOneTagMapper;
+import org.linkedgeodata.jtriplify.mapping.simple.ISimpleOneOneTagMapper;
 import org.linkedgeodata.util.SerializationUtil;
 import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 
@@ -42,7 +43,9 @@ public class TagMapper
 //	implements ITagMapper
 {
 	// k -> v -> property
-	private Map<String, Map<String, Set<IOneOneTagMapper>>> kvp = new HashMap<String, Map<String, Set<IOneOneTagMapper>>>();
+	private Map<String, Map<String, Set<ISimpleOneOneTagMapper>>> kvp = new HashMap<String, Map<String, Set<ISimpleOneOneTagMapper>>>();
+	
+	private List<IOneOneTagMapper> complexMappers = new ArrayList<IOneOneTagMapper>();
 	
 	public TagMapper()
 	{
@@ -56,7 +59,7 @@ public class TagMapper
 			SerializationUtil.deserializeXML(file);
 
 		for(IOneOneTagMapper item : list) {
-			index(item);
+			add(item);
 		}
 	}
 	
@@ -72,47 +75,56 @@ public class TagMapper
 	{
 		List<IOneOneTagMapper> list = new ArrayList<IOneOneTagMapper>();
 		
-		for(Map<String, Set<IOneOneTagMapper>> a : kvp.values()) {
-			for(Set<IOneOneTagMapper> b : a.values()) {
+		for(Map<String, Set<ISimpleOneOneTagMapper>> a : kvp.values()) {
+			for(Set<ISimpleOneOneTagMapper> b : a.values()) {
 				list.addAll(b);
 			}
 		}
 		
+		list.addAll(complexMappers);
+		
 		return list;
 	}
 	
-	public  void index(IOneOneTagMapper tagMapper)
+	public void add(IOneOneTagMapper item) {
+		if(item instanceof ISimpleOneOneTagMapper)
+			index((ISimpleOneOneTagMapper)item);
+		else
+			complexMappers.add(item);
+	}
+	
+	public  void index(ISimpleOneOneTagMapper tagMapper)
 	{
 		String k = tagMapper.getTagPattern().getKey();
 		String v = tagMapper.getTagPattern().getValue();
 		
-		Map<String, Set<IOneOneTagMapper>> m = kvp.get(k);
+		Map<String, Set<ISimpleOneOneTagMapper>> m = kvp.get(k);
 		if(m == null) {
-			m = new HashMap<String, Set<IOneOneTagMapper>>();
+			m = new HashMap<String, Set<ISimpleOneOneTagMapper>>();
 			kvp.put(k, m);
 		}
 		
-		Set<IOneOneTagMapper> ps = m.get(v);
+		Set<ISimpleOneOneTagMapper> ps = m.get(v);
 		if(ps == null) {
-			ps = new HashSet<IOneOneTagMapper>();
+			ps = new HashSet<ISimpleOneOneTagMapper>();
 			m.put(v, ps);
 		}
 		
 		ps.add(tagMapper);
 	}
 
-	public Set<IOneOneTagMapper> lookup(String k, String v)
+	public Set<ISimpleOneOneTagMapper> lookup(String k, String v)
 	{
 		// check if a mapping for k exits
 		for(String kk : new String[]{k, null}) {
-			Map<String, Set<IOneOneTagMapper>> x = kvp.get(kk);
+			Map<String, Set<ISimpleOneOneTagMapper>> x = kvp.get(kk);
 		
 			if(x == null)
 				continue;
 			
 			for(String vv : new String[]{v, null})
 			{
-				Set<IOneOneTagMapper> y = x.get(vv);
+				Set<ISimpleOneOneTagMapper> y = x.get(vv);
 				
 				if(y == null)
 					continue;
@@ -126,9 +138,17 @@ public class TagMapper
 	
 	public Model map(String subject, Tag tag, Model model)
 	{
-		Set<IOneOneTagMapper> candidates = lookup(tag.getKey(), tag.getValue());
-		if(candidates == null)
-			return null;
+		List<IOneOneTagMapper> candidates = new ArrayList<IOneOneTagMapper>();
+	
+		Set<ISimpleOneOneTagMapper> x = lookup(tag.getKey(), tag.getValue());
+		
+		if(x != null)
+			candidates.addAll(x);
+
+		candidates.addAll(complexMappers);
+		
+		//if(candidates == null)
+		//	return null;
 		
 		// Only set the result to non-null if there was at least some partial result
 		Model result = null;

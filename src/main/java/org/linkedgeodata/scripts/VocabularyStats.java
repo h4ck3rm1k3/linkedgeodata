@@ -27,11 +27,11 @@ import org.apache.log4j.PropertyConfigurator;
 import org.linkedgeodata.core.LGDVocab;
 import org.linkedgeodata.jtriplify.TagEntityMap;
 import org.linkedgeodata.jtriplify.TagMapper;
-import org.linkedgeodata.jtriplify.mapping.IOneOneTagMapper;
-import org.linkedgeodata.jtriplify.mapping.SimpleClassTagMapper;
-import org.linkedgeodata.jtriplify.mapping.SimpleDataTypeTagMapper;
-import org.linkedgeodata.jtriplify.mapping.SimpleTextTagMapper;
-import org.linkedgeodata.jtriplify.mapping.TagPattern;
+import org.linkedgeodata.jtriplify.mapping.simple.ISimpleOneOneTagMapper;
+import org.linkedgeodata.jtriplify.mapping.simple.SimpleClassTagMapper;
+import org.linkedgeodata.jtriplify.mapping.simple.SimpleDataTypeTagMapper;
+import org.linkedgeodata.jtriplify.mapping.simple.SimpleTagPattern;
+import org.linkedgeodata.jtriplify.mapping.simple.SimpleTextTagMapper;
 import org.linkedgeodata.util.ModelUtil;
 import org.linkedgeodata.util.PostGISUtil;
 import org.linkedgeodata.util.SerializationUtil;
@@ -61,7 +61,7 @@ class VocabularyStats
 	private Set<String> keys = new HashSet<String>();
 	                 
 	
-	private List<IOneOneTagMapper> tagMappers = new ArrayList<IOneOneTagMapper>();
+	private List<ISimpleOneOneTagMapper> tagMappers = new ArrayList<ISimpleOneOneTagMapper>();
 	                                    
 	private Map<String, String> keyToLanguageMap = new HashMap<String, String>();
 	private Model model = ModelFactory.createDefaultModel();
@@ -82,7 +82,7 @@ class VocabularyStats
 	public void registerDatatypeProperty(String k, String dataType)
 	{
 		String resource = keyToURI(k);
-		SimpleDataTypeTagMapper tagMapper = new SimpleDataTypeTagMapper(resource, new TagPattern(k, null), dataType, false);
+		SimpleDataTypeTagMapper tagMapper = new SimpleDataTypeTagMapper(resource, new SimpleTagPattern(k, null), dataType, false);
 		tagMappers.add(tagMapper);		
 	}
 
@@ -213,7 +213,7 @@ class VocabularyStats
 	{
 		String resource = keyToURI(prefix);
 		
-		SimpleTextTagMapper tagMapper = new SimpleTextTagMapper(resource, new TagPattern(k, null), lang, false);
+		SimpleTextTagMapper tagMapper = new SimpleTextTagMapper(resource, new SimpleTagPattern(k, null), lang, false);
 		
 		tagMappers.add(tagMapper);
 	}
@@ -223,7 +223,7 @@ class VocabularyStats
 	{
 		String resource = keyToURI(k);
 
-		SimpleClassTagMapper tagMapper = new SimpleClassTagMapper(resource, new TagPattern(k, null), false);
+		SimpleClassTagMapper tagMapper = new SimpleClassTagMapper(resource, new SimpleTagPattern(k, null), false);
 		tagMappers.add(tagMapper);		
 	}
 
@@ -237,7 +237,7 @@ class VocabularyStats
 
 		String subClass = keyToURI(subClassStr);
 
-		SimpleClassTagMapper tagMapper = new SimpleClassTagMapper(subClass, new TagPattern(k, v), false);
+		SimpleClassTagMapper tagMapper = new SimpleClassTagMapper(subClass, new SimpleTagPattern(k, v), false);
 		tagMappers.add(tagMapper);
 	}
 
@@ -534,7 +534,7 @@ class VocabularyStats
 		
 		
 		// Rule for defaulting everthing to text-datatype properties
-		TagPattern tagPattern = new TagPattern((String)null, (String)null);
+		SimpleTagPattern tagPattern = new SimpleTagPattern((String)null, (String)null);
 		SimpleTextTagMapper tagMapper = new SimpleTextTagMapper(LGDVocab.RESOURCE, tagPattern, null, false);
 		tagMappers.add(tagMapper);
 		

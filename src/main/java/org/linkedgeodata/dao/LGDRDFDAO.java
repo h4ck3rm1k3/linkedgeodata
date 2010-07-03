@@ -33,8 +33,8 @@ import org.linkedgeodata.core.ILGDVocab;
 import org.linkedgeodata.core.LGDVocab;
 import org.linkedgeodata.core.OSMEntityType;
 import org.linkedgeodata.jtriplify.TagMapper;
-import org.linkedgeodata.jtriplify.mapping.SimpleNodeToRDFTransformer;
-import org.linkedgeodata.jtriplify.mapping.SimpleWayToRDFTransformer;
+import org.linkedgeodata.jtriplify.mapping.simple.SimpleNodeToRDFTransformer;
+import org.linkedgeodata.jtriplify.mapping.simple.SimpleWayToRDFTransformer;
 import org.linkedgeodata.util.ITransformer;
 import org.openstreetmap.osmosis.core.domain.v0_6.Node;
 import org.openstreetmap.osmosis.core.domain.v0_6.Way;
@@ -73,7 +73,7 @@ public class LGDRDFDAO
 			for(Long wayId : entry.getValue()) {
 				model.add(
 						model.createResource(vocab.createOSMNodeURI(entry.getKey())),
-						model.createProperty(vocab.getHasNodesPred()),
+						model.createProperty(vocab.getMemberOfWayPred()),
 						model.createResource(vocab.createOSMWayURI(wayId))
 						);
 			}

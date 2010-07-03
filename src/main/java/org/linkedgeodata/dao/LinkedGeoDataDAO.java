@@ -32,7 +32,7 @@ import org.linkedgeodata.core.OSMEntityType;
 import org.linkedgeodata.jtriplify.LGDOSMEntityBuilder;
 import org.linkedgeodata.jtriplify.TagMapper;
 import org.linkedgeodata.jtriplify.TriplifyUtil;
-import org.linkedgeodata.jtriplify.mapping.SimpleNodeToRDFTransformer;
+import org.linkedgeodata.jtriplify.mapping.simple.SimpleNodeToRDFTransformer;
 import org.linkedgeodata.util.ExceptionUtil;
 import org.linkedgeodata.util.SQLUtil;
 import org.openstreetmap.osmosis.core.domain.v0_6.Node;

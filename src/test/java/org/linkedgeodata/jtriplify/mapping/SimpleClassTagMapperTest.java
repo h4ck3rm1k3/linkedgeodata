@@ -9,6 +9,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.linkedgeodata.jtriplify.TagMapper;
 import org.linkedgeodata.jtriplify.TripleUtil;
+import org.linkedgeodata.jtriplify.mapping.simple.ISimpleOneOneTagMapper;
+import org.linkedgeodata.jtriplify.mapping.simple.SimpleClassTagMapper;
+import org.linkedgeodata.jtriplify.mapping.simple.SimpleDataTypeTagMapper;
+import org.linkedgeodata.jtriplify.mapping.simple.SimpleTagPattern;
 import org.linkedgeodata.util.ModelUtil;
 import org.linkedgeodata.util.SerializationUtil;
 import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
@@ -38,7 +42,7 @@ public class SimpleClassTagMapperTest
 	{
 		String classURI = "http://linkedgeodata.org/AirportTower";
 
-		SimpleClassTagMapper mapper = new SimpleClassTagMapper(classURI, new TagPattern("aerial", "tower"), false);
+		SimpleClassTagMapper mapper = new SimpleClassTagMapper(classURI, new SimpleTagPattern("aerial", "tower"), false);
 	
 		
 		
@@ -64,7 +68,7 @@ public class SimpleClassTagMapperTest
 	{
 		String classURI = "http://linkedgeodata.org/arial";
 		
-		SimpleClassTagMapper mapper = new SimpleClassTagMapper(classURI, new TagPattern("aerial", null), false);
+		SimpleClassTagMapper mapper = new SimpleClassTagMapper(classURI, new SimpleTagPattern("aerial", null), false);
 	
 		
 		Model model = mapper.map("http://s.org", new Tag("aerial", "tower"), null);
@@ -90,7 +94,7 @@ public class SimpleClassTagMapperTest
 
 		String classURI = "http://linkedgeodata.org/arial";
 		
-		Object obj = new SimpleClassTagMapper(classURI, new TagPattern("aerial", null), false);
+		Object obj = new SimpleClassTagMapper(classURI, new SimpleTagPattern("aerial", null), false);
 
 		SerializationUtil.serializeXML(obj, new File("/tmp/Mapper.xml"));
 		Object x = SerializationUtil.deserializeXML(new File("/tmp/Mapper.xml"));
@@ -110,7 +114,7 @@ public class SimpleClassTagMapperTest
 		//TypeMapper typeMapper = new TypeMapper();
 		//RDFDatatype dt = typeMapper.getSafeTypeByName();
 		
-		IOneOneTagMapper obj = new SimpleDataTypeTagMapper(classURI, new TagPattern("a", "b"), XSD.xint.toString(), false);
+		ISimpleOneOneTagMapper obj = new SimpleDataTypeTagMapper(classURI, new SimpleTagPattern("a", "b"), XSD.xint.toString(), false);
 
 		TagMapper tm = new TagMapper();
 		tm.index(obj);

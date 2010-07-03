@@ -22,17 +22,17 @@ package org.linkedgeodata.scripts;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.net.URLEncoder;
 import java.util.List;
 import java.util.Set;
 
 import org.linkedgeodata.jtriplify.TagMapper;
 import org.linkedgeodata.jtriplify.mapping.IOneOneTagMapper;
-import org.linkedgeodata.jtriplify.mapping.IOneOneTagMapperVisitor;
-import org.linkedgeodata.jtriplify.mapping.SimpleClassTagMapper;
-import org.linkedgeodata.jtriplify.mapping.SimpleDataTypeTagMapper;
-import org.linkedgeodata.jtriplify.mapping.SimpleObjectPropertyTagMapper;
-import org.linkedgeodata.jtriplify.mapping.SimpleTextTagMapper;
+import org.linkedgeodata.jtriplify.mapping.simple.ISimpleOneOneTagMapper;
+import org.linkedgeodata.jtriplify.mapping.simple.ISimpleOneOneTagMapperVisitor;
+import org.linkedgeodata.jtriplify.mapping.simple.SimpleClassTagMapper;
+import org.linkedgeodata.jtriplify.mapping.simple.SimpleDataTypeTagMapper;
+import org.linkedgeodata.jtriplify.mapping.simple.SimpleObjectPropertyTagMapper;
+import org.linkedgeodata.jtriplify.mapping.simple.SimpleTextTagMapper;
 import org.linkedgeodata.util.ModelUtil;
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -43,7 +43,7 @@ import com.hp.hpl.jena.vocabulary.RDF;
 import com.hp.hpl.jena.vocabulary.RDFS;
 
 class OntologyGeneratorVistor
-	implements IOneOneTagMapperVisitor<Void>
+	implements ISimpleOneOneTagMapperVisitor<Void>
 {
 	private Model model;
 	private TagMapper tagMapper;
@@ -71,8 +71,8 @@ class OntologyGeneratorVistor
 			if(m.getTagPattern().getValue() != null) {
 				
 				// Check if there might be a parent class
-				Set<IOneOneTagMapper> candidates = tagMapper.lookup(m.getTagPattern().getKey(), null);
-				for(IOneOneTagMapper item : candidates) {
+				Set<ISimpleOneOneTagMapper> candidates = tagMapper.lookup(m.getTagPattern().getKey(), null);
+				for(ISimpleOneOneTagMapper item : candidates) {
 					if(item instanceof SimpleClassTagMapper) {
 						//SimpleClassTagMapper classMapper = (SimpleClassTagMapper)item;
 						Resource parentClass = model.createResource(item.getResource());
@@ -139,7 +139,8 @@ public class TagMapperOntologyGenerator
 		OntologyGeneratorVistor visitor = new OntologyGeneratorVistor(result, tagMapper);
 		
 		for(IOneOneTagMapper item : list) {
-			item.accept(visitor);
+			if(item instanceof ISimpleOneOneTagMapper)
+				((ISimpleOneOneTagMapper)item).accept(visitor);
 		}
 		
 		FileOutputStream out = new FileOutputStream(new File("output/Schema.ttl"));

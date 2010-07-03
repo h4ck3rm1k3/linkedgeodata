@@ -15,7 +15,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <http://www.gnu.h sllorg/licenses/>.
  *
  */ 
 package org.linkedgeodata.scripts;
@@ -24,12 +24,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,7 +37,6 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.Options;
-import org.apache.commons.collections15.MultiMap;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.linkedgeodata.core.ILGDVocab;
@@ -47,20 +46,108 @@ import org.linkedgeodata.dao.LGDRDFDAO;
 import org.linkedgeodata.dump.NodeIdIterator;
 import org.linkedgeodata.dump.WayIdIterator;
 import org.linkedgeodata.jtriplify.TagMapper;
-import org.linkedgeodata.jtriplify.mapping.SimpleNodeToRDFTransformer;
-import org.linkedgeodata.jtriplify.mapping.SimpleWayToRDFTransformer;
-import org.linkedgeodata.util.ITransformer;
+import org.linkedgeodata.util.ExceptionUtil;
 import org.linkedgeodata.util.ModelUtil;
 import org.linkedgeodata.util.PostGISUtil;
 import org.linkedgeodata.util.stats.SimpleStatsTracker;
-import org.openstreetmap.osmosis.core.domain.v0_6.Node;
-import org.openstreetmap.osmosis.core.domain.v0_6.Way;
+import org.springframework.util.StopWatch;
 
-import com.hp.hpl.jena.rdf.model.AnonId;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.vocabulary.RDF;
+
+
+abstract class ResolveTask
+	implements Runnable
+{
+	private static Logger logger = Logger.getLogger(ResolveTask.class);
+	
+	protected LGDRDFDAO dao;
+	protected Collection<Long> ids;
+	protected String tagFilter;
+	protected boolean skipUntagged;
+	protected Model model;
+	protected OutputStream out;
+	
+	// use a common tracker instead I'd say
+	private SimpleStatsTracker tracker = new SimpleStatsTracker();
+	
+	public ResolveTask(Collection<Long> ids, LGDRDFDAO dao, boolean skipUntagged, String tagFilter, OutputStream out)
+	{
+		this.ids = ids;
+		this.dao = dao;
+		this.skipUntagged = skipUntagged;
+		this.tagFilter = tagFilter;
+		this.out = out;
+		this.model = ModelFactory.createDefaultModel();
+	}
+	
+	public void setIds(Collection<Long> ids)
+	{
+		this.ids = ids;
+	}
+	
+	
+	@Override
+	public void run()
+	{
+		try {
+			myRun();
+		} catch (Exception e) {
+			logger.error(ExceptionUtil.toString(e));
+		}
+	}
+	
+	public void myRun()
+		throws Exception
+	{
+		int count = doWork();// 
+
+		tracker.update(count);			
+		//if(model.size() > 10000) {
+			LGDDumper.writeModel(model, out);
+		//}
+	}
+	
+	protected abstract int doWork()
+		throws Exception;	
+}
+
+
+class NodeResolveTask
+	extends ResolveTask
+{
+	public NodeResolveTask(Collection<Long> ids, LGDRDFDAO dao, boolean skipUntagged,
+			String tagFilter, OutputStream out)
+	{
+		super(ids, dao, skipUntagged, tagFilter, out);
+	}
+
+	@Override
+	protected int doWork()
+		throws Exception
+	{
+		return dao.resolveNodes(model, ids, skipUntagged, tagFilter);
+	}
+}
+
+
+class WayResolveTask
+	extends ResolveTask
+{
+	public WayResolveTask(Collection<Long> ids, LGDRDFDAO dao, boolean skipUntagged,
+			String tagFilter, OutputStream out)
+	{
+		super(ids, dao, skipUntagged, tagFilter, out);
+	}
+
+	@Override
+	protected int doWork()
+		throws Exception
+	{
+		return dao.resolveWays(model, ids, skipUntagged, tagFilter);
+	}
+}
+
 
 
 
@@ -105,8 +192,8 @@ public class LGDDumper
 		//tagFilter = null;
 
 		
-		String mappingRulesPath = "output/LGDMappingRules.xml";
-		String rootModelPath    = "Namespaces.ttl";
+		String mappingRulesPath = "output/LGDMappingRules.2.0.xml";
+		String rootModelPath    = "Namespaces.2.0.ttl";
 		
 		
 		logger.info("ExportNodeTags: " + exportNodeTags);
@@ -122,7 +209,7 @@ public class LGDDumper
 		Map<String, String> prefixMap = baseModel.getNsPrefixMap();
 		//System.exit(0);
 		
-		logger.info("Loading mapping rules");
+		logger.info("Loading mapping rules: " + mappingRulesPath);
 		TagMapper tagMapper = new TagMapper();
 		tagMapper.load(new File(mappingRulesPath));
 
@@ -141,6 +228,9 @@ public class LGDDumper
 
 		baseModel.write(out, "N3");
 
+		
+		StopWatch sw = new StopWatch();
+		sw.start();
 
 		if(exportNodeTags) {		
 			//NodeTagIteratorDenorm1 it = new NodeTagIteratorDenorm1(conn, batchSize);
@@ -155,10 +245,39 @@ public class LGDDumper
 			runWayTags(it, tagFilter, prefixMap, dao, out);
 		}
 		
-		out.flush();
-		out.close();
+		
+		executor.shutdown();
+		executor.awaitTermination(60, TimeUnit.HOURS);
+		
+		sw.stop();
+		logger.info("Time taken: " + sw.getTotalTimeSeconds());
+		
+		//System.exit(0);
+		//out.flush();
+		//out.close();
 	}
 
+	
+	private static ExecutorService executor = Executors.newFixedThreadPool(2);
+	//private static ExecutorService executor = Executors.newSingleThreadExecutor();
+	
+	
+	public static void runNodeTags2(Iterator<Collection<Long>> it, String tagFilter, Map<String, String> prefixMap, LGDRDFDAO dao, OutputStream out)
+		throws Exception
+	{	
+		Model model = ModelFactory.createDefaultModel();
+		model.setNsPrefixes(prefixMap);
+	
+		while(it.hasNext()) {
+			Collection<Long> ids = it.next();
+
+			
+			ResolveTask task = new NodeResolveTask(ids, dao, true, tagFilter, out);
+			executor.submit(task);
+		}		
+	}
+
+	
 	public static void runNodeTags(Iterator<Collection<Long>> it, String tagFilter, Map<String, String> prefixMap, LGDRDFDAO dao, OutputStream out)
 		throws Exception
 	{	
@@ -169,18 +288,16 @@ public class LGDDumper
 	
 		while(it.hasNext()) {
 			Collection<Long> ids = it.next();
-
-			int count = dao.resolveNodes(model, ids, true, tagFilter);
+	
+			int count = dao.resolveNodes(model, ids, true, tagFilter);			
+			tracker.update(count);
 			
-			tracker.update(count);			
 			if(model.size() > 10000) {
 				writeModel(model, out);
 			}
 		}
 		writeModel(model, out);
-		
 	}
-
 	
 	public static void runWayTags(Iterator<Collection<Long>> it, String tagFilter, Map<String, String> prefixMap, LGDRDFDAO dao, OutputStream out)
 		throws Exception
@@ -205,7 +322,7 @@ public class LGDDumper
 
 	private static Pattern directivePattern = Pattern.compile("^@.*$.?\\n?", Pattern.MULTILINE);
 
-	private static void writeModel(Model model, OutputStream out)
+	public static synchronized void writeModel(Model model, OutputStream out)
 		throws IOException
 	{
 		if(model.isEmpty())

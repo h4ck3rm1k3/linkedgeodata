@@ -5,8 +5,8 @@ import org.apache.log4j.PropertyConfigurator;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.linkedgeodata.jtriplify.mapping.SimpleTextTagMapper;
-import org.linkedgeodata.jtriplify.mapping.TagPattern;
+import org.linkedgeodata.jtriplify.mapping.simple.SimpleTagPattern;
+import org.linkedgeodata.jtriplify.mapping.simple.SimpleTextTagMapper;
 import org.linkedgeodata.util.ModelUtil;
 import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 
@@ -30,7 +30,7 @@ public class SimpleTextTagMapperTest
 	{
 		SimpleTextTagMapper m = new SimpleTextTagMapper(
 				"http://www.georss.org/georss/line",
-				new TagPattern("@@geoRSSLine", null),
+				new SimpleTagPattern("@@geoRSSLine", null),
 				null,
 				false);
 		
@@ -48,7 +48,7 @@ public class SimpleTextTagMapperTest
 	{
 		SimpleTextTagMapper m = new SimpleTextTagMapper(
 				"http://www.georss.org/georss/polygon",
-				new TagPattern("@@geoRSSPolygon", null),
+				new SimpleTagPattern("@@geoRSSPolygon", null),
 				null,
 				false);
 		

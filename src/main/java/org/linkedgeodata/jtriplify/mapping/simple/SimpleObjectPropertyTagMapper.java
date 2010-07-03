@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.linkedgeodata.jtriplify.mapping;
+package org.linkedgeodata.jtriplify.mapping.simple;
 
 import java.io.Serializable;
 
@@ -30,7 +30,7 @@ import com.hp.hpl.jena.vocabulary.RDF;
 
 
 public class SimpleObjectPropertyTagMapper
-	extends AbstractOneOneTagMapper
+	extends AbstractSimpleOneOneTagMapper
 	implements Serializable
 {
 	/**
@@ -54,7 +54,7 @@ public class SimpleObjectPropertyTagMapper
 	 * @param method
 	 * @param tag
 	 */
-	public SimpleObjectPropertyTagMapper(String property, String object, TagPattern tagPattern, boolean isOSMEntity)
+	public SimpleObjectPropertyTagMapper(String property, String object, SimpleTagPattern tagPattern, boolean isOSMEntity)
 		throws Exception
 	{
 		super(property, tagPattern, isOSMEntity);
@@ -85,7 +85,7 @@ public class SimpleObjectPropertyTagMapper
 	}
 	
 	@Override
-	public <T> T accept(IOneOneTagMapperVisitor<T> visitor)
+	public <T> T accept(ISimpleOneOneTagMapperVisitor<T> visitor)
 	{
 		return visitor.accept(this);
 	}

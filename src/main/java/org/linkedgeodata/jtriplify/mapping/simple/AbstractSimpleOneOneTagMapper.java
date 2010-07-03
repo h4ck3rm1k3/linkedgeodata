@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.linkedgeodata.jtriplify.mapping;
+package org.linkedgeodata.jtriplify.mapping.simple;
 
 import java.io.Serializable;
 
@@ -36,8 +36,8 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
  * @author raven
  *
  */
-public abstract class AbstractOneOneTagMapper
-	implements IOneOneTagMapper, Serializable
+public abstract class AbstractSimpleOneOneTagMapper
+	implements ISimpleOneOneTagMapper, Serializable
 {
 	/**
 	 * 
@@ -46,13 +46,13 @@ public abstract class AbstractOneOneTagMapper
 	
 	private String resource;
 	private String method;
-	private TagPattern tagPattern;
+	private SimpleTagPattern tagPattern;
 
 	// Whether the tag pertains to the OSM entity, or the concept that
 	// the resource represents
 	private boolean describesOSMEntity = false;
 	
-	protected AbstractOneOneTagMapper(String resource, TagPattern tagPattern, boolean describesOSMEntity)
+	protected AbstractSimpleOneOneTagMapper(String resource, SimpleTagPattern tagPattern, boolean describesOSMEntity)
 	{
 		this.resource = resource;
 		this.method = null;
@@ -60,7 +60,7 @@ public abstract class AbstractOneOneTagMapper
 		this.describesOSMEntity = describesOSMEntity;
 	}
 
-	protected AbstractOneOneTagMapper(String resource, String method, TagPattern tagPattern, boolean describesOSMEntity)
+	protected AbstractSimpleOneOneTagMapper(String resource, String method, SimpleTagPattern tagPattern, boolean describesOSMEntity)
 	{
 		this.resource = resource;
 		this.method = method;
@@ -78,7 +78,7 @@ public abstract class AbstractOneOneTagMapper
 		return resource;
 	}
 
-	public TagPattern getTagPattern()
+	public SimpleTagPattern getTagPattern()
 	{
 		return tagPattern;
 	}

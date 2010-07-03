@@ -1,6 +1,6 @@
-package org.linkedgeodata.jtriplify.mapping;
+package org.linkedgeodata.jtriplify.mapping.simple;
 
-public interface IOneOneTagMapperVisitor<T>
+public interface ISimpleOneOneTagMapperVisitor<T>
 {
 	T accept(SimpleClassTagMapper mapper);
 	T accept(SimpleDataTypeTagMapper mapper);

@@ -1,11 +1,12 @@
-package org.linkedgeodata.jtriplify.mapping;
+package org.linkedgeodata.jtriplify.mapping.simple;
 
 import java.io.Serializable;
 
+import org.linkedgeodata.jtriplify.mapping.ITagPattern;
 import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 
-public class TagPattern
-	implements Serializable
+public class SimpleTagPattern
+	implements ITagPattern, Serializable
 {
 	/**
 	 * 
@@ -15,11 +16,11 @@ public class TagPattern
 	private String key;
 	private String value;
 	
-	public TagPattern()
+	public SimpleTagPattern()
 	{
 	}
 	
-	public TagPattern(String key, String value)
+	public SimpleTagPattern(String key, String value)
 	{
 		this.key = key;
 		this.value = value;

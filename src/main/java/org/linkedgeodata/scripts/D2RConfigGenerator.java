@@ -10,12 +10,13 @@ import java.util.List;
 
 import org.linkedgeodata.jtriplify.TagMapper;
 import org.linkedgeodata.jtriplify.mapping.IOneOneTagMapper;
-import org.linkedgeodata.jtriplify.mapping.IOneOneTagMapperVisitor;
-import org.linkedgeodata.jtriplify.mapping.SimpleClassTagMapper;
-import org.linkedgeodata.jtriplify.mapping.SimpleDataTypeTagMapper;
-import org.linkedgeodata.jtriplify.mapping.SimpleObjectPropertyTagMapper;
-import org.linkedgeodata.jtriplify.mapping.SimpleTextTagMapper;
-import org.linkedgeodata.jtriplify.mapping.TagPattern;
+import org.linkedgeodata.jtriplify.mapping.simple.ISimpleOneOneTagMapper;
+import org.linkedgeodata.jtriplify.mapping.simple.ISimpleOneOneTagMapperVisitor;
+import org.linkedgeodata.jtriplify.mapping.simple.SimpleClassTagMapper;
+import org.linkedgeodata.jtriplify.mapping.simple.SimpleDataTypeTagMapper;
+import org.linkedgeodata.jtriplify.mapping.simple.SimpleObjectPropertyTagMapper;
+import org.linkedgeodata.jtriplify.mapping.simple.SimpleTagPattern;
+import org.linkedgeodata.jtriplify.mapping.simple.SimpleTextTagMapper;
 import org.linkedgeodata.util.IOUtil;
 import org.linkedgeodata.util.StringUtil;
 
@@ -63,7 +64,9 @@ public class D2RConfigGenerator
 		List<IOneOneTagMapper> list = tagMapper.asList();
 		
 		for(IOneOneTagMapper item : list) {
-			item.accept(generator);
+			if(item instanceof ISimpleOneOneTagMapper) {
+				((ISimpleOneOneTagMapper)item).accept(generator);
+			}
 		}
 		
 		
@@ -74,7 +77,7 @@ public class D2RConfigGenerator
 
 
 class D2RConfigGeneratorVisitor
-	implements IOneOneTagMapperVisitor<Void>
+	implements ISimpleOneOneTagMapperVisitor<Void>
 {
 	private PrintStream out;
 	private String relationName;
@@ -85,7 +88,7 @@ class D2RConfigGeneratorVisitor
 		this.out = out;
 	}
 	
-	private String buildFullCondition(TagPattern tagPattern)
+	private String buildFullCondition(SimpleTagPattern tagPattern)
 	{
 		String part = buildCondition(tagPattern);
 
@@ -96,7 +99,7 @@ class D2RConfigGeneratorVisitor
 		return result;
 	}
 	
-	private String buildCondition(TagPattern tagPattern)
+	private String buildCondition(SimpleTagPattern tagPattern)
 	{
 		String keyPart = tagPattern.getKey() == null
 			? null
@@ -113,7 +116,7 @@ class D2RConfigGeneratorVisitor
 		return result;
 	}
 	
-	private String toLabel(TagPattern tagPattern)
+	private String toLabel(SimpleTagPattern tagPattern)
 	{
 		String result =
 			StringUtil.coalesce(tagPattern.getKey(), "") +
@@ -131,7 +134,7 @@ class D2RConfigGeneratorVisitor
 		return result;
 	}
 	
-	private String buildFullLabel(TagPattern tagPattern)
+	private String buildFullLabel(SimpleTagPattern tagPattern)
 	{
 		String result =
 			"map:" + relationName + "__" + toLabel(tagPattern) + " a d2rq:PropertyBridge;\n" +

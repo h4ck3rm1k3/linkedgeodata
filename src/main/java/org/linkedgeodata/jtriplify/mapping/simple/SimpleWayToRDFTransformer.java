@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.linkedgeodata.jtriplify.mapping;
+package org.linkedgeodata.jtriplify.mapping.simple;
 
 import org.linkedgeodata.core.ILGDVocab;
 import org.linkedgeodata.core.LGDVocab;

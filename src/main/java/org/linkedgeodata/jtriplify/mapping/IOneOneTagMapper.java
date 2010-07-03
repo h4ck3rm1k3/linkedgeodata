@@ -7,12 +7,12 @@ import com.hp.hpl.jena.rdf.model.Model;
 public interface IOneOneTagMapper
 {
 	// TODO The following two methods should be removed from the interface
-	String getResource();
-	TagPattern getTagPattern();
+	//String getResource();
+	//ITagPattern getTagPattern();
 	
 	
 	Model map(String subject, Tag tag, Model model);
 	
 	
-	<T> T accept(IOneOneTagMapperVisitor<T> visitor);
+	//<T> T accept(ISimpleOneOneTagMapperVisitor<T> visitor);
 }
