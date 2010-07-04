@@ -2216,7 +2216,7 @@
     <describesOSMEntity>false</describesOSMEntity>
   </org.linkedgeodata.jtriplify.mapping.simple.SimpleClassTagMapper>
   <org.linkedgeodata.jtriplify.mapping.simple.SimpleClassTagMapper>
-    <resource>http://linkedgeodata.org/ontology/shop_yes</resource>
+    <resource>http://linkedgeodata.org/ontology/shop</resource>
     <tagPattern>
       <key>shop</key>
       <value>yes</value>
@@ -2480,7 +2480,7 @@
     <describesOSMEntity>false</describesOSMEntity>
   </org.linkedgeodata.jtriplify.mapping.simple.SimpleClassTagMapper>
   <org.linkedgeodata.jtriplify.mapping.simple.SimpleClassTagMapper>
-    <resource>http://linkedgeodata.org/ontology/building_yes</resource>
+    <resource>http://linkedgeodata.org/ontology/building</resource>
     <tagPattern>
       <key>building</key>
       <value>yes</value>
@@ -3584,7 +3584,7 @@
     <describesOSMEntity>false</describesOSMEntity>
   </org.linkedgeodata.jtriplify.mapping.simple.SimpleClassTagMapper>
   <org.linkedgeodata.jtriplify.mapping.simple.SimpleClassTagMapper>
-    <resource>http://linkedgeodata.org/ontology/lock_yes</resource>
+    <resource>http://linkedgeodata.org/ontology/lock</resource>
     <tagPattern>
       <key>lock</key>
       <value>yes</value>
@@ -4400,7 +4400,7 @@
     <describesOSMEntity>false</describesOSMEntity>
   </org.linkedgeodata.jtriplify.mapping.simple.SimpleClassTagMapper>
   <org.linkedgeodata.jtriplify.mapping.simple.SimpleClassTagMapper>
-    <resource>http://linkedgeodata.org/ontology/tourism_yes</resource>
+    <resource>http://linkedgeodata.org/ontology/tourism</resource>
     <tagPattern>
       <key>tourism</key>
       <value>yes</value>
@@ -8240,7 +8240,7 @@
     <describesOSMEntity>false</describesOSMEntity>
   </org.linkedgeodata.jtriplify.mapping.simple.SimpleClassTagMapper>
   <org.linkedgeodata.jtriplify.mapping.simple.SimpleClassTagMapper>
-    <resource>http://linkedgeodata.org/ontology/historic_yes</resource>
+    <resource>http://linkedgeodata.org/ontology/historic</resource>
     <tagPattern>
       <key>historic</key>
       <value>yes</value>
@@ -8672,7 +8672,7 @@
     <describesOSMEntity>false</describesOSMEntity>
   </org.linkedgeodata.jtriplify.mapping.simple.SimpleClassTagMapper>
   <org.linkedgeodata.jtriplify.mapping.simple.SimpleClassTagMapper>
-    <resource>http://linkedgeodata.org/ontology/barrier_yes</resource>
+    <resource>http://linkedgeodata.org/ontology/barrier</resource>
     <tagPattern>
       <key>barrier</key>
       <value>yes</value>
@@ -9088,7 +9088,7 @@
     <describesOSMEntity>false</describesOSMEntity>
   </org.linkedgeodata.jtriplify.mapping.simple.SimpleClassTagMapper>
   <org.linkedgeodata.jtriplify.mapping.simple.SimpleClassTagMapper>
-    <resource>http://linkedgeodata.org/ontology/railway_yes</resource>
+    <resource>http://linkedgeodata.org/ontology/railway</resource>
     <tagPattern>
       <key>railway</key>
       <value>yes</value>
