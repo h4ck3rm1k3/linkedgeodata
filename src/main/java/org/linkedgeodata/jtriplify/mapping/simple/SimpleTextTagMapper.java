@@ -20,6 +20,9 @@
  */
 package org.linkedgeodata.jtriplify.mapping.simple;
 
+import java.net.URLEncoder;
+
+import org.linkedgeodata.util.URIUtil;
 import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -78,9 +81,12 @@ public class SimpleTextTagMapper
 	public Model _map(String subject, Tag tag, Model model)
 	{
 		String suffix = "";
+		
 		if(super.getTagPattern().getKey() == null) {
-			suffix = tag.getKey();
+			//suffix = tag.getKey();			
+			suffix = URIUtil.myEncode(tag.getKey());
 		}
+
 
 		/*
 		if(langTag == null) {

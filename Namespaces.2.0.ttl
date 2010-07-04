@@ -13,6 +13,7 @@
 #@prefix lgdw:       <http://linkedgeodata.org/triplify/way/> .
 #@prefix lgdr:       <http://linkedgeodata.org/triplify/relation/> .
 @prefix lgdo:       <http://linkedgeodata.org/ontology/> .
+@prefix lgdp:       <http://linkedgeodata.org/property/> .
 
 
 #@prefix base:      <http://linkedgeodata.org/triplify/> .

@@ -139,13 +139,22 @@ public class TagMapper
 	public Model map(String subject, Tag tag, Model model)
 	{
 		List<IOneOneTagMapper> candidates = new ArrayList<IOneOneTagMapper>();
-	
-		Set<ISimpleOneOneTagMapper> x = lookup(tag.getKey(), tag.getValue());
-		
-		if(x != null)
-			candidates.addAll(x);
 
-		candidates.addAll(complexMappers);
+		// Check if any of the complex mappers matches - as they have precedence
+		for(IOneOneTagMapper item : complexMappers) {
+			if(item.matches(tag))
+				candidates.add(item);
+		}
+		
+		// If no match was found, use the simple mappers
+		if(candidates.isEmpty()) {
+			Set<ISimpleOneOneTagMapper> x = lookup(tag.getKey(), tag.getValue());
+		
+			if(x != null)
+				candidates.addAll(x);
+		}
+
+		//candidates.addAll(complexMappers);
 		
 		//if(candidates == null)
 		//	return null;

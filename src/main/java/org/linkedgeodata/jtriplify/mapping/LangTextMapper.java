@@ -85,8 +85,7 @@ public class LangTextMapper
 		return model;
 	}
 	
-	private Model _map(String subject, Tag tag, Model model)
-		throws Exception
+	public String matchLangTag(Tag tag)
 	{
 		Matcher matcher = keyPattern.matcher(tag.getKey());
 		if(matcher.matches()) {
@@ -98,14 +97,30 @@ public class LangTextMapper
 			else {
 				String langTag = matcher.group(1);
 				
-				if(knownLangTags.contains(langTag)) {				
-					model.add(
-							model.getResource(subject),
-							model.getProperty(property),
-							tag.getValue(),
-							langTag);
+				if(knownLangTags.contains(langTag)) {
+					return langTag;
 				}				
 			}
+		}
+		
+		return null;
+	}
+	
+	public boolean matches(Tag tag)
+	{
+		return matchLangTag(tag) != null;
+	}
+	
+	private Model _map(String subject, Tag tag, Model model)
+		throws Exception
+	{
+		String langTag = matchLangTag(tag);
+		if(langTag != null) {
+			model.add(
+					model.getResource(subject),
+					model.getProperty(property),
+					tag.getValue(),
+					langTag);		
 		}
 
 		return model;

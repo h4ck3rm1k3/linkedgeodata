@@ -1,5 +1,6 @@
 package org.linkedgeodata.util;
 
+import java.net.URLEncoder;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -8,6 +9,19 @@ import org.apache.commons.collections15.multimap.MultiHashMap;
 
 public class URIUtil
 {
+	public static String myEncode(String str)
+	{
+		String result = str.replaceAll("\\s+", "_");
+
+		try {
+			result = URLEncoder.encode(result, "UTF-8");
+		} catch(Exception e) {
+			throw new RuntimeException(e);
+		}
+		
+		return result;
+	}
+	
 	public static MultiMap<String, String> getQueryMap(String query)  
 	{  
 	    MultiMap<String, String> result = new MultiHashMap<String, String>();  

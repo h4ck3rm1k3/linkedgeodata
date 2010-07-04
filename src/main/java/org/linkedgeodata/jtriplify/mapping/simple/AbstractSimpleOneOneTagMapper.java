@@ -68,6 +68,11 @@ public abstract class AbstractSimpleOneOneTagMapper
 		this.describesOSMEntity = describesOSMEntity;
 	}
 	
+	public boolean matches(Tag tag)
+	{
+		return tagPattern.matches(tag);
+	}
+	
 	public boolean describesOSMEntity()
 	{
 		return describesOSMEntity;

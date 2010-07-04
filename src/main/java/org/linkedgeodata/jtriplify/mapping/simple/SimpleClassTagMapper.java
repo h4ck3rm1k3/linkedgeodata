@@ -21,7 +21,9 @@
 package org.linkedgeodata.jtriplify.mapping.simple;
 
 import java.io.Serializable;
+import java.net.URLEncoder;
 
+import org.linkedgeodata.util.URIUtil;
 import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 
 import com.hp.hpl.jena.graph.Triple;
@@ -66,7 +68,8 @@ public class SimpleClassTagMapper
 		String suffix = "";
 		
 		if(super.getTagPattern().getValue() == null) {
-			suffix = tag.getValue();
+			// suffix = tag.getValue()
+			suffix = URIUtil.myEncode(tag.getValue());
 		}
 		
 		model.add(

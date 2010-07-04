@@ -38,6 +38,11 @@
   </org.linkedgeodata.jtriplify.mapping.simple.SimpleTextTagMapper>
 
 
+  <org.linkedgeodata.jtriplify.mapping.simple.SimpleTextTagMapper>
+    <resource>http://linkedgeodata.org/property/</resource>
+    <tagPattern/>
+    <describesOSMEntity>false</describesOSMEntity>
+  </org.linkedgeodata.jtriplify.mapping.simple.SimpleTextTagMapper>
 
 
   <org.linkedgeodata.jtriplify.mapping.simple.SimpleClassTagMapper>
@@ -24729,10 +24734,5 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <langTag>fr</langTag>
-  </org.linkedgeodata.jtriplify.mapping.simple.SimpleTextTagMapper>
-  <org.linkedgeodata.jtriplify.mapping.simple.SimpleTextTagMapper>
-    <resource>http://linkedgeodata.org/triplify/</resource>
-    <tagPattern/>
-    <describesOSMEntity>false</describesOSMEntity>
   </org.linkedgeodata.jtriplify.mapping.simple.SimpleTextTagMapper>
 </list>

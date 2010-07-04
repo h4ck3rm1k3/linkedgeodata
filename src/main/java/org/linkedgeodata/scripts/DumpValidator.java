@@ -41,7 +41,16 @@ public class DumpValidator
 
 		return result;
     }
-	
+
+    public static void writeModel(String outFilePrefix, long fileId, Model model)
+    	throws Exception
+    {
+		String outFileName = outFilePrefix + fileId;
+		OutputStream out = new FileOutputStream(new File(outFileName));
+		model.write(out, "N-TRIPLE", "");    	
+		out.close();
+    }
+    
 	public static void main(String[] args)
 		throws Exception
 	{
@@ -96,12 +105,9 @@ public class DumpValidator
 					if(++batchCount > batchSize) {
 						//logger.info(batchCount + " objects processed, part size = " + part.length());
 
-						String outFileName = outFilePrefix + fileId;
-						OutputStream out = new FileOutputStream(new File(outFileName));
-						model.write(out, "N-TRIPLE", "");
+						writeModel(outFilePrefix, fileId, model);
 					
 						++fileId;
-						out.close();
 						batchCount = 0;
 						model.removeAll();
 					}
@@ -112,6 +118,7 @@ public class DumpValidator
 
 			part += line + "\n";
 		}
+		writeModel(outFilePrefix, fileId, model);
 	}
 
 

@@ -9,7 +9,7 @@ public interface IOneOneTagMapper
 	// TODO The following two methods should be removed from the interface
 	//String getResource();
 	//ITagPattern getTagPattern();
-	
+	boolean matches(Tag tag);
 	
 	Model map(String subject, Tag tag, Model model);
 	
