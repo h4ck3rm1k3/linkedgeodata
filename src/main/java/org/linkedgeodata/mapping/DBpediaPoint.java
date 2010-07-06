@@ -75,6 +75,7 @@ public class DBpediaPoint extends Point {
 		queryStr += "} }";
 		
 //		SparqlQuery query = new SparqlQuery(queryStr, DBpediaLinkedGeoData.dbpediaEndpoint);
+		System.out.println(queryStr);
 		ResultSet rs = st.queryAsResultSet(queryStr);
 //		ResultSet rs = query.send();
 		classes = new String[] { };
