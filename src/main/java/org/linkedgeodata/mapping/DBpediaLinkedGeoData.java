@@ -81,8 +81,11 @@ public class DBpediaLinkedGeoData {
 	private static String usedDatatype = "xsd:decimal";
 
 	//	public static SparqlEndpoint dbpediaEndpoint = SparqlEndpoint.getEndpointDBpedia();
-	public static SparqlEndpoint dbpediaEndpoint = SparqlEndpoint.getEndpointLOCALDBpedia();
-	private static SPARQLTasks dbpedia = new SPARQLTasks(new Cache("cache/dbpedia_file/"), dbpediaEndpoint);	
+	//public static SparqlEndpoint dbpediaEndpoint = SparqlEndpoint.getEndpointLOCALDBpedia();
+	public static SparqlEndpoint dbpediaEndpoint = SparqlEndpoint.getEndpointDBpedia();
+	//private static SPARQLTasks dbpedia = new SPARQLTasks(new Cache("cache/dbpedia_file/"), dbpediaEndpoint);	
+	private static SPARQLTasks dbpedia = new SPARQLTasks(dbpediaEndpoint);
+	
 	private static SparqlEndpoint geoDataEndpoint = SparqlEndpoint.getEndpointLOCALGeoData();
 	//	private static SPARQLTasks lgd = new SPARQLTasks(new Cache("cache/lgd/"), geoDataEndpoint);
 	private static SPARQLTasks lgd = new SPARQLTasks(geoDataEndpoint);	
@@ -435,6 +438,7 @@ public class DBpediaLinkedGeoData {
 	public static URI findGeoDataMatch(DBpediaPoint dbpediaPoint) throws IOException {
 
 		// 1 degree is about 111 km (depending on the specific point)
+		if(dbpediaPoint.getPoiClass()==null) return null;
 		double distanceThresholdMeters = dbpediaPoint.getPoiClass().getMaxBox();
 		boolean quiet = true;
 

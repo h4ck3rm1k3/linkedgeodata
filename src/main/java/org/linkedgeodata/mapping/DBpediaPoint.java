@@ -20,16 +20,10 @@
 package org.linkedgeodata.mapping;
 
 import java.net.URI;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.linkedgeodata.mapping.Cache;
-import org.linkedgeodata.mapping.DBpediaLinkedGeoData;
-import org.linkedgeodata.mapping.POIClass;
-import org.linkedgeodata.mapping.Point;
-import org.linkedgeodata.mapping.SPARQLTasks;
 
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
@@ -54,7 +48,8 @@ public class DBpediaPoint extends Point {
 	Pattern pattern = Pattern.compile("[\\w| ]+");
 	
 	// use a cache such that DBpedia points can be quickly constructed from URIs 
-	private static SPARQLTasks st = new SPARQLTasks(new Cache("cache/dbpedia_points/"), DBpediaLinkedGeoData.dbpediaEndpoint);
+	//private static SPARQLTasks st = new SPARQLTasks(new Cache("cache/dbpedia_points/"), DBpediaLinkedGeoData.dbpediaEndpoint);
+	private static SPARQLTasks st = new SPARQLTasks(DBpediaLinkedGeoData.dbpediaEndpoint);
 	
 	/**
 	 * Constructs a DBpedia point using SPARQL.
@@ -75,11 +70,13 @@ public class DBpediaPoint extends Point {
 		queryStr += "} }";
 		
 //		SparqlQuery query = new SparqlQuery(queryStr, DBpediaLinkedGeoData.dbpediaEndpoint);
-		System.out.println(queryStr);
+		//System.out.println(queryStr);
 		ResultSet rs = st.queryAsResultSet(queryStr);
+		rs = st.queryAsResultSet(queryStr);
 //		ResultSet rs = query.send();
 		classes = new String[] { };
-		List<String> classList = new LinkedList<String>();
+		//List<String> classList = new LinkedList<String>();
+		Set<String> classSet = new HashSet<String>();
 		
 		if(!rs.hasNext()) {
 			throw new Exception("cannot construct point for " + uri + " (latitude/longitude missing?)");
@@ -97,11 +94,11 @@ public class DBpediaPoint extends Point {
 			}	
 			label = qs.getLiteral("label").getString();
 			if(qs.contains("type")) {
-				classList.add(qs.get("type").toString());
+				classSet.add(qs.get("type").toString());
 			}
 		}
 		
-		classes = classList.toArray(classes);
+		classes = classSet.toArray(classes);
 		poiClass = getPOIClass(classes);
 	}
 	
@@ -155,7 +152,9 @@ public class DBpediaPoint extends Point {
 	public static POIClass getPOIClass(String[] classes) {
 		for(String clazz : classes) {
 //			System.out.println("class: " + clazz);
-			if(clazz.equals("http://dbpedia.org/ontology/City")) {
+			if(clazz.equals("http://dbpedia.org/ontology/Town")) {
+				return POIClass.CITY;
+			} if(clazz.equals("http://dbpedia.org/ontology/City")) {
 				return POIClass.CITY;
 			} if(clazz.equals("http://umbel.org/umbel/sc/City")) {
 				return POIClass.CITY;
