@@ -100,6 +100,7 @@ public class DBpediaPoint extends Point {
 		
 		classes = classSet.toArray(classes);
 		poiClass = getPOIClass(classes);
+		if(poiClass==null) System.err.println("No poi class for url "+uri+", the classes are "+classSet);
 	}
 	
 	public DBpediaPoint(URI uri, String label, String[] classes, double geoLat, double geoLong, int decimalCount) {
@@ -152,7 +153,9 @@ public class DBpediaPoint extends Point {
 	public static POIClass getPOIClass(String[] classes) {
 		for(String clazz : classes) {
 //			System.out.println("class: " + clazz);
-			if(clazz.equals("http://dbpedia.org/ontology/Town")) {
+			if(clazz.equals("http://dbpedia.org/ontology/Settlement")) {
+				return POIClass.CITY;
+			} if(clazz.equals("http://dbpedia.org/ontology/Town")) {
 				return POIClass.CITY;
 			} if(clazz.equals("http://dbpedia.org/ontology/City")) {
 				return POIClass.CITY;
@@ -211,4 +214,3 @@ public class DBpediaPoint extends Point {
 		return null;
 	}
 }
-

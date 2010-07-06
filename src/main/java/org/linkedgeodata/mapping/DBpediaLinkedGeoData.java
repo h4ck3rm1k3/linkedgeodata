@@ -85,7 +85,7 @@ public class DBpediaLinkedGeoData {
 	public static SparqlEndpoint dbpediaEndpoint = SparqlEndpoint.getEndpointDBpedia();
 	//private static SPARQLTasks dbpedia = new SPARQLTasks(new Cache("cache/dbpedia_file/"), dbpediaEndpoint);	
 	private static SPARQLTasks dbpedia = new SPARQLTasks(dbpediaEndpoint);
-	
+
 	private static SparqlEndpoint geoDataEndpoint = SparqlEndpoint.getEndpointLOCALGeoData();
 	//	private static SPARQLTasks lgd = new SPARQLTasks(new Cache("cache/lgd/"), geoDataEndpoint);
 	private static SPARQLTasks lgd = new SPARQLTasks(geoDataEndpoint);	
@@ -414,19 +414,19 @@ public class DBpediaLinkedGeoData {
 	}
 
 
-//	private static double correctLongitude(double geoLong)
-//	{
-//		if(geoLong>180)  return geoLong - 360;
-//		if(geoLong<-180) return geoLong + 360;
-//		return geoLong;
-//	}
-//
-//	private static double correctLatitude(double geoLat)
-//	{
-//		if(geoLong>90) return geoLong - 90;
-//		return geoLong;
-//	}
-	
+	//	private static double correctLongitude(double geoLong)
+	//	{
+	//		if(geoLong>180)  return geoLong - 360;
+	//		if(geoLong<-180) return geoLong + 360;
+	//		return geoLong;
+	//	}
+	//
+	//	private static double correctLatitude(double geoLat)
+	//	{
+	//		if(geoLong>90) return geoLong - 90;
+	//		return geoLong;
+	//	}
+
 	/**
 	 * The main matching method. The matching is directed from DBpedia to LGD,
 	 * i.e. given a POI in DBpedia, we try to find a match in LGD.
@@ -438,7 +438,10 @@ public class DBpediaLinkedGeoData {
 	public static URI findGeoDataMatch(DBpediaPoint dbpediaPoint) throws IOException {
 
 		// 1 degree is about 111 km (depending on the specific point)
-		if(dbpediaPoint.getPoiClass()==null) return null;
+		if(dbpediaPoint.getPoiClass()==null)
+		{
+			return null;
+		}
 		double distanceThresholdMeters = dbpediaPoint.getPoiClass().getMaxBox();
 		boolean quiet = true;
 
@@ -463,10 +466,10 @@ public class DBpediaLinkedGeoData {
 			double minLong = dbpediaPoint.getGeoLong()-(distanceThresholdMeters/1000)/Math.abs(Math.cos(Math.toRadians(dbpediaPoint.getGeoLat()))*111);
 			double maxLong = dbpediaPoint.getGeoLong()+(distanceThresholdMeters/1000)/Math.abs(Math.cos(Math.toRadians(dbpediaPoint.getGeoLat()))*111);
 
-//			minLat = correctLatitude(minLat);
-//			maxLat = correctLatitude(minLat);
-//			minLong = correctLongitude(minLong);
-//			maxLong = correctLongitude(minLong);
+			//			minLat = correctLatitude(minLat);
+			//			maxLat = correctLatitude(minLat);
+			//			minLong = correctLongitude(minLong);
+			//			maxLong = correctLongitude(minLong);
 
 			//			System.out.println("lat:  " + minLat + " < " + dbpediaPoint.getGeoLat() + " < " + maxLat);
 			//			System.out.println("long: " + minLong + " < " + dbpediaPoint.getGeoLong() + " < " + maxLong);
@@ -493,6 +496,7 @@ public class DBpediaLinkedGeoData {
 
 			//			SparqlQuery query = new SparqlQuery(queryStr, geoDataEndpoint);
 			//			ResultSet rs = query.send();
+			System.out.println(queryStr);
 			ResultSet rs = lgd.queryAsResultSet(queryStr);
 
 			double highestScore = 0;
