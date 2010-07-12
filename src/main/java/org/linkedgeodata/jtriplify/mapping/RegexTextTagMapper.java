@@ -34,14 +34,14 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 
 
-public class LangTextMapper
+public class RegexTextTagMapper
 	implements IOneOneTagMapper
 	//extends AbstractOneOneTagMapper
 {
 	private static Set<String> knownLangTags = new HashSet<String>(Arrays.asList(
 			"en","de","fr","pl","ja","it","nl","pt","es","ru","sv","zh","no","fi","ca","uk","tr","cs","hu","ro","vo","eo","da","sk","id","ar","ko","he","lt","vi","sl","sr","bg","et","fa","hr","simple","new","ht","nn","gl","th","te","el","ms","eu","ceb","mk","hi","ka","la","bs","lb","br","is","bpy","mr","sq","cy","az","sh","tl","lv","pms","bn","be_x_old","jv","ta","oc","io","be","an","su","nds","scn","nap","ku","ast","af","fy","sw","wa","zh_yue","bat_smg","qu","ur","cv","ksh"));
 	
-	private static Logger logger = Logger.getLogger(LangTextMapper.class);
+	private static Logger logger = Logger.getLogger(RegexTextTagMapper.class);
 	
 	private Pattern keyPattern;
 	private String  property;
@@ -63,7 +63,7 @@ public class LangTextMapper
 	 * name:([^:]+)
 	 * 
 	 */
-	public LangTextMapper(String property, Pattern keyPattern, boolean isOSMEntity)
+	public RegexTextTagMapper(String property, Pattern keyPattern, boolean isOSMEntity)
 	{
 		this.property = property;
 		this.keyPattern = keyPattern;

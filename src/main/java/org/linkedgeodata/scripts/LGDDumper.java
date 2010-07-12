@@ -33,6 +33,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.xml.datatype.DatatypeFactory;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
@@ -41,6 +43,8 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.linkedgeodata.core.ILGDVocab;
 import org.linkedgeodata.core.LGDVocab;
+import org.linkedgeodata.core.vocab.GeoRSS;
+import org.linkedgeodata.core.vocab.WGS84Pos;
 import org.linkedgeodata.dao.LGDDAO;
 import org.linkedgeodata.dao.LGDRDFDAO;
 import org.linkedgeodata.dump.NodeIdIterator;
@@ -52,8 +56,13 @@ import org.linkedgeodata.util.PostGISUtil;
 import org.linkedgeodata.util.stats.SimpleStatsTracker;
 import org.springframework.util.StopWatch;
 
+import com.hp.hpl.jena.datatypes.RDFDatatype;
+import com.hp.hpl.jena.datatypes.TypeMapper;
+import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.RDFNode;
+import com.hp.hpl.jena.rdf.model.Statement;
 
 
 abstract class ResolveTask
@@ -192,6 +201,7 @@ public class LGDDumper
 		//tagFilter = null;
 
 		
+		//String mappingRulesPath = "data/triplify/config/2.0/LGDMappingRules.2.0.xml";
 		String mappingRulesPath = "output/LGDMappingRules.2.0.xml";
 		String rootModelPath    = "Namespaces.2.0.ttl";
 		
@@ -278,6 +288,38 @@ public class LGDDumper
 	}
 
 	
+	/**
+	 * Creates a triple
+	 * <x> geo:geometry "POINT(<long> <lat>)"^^virtrdf:Geometry
+	 * for each triple of the form
+	 * <x> georss:point "<lat> <long>"
+	 * 
+	 * @param model
+	 * @return
+	 */
+	public static Model augmentGeoRSSWithVirtuoso(Model model)
+	{
+		TypeMapper tm = TypeMapper.getInstance();
+		RDFDatatype virtrdfGeometry = tm.getSafeTypeByName("http://www.openlinksw.com/schemas/virtrdf#Geometry");
+
+		Iterator<Statement> it = model.listStatements(null, GeoRSS.point, (RDFNode)null);
+		while(it.hasNext()) {
+			Statement stmt = it.next();
+
+			String value = stmt.getObject().asNode().getLiteralValue().toString();
+			
+			String[] latlong = value.trim().split("\\s+");
+			
+			Literal virtLit = model.createTypedLiteral("POINT(" + latlong[1] + " " + latlong[0] + ")", virtrdfGeometry);
+			
+			model.add(stmt.getSubject(), WGS84Pos.geometry, virtLit);
+		}
+	
+		
+		return model;
+	}
+	
+	
 	public static void runNodeTags(Iterator<Collection<Long>> it, String tagFilter, Map<String, String> prefixMap, LGDRDFDAO dao, OutputStream out)
 		throws Exception
 	{	
@@ -327,6 +369,9 @@ public class LGDDumper
 	{
 		if(model.isEmpty())
 			return;
+		
+		// TODO add a switch
+		augmentGeoRSSWithVirtuoso(model);
 		
 		String str = ModelUtil.toString(model, "N3");
 		

@@ -55,7 +55,6 @@ public class SimpleObjectPropertyTagMapper
 	 * @param tag
 	 */
 	public SimpleObjectPropertyTagMapper(String property, String object, SimpleTagPattern tagPattern, boolean isOSMEntity)
-		throws Exception
 	{
 		super(property, tagPattern, isOSMEntity);
 		this.object = object;

@@ -19,14 +19,14 @@
   </org.linkedgeodata.jtriplify.mapping.simple.SimpleTextTagMapper>
 
 
-  <org.linkedgeodata.jtriplify.mapping.LangTextMapper>
+  <org.linkedgeodata.jtriplify.mapping.RegexTextTagMapper>
     <keyPattern>
       <pattern>name:([^:]+)</pattern>
       <flags>0</flags>
     </keyPattern>
     <property>http://www.w3.org/2000/01/rdf-schema#label</property>
     <isOSMEntity>false</isOSMEntity>
-  </org.linkedgeodata.jtriplify.mapping.LangTextMapper>
+  </org.linkedgeodata.jtriplify.mapping.RegexTextTagMapper>
 
  <org.linkedgeodata.jtriplify.mapping.simple.SimpleTextTagMapper>
     <resource>http://www.w3.org/2000/01/rdf-schema#label</resource>

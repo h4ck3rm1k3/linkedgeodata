@@ -26,6 +26,7 @@ import java.util.Date;
 import org.apache.log4j.Logger;
 import org.linkedgeodata.core.ILGDVocab;
 import org.linkedgeodata.core.LGDVocab;
+import org.linkedgeodata.core.vocab.WGS84Pos;
 import org.linkedgeodata.jtriplify.TagMapper;
 import org.linkedgeodata.util.ITransformer;
 import org.openstreetmap.osmosis.core.domain.v0_6.Node;
@@ -129,17 +130,19 @@ public class SimpleNodeToRDFTransformer
 	}
 	
 	
+	/*
 	private static final String wgs84NS = "http://www.w3.org/2003/01/geo/wgs84_pos#";
 	private static final String wgs84Lat = wgs84NS + "lat";
 	private static final String wgs84Long = wgs84NS + "long";
+	*/
 	
 	public static  void generateWGS84(Model model, Resource subject, Node node)
 	{
 		TypeMapper tm = TypeMapper.getInstance();
 		RDFDatatype dataType = tm.getSafeTypeByName(XSD.decimal.getURI());
 
-		model.add(subject, model.getProperty(wgs84Lat), Double.toString(node.getLatitude()), dataType);
-		model.add(subject, model.getProperty(wgs84Long), Double.toString(node.getLongitude()), dataType);		
+		model.add(subject, WGS84Pos.xlat, Double.toString(node.getLatitude()), dataType);
+		model.add(subject, WGS84Pos.xlong, Double.toString(node.getLongitude()), dataType);		
 	}
 
 	

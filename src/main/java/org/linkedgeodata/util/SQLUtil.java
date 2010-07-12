@@ -268,6 +268,15 @@ public class SQLUtil
 		return result;
 	}
 	
+	public static ResultSet execute(PreparedStatement stmt, Object ...args)
+		throws SQLException
+	{
+		executeSetArgs(stmt, args);
+		
+		ResultSet result = stmt.executeQuery();
+		return result;
+	}
+	
 	public static <T> T execute(PreparedStatement stmt, Class<T> clazz, Object ...args)
 		throws SQLException
 	{
@@ -311,6 +320,16 @@ public class SQLUtil
 		return result;
 	}
 
+	public static void close(ResultSet resultSet)
+	{
+		try {
+			if(resultSet != null)
+				resultSet.close();
+		}
+		catch(SQLException e) {
+			logger.error(ExceptionUtil.toString(e));
+		}
+	}
 	
 	/*
 	public static String escape(Object value)
