@@ -58,8 +58,8 @@ $$
     RETURNS NULL ON NULL INPUT;
 
 
-DROP FUNCTION LGD_ToTile(geom Geometry, zoom INT);
-CREATE FUNCTION LGD_ToTile(geom Geometry, zoom INT) RETURNS INT8 AS
+DROP FUNCTION lgd_to_tile(geom Geometry, zoom INT);
+CREATE FUNCTION lgd_to_tile(geom Geometry, zoom INT) RETURNS INT8 AS
 $$
 DECLARE
 	f   INT4;
@@ -84,11 +84,11 @@ $$
 
 
 
-DROP FUNCTION LGD_ToTile(geog Geography, zoom INT);
-CREATE FUNCTION LGD_ToTile(geog Geography, zoom INT) RETURNS INT8 AS
+DROP FUNCTION lgd_to_tile(geog Geography, zoom INT);
+CREATE FUNCTION lgd_to_tile(geog Geography, zoom INT) RETURNS INT8 AS
 $$
 BEGIN
-    RETURN LGD_ToTile(geog::geometry, zoom); 
+    RETURN lgd_to_tile(geog::geometry, zoom); 
 END;
 $$
     LANGUAGE 'plpgsql'
