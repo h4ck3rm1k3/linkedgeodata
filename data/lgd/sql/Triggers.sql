@@ -1,3 +1,64 @@
+DROP FUNCTION lgd_get_tile_for_node(INT, bigint);
+CREATE FUNCTION lgd_get_tile_for_node(zoom INT, node_id bigint) RETURNS INT8 AS $$
+DECLARE
+	geog geography;
+BEGIN
+	/* get the tile id for the entity_id */
+	SELECT geom INTO geog FROM nodes WHERE id = node_id;
+	RETURN lgd_to_tile(geog, zoom);
+END;
+$$
+	LANGUAGE plpgsql;
+
+	
+
+	
+
+
+/** tile based updates
+ *
+ * Whenever a tag is inserted, update the statistic for the lgd_tiles_kv_xx
+ * table 
+ * 
+ */
+DROP FUNCTION lgd_helper_insert_tag_tile_kv(text, text, INT);
+CREATE FUNCTION lgd_helper_insert_tag_tile_kv(table_name text, level INT, _id _k text, _v text, uc INT) RETURNS VOID AS $$
+BEGIN
+	/* get the tile id for the entity_id */
+	FOR rec IN EXECUTE 'SELECT k FROM ' || table_name || ' LIMIT 1' LOOP
+		RETURN rec.k;
+	END LOOP;
+
+	
+	IF(uc IS NULL) THEN
+			INSERT INTO lgd_stats_kv(k, v, usage_count) VALUES(_k, _v, 1);
+		ELSE
+			UPDATE lgd_stats_kv SET usage_count = uc + 1 WHERE k = _k AND v = _v;		
+		END IF;
+END;
+$$
+	LANGUAGE plpgsql;
+
+	
+DROP FUNCTION lgd_test(table_name text);
+CREATE FUNCTION lgd_test(table_name text) RETURNS text AS $$
+DECLARE
+	rec record;
+	result text;
+BEGIN
+	FOR rec IN EXECUTE 'SELECT k FROM ' || table_name || ' LIMIT 1' LOOP
+		RETURN rec.k;
+	END LOOP;
+ 
+	RETURN NULL;
+END;
+$$
+	LANGUAGE plpgsql;
+
+
+	
+/** global updates **/
+
 
 DROP FUNCTION lgd_helper_insert_tag(text, text, INT);
 CREATE FUNCTION lgd_helper_insert_tag(_k text, _v text, uc INT) RETURNS VOID AS $$
