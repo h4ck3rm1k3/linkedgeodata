@@ -5,7 +5,13 @@ import java.sql.DriverManager;
 
 public class PostGISUtil
 {
-
+	public static Connection connectPostGIS(ConnectionConfig config)
+		throws Exception
+	{
+		return connectPostGIS(
+				config.getHostName(), config.getDataBaseName(), config.getUserName(), config.getPassWord());
+	}
+	
 	public static Connection connectPostGIS(String hostName, String dbName, String userName, String passWord)
 		throws Exception
 	{
