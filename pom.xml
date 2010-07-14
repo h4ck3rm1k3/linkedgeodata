@@ -71,13 +71,6 @@
   		<scope>compile</scope>
   	</dependency>
   	<dependency>
-  		<groupId>postgresql</groupId>
-  		<artifactId>postgresql</artifactId>
-  		<version>8.4-701.jdbc4</version>
-  		<type>jar</type>
-  		<scope>compile</scope>
-  	</dependency>
-  	<dependency>
   		<groupId>net.sourceforge.collections</groupId>
   		<artifactId>collections-generic</artifactId>
   		<version>4.01</version>
@@ -102,6 +95,13 @@
   		<groupId>org.codehaus.groovy</groupId>
   		<artifactId>groovy</artifactId>
   		<version>1.7.2</version>
+  		<type>jar</type>
+  		<scope>compile</scope>
+  	</dependency>
+  	<dependency>
+  		<groupId>postgresql</groupId>
+  		<artifactId>postgresql</artifactId>
+  		<version>8.4-701.jdbc4</version>
   		<type>jar</type>
   		<scope>compile</scope>
   	</dependency>
