@@ -81,6 +81,8 @@ public class NodeTagsTriggerBenchmark
 		StopWatch sw = new StopWatch();
 		sw.start();
 		
+		conn.setAutoCommit(false);
+		
 		long offset = 1000000000;
 		int n = 10000;
 		for(int i = 0; i < n; ++i) {
@@ -91,6 +93,8 @@ public class NodeTagsTriggerBenchmark
 			SQLUtil.execute(stmt, Void.class, 0, "a", "b");
 		}
 		
+		conn.commit();
+		conn.setAutoCommit(true);
 		sw.stop();
 		long after = SQLUtil.single(conn.createStatement().executeQuery("SELECT COUNT(*) FROM node_tags"), Long.class);
 		

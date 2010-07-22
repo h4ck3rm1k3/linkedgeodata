@@ -5,8 +5,8 @@ import org.apache.log4j.PropertyConfigurator;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.linkedgeodata.jtriplify.mapping.simple.SimpleTagPattern;
-import org.linkedgeodata.jtriplify.mapping.simple.SimpleTextTagMapper;
+import org.linkedgeodata.osm.mapping.impl.SimpleTagPattern;
+import org.linkedgeodata.osm.mapping.impl.SimpleTextTagMapper;
 import org.linkedgeodata.util.ModelUtil;
 import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 

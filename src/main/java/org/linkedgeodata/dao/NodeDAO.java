@@ -20,7 +20,10 @@
  */
 package org.linkedgeodata.dao;
 
+import java.awt.Rectangle;
+import java.awt.geom.Rectangle2D;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -31,13 +34,10 @@ import java.util.Map;
 import org.apache.commons.collections15.MultiMap;
 import org.apache.commons.collections15.multimap.MultiHashMap;
 import org.apache.log4j.Logger;
-import org.linkedgeodata.util.SQLUtil;
 import org.linkedgeodata.util.StringUtil;
 import org.openstreetmap.osmosis.core.domain.v0_6.Node;
 import org.openstreetmap.osmosis.core.domain.v0_6.OsmUser;
 import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
-import org.openstreetmap.osmosis.core.domain.v0_6.Way;
-import org.postgis.LineString;
 import org.postgis.PGgeometry;
 import org.postgis.Point;
 
@@ -48,19 +48,53 @@ public class NodeDAO
 	
 	private Connection conn;
 	
+	
+	private static final String strGetNodeExtents = "SELECT MIN(X(geom::geometry)), MIN(Y(geom::geometry)), MAX(X(geom::geometry)), MAX(Y(geom::geometry)) FROM nodes";
+	
+	private PreparedStatement stmtGetNodeExtents;
+	
+	
 	public NodeDAO()
 	{
 	}
 	
 	public NodeDAO(Connection conn)
+		throws SQLException
 	{
-		this.conn = conn;
+		setConnection(conn);
 	}
 	
 	
 	public void setConnection(Connection conn)
+		throws SQLException
 	{
+		if(stmtGetNodeExtents != null)
+			stmtGetNodeExtents.close();
+		
 		this.conn = conn;
+
+		stmtGetNodeExtents = conn.prepareStatement(strGetNodeExtents);
+	}
+	
+	public Rectangle2D getNodeExtents()
+		throws SQLException
+	{
+		ResultSet rs = stmtGetNodeExtents.executeQuery();
+		try {
+			while(rs.next()) {
+				Rectangle2D result = new Rectangle2D.Double(
+						rs.getDouble(1),
+						rs.getDouble(2),
+						rs.getDouble(3) - rs.getDouble(1),
+						rs.getDouble(4) - rs.getDouble(2));
+				
+				return result;
+			}
+		}
+		finally {
+			rs.close();
+		}
+		return new Rectangle2D.Double();
 	}
 	
 	public MultiMap<Long, Long> getWayMemberships(Collection<Long> nodeIds)

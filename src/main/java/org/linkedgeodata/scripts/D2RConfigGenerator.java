@@ -8,15 +8,15 @@ import java.io.PrintStream;
 import java.net.URLEncoder;
 import java.util.List;
 
-import org.linkedgeodata.jtriplify.TagMapper;
-import org.linkedgeodata.jtriplify.mapping.IOneOneTagMapper;
-import org.linkedgeodata.jtriplify.mapping.simple.ISimpleOneOneTagMapper;
-import org.linkedgeodata.jtriplify.mapping.simple.ISimpleOneOneTagMapperVisitor;
-import org.linkedgeodata.jtriplify.mapping.simple.SimpleClassTagMapper;
-import org.linkedgeodata.jtriplify.mapping.simple.SimpleDataTypeTagMapper;
-import org.linkedgeodata.jtriplify.mapping.simple.SimpleObjectPropertyTagMapper;
-import org.linkedgeodata.jtriplify.mapping.simple.SimpleTagPattern;
-import org.linkedgeodata.jtriplify.mapping.simple.SimpleTextTagMapper;
+import org.linkedgeodata.osm.mapping.IOneOneTagMapper;
+import org.linkedgeodata.osm.mapping.TagMapper;
+import org.linkedgeodata.osm.mapping.impl.ISimpleOneOneTagMapper;
+import org.linkedgeodata.osm.mapping.impl.ISimpleOneOneTagMapperVisitor;
+import org.linkedgeodata.osm.mapping.impl.SimpleClassTagMapper;
+import org.linkedgeodata.osm.mapping.impl.SimpleDataTypeTagMapper;
+import org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper;
+import org.linkedgeodata.osm.mapping.impl.SimpleTagPattern;
+import org.linkedgeodata.osm.mapping.impl.SimpleTextTagMapper;
 import org.linkedgeodata.util.IOUtil;
 import org.linkedgeodata.util.StringUtil;
 

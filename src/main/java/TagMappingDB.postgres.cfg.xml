@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+          "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+          "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+	<session-factory>
+		<property name="connection.url">jdbc:postgresql_postGIS://localhost/tagmappingdb</property>
+		<property name="connection.username">postgres</property>
+		<property name="connection.password">postgres</property>
+		<property name="connection.driver_class">org.postgis.DriverWrapper</property>
+		<property name="dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+		<property name="hibernate.hbm2ddl.auto">update</property>
+
+		<!-- <property name="hibernate.hbm2ddl.auto">create-drop</property> -->
+
+		<property name="transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property>
+		<!--
+			thread is the short name for org.hibernate.context.ThreadLocalSessionContext
+			and let Hibernate bind the session automatically to the thread
+		-->
+		<property name="current_session_context_class">thread</property>
+		<property name="hibernate.show_sql">true</property>
+
+		<mapping class="org.example.myproject.client.entity.AbstractEntity" />
+		<mapping class="org.example.myproject.client.entity.AbstractSimpleOneOneTagMapperState" />
+		
+		<mapping class="org.example.myproject.client.entity.SimpleClassTagMapperState" />
+		<mapping class="org.example.myproject.client.entity.SimpleDataTypeTagMapperState" />
+		<mapping class="org.example.myproject.client.entity.SimpleObjectPropertyTagMapperState" />
+		<mapping class="org.example.myproject.client.entity.SimpleTextTagMapperState" />
+		<mapping class="org.example.myproject.client.entity.RegexTextTagMapperState" />
+
+
+		<!-- documentation for connection pool settings: 
+		http://www.mchange.com/projects/c3p0/index.html#acquireIncrement
+		 -->		 
+
+		<!--
+		<property name="hibernate.connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
+		<property name="hibernate.c3p0.initialPoolSize">3</property>
+		<property name="hibernate.c3p0.minPoolSize">3</property>
+		<property name="hibernate.c3p0.maxPoolSize">10</property>
+		<property name="hibernate.c3p0.maxIdleTime">600</property>
+		<property name="hibernate.c3p0.acquireIncrement">3</property>
+		<property name="hibernate.c3p0.idleConnectionTestPeriod">1</property>
+		<property name="hibernate.c3p0.maxStatements">0</property>
+		 
+		<property name="hibernate.c3p0.breakAfterAcquireFailure">false</property>
+		<property name="hibernate.c3p0.acquireRetryAttempts">-1</property>
+		<property name="hibernate.c3p0.acquireRetryDelay">30000</property>
+
+		<property name="hibernate.c3p0.autoCommitOnClose">false</property>
+		<property name="hibernate.c3p0.automaticTestTable">dbpedia_connection_pool_test_table</property>
+		
+		<property name="hibernate.c3p0.idleConnectionTestPeriod">60</property>
+		<property name="hibernate.c3p0.testConnectionsOnCheckIn">true</property>
+  		-->
+	</session-factory>
+</hibernate-configuration>

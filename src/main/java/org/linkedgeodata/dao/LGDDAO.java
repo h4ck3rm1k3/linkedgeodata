@@ -65,11 +65,13 @@ public class LGDDAO
 	}
 	
 	public LGDDAO(Connection conn)
+		throws SQLException
 	{
 		setConnection(conn);
 	}
 	
 	public void setConnection(Connection conn)
+		throws SQLException
 	{
 		this.conn = conn;
 		nodeDAO.setConnection(conn);

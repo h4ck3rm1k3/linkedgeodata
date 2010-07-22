@@ -49,7 +49,7 @@ import org.linkedgeodata.dao.LGDDAO;
 import org.linkedgeodata.dao.LGDRDFDAO;
 import org.linkedgeodata.dump.NodeIdIterator;
 import org.linkedgeodata.dump.WayIdIterator;
-import org.linkedgeodata.jtriplify.TagMapper;
+import org.linkedgeodata.osm.mapping.TagMapper;
 import org.linkedgeodata.util.ExceptionUtil;
 import org.linkedgeodata.util.ModelUtil;
 import org.linkedgeodata.util.PostGISUtil;
@@ -113,7 +113,7 @@ abstract class ResolveTask
 
 		tracker.update(count);			
 		//if(model.size() > 10000) {
-			LGDDumper.writeModel(model, out);
+			LGDDumper.writeModel(model, out, false);
 		//}
 	}
 	
@@ -183,7 +183,7 @@ public class LGDDumper
 		String outFileName = commandLine.getOptionValue("o", "out.n3");
 	
 		String batchSizeStr = commandLine.getOptionValue("n", "1000");
-
+		
 		int batchSize = Integer.parseInt(batchSizeStr);
 		if(batchSize <= 0)
 			throw new RuntimeException("Invalid argument for batchsize");
@@ -192,6 +192,7 @@ public class LGDDumper
 		boolean exportNodeTags = commandLine.hasOption("xnt");
 		boolean exportWayTags = commandLine.hasOption("xwt");
 
+		boolean enableVirtuosoPredicates = commandLine.hasOption("V");
 		
 		String entityFilter =commandLine.getOptionValue("ef", null);
 		String tagFilter = commandLine.getOptionValue("tf", null);
@@ -246,13 +247,13 @@ public class LGDDumper
 			//NodeTagIteratorDenorm1 it = new NodeTagIteratorDenorm1(conn, batchSize);
 			Iterator<Collection<Long>> it = new NodeIdIterator(conn, batchSize, entityFilter);
 
-			runNodeTags(it, tagFilter, prefixMap, dao, out);		
+			runNodeTags(it, tagFilter, prefixMap, dao, out, enableVirtuosoPredicates);		
 		}
 		
 		if(exportWayTags) {
 			Iterator<Collection<Long>> it = new WayIdIterator(conn, batchSize, entityFilter);
 
-			runWayTags(it, tagFilter, prefixMap, dao, out);
+			runWayTags(it, tagFilter, prefixMap, dao, out, enableVirtuosoPredicates);
 		}
 		
 		
@@ -320,7 +321,7 @@ public class LGDDumper
 	}
 	
 	
-	public static void runNodeTags(Iterator<Collection<Long>> it, String tagFilter, Map<String, String> prefixMap, LGDRDFDAO dao, OutputStream out)
+	public static void runNodeTags(Iterator<Collection<Long>> it, String tagFilter, Map<String, String> prefixMap, LGDRDFDAO dao, OutputStream out, boolean enableVirtuosoPredicates)
 		throws Exception
 	{	
 		SimpleStatsTracker tracker = new SimpleStatsTracker();
@@ -335,13 +336,13 @@ public class LGDDumper
 			tracker.update(count);
 			
 			if(model.size() > 10000) {
-				writeModel(model, out);
+				writeModel(model, out, enableVirtuosoPredicates);
 			}
 		}
-		writeModel(model, out);
+		writeModel(model, out, enableVirtuosoPredicates);
 	}
 	
-	public static void runWayTags(Iterator<Collection<Long>> it, String tagFilter, Map<String, String> prefixMap, LGDRDFDAO dao, OutputStream out)
+	public static void runWayTags(Iterator<Collection<Long>> it, String tagFilter, Map<String, String> prefixMap, LGDRDFDAO dao, OutputStream out, boolean enableVirtuosoPredicates)
 		throws Exception
 	{	
 		SimpleStatsTracker tracker = new SimpleStatsTracker();
@@ -356,22 +357,23 @@ public class LGDDumper
 			tracker.update(count);
 			
 			if(model.size() > 10000) {
-				writeModel(model, out);
+				writeModel(model, out, enableVirtuosoPredicates);
 			}
 		}
-		writeModel(model, out);
+		writeModel(model, out, enableVirtuosoPredicates);
 	}
 
 	private static Pattern directivePattern = Pattern.compile("^@.*$.?\\n?", Pattern.MULTILINE);
 
-	public static synchronized void writeModel(Model model, OutputStream out)
+	public static synchronized void writeModel(Model model, OutputStream out, boolean enableVirtuosoPredicates)
 		throws IOException
 	{
 		if(model.isEmpty())
 			return;
-		
-		// TODO add a switch
-		augmentGeoRSSWithVirtuoso(model);
+
+		if(enableVirtuosoPredicates) {
+			augmentGeoRSSWithVirtuoso(model);
+		}
 		
 		String str = ModelUtil.toString(model, "N3");
 		
@@ -405,5 +407,7 @@ public class LGDDumper
 		
 		cliOptions.addOption("ef", "entityfilter", true, "");
 		cliOptions.addOption("tf", "tagfilter", true, "");
+		
+		cliOptions.addOption("V", "virtuoso predicates", false, "");
 	}
 }

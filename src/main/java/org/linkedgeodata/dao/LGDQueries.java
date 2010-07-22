@@ -113,11 +113,15 @@ public class LGDQueries
 	}
 
 	public static String createPredicate(String relName, String k, String v, boolean bOr)
-	{		
+	{	
+		relName = (relName == null || relName.isEmpty())
+			? ""
+			: relName + ".";
+		
 		String kvPred = "";
 		
-		String kPart = k != null ? relName + ".k = '" + k + "'" : "";
-		String vPart = v != null ? relName + ".v = '" + v + "'" : "";
+		String kPart = k != null ? relName + "k = '" + k + "'" : "";
+		String vPart = v != null ? relName + "v = '" + v + "'" : "";
 		
 		String opPart = "";
 		if(k != null && v != null) {

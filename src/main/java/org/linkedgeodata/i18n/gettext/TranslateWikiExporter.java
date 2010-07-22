@@ -18,7 +18,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
-import org.linkedgeodata.jtriplify.TagMapper;
+import org.linkedgeodata.osm.mapping.TagMapper;
 import org.linkedgeodata.util.SinglePrefetchIterator;
 import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 

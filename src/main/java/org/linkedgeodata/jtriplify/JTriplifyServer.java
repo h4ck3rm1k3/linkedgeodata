@@ -59,6 +59,7 @@ import org.linkedgeodata.jtriplify.methods.FunctionUtil;
 import org.linkedgeodata.jtriplify.methods.IInvocable;
 import org.linkedgeodata.jtriplify.methods.JavaMethodInvocable;
 import org.linkedgeodata.jtriplify.methods.Pair;
+import org.linkedgeodata.osm.mapping.TagMapper;
 import org.linkedgeodata.util.ExceptionUtil;
 import org.linkedgeodata.util.ModelUtil;
 import org.linkedgeodata.util.PostGISUtil;
@@ -173,8 +174,10 @@ class Model2Handler
 
 		String body = ModelUtil.toString(model, resultType.getKey());
 
-		if(resultType.getValue().match("text/html"))
+		if(resultType.getValue().match("text/html")) {
 			body = StringEscapeUtils.escapeHtml(body);
+			body = body.replace("\n", "<br />");
+		}
 		
 		if(resultType != null) {
 			MyHandler.sendResponse(x, 200, resultType.getValue().toString(), body);
@@ -878,7 +881,7 @@ public class JTriplifyServer
 	
 		logger.info("Loading mapping rules");
 		TagMapper tagMapper = new TagMapper();
-		tagMapper.load(new File("output/LGDMappingRules.2.0.xml"));
+		tagMapper.load(new File("data/triplify/config/2.0/LGDMappingRules.2.0.xml"));
 		
 		LGDDAO innerDAO = new LGDDAO(conn);
 		

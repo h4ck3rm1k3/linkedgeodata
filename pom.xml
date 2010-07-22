@@ -241,6 +241,7 @@
 		</dependency>
 	<!-- [End Osmosis Stuff] -->
 
+<!-- 
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
@@ -248,6 +249,34 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
+ -->
+		
+  	<dependency>
+  		<groupId>org.hibernate</groupId>
+  		<artifactId>hibernate-annotations</artifactId>
+  		<version>3.4.0.GA</version>
+  		<type>jar</type>
+  		<scope>compile</scope>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.hibernate</groupId>
+  		<artifactId>hibernate-core</artifactId>
+  		<version>3.3.2.GA</version>
+  		<type>jar</type>
+  		<scope>compile</scope>
+  	</dependency>  	  	
+	<dependency><!-- java bytecode processor -->
+	    <groupId>javassist</groupId>
+	    <artifactId>javassist</artifactId>
+	    <version>3.4.GA</version>
+	</dependency>
+	<dependency>
+		<groupId>org.slf4j</groupId>
+		<artifactId>slf4j-api</artifactId>
+		<version>1.6.0</version>
+		<type>jar</type>
+		<scope>compile</scope>
+	</dependency>
   </dependencies>
   <properties>
   	<maven.compiler.source>1.6</maven.compiler.source>

@@ -3,8 +3,8 @@ package org.linkedgeodata.unsorted;
 import java.io.File;
 import java.util.regex.Pattern;
 
-import org.linkedgeodata.jtriplify.TagMapper;
-import org.linkedgeodata.jtriplify.mapping.LangTextMapper;
+import org.linkedgeodata.osm.mapping.TagMapper;
+import org.linkedgeodata.osm.mapping.impl.RegexTextTagMapper;
 import org.linkedgeodata.util.ModelUtil;
 import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 
@@ -17,7 +17,7 @@ public class Playground
 		throws Exception
 	{
 		TagMapper mapper = new TagMapper();
-		mapper.add(new LangTextMapper("http://rdfslabel.org", Pattern.compile("name:([^:]+)"), false));
+		mapper.add(new RegexTextTagMapper("http://rdfslabel.org", Pattern.compile("name:([^:]+)"), false));
 		
 		mapper.save(new File("/tmp/tmp.txt"));
 		
