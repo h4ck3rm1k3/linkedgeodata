@@ -28,7 +28,15 @@
   		<id>our archiva</id>
   		<url>http://db0.aksw.org:8081/archiva/repository/internal/</url>
   	</repository>
+
+	<!-- Repository for hibernate -->
+    <repository>
+    	<id>repository.jboss.org</id>
+    	<url>http://repository.jboss.com/maven2</url>
+    </repository> 
+
   </repositories>
+
   <dependencies>
   	<dependency>
   		<groupId>com.jamonapi</groupId>
@@ -168,13 +176,7 @@
 			<artifactId>commons-cli</artifactId>
 			<version>1.2</version>
 		</dependency>
-		
-		<dependency>
-			<groupId>commons-collections</groupId>
-			<artifactId>commons-collections</artifactId>
-			<version>2.1.1</version>
-		</dependency>
-		
+				
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-compress</artifactId>
@@ -255,7 +257,8 @@
 		</dependency>
 	<!-- [End Osmosis Stuff] -->
 
-<!-- 
+ 
+ <!-- 
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
@@ -263,19 +266,33 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
- -->
-		
+-->
+ <!--
+ This dependency gives the following error:
+ SLF4J: See http://www.slf4j.org/codes.html#version_mismatch for further details.
+Exception in thread "main" java.lang.NoSuchMethodError: org.slf4j.helpers.MessageFormatter.format(Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/String;
+
+	<dependency>
+		<groupId>org.slf4j</groupId>
+		<artifactId>slf4j-api</artifactId>
+		<version>1.6.0</version>
+		<type>jar</type>
+		<scope>compile</scope>
+	</dependency>
+  -->	
+  
+  	<!-- Hibernate specific stuff -->	
   	<dependency>
   		<groupId>org.hibernate</groupId>
   		<artifactId>hibernate-annotations</artifactId>
-  		<version>3.4.0.GA</version>
+  		<version>3.5.1-Final</version>
   		<type>jar</type>
   		<scope>compile</scope>
   	</dependency>
   	<dependency>
   		<groupId>org.hibernate</groupId>
   		<artifactId>hibernate-core</artifactId>
-  		<version>3.3.2.GA</version>
+  		<version>3.5.1-Final</version>
   		<type>jar</type>
   		<scope>compile</scope>
   	</dependency>  	  	
@@ -291,6 +308,19 @@
 		<type>jar</type>
 		<scope>compile</scope>
 	</dependency>
+	<dependency>
+		<groupId>org.slf4j</groupId>
+		<artifactId>slf4j-log4j12</artifactId>
+		<version>1.6.0</version>
+		<type>jar</type>
+		<scope>compile</scope>
+	</dependency>
+	<dependency>
+		<groupId>commons-collections</groupId>
+		<artifactId>commons-collections</artifactId>
+		<version>3.2.1</version>
+	</dependency>
+	
   </dependencies>
   <properties>
   	<maven.compiler.source>1.6</maven.compiler.source>

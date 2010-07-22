@@ -14,9 +14,11 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 
 /**
  * 
- * TODO: All methods consisting of more than 1 line should be put into the 
+ * TODO All methods consisting of more than 1 line should be put into the 
  * LGDRDFDAO
  * 
+ * TODO Use Jersey for providing the REST-interface
+ * http://docs.sun.com/app/docs/doc/820-4867/ggnxo?l=en&a=view
  * @author raven
  *
  */

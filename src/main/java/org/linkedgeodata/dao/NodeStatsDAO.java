@@ -38,11 +38,18 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.apache.log4j.config.PropertyGetter.PropertyCallback;
+import org.linkedgeodata.osm.mapping.DBTagMapper;
+import org.linkedgeodata.osm.mapping.TagMappingDB;
+import org.linkedgeodata.util.ModelUtil;
 import org.linkedgeodata.util.PostGISUtil;
 import org.linkedgeodata.util.SQLUtil;
 import org.linkedgeodata.util.StringUtil;
 import org.linkedgeodata.util.tiles.SubTileIdCollection;
 import org.linkedgeodata.util.tiles.TileUtil;
+import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
+
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
 
 
 
@@ -70,6 +77,18 @@ public class NodeStatsDAO
 		PropertyConfigurator.configure("log4j.properties");
 		
 		Connection conn = PostGISUtil.connectPostGIS("localhost", "unittest_lgd", "postgres", "postgres");
+
+		
+		DBTagMapper tagMapper = new DBTagMapper();
+		Model model = ModelFactory.createDefaultModel();
+		tagMapper.map("http://test", new Tag("amenity", "park"), model);
+		
+		System.out.println("RESULT:");
+		System.out.println("-------------------------------");
+		System.out.println( ModelUtil.toString(model));
+		
+		if(true)
+			System.exit(0);
 		
 		
 		NodeStatsDAO dao = new NodeStatsDAO();

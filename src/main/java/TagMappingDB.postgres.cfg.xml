@@ -22,14 +22,14 @@
 		<property name="current_session_context_class">thread</property>
 		<property name="hibernate.show_sql">true</property>
 
-		<mapping class="org.example.myproject.client.entity.AbstractEntity" />
-		<mapping class="org.example.myproject.client.entity.AbstractSimpleOneOneTagMapperState" />
+		<mapping class="org.linkedgeodata.tagmapping.client.entity.AbstractEntity" />
+		<mapping class="org.linkedgeodata.tagmapping.client.entity.AbstractSimpleOneOneTagMapperState" />
 		
-		<mapping class="org.example.myproject.client.entity.SimpleClassTagMapperState" />
-		<mapping class="org.example.myproject.client.entity.SimpleDataTypeTagMapperState" />
-		<mapping class="org.example.myproject.client.entity.SimpleObjectPropertyTagMapperState" />
-		<mapping class="org.example.myproject.client.entity.SimpleTextTagMapperState" />
-		<mapping class="org.example.myproject.client.entity.RegexTextTagMapperState" />
+		<mapping class="org.linkedgeodata.tagmapping.client.entity.SimpleClassTagMapperState" />
+		<mapping class="org.linkedgeodata.tagmapping.client.entity.SimpleDataTypeTagMapperState" />
+		<mapping class="org.linkedgeodata.tagmapping.client.entity.SimpleObjectPropertyTagMapperState" />
+		<mapping class="org.linkedgeodata.tagmapping.client.entity.SimpleTextTagMapperState" />
+		<mapping class="org.linkedgeodata.tagmapping.client.entity.RegexTextTagMapperState" />
 
 
 		<!-- documentation for connection pool settings: 
