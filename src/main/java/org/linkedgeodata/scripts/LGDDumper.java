@@ -49,7 +49,7 @@ import org.linkedgeodata.dao.LGDDAO;
 import org.linkedgeodata.dao.LGDRDFDAO;
 import org.linkedgeodata.dump.NodeIdIterator;
 import org.linkedgeodata.dump.WayIdIterator;
-import org.linkedgeodata.osm.mapping.TagMapper;
+import org.linkedgeodata.osm.mapping.InMemoryTagMapper;
 import org.linkedgeodata.util.ExceptionUtil;
 import org.linkedgeodata.util.ModelUtil;
 import org.linkedgeodata.util.PostGISUtil;
@@ -221,7 +221,7 @@ public class LGDDumper
 		//System.exit(0);
 		
 		logger.info("Loading mapping rules: " + mappingRulesPath);
-		TagMapper tagMapper = new TagMapper();
+		InMemoryTagMapper tagMapper = new InMemoryTagMapper();
 		tagMapper.load(new File(mappingRulesPath));
 
 		

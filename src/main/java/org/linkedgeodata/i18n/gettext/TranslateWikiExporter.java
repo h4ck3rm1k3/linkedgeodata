@@ -18,7 +18,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
-import org.linkedgeodata.osm.mapping.TagMapper;
+import org.linkedgeodata.osm.mapping.InMemoryTagMapper;
 import org.linkedgeodata.util.SinglePrefetchIterator;
 import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 
@@ -168,9 +168,9 @@ interface IEntityResolver
 class EntityResolver2
 	implements IEntityResolver
 {
-	private TagMapper tagMapper;
+	private InMemoryTagMapper tagMapper;
 	
-	public EntityResolver2(TagMapper tagMapper)
+	public EntityResolver2(InMemoryTagMapper tagMapper)
 	{
 		this.tagMapper = tagMapper;
 	}
@@ -306,7 +306,7 @@ public class TranslateWikiExporter
 		PropertyConfigurator.configure("log4j.properties");
 	
 		logger.info("Loading tag mappings");
-		TagMapper tagMapper = new TagMapper();
+		InMemoryTagMapper tagMapper = new InMemoryTagMapper();
 		tagMapper.load(new File("output/LGDMappingRules.2.0.xml"));
 		
 		logger.info("Initializing EntityResolver");

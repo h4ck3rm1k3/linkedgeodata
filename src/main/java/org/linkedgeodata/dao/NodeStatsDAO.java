@@ -30,6 +30,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -37,9 +38,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
-import org.apache.log4j.config.PropertyGetter.PropertyCallback;
-import org.linkedgeodata.osm.mapping.DBTagMapper;
-import org.linkedgeodata.osm.mapping.TagMappingDB;
+import org.linkedgeodata.core.LGDVocab;
 import org.linkedgeodata.util.ModelUtil;
 import org.linkedgeodata.util.PostGISUtil;
 import org.linkedgeodata.util.SQLUtil;
@@ -50,9 +49,59 @@ import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.vocabulary.RDF;
 
 
+/**
+ * TODO Implements this class
+ * What I'm trying to do here:
+ * When querying for certain instances, the result is a set of tile-data of 
+ * certain types: either there are actual items in the area, or there are
+ * just some stats for that tile instead.
+ * 
+ * This data could be used to render clickable tiles on the map when there is
+ * too much data, where a zoom-in action is activated when clicked.
+ *  
+ */ 
+class TileResult
+{
+	private RectangularShape rect;
+	private int zoom;
+	private long tileId;
+	private long subTileCount;
+	private long estimatedNodeCount;
 
+	private List<Long> nodeIds;
+	
+	public List<Long> getNodeIds()
+	{
+		return nodeIds;
+	}
+	
+	/**
+	 * Returns the rectangle in the form latmin-latmax,longmin-longmax
+	 * 
+	 * 
+	 * @param rect
+	 * @return
+	 */
+	private static String toLatLong(RectangularShape rect)
+	{
+		return rect.getMinY() + "-" + rect.getMaxY() + "," + rect.getMinX() + "-" + rect.getMaxX();
+	}
+	
+	public void toRDF(Model model) {
+		Resource subject = model.createResource("http://linkedgeodata.org/area/rect" + toLatLong(rect));
+		//Resource subject = model.createResource("http://linkedgeodata.org/area/rect" + toLatLong(rect));
+		
+		model.add(subject, RDF.type, model.createResource(LGDVocab.ONTOLOGY + "TileArea"));
+		model.addLiteral(subject, model.createProperty(LGDVocab.ONTOLOGY + "tileId"), tileId);
+		model.addLiteral(subject, model.createProperty(LGDVocab.ONTOLOGY + "zoomLevel"), zoom);
+		model.addLiteral(subject, model.createProperty(LGDVocab.ONTOLOGY + "subTileCount"), subTileCount);
+		model.addLiteral(subject, model.createProperty(LGDVocab.ONTOLOGY + "estimatedNodeCount"), estimatedNodeCount);
+	}
+}
 
 
 public class NodeStatsDAO
@@ -78,93 +127,49 @@ public class NodeStatsDAO
 		
 		Connection conn = PostGISUtil.connectPostGIS("localhost", "unittest_lgd", "postgres", "postgres");
 
+		NodeStatsDAO nodeStatsDAO = new NodeStatsDAO();
+		nodeStatsDAO.setConnection(conn);
 		
-		DBTagMapper tagMapper = new DBTagMapper();
+		TagMapperDAO tagMapper = new TagMapperDAO();
+		LGDDAO lgdDAO = new LGDDAO(conn);
+		LGDRDFDAO dao = new LGDRDFDAO(lgdDAO, tagMapper, new LGDVocab());
+
+		
+		Rectangle2D maxRect = dao.getSQLDAO().getNodeDAO().getNodeExtents();
+		System.out.println("MaxRect: " + maxRect);
+
+		String k = "amenity";
+		//String v = "pub";
+		String v = null;
+		int maxZoom = 16;
+
+		
+		String tagFilter = "k = '" + k + "'";
+		
+		if(v != null)
+			tagFilter += " AND v = '" + v + "'";
+		
+		List<Long> candidateTiles = nodeStatsDAO.getCandidateTiles(maxRect, k, v);
+		List<Long> nodeIds = nodeStatsDAO.getNodeIds(candidateTiles, maxZoom, maxRect, tagFilter);
+
+		
 		Model model = ModelFactory.createDefaultModel();
-		tagMapper.map("http://test", new Tag("amenity", "park"), model);
+		dao.resolveNodes(model, Collections.singleton(nodeIds.iterator().next()), false, tagFilter);
+
+		System.out.println("Sleep");
+		Thread.sleep(1000);
+		System.out.println("Running");
+		
+		dao.resolveNodes(model, nodeIds, false, tagFilter);
+		
+		//tagMapper.map("http://test", new Tag("amenity", "park"), model);
+
 		
 		System.out.println("RESULT:");
 		System.out.println("-------------------------------");
 		System.out.println( ModelUtil.toString(model));
 		
-		if(true)
-			System.exit(0);
-		
-		
-		NodeStatsDAO dao = new NodeStatsDAO();
-		dao.setConnection(conn);
-		
-		//NodeDAO ndao = new NodeDAO(conn);
-		LGDDAO ldao = new LGDDAO(conn);
-		NodeDAO ndao = ldao.getNodeDAO();
-		
-		Rectangle2D maxRect = ndao.getNodeExtents();
-		System.out.println("MaxRect: " + maxRect);
-
-		String k = "amenity";
-		String v = "pub";
-		int maxZoom = 16;
-		/*
-		int zoom = 4;
-		
-		
-		int limit = 500;
-		
-		
-		if(zoom > maxZoom)
-			zoom = maxZoom;
-		
-		int delta = 2;
-		List<Long> candidateTiles = getTileIds(maxRect, zoom);
-		while(zoom != maxZoom) {
-			System.out.println("Entering level " + zoom);
-		
-			List<Long> tileIds = candidateTiles;
-			System.out.println("TileIds before clipping: " + tileIds.size() + "; " + tileIds);
-		
-			// TODO Clip the tiles against the rect
-			Iterator<Long> it = tileIds.iterator();
-			while(it.hasNext()) {
-				Rectangle2D tileRect = TileUtil.getRectangle(it.next(), zoom);
-		
-				//System.out.println(tileRect + " vs " + maxRect);
-				if(!(maxRect.intersects(tileRect) || maxRect.contains(tileRect)))
-					it.remove();
-			}
-			System.out.println("TileIds after clipping: " + tileIds.size() + "; " + tileIds);
-			
-			
-			Map<Long, Long> counts = dao.getCounts(tileIds, zoom, k, v);
-			System.out.println("Counts: " + counts);
-			
-			candidateTiles = new ArrayList<Long>();
-			for(Map.Entry<Long, Long> entry : counts.entrySet()) {
-				long itemCount = entry.getValue();
-				if(itemCount == 0 || itemCount > limit) {
-					continue;
-				}
-				
-				// add all children of the current tile
-				Collection<Long> subTileIds =
-					new SubTileIdCollection(entry.getKey(), delta);
-				
-				for(long subTileId : subTileIds)  
-					candidateTiles.add(subTileId);
-			}
-			
-			zoom += delta;
-		}
-		*/
-		
-		List<Long> candidateTiles = dao.getCandidateTiles(maxRect, k, v);
-		
-		System.out.println("Result:" + candidateTiles);
-		
-			
-		// Loading node-ids from the remaining tiles
-		List<Long> nodeIds = dao.getNodeIds(candidateTiles, maxZoom, maxRect, "k = '" + k + "' AND v = '" + v + "'");
-		
-		System.out.println("Nodes (" + nodeIds.size() + "): " + nodeIds);
+		System.out.println("Count: " + nodeIds.size());
 	}
 	
 	
@@ -513,8 +518,12 @@ public class NodeStatsDAO
 			candidateTiles = new ArrayList<Long>();
 			for(Map.Entry<Long, Long> entry : counts.entrySet()) {
 				long itemCount = entry.getValue();
-				if(itemCount == 0 || itemCount > limit) {
+				if(itemCount == 0)
 					continue;
+
+				if(itemCount > limit) {
+					logger.trace("Skipping tile because ItemCount " + itemCount + " exceeds limit " + limit);
+					break;
 				}
 				
 				// add all children of the current tile

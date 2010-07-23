@@ -24,12 +24,15 @@ import java.io.Serializable;
 
 import javax.persistence.Entity;
 
+import org.hibernate.annotations.Index;
+import org.hibernate.annotations.Table;
+
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 
 @Entity
 public class SimpleClassTagMapperState
-	extends AbstractSimpleOneOneTagMapperState
+	extends AbstractSimpleTagMapperState
 	implements Serializable, IsSerializable
 {
 	/**

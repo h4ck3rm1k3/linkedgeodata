@@ -25,7 +25,7 @@ import javax.persistence.Entity;
 
 @Entity
 public class SimpleTextTagMapperState
-	extends AbstractSimpleOneOneTagMapperState
+	extends AbstractSimpleTagMapperState
 {		
 	/**
 	 * 

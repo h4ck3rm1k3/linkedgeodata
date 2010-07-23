@@ -21,24 +21,22 @@
 package org.linkedgeodata.osm.mapping.impl;
 
 import org.linkedgeodata.core.ILGDVocab;
-import org.linkedgeodata.core.LGDVocab;
-import org.linkedgeodata.osm.mapping.TagMapper;
+import org.linkedgeodata.osm.mapping.ITagMapper;
 import org.linkedgeodata.util.ITransformer;
 import org.openstreetmap.osmosis.core.domain.v0_6.Way;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.vocabulary.RDF;
 
 public class SimpleWayToRDFTransformer
 	implements ITransformer<Way, Model>
 {
 	//private static final String WGS84_WAY = "";
 
-	private TagMapper tagMapper;
+	private ITagMapper tagMapper;
 	private ILGDVocab vocab;
 	
-	public SimpleWayToRDFTransformer(TagMapper tagMapper, ILGDVocab vocab)
+	public SimpleWayToRDFTransformer(ITagMapper tagMapper, ILGDVocab vocab)
 	{
 		this.tagMapper = tagMapper;
 		this.vocab = vocab;

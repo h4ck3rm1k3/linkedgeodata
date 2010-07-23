@@ -3,7 +3,7 @@ package org.linkedgeodata.unsorted;
 import java.io.File;
 import java.util.regex.Pattern;
 
-import org.linkedgeodata.osm.mapping.TagMapper;
+import org.linkedgeodata.osm.mapping.InMemoryTagMapper;
 import org.linkedgeodata.osm.mapping.impl.RegexTextTagMapper;
 import org.linkedgeodata.util.ModelUtil;
 import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
@@ -16,7 +16,7 @@ public class Playground
 	public static void main(String[] args)
 		throws Exception
 	{
-		TagMapper mapper = new TagMapper();
+		InMemoryTagMapper mapper = new InMemoryTagMapper();
 		mapper.add(new RegexTextTagMapper("http://rdfslabel.org", Pattern.compile("name:([^:]+)"), false));
 		
 		mapper.save(new File("/tmp/tmp.txt"));

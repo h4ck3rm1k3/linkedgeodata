@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.linkedgeodata.osm.mapping.IOneOneTagMapper;
-import org.linkedgeodata.osm.mapping.TagMapper;
+import org.linkedgeodata.osm.mapping.InMemoryTagMapper;
 import org.linkedgeodata.osm.mapping.impl.ISimpleOneOneTagMapper;
 import org.linkedgeodata.osm.mapping.impl.ISimpleOneOneTagMapperVisitor;
 import org.linkedgeodata.osm.mapping.impl.SimpleClassTagMapper;
@@ -46,15 +46,15 @@ class OntologyGeneratorVistor
 	implements ISimpleOneOneTagMapperVisitor<Void>
 {
 	private Model model;
-	private TagMapper tagMapper;
+	private InMemoryTagMapper tagMapper;
 	
-	public OntologyGeneratorVistor(TagMapper tagMapper)
+	public OntologyGeneratorVistor(InMemoryTagMapper tagMapper)
 	{
 		this.model = ModelFactory.createDefaultModel();
 		this.tagMapper = tagMapper;
 	}
 
-	public OntologyGeneratorVistor(Model model, TagMapper tagMapper)
+	public OntologyGeneratorVistor(Model model, InMemoryTagMapper tagMapper)
 	{
 		this.model = model;
 		this.tagMapper = tagMapper;
@@ -128,7 +128,7 @@ public class TagMapperOntologyGenerator
 	public static void main(String[] args)
 		throws Exception
 	{
-		TagMapper tagMapper = new TagMapper();
+		InMemoryTagMapper tagMapper = new InMemoryTagMapper();
 		tagMapper.load(new File("output/LGDMappingRules.xml"));
 	
 		List<IOneOneTagMapper> list = tagMapper.asList();

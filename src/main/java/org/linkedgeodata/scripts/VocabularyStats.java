@@ -26,7 +26,7 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.linkedgeodata.core.LGDVocab;
 import org.linkedgeodata.jtriplify.TagEntityMap;
-import org.linkedgeodata.osm.mapping.TagMapper;
+import org.linkedgeodata.osm.mapping.InMemoryTagMapper;
 import org.linkedgeodata.osm.mapping.impl.ISimpleOneOneTagMapper;
 import org.linkedgeodata.osm.mapping.impl.SimpleClassTagMapper;
 import org.linkedgeodata.osm.mapping.impl.SimpleDataTypeTagMapper;

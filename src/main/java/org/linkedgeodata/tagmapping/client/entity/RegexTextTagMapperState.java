@@ -18,7 +18,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  */
 @Entity
 public class RegexTextTagMapperState
-	extends AbstractEntity
+	extends AbstractTagMapperState
 	implements Serializable, IsSerializable
 {
 	/**

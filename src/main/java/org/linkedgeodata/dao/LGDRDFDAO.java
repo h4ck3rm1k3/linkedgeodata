@@ -30,9 +30,9 @@ import java.util.Map;
 
 import org.apache.commons.collections15.MultiMap;
 import org.linkedgeodata.core.ILGDVocab;
-import org.linkedgeodata.core.LGDVocab;
 import org.linkedgeodata.core.OSMEntityType;
-import org.linkedgeodata.osm.mapping.TagMapper;
+import org.linkedgeodata.osm.mapping.ITagMapper;
+import org.linkedgeodata.osm.mapping.InMemoryTagMapper;
 import org.linkedgeodata.osm.mapping.impl.SimpleNodeToRDFTransformer;
 import org.linkedgeodata.osm.mapping.impl.SimpleWayToRDFTransformer;
 import org.linkedgeodata.util.ITransformer;
@@ -48,14 +48,14 @@ import com.hp.hpl.jena.vocabulary.RDF;
 public class LGDRDFDAO
 {
 	private LGDDAO dao;
-	private TagMapper tagMapper;
+	private ITagMapper tagMapper;
 
 	private ITransformer<Node, Model> nodeTransformer;
 	private ITransformer<Way, Model> wayTransformer;
 	
 	private ILGDVocab vocab;
 	
-	public LGDRDFDAO(LGDDAO dao, TagMapper tagMapper, ILGDVocab vocab)
+	public LGDRDFDAO(LGDDAO dao, ITagMapper tagMapper, ILGDVocab vocab)
 	{
 		this.dao = dao;
 		this.tagMapper = tagMapper;

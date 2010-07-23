@@ -59,7 +59,7 @@ import org.linkedgeodata.jtriplify.methods.FunctionUtil;
 import org.linkedgeodata.jtriplify.methods.IInvocable;
 import org.linkedgeodata.jtriplify.methods.JavaMethodInvocable;
 import org.linkedgeodata.jtriplify.methods.Pair;
-import org.linkedgeodata.osm.mapping.TagMapper;
+import org.linkedgeodata.osm.mapping.InMemoryTagMapper;
 import org.linkedgeodata.util.ExceptionUtil;
 import org.linkedgeodata.util.ModelUtil;
 import org.linkedgeodata.util.PostGISUtil;
@@ -880,7 +880,7 @@ public class JTriplifyServer
 		Map<String, String> prefixMap = prefixModel.getNsPrefixMap();
 	
 		logger.info("Loading mapping rules");
-		TagMapper tagMapper = new TagMapper();
+		InMemoryTagMapper tagMapper = new InMemoryTagMapper();
 		tagMapper.load(new File("data/triplify/config/2.0/LGDMappingRules.2.0.xml"));
 		
 		LGDDAO innerDAO = new LGDDAO(conn);

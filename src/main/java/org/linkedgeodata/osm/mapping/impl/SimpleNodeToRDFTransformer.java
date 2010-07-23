@@ -25,9 +25,9 @@ import java.util.Date;
 
 import org.apache.log4j.Logger;
 import org.linkedgeodata.core.ILGDVocab;
-import org.linkedgeodata.core.LGDVocab;
 import org.linkedgeodata.core.vocab.WGS84Pos;
-import org.linkedgeodata.osm.mapping.TagMapper;
+import org.linkedgeodata.osm.mapping.ITagMapper;
+import org.linkedgeodata.osm.mapping.InMemoryTagMapper;
 import org.linkedgeodata.util.ITransformer;
 import org.openstreetmap.osmosis.core.domain.v0_6.Node;
 import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
@@ -52,12 +52,12 @@ public class SimpleNodeToRDFTransformer
 	implements ITransformer<Node, Model>
 {
 	private static final Logger logger = Logger.getLogger(SimpleNodeToRDFTransformer.class);
-	private TagMapper tagMapper;
+	private ITagMapper tagMapper;
 	private ILGDVocab vocab;
 	
 	private static int parseErrorCount = 0;
 	
-	public SimpleNodeToRDFTransformer(TagMapper tagMapper, ILGDVocab vocab)
+	public SimpleNodeToRDFTransformer(ITagMapper tagMapper, ILGDVocab vocab)
 	{
 		this.tagMapper = tagMapper;
 		this.vocab = vocab;
@@ -88,7 +88,7 @@ public class SimpleNodeToRDFTransformer
 		return transform(model, node);
 	}
 	
-	public static void generateTags(TagMapper tagMapper, Model model, String subject, Collection<Tag> tags)
+	public static void generateTags(ITagMapper tagMapper, Model model, String subject, Collection<Tag> tags)
 	{
 		//if(tags == null)
 

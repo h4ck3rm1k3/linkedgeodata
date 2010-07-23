@@ -8,7 +8,7 @@ import org.apache.log4j.PropertyConfigurator;
 import org.junit.Before;
 import org.junit.Test;
 import org.linkedgeodata.jtriplify.TripleUtil;
-import org.linkedgeodata.osm.mapping.TagMapper;
+import org.linkedgeodata.osm.mapping.InMemoryTagMapper;
 import org.linkedgeodata.osm.mapping.impl.ISimpleOneOneTagMapper;
 import org.linkedgeodata.osm.mapping.impl.SimpleClassTagMapper;
 import org.linkedgeodata.osm.mapping.impl.SimpleDataTypeTagMapper;
@@ -116,12 +116,12 @@ public class SimpleClassTagMapperTest
 		
 		ISimpleOneOneTagMapper obj = new SimpleDataTypeTagMapper(classURI, new SimpleTagPattern("a", "b"), XSD.xint.toString(), false);
 
-		TagMapper tm = new TagMapper();
+		InMemoryTagMapper tm = new InMemoryTagMapper();
 		tm.index(obj);
 		
 		tm.save(new File("/tmp/TagMapping.xml"));
 		
-		TagMapper tm2 = new TagMapper();
+		InMemoryTagMapper tm2 = new InMemoryTagMapper();
 		tm2.load(new File("/tmp/TagMapping.xml"));
 		
 		Model m = tm.map("www.x.org", new Tag("a", "b"), null);		

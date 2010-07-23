@@ -22,10 +22,13 @@ package org.linkedgeodata.tagmapping.client.entity;
 
 import java.io.Serializable;
 
-import javax.persistence.MappedSuperclass;
+import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.Index;
+import org.hibernate.annotations.Table;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
@@ -38,10 +41,17 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  * @author raven
  *
  */
-@MappedSuperclass
-//@Index(name="idx_abstractsimpleoneonetagmapperstate_kv", columnNames={"key", "value"})
-public abstract class AbstractSimpleOneOneTagMapperState
-	extends AbstractEntity
+@Entity
+@Inheritance(strategy=InheritanceType.JOINED)
+@Table(
+		appliesTo="AbstractSimpleTagMapperState",
+		indexes = {
+				@Index(name="idx_lgd_abstract_simple_tag_mapper_state_k_v", columnNames={"key", "value"}),
+				@Index(name="idx_lgd_abstract_simple_tag_mapper_state_r", columnNames={"resource"})
+		}
+)
+public abstract class AbstractSimpleTagMapperState
+	extends AbstractTagMapperState
 	implements Serializable, IsSerializable
 {
 	/**
@@ -51,20 +61,18 @@ public abstract class AbstractSimpleOneOneTagMapperState
 	
 	private SimpleTagPattern tagPattern;
 	
-	//@Index(name = "")
 	private String resource;
-	//private String method;
 
 	// Whether the tag pertains to the OSM entity, or the concept that
 	// the resource represents
 	private boolean describesOSMEntity = false;
 	
-	public AbstractSimpleOneOneTagMapperState()
+	public AbstractSimpleTagMapperState()
 	{
 	}
 	
 	
-	protected AbstractSimpleOneOneTagMapperState(String resource, SimpleTagPattern tagPattern, boolean describesOSMEntity)
+	protected AbstractSimpleTagMapperState(String resource, SimpleTagPattern tagPattern, boolean describesOSMEntity)
 	{
 		this.resource = resource;
 		//this.method = null;
@@ -72,7 +80,7 @@ public abstract class AbstractSimpleOneOneTagMapperState
 		this.describesOSMEntity = describesOSMEntity;
 	}
 
-	protected AbstractSimpleOneOneTagMapperState(String resource, String method, SimpleTagPattern tagPattern, boolean describesOSMEntity)
+	protected AbstractSimpleTagMapperState(String resource, String method, SimpleTagPattern tagPattern, boolean describesOSMEntity)
 	{
 		this.resource = resource;
 		//this.method = method;

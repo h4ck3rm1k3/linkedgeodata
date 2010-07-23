@@ -31,7 +31,7 @@ import org.apache.log4j.Logger;
 import org.linkedgeodata.core.OSMEntityType;
 import org.linkedgeodata.jtriplify.LGDOSMEntityBuilder;
 import org.linkedgeodata.jtriplify.TriplifyUtil;
-import org.linkedgeodata.osm.mapping.TagMapper;
+import org.linkedgeodata.osm.mapping.InMemoryTagMapper;
 import org.linkedgeodata.osm.mapping.impl.SimpleNodeToRDFTransformer;
 import org.linkedgeodata.util.ExceptionUtil;
 import org.linkedgeodata.util.SQLUtil;
@@ -60,9 +60,9 @@ public class LinkedGeoDataDAO
 	}
 
 	private Transformer<String, URI> uriResolver;
-	private TagMapper tagMapper;
+	private InMemoryTagMapper tagMapper;
 	
-	public LinkedGeoDataDAO(Transformer<String, URI> uriResolver, TagMapper tagMapper)
+	public LinkedGeoDataDAO(Transformer<String, URI> uriResolver, InMemoryTagMapper tagMapper)
 	{
 		this.uriResolver = uriResolver;
 		
@@ -85,7 +85,7 @@ public class LinkedGeoDataDAO
 
 	
 	
-	private static Model mapNodeTags(ResultSet rs, TagMapper tagMapper, Model model)
+	private static Model mapNodeTags(ResultSet rs, InMemoryTagMapper tagMapper, Model model)
 		throws Exception
 	{
 		while(rs.next()) {

@@ -53,6 +53,7 @@ public class NodeDAO
 	
 	private PreparedStatement stmtGetNodeExtents;
 	
+	private NodeStatsDAO nodeStatsDAO = new NodeStatsDAO();
 	
 	public NodeDAO()
 	{
@@ -62,6 +63,7 @@ public class NodeDAO
 		throws SQLException
 	{
 		setConnection(conn);
+		nodeStatsDAO.setConnection(conn);
 	}
 	
 	

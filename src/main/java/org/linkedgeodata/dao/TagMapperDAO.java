@@ -1,4 +1,4 @@
-package org.linkedgeodata.osm.mapping;
+package org.linkedgeodata.dao;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,23 +8,37 @@ import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.linkedgeodata.tagmapping.client.entity.AbstractEntity;
-import org.linkedgeodata.tagmapping.client.entity.AbstractSimpleOneOneTagMapperState;
+import org.linkedgeodata.osm.mapping.IOneOneTagMapper;
+import org.linkedgeodata.osm.mapping.ITagMapper;
+import org.linkedgeodata.osm.mapping.TagMapperInstantiator;
+import org.linkedgeodata.osm.mapping.TagMappingDB;
+import org.linkedgeodata.tagmapping.client.entity.AbstractTagMapperState;
+import org.linkedgeodata.tagmapping.client.entity.AbstractSimpleTagMapperState;
 import org.linkedgeodata.tagmapping.client.entity.RegexTextTagMapperState;
 import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 
 import com.hp.hpl.jena.rdf.model.Model;
 
-
-public class DBTagMapper
+public class TagMapperDAO
 	implements ITagMapper
 {
-	private static final Logger logger = Logger.getLogger(DBTagMapper.class);
+	private static final Logger logger = Logger.getLogger(TagMapperDAO.class);
 	
 	
-	public List<AbstractEntity> getTagMappings(String k, String v)
+	/*
+	public Collection<String> getClassKeys()
 	{
-		int limit = 100;
+	}
+	
+	public Collection<String> getClassTags()
+	{
+	}
+	*/
+	
+	
+	public List<AbstractTagMapperState> getTagMappings(String k, String v)
+	{
+		//int limit = 100;
 		//limit = constrain(limit, 0, 100);
 		
 		Session session = TagMappingDB.getSession();
@@ -33,7 +47,7 @@ public class DBTagMapper
 		//k = k.replace("%", "\\%") + "%";
 		//v = v.replace("%", "\\%") + "%";
 		
-		List<AbstractEntity> result = new ArrayList<AbstractEntity>();
+		List<AbstractTagMapperState> result = new ArrayList<AbstractTagMapperState>();
 		try {
 			Query query = session.createQuery("SELECT o FROM RegexTextTagMapperState o");
 
@@ -50,26 +64,26 @@ public class DBTagMapper
 			}
 			
 			if(result.isEmpty()) {
-				query = session.createQuery("SELECT o FROM " + AbstractSimpleOneOneTagMapperState.class.getName() + " o WHERE o.tagPattern.key = :k AND o.tagPattern.value = :v");
+				query = session.createQuery("SELECT o FROM " + AbstractSimpleTagMapperState.class.getName() + " o WHERE o.tagPattern.key = :k AND o.tagPattern.value = :v");
 				
 				query.setParameter("k", k);
 				query.setParameter("v", v);
 				
-				query.setMaxResults(limit);
+				//query.setMaxResults(limit);
 				
 				for(Object o: query.list()) {
-					result.add((AbstractEntity)o);
+					result.add((AbstractTagMapperState)o);
 				}
 			}
 			
 			if(result.isEmpty()) {
-				query = session.createQuery("SELECT o FROM " + AbstractSimpleOneOneTagMapperState.class.getName() + " o WHERE o.tagPattern.key = :k AND o.tagPattern.value IS NULL");
+				query = session.createQuery("SELECT o FROM " + AbstractSimpleTagMapperState.class.getName() + " o WHERE o.tagPattern.key = :k AND o.tagPattern.value IS NULL");
 				
 				query.setParameter("k", k);				
-				query.setMaxResults(limit);
+				//query.setMaxResults(limit);
 				
 				for(Object o: query.list()) {
-					result.add((AbstractEntity)o);
+					result.add((AbstractTagMapperState)o);
 				}
 			}
 			
@@ -89,9 +103,9 @@ public class DBTagMapper
 	@Override
 	public Model map(String subject, Tag tag, Model model)
 	{
-		List<AbstractEntity> mapperStates = getTagMappings(tag.getKey(), tag.getValue());
+		List<AbstractTagMapperState> mapperStates = getTagMappings(tag.getKey(), tag.getValue());
 		
-		for(AbstractEntity item : mapperStates) {
+		for(AbstractTagMapperState item : mapperStates) {
 			IOneOneTagMapper mapper = TagMapperInstantiator.getInstance().instantiate(item);
 			
 			//Model model = ModelFactory.

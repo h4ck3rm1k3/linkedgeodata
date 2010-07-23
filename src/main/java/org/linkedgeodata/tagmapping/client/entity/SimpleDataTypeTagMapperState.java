@@ -28,7 +28,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 
 @Entity
 public class SimpleDataTypeTagMapperState
-	extends AbstractSimpleOneOneTagMapperState
+	extends AbstractSimpleTagMapperState
 	implements Serializable, IsSerializable
 {		
 	/**

@@ -9,7 +9,7 @@ import java.net.URLEncoder;
 import java.util.List;
 
 import org.linkedgeodata.osm.mapping.IOneOneTagMapper;
-import org.linkedgeodata.osm.mapping.TagMapper;
+import org.linkedgeodata.osm.mapping.InMemoryTagMapper;
 import org.linkedgeodata.osm.mapping.impl.ISimpleOneOneTagMapper;
 import org.linkedgeodata.osm.mapping.impl.ISimpleOneOneTagMapperVisitor;
 import org.linkedgeodata.osm.mapping.impl.SimpleClassTagMapper;
@@ -48,7 +48,7 @@ public class D2RConfigGenerator
 	public static void main(String[] args)
 		throws Exception
 	{
-		TagMapper tagMapper = new TagMapper();
+		InMemoryTagMapper tagMapper = new InMemoryTagMapper();
 		tagMapper.load(new File("output/LGDMappingRules.xml"));
 		
 		File outFile = new File("output/d2rmapping.n3");

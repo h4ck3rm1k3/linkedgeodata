@@ -17,7 +17,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  *
  */
 @MappedSuperclass
-public abstract class AbstractEntity
+public abstract class AbstractTagMapperState
 	implements IEntity, Serializable, IsSerializable
 {
 	private static final long	serialVersionUID	= 1L;

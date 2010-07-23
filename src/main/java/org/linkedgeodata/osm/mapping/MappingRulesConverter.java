@@ -7,6 +7,7 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.Options;
+import org.apache.log4j.PropertyConfigurator;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.linkedgeodata.osm.mapping.impl.ISimpleOneOneTagMapper;
@@ -39,6 +40,8 @@ public class MappingRulesConverter
 	public static void main(String[] args)
 		throws Exception
 	{
+		PropertyConfigurator.configure("log4j.properties");
+		
 		initCLIOptions();
 		CommandLineParser cliParser = new GnuParser();
 		CommandLine commandLine = cliParser.parse(cliOptions, args);
@@ -47,7 +50,7 @@ public class MappingRulesConverter
 		
 		File file = new File(fileName);
 		
-		TagMapper mapper = new TagMapper();
+		InMemoryTagMapper mapper = new InMemoryTagMapper();
 		mapper.load(file);
 	
 		Session session = TagMappingDB.getSession();

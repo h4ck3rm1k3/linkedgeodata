@@ -38,15 +38,15 @@ import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 
-public class TagMapper
-//	implements ITagMapper
+public class InMemoryTagMapper
+	implements ITagMapper
 {
 	// k -> v -> property
 	private Map<String, Map<String, Set<ISimpleOneOneTagMapper>>> kvp = new HashMap<String, Map<String, Set<ISimpleOneOneTagMapper>>>();
 	
 	private List<IOneOneTagMapper> complexMappers = new ArrayList<IOneOneTagMapper>();
 	
-	public TagMapper()
+	public InMemoryTagMapper()
 	{
 	}
 	
@@ -135,6 +135,7 @@ public class TagMapper
 		return null;
 	}
 	
+	@Override
 	public Model map(String subject, Tag tag, Model model)
 	{
 		List<IOneOneTagMapper> candidates = new ArrayList<IOneOneTagMapper>();
