@@ -22,6 +22,10 @@ package org.linkedgeodata.tagmapping.client.entity;
 
 import java.io.Serializable;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -60,6 +64,13 @@ public abstract class AbstractSimpleTagMapperState
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	/*
+	@Embedded
+    @AttributeOverrides( {
+            @AttributeOverride(name="key", column = @Column(name="k") ),
+            @AttributeOverride(name="value", column = @Column(name="v") )
+    })
+    */
 	private SimpleTagPattern tagPattern;
 	
 	private String resource;

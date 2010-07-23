@@ -5,8 +5,6 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
-import org.hibernate.annotations.Index;
-
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 //import org.linkedgeodata.jtriplify.mapping.ITagPattern;
@@ -21,7 +19,6 @@ public class SimpleTagPattern
 	 */
 	private static final long serialVersionUID = 1L;
 
-	//@Index(name = "kv_index", columnNames={"key", "value"})
 	@Column(name="k")
 	private String key;
 	

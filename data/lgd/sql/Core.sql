@@ -1,6 +1,9 @@
 DROP TYPE IF EXISTS OSMEntityType;
 CREATE TYPE OSMEntityType AS ENUM ('node', 'way', 'relation');
 
+DROP TYPE IF EXISTS LGDOWLEntityType;
+CREATE TYPE LGDOWLEntityType AS ENUM ('class', 'objectProperty', 'dataTypeProperty');
+
 /**
  * A view for uniform access to all sorts of tags
  * 

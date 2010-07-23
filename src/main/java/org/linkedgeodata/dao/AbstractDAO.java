@@ -2,6 +2,7 @@ package org.linkedgeodata.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,21 +16,31 @@ public class AbstractDAO
 	protected Map<Object, PreparedStatement> queryToStmt = new HashMap<Object, PreparedStatement>();
 
 	protected Map<Object, String> idToQuery = new HashMap<Object, String>();
-	/*
-	private Collection<? extends IQuery> queries;
+	///*
+	//private Collection<? extends IQuery> queries;
+	
+	protected AbstractDAO()
+	{
+	}
 	
 	protected AbstractDAO(Collection<? extends IQuery> queries)
 	{
-		this.queries = queries;
+		//this.queries = queries;
+
+		for(IQuery item : queries) {
+			idToQuery.put(item, item.getSQL());
+		}
 	}
-	*/
+	//*/
 	
+
 	protected void setPreparedStatement(Object id, String query)
 	{
 		Logger.getLogger(this.getClass()).trace("Preparing statement [" + id + "]: " + query);
 
 		idToQuery.put(id, query);
 	}
+
 	
 	private void close()
 		throws Exception
