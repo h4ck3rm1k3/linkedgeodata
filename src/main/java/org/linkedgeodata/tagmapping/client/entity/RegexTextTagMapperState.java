@@ -3,6 +3,7 @@ package org.linkedgeodata.tagmapping.client.entity;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
@@ -17,6 +18,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  *
  */
 @Entity
+@Table(name="lgd_tag_mapping_regex_text")
 public class RegexTextTagMapperState
 	extends AbstractTagMapperState
 	implements Serializable, IsSerializable

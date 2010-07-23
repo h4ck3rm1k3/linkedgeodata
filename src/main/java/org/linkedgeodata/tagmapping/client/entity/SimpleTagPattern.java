@@ -2,6 +2,7 @@ package org.linkedgeodata.tagmapping.client.entity;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 import org.hibernate.annotations.Index;
@@ -20,8 +21,11 @@ public class SimpleTagPattern
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@Index(name = "kv_index", columnNames={"key", "value"})
+	//@Index(name = "kv_index", columnNames={"key", "value"})
+	@Column(name="k")
 	private String key;
+	
+	@Column(name="v")
 	private String value;
 	
 	public SimpleTagPattern()

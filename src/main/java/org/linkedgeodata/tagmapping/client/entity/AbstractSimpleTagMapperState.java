@@ -25,10 +25,10 @@ import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.Index;
-import org.hibernate.annotations.Table;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
@@ -43,8 +43,9 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  */
 @Entity
 @Inheritance(strategy=InheritanceType.JOINED)
-@Table(
-		appliesTo="AbstractSimpleTagMapperState",
+@Table(name="lgd_tag_mapping_simple_base")
+@org.hibernate.annotations.Table(
+		appliesTo="lgd_tag_mapping_simple_base",
 		indexes = {
 				@Index(name="idx_lgd_abstract_simple_tag_mapper_state_k_v", columnNames={"key", "value"}),
 				@Index(name="idx_lgd_abstract_simple_tag_mapper_state_r", columnNames={"resource"})

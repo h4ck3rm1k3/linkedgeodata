@@ -23,14 +23,13 @@ package org.linkedgeodata.tagmapping.client.entity;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
-
-import org.hibernate.annotations.Index;
-import org.hibernate.annotations.Table;
+import javax.persistence.Table;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 
 @Entity
+@Table(name="lgd_tag_mapping_simple_class")
 public class SimpleClassTagMapperState
 	extends AbstractSimpleTagMapperState
 	implements Serializable, IsSerializable

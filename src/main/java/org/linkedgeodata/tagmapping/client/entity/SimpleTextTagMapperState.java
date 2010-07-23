@@ -21,9 +21,11 @@
 package org.linkedgeodata.tagmapping.client.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 
 @Entity
+@Table(name="lgd_tag_mapping_simple_text")
 public class SimpleTextTagMapperState
 	extends AbstractSimpleTagMapperState
 {		

@@ -5,7 +5,7 @@
 
 <hibernate-configuration>
 	<session-factory>
-		<property name="connection.url">jdbc:postgresql_postGIS://localhost/tagmappingdb</property>
+		<property name="connection.url">jdbc:postgresql_postGIS://localhost/unittest_lgd</property>
 		<property name="connection.username">postgres</property>
 		<property name="connection.password">postgres</property>
 		<property name="connection.driver_class">org.postgis.DriverWrapper</property>

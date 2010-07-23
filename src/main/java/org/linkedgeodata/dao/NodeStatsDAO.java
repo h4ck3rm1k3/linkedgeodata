@@ -29,13 +29,18 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
+import org.apache.commons.collections.TransformerUtils;
+import org.apache.commons.collections.list.TransformedList;
+import org.apache.commons.collections15.Transformer;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.linkedgeodata.core.LGDVocab;
@@ -45,13 +50,11 @@ import org.linkedgeodata.util.SQLUtil;
 import org.linkedgeodata.util.StringUtil;
 import org.linkedgeodata.util.tiles.SubTileIdCollection;
 import org.linkedgeodata.util.tiles.TileUtil;
-import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.RDF;
-
 
 /**
  * TODO Implements this class
@@ -152,6 +155,15 @@ public class NodeStatsDAO
 		List<Long> candidateTiles = nodeStatsDAO.getCandidateTiles(maxRect, k, v);
 		List<Long> nodeIds = nodeStatsDAO.getNodeIds(candidateTiles, maxZoom, maxRect, tagFilter);
 
+		
+		Map<String, Long> statsK = nodeStatsDAO.getStatsNodeTagsK(maxRect, null, false);
+		System.out.println(statsK);
+		
+		Map<String, Map<String, Long>> statsKV = nodeStatsDAO.getStatsNodeTagsKV(maxRect, Arrays.asList("amenity"));
+		System.out.println(statsKV);
+		
+		if(true)
+			System.exit(0);
 		
 		Model model = ModelFactory.createDefaultModel();
 		dao.resolveNodes(model, Collections.singleton(nodeIds.iterator().next()), false, tagFilter);
@@ -335,7 +347,7 @@ public class NodeStatsDAO
 	//public static Rectangle transform(Rect
 
 	
-	public static List<Long> getTileIds(Rectangle2D rect, int zoom)
+	public static List<Long> getTileIds(RectangularShape rect, int zoom)
 	{
 		//double f = Math.pow(2, zoom); // - 1; removed the -1 -- claus
 		
@@ -381,99 +393,211 @@ public class NodeStatsDAO
 	}
 
 	
-	public List<Long> getStatsNodeTagsK(Rectangle rect, List<String> kList, boolean asBlackList)
+	/**
+	 * 
+	 * 
+	 * FIXME Maybe enhance to Map<Map<String, Lon>>
+	 * 
+	 * @param rect
+	 * @param kList
+	 * @param asBlackList
+	 * @return
+	 * @throws SQLException
+	 */
+	public Map<String, Long> getStatsNodeTagsK(RectangularShape rect, List<String> kList, boolean asBlackList)
+		throws SQLException
 	{
 		int maxZoom = 16;
 		
 		int zoom = getZoom(rect);
 		
+		//int limit 100;
+		
+		
 		// TODO SQL Injection vulnerability
-		String filterPart = (kList == null)
+		String filterPart = (kList == null || kList.isEmpty())
 			? ""
 			: " AND t.k IN (" + StringUtil.implode(",", kList) + ")";
 
+		/*
+		String limitPart = (limit == null)
+			? ""
+			: " LIMIT " + limit;
+		*/
+
 		if(zoom > maxZoom)
 			zoom = maxZoom;
-		
+
+		String query;
 		if(zoom == maxZoom) {
-			String query
+			query
 				= "SELECT "
-				+ 	"t.k property, "
-				+ 	"COUNT(*) c "
+				+ 	"t.k k, "
+				+ 	"COUNT(*) usage_count "
 				+ "FROM "
 				+ 	"node_tags t "
-				+ 	"INNER JOIN lgd_properties p ON (p.k = t.k) "
+				//+ 	"INNER JOIN lgd_tag_mapping_simple_base sb ON (p.k = t.k) "
+				//+   "INNER JOIN lgd_tag_mapping_simple_class sc ON (sc.id = db.id) "
 				+ "WHERE "
 				+ 	"t.geom && " + LGDQueries.BBox(rect) + " "
 				+ 	filterPart + " "
 				+ "GROUP BY "
 				+ 	"t.k "
-				+ "ORDER BY "
-				+ 	"p.ontology_entity_type, t.k "
+				//+ "ORDER BY "
+				//+ 	"t.k "
 				;
 		}
 		else {
 			List<Long> tileIds = getTileIds(rect, zoom);		
 			
-			String query
+			query
 				= "SELECT " 
-				+ 	"t.k property, SUM(usage_count) c "
+				+ 	"t.k k, SUM(usage_count) usage_count "
 				+ "FROM "
 				+ 	"lgd_stats_node_tags_tilek_" + zoom + " t "
 				+ "WHERE "
-				+ "LGD_ToTile(t.geom, 16) IN (" + StringUtil.implode(",", tileIds) + ") AND "
+				+ 	"tile_id IN (" + StringUtil.implode(",", tileIds) + ") "
 				+ 	filterPart + " "
 				+ "GROUP BY "
 				+ 	"t.k "
-				+ "ORDER BY "
-				+ "t.k"
+				//+ "ORDER BY "
+				//+ "t.k"
 				;
 		}
 
-		return null;
-	}
-	
-	
-	public List<Long> getStatsNodeTagsKV(Rectangle rect, String k)
-	{
-		/*
-		if(zoom == maxZoom) {
-			$s =
-				"SELECT
-					v AS value,
-					count(*) AS c
-				FROM
-					node_tags nt JOIN
-					nodes n ON (n.id = nt.node_id)
-				WHERE
-					n.geom && $exactBox AND
-					nt.k = '$propertyPart'
-				GROUP BY
-					k, v
-				ORDER BY
-					k, v
-				";
-
-		}
-		else {
-			$s =
-				"SELECT
-					v AS value,
-					SUM(count) AS c
-				FROM
-					node_tags_tiles_kv_$zoom
-				WHERE
-					k = '$propertyPart' AND $tileBox
-				GROUP BY
-					k, v
-				ORDER BY
-					v";			
+		// Use a tree map here, as its nicer for display
+		Map<String, Long> result = new TreeMap<String, Long>();
+		ResultSet rs = SQLUtil.executeCore(conn, query);
+		while(rs.next()) {
+			String k = rs.getString(1);
+			long usageCount = rs.getLong(2);
+			
+			result.put(k, usageCount);
 		}
 		
-		//String query = 
-		 */
+		return result;
+	}
+	
+	
+	public static String escape(Object o)
+	{
+		return o.toString().replace("'", "\'");
+	}
+	
+	public String quote(Object o)
+	{
+		return "'" + escape(o) + "'";
+	}
+	
+	public List<String> quote(Iterable<?> items)
+	{
+		List<String> result = new ArrayList<String>();
+		for(Object item : items)
+			result.add(quote(item));
+		
+		return result;
+	}	
+	
+	public Map<String, Map<String, Long>> getStatsNodeTagsKV(RectangularShape rect, Iterable<String> ks)
+		throws SQLException
+	{
+		int maxZoom = 16;
+		
+		int zoom = getZoom(rect);
+		
+		//Collection<String> kList = new Transformed(k, new QuoteTransformer());
+		
+		//int limit 100;
+		/*
+		// TODO SQL Injection vulnerability
+		String filterPart = (kList == null || kList.isEmpty())
+			? ""
+			: " AND t.k IN (" + StringUtil.implode(",", kList) + ")";
+		*/
+		
+		String query;
+		if(zoom == maxZoom) {
+			query
+			= "SELECT "
+			+ 	"t.k k, t.v v, COUNT(*) usage_count "
+			+ "FROM "
+			+ 	"node_tags t "
+			//+ 	"INNER JOIN lgd_tag_mapping_simple_base sb ON (p.k = t.k) "
+			//+   "INNER JOIN lgd_tag_mapping_simple_class sc ON (sc.id = db.id) "
+			+ "WHERE "
+			+ 	"t.geom && " + LGDQueries.BBox(rect) + " "
+			+   "t.k = (" + StringUtil.implode(",", quote(ks)) + ") "
+			//+ 	filterPart + " "
+			+ "GROUP BY "
+			+ 	"t.k, t.v "
+			//+ "ORDER BY "
+			//+ 	"t.k "
+			;
+		}
+		else {
+			List<Long> tileIds = getTileIds(rect, zoom);	
+			
+			query
+				= "SELECT " 
+				+ 	"t.v v, SUM(usage_count) usage_count "
+				+ "FROM "
+				+ 	"lgd_stats_node_tags_tilekv_" + zoom + " t "
+				+ "WHERE "
+				+ 	"tile_id IN (" + StringUtil.implode(",", tileIds) + ") "
+				+	"AND k IN (" +  StringUtil.implode(",", quote(ks)) + ") " 
+				//+ 	filterPart + " "
+				+ "GROUP BY "
+				+ 	"t.k, t.v "
+				//+ "ORDER BY "
+				//+ "t.k"
+				;
+		}
+		
+		// Use a tree map here, as its nicer for display
+		Map<String, Map<String, Long>> result = new TreeMap<String, Map<String, Long>>();
+		ResultSet rs = SQLUtil.executeCore(conn, query);
+		while(rs.next()) {
+			String k = rs.getString(1);
+			String v = rs.getString(2);
+			long usageCount = rs.getLong(2);
+			
+			Map<String, Long> vMap = result.get(k);
+			if(vMap == null) {
+				vMap = new TreeMap<String, Long>();
+				result.put(k, vMap);
+			}
+			
+			vMap.put(v, usageCount);
+		}
+		
+		return result;
+	}
+	
+	
+	/**
+	 * Retrieves the all available classes in a given area 
+	 * 
+	 * @param tiles
+	 * @return
+	 */
+	public List<Long> getClassesInAreaEstimated(Iterable<Long> tileIds, int zoom)
+	{
+		/*
+		String query
+			= "SELECT"
+			+ 	"a.k, a.usage_count, b. "
+			+ "FROM "
+			+ 	"lgd_stats_node_tags_tilek_" + zoom + " a"
+			+   "INNER JOIN lgd_tag_mapping_simple_class b ON (b.k, b.v) = (a.k, a.v)" 
+			+ "WHERE "
+			+ 	"a.tile_id IN (" + StringUtil.implode(",", tileIds) + ")"
+			+ "GROUP BY "
+			+   "a.k"
+			;
+		*/
 		return null;
 	}
+	
 	
 	
 	public List<Long> getCandidateTiles(List<Long> tileIds, int zoom, Rectangle2D maxRect, String k, String v)
