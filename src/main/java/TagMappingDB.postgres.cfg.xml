@@ -20,7 +20,7 @@
 			and let Hibernate bind the session automatically to the thread
 		-->
 		<property name="current_session_context_class">thread</property>
-		<property name="hibernate.show_sql">false</property>
+		<property name="hibernate.show_sql">true</property>
 
 		<mapping class="org.linkedgeodata.tagmapping.client.entity.AbstractTagMapperState" />
 		<mapping class="org.linkedgeodata.tagmapping.client.entity.AbstractSimpleTagMapperState" />

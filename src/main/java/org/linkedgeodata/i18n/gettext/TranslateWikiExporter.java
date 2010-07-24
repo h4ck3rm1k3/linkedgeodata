@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.URI;
 import java.net.URL;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -16,9 +17,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import org.linkedgeodata.dao.TagLabelDAO;
 import org.linkedgeodata.osm.mapping.InMemoryTagMapper;
+import org.linkedgeodata.util.ConnectionConfig;
+import org.linkedgeodata.util.PostGISUtil;
 import org.linkedgeodata.util.SinglePrefetchIterator;
 import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 
@@ -307,7 +312,7 @@ public class TranslateWikiExporter
 	
 		logger.info("Loading tag mappings");
 		InMemoryTagMapper tagMapper = new InMemoryTagMapper();
-		tagMapper.load(new File("output/LGDMappingRules.2.0.xml"));
+		tagMapper.load(new File("data/triplify/config/2.0/LGDMappingRules.2.0.xml"));
 		
 		logger.info("Initializing EntityResolver");
 		IEntityResolver resolver = new EntityResolver2(tagMapper);
@@ -325,6 +330,91 @@ public class TranslateWikiExporter
 	}
 
 	public static void export(String initLangCode, boolean idMode,
+			String overrideLangCode, IEntityResolver resolver)
+		throws Exception
+	{
+		exportToDataBase(initLangCode, idMode, overrideLangCode);
+	}
+	
+	public static void exportToDataBase(String initLangCode, boolean idMode,
+			String overrideLangCode)
+		throws Exception
+	{
+		logger.info("Connecting to Database");
+		Connection conn = PostGISUtil.connectPostGIS(new ConnectionConfig("localhost", "unittest_lgd", "postgres", "postgres"));
+		
+		TagLabelDAO dao = new TagLabelDAO(conn);
+		
+		
+		
+		logger.info("Processing: " + initLangCode);
+
+		URL source = TranslateWikiUtil.getOSMExportURL(initLangCode);
+
+		logger.debug("Source URL: " + source);
+		/**
+		 * In english mode, 'msgid' will be taken instead of 'msgstr'. This is
+		 * because the source language is english, and therefore the ids are
+		 * already the english terms.
+		 * 
+		 */
+
+		String langCode = overrideLangCode;
+		// if(idMode)
+		// langCode = initLangCode;
+
+		InputStream in = source.openStream();
+
+		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+		GetTextIterator it = new GetTextIterator(reader);
+
+		if (!it.hasNext()) {
+			throw new RuntimeException("No header detected");
+		}
+
+		GetTextRecord header = it.next();
+
+		if (langCode == null)
+			langCode = detectLangCode(header);
+
+		logger.info("Using language: " + langCode);
+		logger.info("IdMode: " + idMode);
+
+		if (langCode == null)
+			throw new RuntimeException("Language code not detected");
+	
+	
+		while (it.hasNext()) {
+			GetTextRecord record = it.next();
+
+			if (!record.get(GetTextRecord.Msg.MSGCTXT).startsWith(prefix))
+				continue;
+
+			String entry = record.get(GetTextRecord.Msg.MSGCTXT).substring(
+					prefix.length());
+
+			String label = idMode ? record.get(GetTextRecord.Msg.MSGID)
+					: record.get(GetTextRecord.Msg.MSGSTR);
+			label = label.trim();
+			if (label.isEmpty())
+				continue;
+
+			String[] kv = entry.split("\\.");
+			if (kv.length == 2) {
+				String key = kv[0];
+				String value = kv[1]; //.trim();
+
+				try {
+					dao.insert(key, value, langCode, label);
+				}
+				catch(Exception e) {
+					logger.warn(ExceptionUtils.getStackTrace(e));
+				}
+			}
+		}
+	}
+	
+	public static void exportToTriples(String initLangCode, boolean idMode,
 			String overrideLangCode, IEntityResolver resolver)
 		throws Exception
 	{		

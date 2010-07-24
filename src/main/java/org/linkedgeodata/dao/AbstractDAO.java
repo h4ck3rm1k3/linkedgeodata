@@ -2,6 +2,8 @@ package org.linkedgeodata.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -95,5 +97,13 @@ public class AbstractDAO
 		List<T> result = SQLUtil.executeList(stmt, clazz, args);
 		
 		return result;
-	}	
+	}
+	
+	public ResultSet executeQuery(Object id, Object ...args)
+		throws SQLException
+	{
+		PreparedStatement stmt = getPreparedStatement(id);
+		
+		return SQLUtil.execute(stmt, args);
+	}
 }

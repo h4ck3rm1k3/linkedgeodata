@@ -1,7 +1,9 @@
 package org.linkedgeodata.dao;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
@@ -12,8 +14,9 @@ import org.linkedgeodata.osm.mapping.IOneOneTagMapper;
 import org.linkedgeodata.osm.mapping.ITagMapper;
 import org.linkedgeodata.osm.mapping.TagMapperInstantiator;
 import org.linkedgeodata.osm.mapping.TagMappingDB;
-import org.linkedgeodata.tagmapping.client.entity.AbstractTagMapperState;
+import org.linkedgeodata.osm.mapping.impl.ISimpleOneOneTagMapper;
 import org.linkedgeodata.tagmapping.client.entity.AbstractSimpleTagMapperState;
+import org.linkedgeodata.tagmapping.client.entity.AbstractTagMapperState;
 import org.linkedgeodata.tagmapping.client.entity.RegexTextTagMapperState;
 import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 
@@ -98,25 +101,34 @@ public class TagMapperDAO
 		return result;
 	}
 
-	
+
 
 	@Override
 	public Model map(String subject, Tag tag, Model model)
 	{
-		List<AbstractTagMapperState> mapperStates = getTagMappings(tag.getKey(), tag.getValue());
+		Set<IOneOneTagMapper> mappers = lookup(tag.getKey(), tag.getValue());
 		
-		for(AbstractTagMapperState item : mapperStates) {
-			IOneOneTagMapper mapper = TagMapperInstantiator.getInstance().instantiate(item);
-			
-			//Model model = ModelFactory.
-			mapper.map(subject, tag, model);
-			
-			//List<CTriple> triples = JenaModelConverter.convert(model);
-			
-			//result.put(item, triples);
+		for(IOneOneTagMapper item : mappers) {
+			item.map(subject, tag, model);
 		}
 
 		return model;
+	}
+
+
+
+	@Override
+	public Set<IOneOneTagMapper> lookup(String k, String v)
+	{
+		Set<IOneOneTagMapper> result = new HashSet<IOneOneTagMapper>();
+
+		List<AbstractTagMapperState> mapperStates = getTagMappings(k, v);
+		for(AbstractTagMapperState item : mapperStates) {
+			IOneOneTagMapper mapper = TagMapperInstantiator.getInstance().instantiate(item);
+			result.add(mapper);
+		}
+		
+		return result;
 	}
 	
 }

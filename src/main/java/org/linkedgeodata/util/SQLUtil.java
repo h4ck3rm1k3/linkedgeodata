@@ -139,6 +139,7 @@ public class SQLUtil
 	{
 		return single(rs, clazz, true);
 	}
+	
 
 	/**
 	 * Returns the 1st column of the first row or null of there is no row.

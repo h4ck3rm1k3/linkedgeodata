@@ -22,10 +22,12 @@ package org.linkedgeodata.osm.mapping.impl;
 
 import java.io.Serializable;
 
+import org.linkedgeodata.util.URIUtil;
 import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.vocabulary.RDF;
 
 /**
  * Abstract Mapping rule between a single tag pattern and a resource.
@@ -110,6 +112,25 @@ public abstract class AbstractSimpleOneOneTagMapper
 			model = ModelFactory.createDefaultModel(); 
 		
 		return _map(subject, tag, model);
+	}
+
+	@Override
+	public String getResource(Tag tag)
+	{
+		if(!tagPattern.matches(tag)) {
+			return null;
+		}
+
+		String suffix = "";
+		
+		if(tagPattern.getValue() == null) {
+			// suffix = tag.getValue()
+			suffix = URIUtil.myEncode(tag.getValue());
+		}
+		
+		String result = resource + suffix;
+		
+		return result;
 	}
 	
 

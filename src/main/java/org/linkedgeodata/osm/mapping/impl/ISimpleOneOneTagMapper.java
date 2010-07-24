@@ -8,11 +8,14 @@ import com.hp.hpl.jena.rdf.model.Model;
 public interface ISimpleOneOneTagMapper
 	extends IOneOneTagMapper
 {
-	// TODO The following two methods should be removed from the interface
+	// TODO The following method should be renamed getBaseResource
 	String getResource();
 	SimpleTagPattern getTagPattern();
 	
 	
+	// Returns the resource corresponding to a tag.
+	String getResource(Tag tag);
+
 	//Model map(String subject, Tag tag, Model model);
 	
 	
