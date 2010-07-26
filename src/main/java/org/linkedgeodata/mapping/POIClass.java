@@ -82,7 +82,7 @@ public enum POIClass {
 	POIClass(double maxBox) {
 		this.maxBox = maxBox;
 	}
-	
+		
 	/**
 	 * Maximum distance coordinates and actual position of
 	 * this POI type can differ in meters. Retrieving POIs within
