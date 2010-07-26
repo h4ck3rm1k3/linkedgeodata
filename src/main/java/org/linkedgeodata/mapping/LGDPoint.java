@@ -20,6 +20,8 @@
 package org.linkedgeodata.mapping;
 
 import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A LinkedGeoData point.
@@ -42,6 +44,8 @@ public class LGDPoint extends Point {
 		return name;
 	}
 
+	public void  
+	
 	/**
 	 * @param name the name to set
 	 */
@@ -49,26 +53,48 @@ public class LGDPoint extends Point {
 		this.name = name;
 	}
 
+	private static String typeRestriction(String type)
+	{
+		String lgdO = "<http://linkedgeodata.org/ontology/";
+		return type;
+		//return "a "+lgdO+type+"> .";
+	}
+	
 	public static String getSPARQLRestriction(POIClass poiClass, String variable) {
-		String prefix = "<http://linkedgeodata.org/property/";
+		String lgdP = "<http://linkedgeodata.org/property/";
+		String a = "rdf:type";
 		String prefix2 = "";
 		String suffix2 = "";
+		
+		Map<POIClass,String> classRestrictions = new HashMap<POIClass,String>(); 
+		classRestrictions.put(POIClass.CITY," "+ lgdP + "place> \"city\" } UNION {" + variable + " "+ lgdP + "place> \"village\" } UNION {" + variable + " "+ lgdP + "place> \"town\" } UNION {" + variable + " "+ lgdP + "place> \"suburb\" }");
+		
+		//System.out.println(poiClass.CITY.toString());
+		
 		switch(poiClass) {
-		case CITY : 			return "{ " + variable + " "+ prefix + "place> \"city\" } UNION {" + variable + " "+ prefix + "place> \"village\" } UNION {" + variable + " "+ prefix + "place> \"town\" } UNION {" + variable + " "+ prefix + "place> \"suburb\" }";
-		case UNIVERSITY :		return variable + " "+ prefix + "amenity"+"> "+"\"university\" . ";
-		case SCHOOL :			return variable + " "+ prefix + "amenity> \"school\" . ";
-		case AIRPORT :			return variable + " "+ prefix + "aeroway> \"aerodrome\" . ";
-		case LAKE :				return variable + " "+ prefix + "natural> \"water\" . ";
-		case COUNTRY :			return variable + " "+ prefix + "place> \"country\" . ";
-		case RAILWAY_STATION : 	return variable + " "+ prefix + "railway> \"station\" . ";
-		case ISLAND : 			return variable + " "+ prefix + "place> \"island\" . ";
-		case STADIUM : 			return variable + " "+ prefix + "leisure> \"stadium\" . ";
-		case RIVER :			return variable + " "+ prefix + "waterway> ?something . ";
-		case BRIDGE :			return variable + " "+ prefix + "bridge> ?something . ";				
-		case MOUNTAIN :			return variable + " "+ prefix + "natural> \"peak\" . ";				
-		case RADIO_STATION :	return variable + " "+ prefix + "amenity> \"studio\" . ";				
-		case LIGHT_HOUSE :		return variable + " "+ prefix + "man_made> \"lighthouse\" . ";				
+		case CITY : 			return "{ " + variable + " "+ lgdP + "place> \"city\" } UNION {" + variable + " "+ lgdP + "place> \"village\" } UNION {" + variable + " "+ lgdP + "place> \"town\" } UNION {" + variable + " "+ lgdP + "place> \"suburb\" }";		
+//		case AIRPORT :			return variable + " "+ lgdP + "aeroway> \"aerodrome\" . ";
+		case AIRPORT :			return variable +" "+ typeRestriction("helipad");		
+		case UNIVERSITY :		return variable + " "+ typeRestriction("amenity_university"); // später nur university 
+
+		case SCHOOL :			return variable + " "+ lgdP + "amenity> \"school\" . ";
+
+		
+		case LAKE :				return variable + " "+ lgdP + "natural> \"water\" . ";
+		case COUNTRY :			return variable + " "+ lgdP + "place> \"country\" . ";
+		case RAILWAY_STATION : 	return variable + " "+ lgdP + "railway> \"station\" . ";
+		case ISLAND : 			return variable + " "+ lgdP + "place> \"island\" . ";
+		case STADIUM : 			return variable + " "+ lgdP + "leisure> \"stadium\" . ";
+		case RIVER :			return variable + " "+ lgdP + "waterway> ?something . ";
+		case BRIDGE :			return variable + " "+ lgdP + "bridge> ?something . ";				
+		case MOUNTAIN :			return variable + " "+ lgdP + "natural> \"peak\" . ";				
+		case RADIO_STATION :	return variable + " "+ lgdP + "amenity> \"studio\" . ";				
+		case LIGHT_HOUSE :		return variable + " "+ lgdP + "man_made> \"lighthouse\" . ";				
 		default: throw new Error("Cannot restrict.");
 		}
 	}
 }
+// CITY
+// Dresden
+// Leipzig
+// London
