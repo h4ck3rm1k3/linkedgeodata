@@ -99,7 +99,8 @@ public class LGDPoint extends Point {
 	public void setName(double name) {
 		this.name = name;
 	}
-
+	
+	// todo : dont return 0 if nothing found but do something safer (maybe exception)
 	public static String getSPARQLRestriction(POIClass poiClass, String variable)
 	{
 		if(classRestrictions==null)

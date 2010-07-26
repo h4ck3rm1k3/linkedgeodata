@@ -476,8 +476,10 @@ public class DBpediaLinkedGeoData {
 
 			// query all points in the box corresponding to this class
 			// (we make sure that returned points are in the same POI class)
+			String restriction = LGDPoint.getSPARQLRestriction(dbpediaPoint.getPoiClass(), "?point");
+			if(restriction==null) {return null;}
 			String queryStr = "select ?point ?lat ?long ?name ?name_en ?name_int where { ";
-			queryStr += LGDPoint.getSPARQLRestriction(dbpediaPoint.getPoiClass(), "?point");
+			queryStr += restriction;
 			queryStr += "?point <http://www.w3.org/2003/01/geo/wgs84_pos#lat> ?lat .";
 			queryStr += "FILTER ("+usedDatatype+"(?lat) > " + minLat + ") .";
 			queryStr += "FILTER ("+usedDatatype+"(?lat) < " + maxLat + ") .";		
