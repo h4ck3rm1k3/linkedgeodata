@@ -936,12 +936,20 @@ public class JTriplifyServer
 		
 		
 		IInvocable bboxFn = DefaultCoercions.wrap(methods, "publicGetEntitiesWithinRect.*");
-		dataHandler.getRIC().put(".*/near/(-?[^-]+)-(-?[^,]+),(-?[^-]+)-(-?[^/]+)/?(\\?.*)?", bboxFn, "$0", "$1", "$2", "$3", null, null, false);
+		// lat-lat lon-lon class lable lang matchmode
+		dataHandler.getRIC().put(".*/near/(-?[^-]+)-(-?[^,]+),(-?[^-]+)-(-?[^/]+)/?(\\?.*)?", bboxFn, "$0", "$1", "$2", "$3", null, null, null, null);
 
-		dataHandler.getRIC().put(".*/near/(-?[^-]+)-(-?[^,]+),(-?[^-]+)-(-?[^/]+)/class/(.*)/?(\\?.*)?", bboxFn, "$0", "$1", "$2", "$3", null, null, false);
-		dataHandler.getRIC().put(".*/near/(-?[^-]+)-(-?[^,]+),(-?[^-]+)-(-?[^/]+)/class/([^/]*)/label/(*.)/?(\\?.*)?", bboxFn, "$0", "$1", "$2", "$3", null, null, false);
-		dataHandler.getRIC().put(".*/near/(-?[^-]+)-(-?[^,]+),(-?[^-]+)-(-?[^/]+)/class/([^/]*)/label/([^/]*)/(*.)/?(\\?.*)?", bboxFn, "$0", "$1", "$2", "$3", null, null, false);
+		dataHandler.getRIC().put(".*/near/(-?[^-]+)-(-?[^,]+),(-?[^-]+)-(-?[^/]+)/class/([^/]*)/?(\\?.*)?", bboxFn, "$0", "$1", "$2", "$3", "$4", null, null, null);
 
+		dataHandler.getRIC().put(".*/near/(-?[^-]+)-(-?[^,]+),(-?[^-]+)-(-?[^/]+)/class/([^/]*)/label/([^/]*)/([^/]*)/(.*)/?(\\?.*)?", bboxFn, "$0", "$1", "$2", "$3", "$4", "$7", "$5", "$6");
+		
+		//dataHandler.getRIC().put(".*/near/(-?[^-]+)-(-?[^,]+),(-?[^-]+)-(-?[^/]+)/class/([^/]*)/label/(.*)/?(\\?.*)?", bboxFn, "$0", "$1", "$2", "$3", "$4", "$5", null, null);
+		//dataHandler.getRIC().put(".*/near/(-?[^-]+)-(-?[^,]+),(-?[^-]+)-(-?[^/]+)/class/([^/]*)/label/([^/]*)/(.*)/?(\\?.*)?", bboxFn, "$0", "$1", "$2", "$3", "$5", "$4", null);
+		//dataHandler.getRIC().put(".*/near/(-?[^-]+)-(-?[^,]+),(-?[^-]+)-(-?[^/]+)/class/([^/]*)/label/([^/]*)/([^/]*)/(.*)/?(\\?.*)?", bboxFn, "$0", "$1", "$2", "$3", "$6", "$4", "$5");
+
+		//dataHandler.getRIC().put(".*/near/(-?[^-]+)-(-?[^,]+),(-?[^-]+)-(-?[^/]+)/label/([^/]*)/(*.)/?(\\?.*)?", bboxFn, "$0", "$1", "$2", "$3", "$5", "$6");
+		
+		
 		
 		
 		IInvocable getOntologyFn = DefaultCoercions.wrap(methods, "publicGetOntology.*");

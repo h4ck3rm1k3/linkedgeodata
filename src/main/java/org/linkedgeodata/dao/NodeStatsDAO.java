@@ -301,9 +301,13 @@ public class NodeStatsDAO
 	public List<Long> getNodeIds(Collection<Long> tileIds, int zoom, RectangularShape filter, Collection<String> tagConditions)
 		throws SQLException
 	{
-		if(tileIds.size() == 0)
+		if(tileIds != null && tileIds.size() == 0)
 			return new ArrayList<Long>();
 		
+		String tileFilter = (tileIds == null)
+			? ""
+			: " AND LGD_ToTile(nt0.geom, " + zoom + ") IN (" + StringUtil.implode(",", tileIds) + ") ";
+
 		
 		String bbox = (filter == null)
 			? ""
@@ -313,7 +317,7 @@ public class NodeStatsDAO
 		String query
 			=  "SELECT nt0.node_id FROM "
 				+ createJoin("node_tags", "nt", "node_id", tagConditions) + " "
-				+ " AND LGD_ToTile(nt0.geom, " + zoom + ") IN (" + StringUtil.implode(",", tileIds) + ") "
+				+ tileFilter
 				+ bbox;
 
 		/*

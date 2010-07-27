@@ -116,12 +116,18 @@ public class ServerMethods
 	public Model publicGetEntitiesWithinRect(Double latMin, Double latMax, Double lonMin, Double lonMax, String className, String label, String language, String matchMode)
 		throws Exception
 	{
-		TagFilterUtils.MatchMode mm = TagFilterUtils.MatchMode.EQUALS;
+		if(language != null && language.equalsIgnoreCase("any"))
+			language = null;
 		
-		if(matchMode.equals("like"))
+		TagFilterUtils.MatchMode mm = TagFilterUtils.MatchMode.EQUALS;
+		if(matchMode.equalsIgnoreCase("contains")) {
 			mm = TagFilterUtils.MatchMode.LIKE;
-		else if(matchMode.equals("regex"))
-			mm = TagFilterUtils.MatchMode.REGEX;
+			label = "%" + label.replace("%", "\\%") + "%";
+		}
+		else if(matchMode.equalsIgnoreCase("startsWith")) {
+			mm = TagFilterUtils.MatchMode.LIKE;
+			label = "%" + label.replace("%", "\\%");
+		}
 		
 		// FIXME Add this to some kind of facade
 		TagFilterUtils filterUtil = new TagFilterUtils(dao.getOntologyDAO());
@@ -132,7 +138,7 @@ public class ServerMethods
 			entityTagConditions.add(filterUtil.restrictByObject(RDF.type.toString(), "http://linkedgeodata.org/ontology/" + className, "$$"));
 
 		if(label != null)
-			entityTagConditions.add(filterUtil.restrictByText(RDFS.label.toString(), language, label, mm, "$$"));
+			entityTagConditions.add(filterUtil.restrictByText(RDFS.label.toString(), label, language, mm, "$$"));
 		
 	
 		Rectangle2D rect = new Rectangle2D.Double(lonMin, latMin, lonMax - lonMin, latMax - latMin);
@@ -140,7 +146,7 @@ public class ServerMethods
 		Model result = createModel();
 		NodeStatsDAO nodeStatsDAO = new NodeStatsDAO(dao.getSQLDAO().getConnection());
 		
-		Collection<Long> tileIds = NodeStatsDAO.getTileIds(rect, 16);
+		Collection<Long> tileIds = null; //NodeStatsDAO.getTileIds(rect, 16);
 		Collection<Long> nodeIds = nodeStatsDAO.getNodeIds(tileIds, 16, rect, entityTagConditions);
 		
 		dao.resolveNodes(result, nodeIds, false, null);

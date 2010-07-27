@@ -76,7 +76,7 @@ public class LGDQueries
 			Object maxLonArg)
 	{
 		String result =
-			"ST_SetSRID(ST_MakeBox2D(\n" +
+			"ST_SetSRID(ST_MakeBox2D(" +
 				buildPoint(minLatArg, minLonArg) + ", " +
 				buildPoint(maxLatArg, maxLonArg) +
 			"), 4326)\n";
