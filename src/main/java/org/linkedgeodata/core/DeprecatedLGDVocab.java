@@ -44,7 +44,7 @@ public class DeprecatedLGDVocab
 	}
 
 	@Override
-	public String GetBaseNS()
+	public String getBaseNS()
 	{
 		return NS;
 	}
@@ -65,5 +65,11 @@ public class DeprecatedLGDVocab
 	public String getResourceNS()
 	{
 		return RESOURCE;
+	}
+
+	@Override
+	public String getOntologyNS()
+	{
+		return ONTOLOGY;
 	}	
 }

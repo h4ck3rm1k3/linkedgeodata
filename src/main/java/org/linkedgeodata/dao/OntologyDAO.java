@@ -3,6 +3,7 @@ package org.linkedgeodata.dao;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -69,7 +70,7 @@ public class OntologyDAO
 	}
 	
 	
-	private static void testSQLConstraints(OntologyDAO ontologyDAO)
+	private static void testSQLConstraints(Connection conn, OntologyDAO ontologyDAO)
 		throws Exception
 	{
 		TagFilterUtils tagFilterDAO = new TagFilterUtils(ontologyDAO);
@@ -91,7 +92,7 @@ public class OntologyDAO
 					"en",
 					TagFilterUtils.MatchMode.LIKE,
 					"alias");
-
+		
 		System.out.println(filter);
 		
 		
@@ -114,6 +115,11 @@ public class OntologyDAO
 		
 		OntologyDAO dao = new OntologyDAO(tagMapper, conn);
 
+		Model model = ModelFactory.createDefaultModel();
+		System.out.println(ModelUtil.toString(dao.getOntology(model)));
+		
+		if(true)
+			return;
 
 /*
 		Model model = ModelFactory.createDefaultModel();
@@ -121,7 +127,7 @@ public class OntologyDAO
 		model = dao.describe("http://linkedgeodata.org/ontology/amenity_parking", model);
 		System.out.println(ModelUtil.toString(model));
 */
-		testSQLConstraints(dao);
+		testSQLConstraints(conn, dao);
 				
 		//System.out.println(tagFilterDAO.restrictByClass("http://linkedgeodata.org/ontology/railway_station", "alias"));
 		
@@ -350,7 +356,7 @@ public class OntologyDAO
 			logger.debug("Found fuzzy matches: " + matches);
 		}		
 		*/
-	
+
 	private static void processLabels(Model model, String resource, MultiMap<String, String> langToLabels)
 	{
 		Resource subject = model.createResource(resource);
@@ -366,5 +372,27 @@ public class OntologyDAO
 						model.createLiteral(label, lang));						
 			}
 		}
-	}	
+	}
+	
+	
+	public Model getOntology(Model model) {
+		if(model == null)
+			model = ModelFactory.createDefaultModel();
+		
+		OntologyGeneratorVisitor visitor = new OntologyGeneratorVisitor(model, tagMapper);
+		
+		for(IOneOneTagMapper item : tagMapper.getAllMappers()) {
+			
+			if(!(item instanceof ISimpleOneOneTagMapper))
+				continue;
+			
+			// Optional: filter ontology only to things that actually exist in the DB
+			//tagDAO.doesTagExist(item.)
+			
+			ISimpleOneOneTagMapper x = (ISimpleOneOneTagMapper)item;
+			x.accept(visitor);
+		}
+		
+		return model;
+	}
 }

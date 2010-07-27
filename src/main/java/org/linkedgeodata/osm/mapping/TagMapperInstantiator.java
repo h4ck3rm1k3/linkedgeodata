@@ -79,11 +79,17 @@ public class TagMapperInstantiator
 	@Override
 	public SimpleTextTagMapper visit(SimpleTextTagMapperState state)
 	{
+		// A small hack, since the the tagPattern field may be null if both
+		// its key and value are null
+		SimpleTagPattern tagPattern = (state.getTagPattern() == null)
+			? new SimpleTagPattern(null, null)
+			: new SimpleTagPattern(
+					state.getTagPattern().getKey(), 
+					state.getTagPattern().getValue());
+		
 		return new SimpleTextTagMapper(
 				state.getProperty(),
-				new SimpleTagPattern(
-						state.getTagPattern().getKey(), 
-						state.getTagPattern().getValue()),
+				tagPattern,
 				state.getLanguageTag(),
 				state.describesOSMEntity());
 	}

@@ -7,6 +7,8 @@ import java.util.Set;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
+import org.dom4j.tree.AbstractEntity;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -15,12 +17,14 @@ import org.linkedgeodata.osm.mapping.ITagMapper;
 import org.linkedgeodata.osm.mapping.TagMapperInstantiator;
 import org.linkedgeodata.osm.mapping.TagMappingDB;
 import org.linkedgeodata.osm.mapping.impl.ISimpleOneOneTagMapper;
+import org.linkedgeodata.osm.mapping.impl.RegexTagPattern;
 import org.linkedgeodata.tagmapping.client.entity.AbstractSimpleTagMapperState;
 import org.linkedgeodata.tagmapping.client.entity.AbstractTagMapperState;
 import org.linkedgeodata.tagmapping.client.entity.RegexTextTagMapperState;
 import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
 
 public class TagMapperDAO
 	implements ITagMapper
@@ -106,10 +110,13 @@ public class TagMapperDAO
 	@Override
 	public Model map(String subject, Tag tag, Model model)
 	{
+		if(model == null)
+			model = ModelFactory.createDefaultModel();
+		
 		Set<IOneOneTagMapper> mappers = lookup(tag.getKey(), tag.getValue());
 		
 		for(IOneOneTagMapper item : mappers) {
-			item.map(subject, tag, model);
+			 item.map(subject, tag, model);
 		}
 
 		return model;
@@ -131,4 +138,31 @@ public class TagMapperDAO
 		return result;
 	}
 	
+
+	/**
+	 * Retrieve a list of all TagMappers in the database.
+	 * 
+	 * @return All TagMappers in the database
+	 */
+	@Override
+	public List<IOneOneTagMapper> getAllMappers()
+	{
+		Session session = TagMappingDB.getSession();
+		Transaction tx = session.beginTransaction();
+
+		List<IOneOneTagMapper> result = new ArrayList<IOneOneTagMapper>();
+
+		Criteria criteria = session.createCriteria(AbstractTagMapperState.class);
+		
+		for(Object o : criteria.list()) {			
+			AbstractTagMapperState item = (AbstractTagMapperState)o;
+			
+			IOneOneTagMapper mapper = TagMapperInstantiator.getInstance().instantiate(item);
+			result.add(mapper);
+		}
+		
+		tx.commit();
+		
+		return result;
+	}
 }

@@ -57,7 +57,7 @@ public class ClassToPropertyMappingRulesConverter
 		
 		InMemoryTagMapper output = new InMemoryTagMapper();
 		
-		for(IOneOneTagMapper item : mapper.asList()) {
+		for(IOneOneTagMapper item : mapper.getAllMappers()) {
 			if(item instanceof SimpleClassTagMapper) {
 				SimpleClassTagMapper m  = (SimpleClassTagMapper)item;
 				

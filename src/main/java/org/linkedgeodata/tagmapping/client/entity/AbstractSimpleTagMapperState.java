@@ -29,6 +29,7 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -71,6 +72,8 @@ public abstract class AbstractSimpleTagMapperState
             @AttributeOverride(name="value", column = @Column(name="v") )
     })
     */
+	//@OneToOne
+	@Embedded
 	private SimpleTagPattern tagPattern;
 	
 	//boolean isPropertyPrefixMode = false;

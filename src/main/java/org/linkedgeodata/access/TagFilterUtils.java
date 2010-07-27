@@ -120,7 +120,7 @@ public class TagFilterUtils
 		tx.commit();
 		
 
-		tableAlias = (tableAlias == null)
+		tableAlias = (tableAlias == null || tableAlias.isEmpty())
 			? ""
 			: tableAlias + ".";
 	
@@ -150,9 +150,11 @@ public class TagFilterUtils
 		}
 	
 	
-		String result = StringUtil.implode(" AND ", constraints);
+		String result = StringUtil.implode(" OR ", constraints);
 		if(result.isEmpty())
 			result = "FALSE";
+		//else
+			//result = "(" + result + ")";
 		
 		return result;
 	}
@@ -169,7 +171,7 @@ public class TagFilterUtils
 	public String restrictByObject(String propertyURI, String objectURI, String tableAlias)
 		throws Exception
 	{
-		tableAlias = (tableAlias == null)
+		tableAlias = (tableAlias == null || tableAlias.isEmpty())
 			? ""
 			: tableAlias + ".";
 		

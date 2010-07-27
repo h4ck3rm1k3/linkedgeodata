@@ -60,7 +60,7 @@ public class D2RConfigGenerator
 		D2RConfigGeneratorVisitor generator = new D2RConfigGeneratorVisitor("node_tags", out);
 		
 		
-		List<IOneOneTagMapper> list = tagMapper.asList();
+		List<IOneOneTagMapper> list = tagMapper.getAllMappers();
 		
 		for(IOneOneTagMapper item : list) {
 			if(item instanceof ISimpleOneOneTagMapper) {

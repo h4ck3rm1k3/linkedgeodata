@@ -2,15 +2,23 @@ package org.linkedgeodata.jtriplify;
 
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
+import org.linkedgeodata.access.TagFilterUtils;
 import org.linkedgeodata.dao.LGDQueries;
 import org.linkedgeodata.dao.LGDRDFDAO;
-import org.linkedgeodata.util.ModelUtil;
+import org.linkedgeodata.dao.NodeStatsDAO;
+import org.linkedgeodata.util.StringUtil;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.vocabulary.RDF;
+import com.hp.hpl.jena.vocabulary.RDFS;
 
 /**
  * 
@@ -88,7 +96,7 @@ public class ServerMethods
 	}
 	
 
-	public Model publicGetEntitiesWithinRect(Double latMin, Double latMax, Double lonMin, Double lonMax, String k, String v, Boolean bOr)
+	public Model publicGetEntitiesWithinRectOld(Double latMin, Double latMax, Double lonMin, Double lonMax, String k, String v, Boolean bOr)
 		throws Exception
 	{
 		String tagFilter = LGDQueries.createPredicate("", k, v, bOr);
@@ -102,5 +110,63 @@ public class ServerMethods
 		dao.getWaysWithinRect(result, rect, false, tagFilter, null, null);
 		
 		return result;
+	}
+	
+	
+	public Model publicGetEntitiesWithinRect(Double latMin, Double latMax, Double lonMin, Double lonMax, String className, String label, String language, String matchMode)
+		throws Exception
+	{
+		TagFilterUtils.MatchMode mm = TagFilterUtils.MatchMode.EQUALS;
+		
+		if(matchMode.equals("like"))
+			mm = TagFilterUtils.MatchMode.LIKE;
+		else if(matchMode.equals("regex"))
+			mm = TagFilterUtils.MatchMode.REGEX;
+		
+		// FIXME Add this to some kind of facade
+		TagFilterUtils filterUtil = new TagFilterUtils(dao.getOntologyDAO());
+
+		List<String> entityTagConditions = new ArrayList<String>();
+		
+		if(className != null)
+			entityTagConditions.add(filterUtil.restrictByObject(RDF.type.toString(), "http://linkedgeodata.org/ontology/" + className, "$$"));
+
+		if(label != null)
+			entityTagConditions.add(filterUtil.restrictByText(RDFS.label.toString(), language, label, mm, "$$"));
+		
+	
+		Rectangle2D rect = new Rectangle2D.Double(lonMin, latMin, lonMax - lonMin, latMax - latMin);
+		
+		Model result = createModel();
+		NodeStatsDAO nodeStatsDAO = new NodeStatsDAO(dao.getSQLDAO().getConnection());
+		
+		Collection<Long> tileIds = NodeStatsDAO.getTileIds(rect, 16);
+		Collection<Long> nodeIds = nodeStatsDAO.getNodeIds(tileIds, 16, rect, entityTagConditions);
+		
+		dao.resolveNodes(result, nodeIds, false, null);
+		//dao.getNodesWithinRect(result, rect, false, tagFilter, null, null);
+		//dao.getWaysWithinRect(result, rect, false, tagFilter, null, null);
+		
+		return result;
+	}
+	
+	public Model publicGetOntology()
+	{
+		Model model = dao.getOntologyDAO().getOntology(null);
+		
+		return model;
+	}
+		
+	public Model publicDescribe(String uri)
+		throws Exception
+	{
+		// Replace the prefix with the appropriate namespace
+		// The reason not to use the full original URI is because in testing
+		// the domain and port may be differ.
+		uri = uri.replaceFirst("^ontology/", dao.getVocabulary().getOntologyNS());
+
+		Model model = dao.getOntologyDAO().describe(uri, null);
+		
+		return model;
 	}
 }

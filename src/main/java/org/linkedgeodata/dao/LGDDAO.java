@@ -78,6 +78,11 @@ public class LGDDAO
 		wayDAO.setConnection(conn);		
 	}
 	
+	public Connection getConnection()
+	{
+		return conn;
+	}
+	
 	public NodeDAO getNodeDAO()
 	{
 		return nodeDAO;

@@ -42,7 +42,7 @@ public class TagMapperOntologyGenerator
 		InMemoryTagMapper tagMapper = new InMemoryTagMapper();
 		tagMapper.load(new File("output/LGDMappingRules.xml"));
 	
-		List<IOneOneTagMapper> list = tagMapper.asList();
+		List<IOneOneTagMapper> list = tagMapper.getAllMappers();
 
 		Model result = ModelFactory.createDefaultModel();
 		ModelUtil.read(result, new File("Namespaces.ttl"), "TTL");

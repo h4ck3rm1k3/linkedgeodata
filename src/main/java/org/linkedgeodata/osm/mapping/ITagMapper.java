@@ -29,4 +29,7 @@ public interface ITagMapper
 	Model map(String subject, Tag tag, Model model);
 	
 	Collection<? extends IOneOneTagMapper> lookup(String k, String v);
+
+
+	Collection<? extends IOneOneTagMapper> getAllMappers();
 }

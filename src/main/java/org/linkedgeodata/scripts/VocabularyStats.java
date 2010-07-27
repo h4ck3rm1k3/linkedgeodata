@@ -194,7 +194,7 @@ class VocabularyStats
 	String keyToURI(String key)
 	{
 		try {
-			return LGDVocab.ONTOLOGY + URLEncoder.encode(key, "UTF-8");
+			return LGDVocab.ONTOLOGY_NS + URLEncoder.encode(key, "UTF-8");
 		}
 		catch(Exception e) {
 			return null;

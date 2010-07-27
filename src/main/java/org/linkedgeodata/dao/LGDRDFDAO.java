@@ -50,21 +50,37 @@ public class LGDRDFDAO
 	private LGDDAO dao;
 	private ITagMapper tagMapper;
 
+	private OntologyDAO ontologyDAO;
+	
 	private ITransformer<Node, Model> nodeTransformer;
 	private ITransformer<Way, Model> wayTransformer;
 	
 	private ILGDVocab vocab;
 	
+	public ILGDVocab getVocabulary()
+	{
+		return vocab;
+	}
+	
 	public LGDRDFDAO(LGDDAO dao, ITagMapper tagMapper, ILGDVocab vocab)
+		throws SQLException
 	{
 		this.dao = dao;
 		this.tagMapper = tagMapper;
 		this.vocab = vocab;
 
+		// FIXME Don't pull the connection out of the DAO like this
+		ontologyDAO = new OntologyDAO(tagMapper, dao.getConnection());
+		
 		this.nodeTransformer = new SimpleNodeToRDFTransformer(tagMapper, vocab);
 		this.wayTransformer = new SimpleWayToRDFTransformer(tagMapper, vocab);
 	}
 	
+	
+	public OntologyDAO getOntologyDAO()
+	{
+		return ontologyDAO;
+	}
 	
 
 	private void writeNodeWays(Model model, MultiMap<Long, Long> members)

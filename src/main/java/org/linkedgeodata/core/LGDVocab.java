@@ -30,10 +30,10 @@ public class LGDVocab
 	public static final String NODE = RESOURCE + "node";
 	public static final String WAY = RESOURCE + "way";
 	
-	public static final String ONTOLOGY = NS + "ontology/";
+	public static final String ONTOLOGY_NS = NS + "ontology/";
 	
-	public static final String MEMBER_OF_WAY = ONTOLOGY + "memberOfWay";
-	public static final String HAS_NODES = ONTOLOGY + "hasNodes";
+	public static final String MEMBER_OF_WAY = ONTOLOGY_NS + "memberOfWay";
+	public static final String HAS_NODES = ONTOLOGY_NS + "hasNodes";
 	
 	// NIR = Non-Information-Resource
 	@Override
@@ -63,7 +63,7 @@ public class LGDVocab
 	}
 
 	@Override
-	public String GetBaseNS()
+	public String getBaseNS()
 	{
 		return NS;
 	}
@@ -84,5 +84,11 @@ public class LGDVocab
 	public String getResourceNS()
 	{
 		return RESOURCE;
+	}
+
+	@Override
+	public String getOntologyNS()
+	{
+		return ONTOLOGY_NS;
 	}	
 }

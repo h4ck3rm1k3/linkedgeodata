@@ -763,7 +763,7 @@ public class JTriplifyServer
 	protected static final Options cliOptions = new Options();
 	
 	private static void initCLIOptions()
-	{
+	{		
 		cliOptions.addOption("p", "port", true, "Server port");
 		cliOptions.addOption("c", "context", true, "Context e.g. /triplify/");
 		cliOptions.addOption("b", "backlog", true, "Maximum number of connections");
@@ -937,9 +937,20 @@ public class JTriplifyServer
 		
 		IInvocable bboxFn = DefaultCoercions.wrap(methods, "publicGetEntitiesWithinRect.*");
 		dataHandler.getRIC().put(".*/near/(-?[^-]+)-(-?[^,]+),(-?[^-]+)-(-?[^/]+)/?(\\?.*)?", bboxFn, "$0", "$1", "$2", "$3", null, null, false);
+
+		dataHandler.getRIC().put(".*/near/(-?[^-]+)-(-?[^,]+),(-?[^-]+)-(-?[^/]+)/class/(.*)/?(\\?.*)?", bboxFn, "$0", "$1", "$2", "$3", null, null, false);
+		dataHandler.getRIC().put(".*/near/(-?[^-]+)-(-?[^,]+),(-?[^-]+)-(-?[^/]+)/class/([^/]*)/label/(*.)/?(\\?.*)?", bboxFn, "$0", "$1", "$2", "$3", null, null, false);
+		dataHandler.getRIC().put(".*/near/(-?[^-]+)-(-?[^,]+),(-?[^-]+)-(-?[^/]+)/class/([^/]*)/label/([^/]*)/(*.)/?(\\?.*)?", bboxFn, "$0", "$1", "$2", "$3", null, null, false);
+
 		
 		
+		IInvocable getOntologyFn = DefaultCoercions.wrap(methods, "publicGetOntology.*");
+		dataHandler.getRIC().put(".*/ontology/?(\\?.*)?", getOntologyFn);		
+
 		
+		
+		IInvocable describeFn = DefaultCoercions.wrap(methods, "publicDescribe.*");
+		dataHandler.getRIC().put(".*/(ontology/.*)(\\?.*)?", describeFn, "$0");		
 	}
 	
 

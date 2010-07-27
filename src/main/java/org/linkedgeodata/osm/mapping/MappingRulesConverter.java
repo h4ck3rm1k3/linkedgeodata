@@ -55,7 +55,7 @@ public class MappingRulesConverter
 		MappingRulesConverter converter = new MappingRulesConverter(session);
 		Transaction tx = session.beginTransaction();
 		
-		for(IOneOneTagMapper item : mapper.asList()) {
+		for(IOneOneTagMapper item : mapper.getAllMappers()) {
 			if(item instanceof ISimpleOneOneTagMapper) {
 				ISimpleOneOneTagMapper x = (ISimpleOneOneTagMapper)item;
 				

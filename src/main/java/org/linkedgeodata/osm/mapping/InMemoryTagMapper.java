@@ -65,12 +65,13 @@ public class InMemoryTagMapper
 	public void save(File file)
 		throws IOException, JAXBException
 	{
-		List<IOneOneTagMapper> list = asList();
+		List<IOneOneTagMapper> list = getAllMappers();
 		
 		SerializationUtil.serializeXML(list, file);
 	}
 	
-	public List<IOneOneTagMapper> asList()
+	@Override
+	public List<IOneOneTagMapper> getAllMappers()
 	{
 		List<IOneOneTagMapper> list = new ArrayList<IOneOneTagMapper>();
 		

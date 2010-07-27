@@ -21,11 +21,10 @@
 package org.linkedgeodata.dao;
 
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RectangularShape;
+import java.io.File;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -38,19 +37,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.apache.commons.collections.TransformerUtils;
-import org.apache.commons.collections.list.TransformedList;
-import org.apache.commons.collections15.Transformer;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import org.ini4j.Ini;
+import org.linkedgeodata.access.TagFilterUtils;
+import org.linkedgeodata.core.IniUtils;
 import org.linkedgeodata.core.LGDVocab;
+import org.linkedgeodata.util.ConnectionConfig;
 import org.linkedgeodata.util.ModelUtil;
 import org.linkedgeodata.util.PostGISUtil;
 import org.linkedgeodata.util.SQLUtil;
 import org.linkedgeodata.util.StringUtil;
 import org.linkedgeodata.util.tiles.SubTileIdCollection;
 import org.linkedgeodata.util.tiles.TileUtil;
-import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -99,11 +98,11 @@ class TileResult
 		Resource subject = model.createResource("http://linkedgeodata.org/area/rect" + toLatLong(rect));
 		//Resource subject = model.createResource("http://linkedgeodata.org/area/rect" + toLatLong(rect));
 		
-		model.add(subject, RDF.type, model.createResource(LGDVocab.ONTOLOGY + "TileArea"));
-		model.addLiteral(subject, model.createProperty(LGDVocab.ONTOLOGY + "tileId"), tileId);
-		model.addLiteral(subject, model.createProperty(LGDVocab.ONTOLOGY + "zoomLevel"), zoom);
-		model.addLiteral(subject, model.createProperty(LGDVocab.ONTOLOGY + "subTileCount"), subTileCount);
-		model.addLiteral(subject, model.createProperty(LGDVocab.ONTOLOGY + "estimatedNodeCount"), estimatedNodeCount);
+		model.add(subject, RDF.type, model.createResource(LGDVocab.ONTOLOGY_NS + "TileArea"));
+		model.addLiteral(subject, model.createProperty(LGDVocab.ONTOLOGY_NS + "tileId"), tileId);
+		model.addLiteral(subject, model.createProperty(LGDVocab.ONTOLOGY_NS + "zoomLevel"), zoom);
+		model.addLiteral(subject, model.createProperty(LGDVocab.ONTOLOGY_NS + "subTileCount"), subTileCount);
+		model.addLiteral(subject, model.createProperty(LGDVocab.ONTOLOGY_NS + "estimatedNodeCount"), estimatedNodeCount);
 	}
 }
 
@@ -144,10 +143,12 @@ public class NodeStatsDAO
 	public static void main(String[] args)
 		throws Exception
 	{
-		PropertyConfigurator.configure("log4j.properties");
-		
-		Connection conn = PostGISUtil.connectPostGIS("localhost", "unittest_lgd", "postgres", "postgres");
+		Ini ini = new Ini(new File("config.ini"));
+		PropertyConfigurator.configure(ini.get("Main").get("log4jConfigFile"));
+		ConnectionConfig connConfig = IniUtils.getConnectionConfig(ini.get("OSMDataBase"));
 
+		Connection conn = PostGISUtil.connectPostGIS(connConfig);
+		
 		NodeStatsDAO nodeStatsDAO = new NodeStatsDAO();
 		nodeStatsDAO.setConnection(conn);
 		
@@ -155,8 +156,12 @@ public class NodeStatsDAO
 		LGDDAO lgdDAO = new LGDDAO(conn);
 		LGDRDFDAO dao = new LGDRDFDAO(lgdDAO, tagMapper, new LGDVocab());
 
+		OntologyDAO ontologyDAO = new OntologyDAO(tagMapper, conn);
+		TagFilterUtils filterUtil = new TagFilterUtils(ontologyDAO);
 		
-		Rectangle2D maxRect = dao.getSQLDAO().getNodeDAO().getNodeExtents();
+		
+		//Rectangle2D maxRect = dao.getSQLDAO().getNodeDAO().getNodeExtents();
+		Rectangle2D maxRect = new Rectangle2D.Double(-110.8018691, -38.0312804, 50.2977917, 50.235065);
 		System.out.println("MaxRect: " + maxRect);
 
 		String k = "amenity";
@@ -164,14 +169,33 @@ public class NodeStatsDAO
 		String v = null;
 		int maxZoom = 16;
 
+		//System.out.println(tagMapper.map("http://x.org", new Tag("name", "Technisches Bildungszentrum Mitte"), null));
+		//if(true) return;
 		
+		
+		/**
+		 * Note $$ is a special table alias, which will get replaced
+		 * when the actual query is built 
+		 */
+		List<String> entityTagConditions = Arrays.asList(
+				StringUtil.implode(" OR ",
+						filterUtil.restrictByObject(RDF.type.toString(), "http://linkedgeodata.org/ontology/amenity_school", "$$"),
+						filterUtil.restrictByObject(RDF.type.toString(), "http://linkedgeodata.org/ontology/amenity_university", "$$")
+				)
+				//filterUtil.restrictByText(RDFS.label.toString(), "%weil%", "", TagFilterUtils.MatchMode.LIKE, "$$")
+		);
+		
+		
+		System.out.println("\n\n\nENTITY TAG CONDITIONS: " + entityTagConditions + "\n\n\n");
+		/*
 		String tagFilter = "k = '" + k + "'";
 		
 		if(v != null)
 			tagFilter += " AND v = '" + v + "'";
+		*/
 		
-		List<Long> candidateTiles = nodeStatsDAO.getCandidateTiles(maxRect, k, v);
-		List<Long> nodeIds = nodeStatsDAO.getNodeIds(candidateTiles, maxZoom, maxRect, tagFilter);
+		List<Long> candidateTiles = nodeStatsDAO.getCandidateTiles(maxRect, entityTagConditions);
+		List<Long> nodeIds = nodeStatsDAO.getNodeIds(candidateTiles, maxZoom, maxRect, entityTagConditions);
 
 		
 		Map<String, Long> statsK = nodeStatsDAO.getStatsNodeTagsK(maxRect, null, false);
@@ -180,18 +204,16 @@ public class NodeStatsDAO
 		Map<String, Map<String, Long>> statsKV = nodeStatsDAO.getStatsNodeTagsKV(maxRect, Arrays.asList("amenity"));
 		System.out.println(statsKV);
 		
-		if(true)
-			System.exit(0);
 		
 		Model model = ModelFactory.createDefaultModel();
-		dao.resolveNodes(model, Collections.singleton(nodeIds.iterator().next()), false, tagFilter);
+		dao.resolveNodes(model, Collections.singleton(nodeIds.iterator().next()), false, null);
 
 		System.out.println("Sleep");
 		Thread.sleep(1000);
 		System.out.println("Running");
 		
-		dao.resolveNodes(model, nodeIds, false, tagFilter);
-		
+		//dao.resolveNodes(model, nodeIds, false, null);
+
 		//tagMapper.map("http://test", new Tag("amenity", "park"), model);
 
 		
@@ -199,12 +221,10 @@ public class NodeStatsDAO
 		System.out.println("-------------------------------");
 		System.out.println( ModelUtil.toString(model));
 		
-		System.out.println("Count: " + nodeIds.size());
+		//System.out.println("Count: " + nodeIds.size());
 	}	
 	
 
-	private Connection conn;
-	
 	public NodeStatsDAO()
 	{
 		super(Arrays.asList(Query.values()));
@@ -278,9 +298,47 @@ public class NodeStatsDAO
 	 * @return
 	 * @throws SQLException
 	 */
+	public List<Long> getNodeIds(Collection<Long> tileIds, int zoom, RectangularShape filter, Collection<String> tagConditions)
+		throws SQLException
+	{
+		if(tileIds.size() == 0)
+			return new ArrayList<Long>();
+		
+		
+		String bbox = (filter == null)
+			? ""
+			: "AND nt0.geom::geometry && " + LGDQueries.BBox(filter) + " ";
+		
+
+		String query
+			=  "SELECT nt0.node_id FROM "
+				+ createJoin("node_tags", "nt", "node_id", tagConditions) + " "
+				+ " AND LGD_ToTile(nt0.geom, " + zoom + ") IN (" + StringUtil.implode(",", tileIds) + ") "
+				+ bbox;
+
+		/*
+		String query
+			= "SELECT node_id FROM node_tags "
+			+ "WHERE "
+			+ "LGD_ToTile(geom, " + zoom + ") IN (" + StringUtil.implode(",", tileIds) + ") "
+			+ bbox
+			+ strTagFilter;
+		*/
+		System.out.println(query);
+	
+		ResultSet rs = conn.createStatement().executeQuery(query);
+		List<Long> result = SQLUtil.list(rs, Long.class);
+		
+		return result;
+	}
+	
+	/*
 	public List<Long> getNodeIds(Collection<Long> tileIds, int zoom, RectangularShape filter, String tagFilter)
 		throws SQLException
 	{
+		if(tileIds.size() == 0)
+			return new ArrayList<Long>();
+		
 		String strTagFilter = (tagFilter == null || tagFilter.trim().isEmpty())
 			? ""
 			: "AND " + tagFilter + " ";
@@ -303,9 +361,43 @@ public class NodeStatsDAO
 		
 		return result;
 	}
+	*/
 
+	public static String createJoin(String tableName, String aliasPrefix, String joinColumn, Collection<String> tagFilters)
+	{
+		String joinPart = "";
+		String wherePart = "";
+		
+		if(tagFilters.isEmpty())
+			joinPart += tableName + " " + aliasPrefix + "0";
+		
+		int aliasCounter = 0;
+		for(String filter : tagFilters) {
+			String currentAlias = aliasPrefix + aliasCounter;
 
-	Map<Long, Long> getCounts(Collection<Long> tileIds, int zoom, String k, String v)
+			if(!joinPart.isEmpty()) {
+				String oldAlias = aliasPrefix + (aliasCounter - 1);
+				joinPart += " INNER JOIN " + tableName + " " + currentAlias + " ON (" + currentAlias + "." + joinColumn + " = " + oldAlias + "." + joinColumn + ")";
+			}
+			else {
+				joinPart += tableName + " " + currentAlias;
+			}
+			
+			if(!wherePart.isEmpty())
+				wherePart += " AND ";
+			
+			wherePart += "(" + filter.replace("$$", currentAlias) + ")"; 
+			
+			++aliasCounter;
+		}
+		
+		if(wherePart.isEmpty())
+			wherePart += " TRUE ";
+		
+		return joinPart + " WHERE " + wherePart;
+	}
+
+	Map<Long, Long> getCounts(Collection<Long> tileIds, int zoom, Collection<String> tagConditions)
 		throws SQLException
 	{
 		Map<Long, Long> result = new HashMap<Long, Long>();
@@ -313,11 +405,21 @@ public class NodeStatsDAO
 		if(tileIds.size() == 0)
 			return result;
 
-		
+		/*
 		String tableName = (v == null)
 			? getTableNameKForZoom(zoom)
 			: getTableNameKVForZoom(zoom);
-			
+		*/
+		String tableName = getTableNameKVForZoom(zoom);
+		
+
+		// TODO Create the query based on the filters
+		// TODO Add an optimization if the tagFilter is independent of v
+		// With the assumption that table aliases are special constants, this
+		// is easy to determine.
+		// Proposed pattern for special table aliases: $$v1$$
+		
+		
 		
 		//String query = "SELECT tile_id, usage_count FROM " + getTableNameForZoom(zoom) +
 		//" WHERE k = ? AND V = ? AND tile_id IN (" + StringUtil.implode(",", tileIds) + ")";
@@ -325,20 +427,38 @@ public class NodeStatsDAO
 		/*
 		 * Safe variant: uncomment if statistics contain duplicates
 		 */
+		/*
 		String filterPart = (v == null)
 			? "k = ?"
 			: "k = ? AND v = ?";
+		*/
+
+		/*
+		String filterPart = tagFilter;
 			
 		String query = "SELECT tile_id, SUM(usage_count) FROM " + tableName +
 		" WHERE " + filterPart + " AND tile_id IN (" + StringUtil.implode(",", tileIds) + ") GROUP BY tile_id";
+		*/
 		
-		PreparedStatement stmt = null;
-		try {
-			stmt = conn.prepareStatement(query);
+		String query
+			=  "SELECT alias0.tile_id, SUM(alias0.usage_count) FROM "
+			+ createJoin(tableName, "alias", "tile_id", tagConditions) + " "
+			+ " AND alias0.tile_id IN (" + StringUtil.implode(",", tileIds) + ") GROUP BY alias0.tile_id";
+			
+		//" WHERE " + filterPart + " AND tile_id IN (" + StringUtil.implode(",", tileIds) + ") GROUP BY tile_id";
 		
+		System.out.println(query);
+		
+		//PreparedStatement stmt = null;
+		//try {
+			//stmt = conn.prepareStatement(query);
+		
+			/*
 			ResultSet rs = (v == null)
 				? SQLUtil.execute(stmt, k)
 				: SQLUtil.execute(stmt, k, v);
+			*/
+			ResultSet rs = SQLUtil.executeCore(conn, query);
 			
 			while(rs.next()) {
 				result.put(rs.getLong(1), rs.getLong(2));
@@ -346,10 +466,10 @@ public class NodeStatsDAO
 			rs.close();
 			
 			return result;
-		}
-		finally {
-			if(stmt != null) stmt.close();
-		}
+		//}
+		//finally {
+			//if(stmt != null) stmt.close();
+		//}
 	}
 	
 	
@@ -409,14 +529,14 @@ public class NodeStatsDAO
 	 * @return
 	 * @throws SQLException 
 	 */
-	public List<Long> getCandidateTiles(Rectangle2D rect, String k, String v)
+	public List<Long> getCandidateTiles(Rectangle2D rect, Collection<String> tagConditions)
 		throws SQLException
 	{
 		int zoom = getZoom(rect);
 		logger.debug("Chose zoom level " + zoom + " for " + rect);
 		List<Long> tileIds = getTileIds(rect, zoom);
 
-		List<Long> result = getCandidateTiles(tileIds, zoom, rect, k, v);
+		List<Long> result = getCandidateTiles(tileIds, zoom, rect, tagConditions);
 		
 		return result;
 	}
@@ -611,13 +731,12 @@ public class NodeStatsDAO
 	
 	
 	
-	public List<Long> getCandidateTiles(List<Long> tileIds, int zoom, Rectangle2D maxRect, String k, String v)
+	public List<Long> getCandidateTiles(List<Long> tileIds, int zoom, Rectangle2D maxRect, Collection<String> tagConditions)
 		throws SQLException
 	{
 		logger.debug("Retrieving candidate tiles: " + StringUtil.implode(", ",
 						"zoom: " + zoom, 
-						"k: " + k,
-						"v: " + v,
+						"tagConditions: " + tagConditions,
 						"rect: " + maxRect,
 						"tileIds: " + tileIds));
 		
@@ -647,7 +766,7 @@ public class NodeStatsDAO
 			logger.trace("TileIds after clipping: " + tileIds.size() + "; " + tileIds);
 			
 			
-			Map<Long, Long> counts = getCounts(tileIds, zoom, k, v);
+			Map<Long, Long> counts = getCounts(tileIds, zoom, tagConditions);
 			logger.trace("Counts: " + counts);
 			
 			candidateTiles = new ArrayList<Long>();
