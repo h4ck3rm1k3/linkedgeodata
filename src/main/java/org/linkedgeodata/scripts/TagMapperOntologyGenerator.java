@@ -22,27 +22,16 @@ package org.linkedgeodata.scripts;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.Collection;
 import java.util.List;
 
 import org.linkedgeodata.dao.OntologyGeneratorVisitor;
 import org.linkedgeodata.osm.mapping.IOneOneTagMapper;
-import org.linkedgeodata.osm.mapping.ITagMapper;
 import org.linkedgeodata.osm.mapping.InMemoryTagMapper;
 import org.linkedgeodata.osm.mapping.impl.ISimpleOneOneTagMapper;
-import org.linkedgeodata.osm.mapping.impl.ISimpleOneOneTagMapperVisitor;
-import org.linkedgeodata.osm.mapping.impl.SimpleClassTagMapper;
-import org.linkedgeodata.osm.mapping.impl.SimpleDataTypeTagMapper;
-import org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper;
-import org.linkedgeodata.osm.mapping.impl.SimpleTextTagMapper;
 import org.linkedgeodata.util.ModelUtil;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.vocabulary.OWL;
-import com.hp.hpl.jena.vocabulary.RDF;
-import com.hp.hpl.jena.vocabulary.RDFS;
 
 
 public class TagMapperOntologyGenerator

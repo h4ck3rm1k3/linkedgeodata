@@ -50,6 +50,7 @@ import org.linkedgeodata.util.SQLUtil;
 import org.linkedgeodata.util.StringUtil;
 import org.linkedgeodata.util.tiles.SubTileIdCollection;
 import org.linkedgeodata.util.tiles.TileUtil;
+import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -108,8 +109,25 @@ class TileResult
 
 
 public class NodeStatsDAO
+	extends AbstractDAO
 {
 	private static final Logger logger = Logger.getLogger(NodeStatsDAO.class);
+	
+	private static final String TABLE_PREFIX_K = "lgd_stats_node_tags_tilek_";
+	private static final String TABLE_PREFIX_KV = "lgd_stats_node_tags_tilekv_";
+
+	enum Query
+		implements IQuery
+	{
+		DOES_TAG_EXIST("SELECT tile_id FROM " + TABLE_PREFIX_KV + "0 WHERE (tile_id, k, v) = (0, ?, ?) LIMIT 1"),
+		;
+		
+		private String sql;
+		
+		Query(String sql) { this.sql = sql; }
+		public String getSQL() { return sql; }
+	}
+	
 	
 	/**
 	 * Some ideas for options:
@@ -182,19 +200,29 @@ public class NodeStatsDAO
 		System.out.println( ModelUtil.toString(model));
 		
 		System.out.println("Count: " + nodeIds.size());
-	}
+	}	
 	
-	
-	private static final String TABLE_PREFIX_K = "lgd_stats_node_tags_tilek_";
-	private static final String TABLE_PREFIX_KV = "lgd_stats_node_tags_tilekv_";
 
 	private Connection conn;
 	
+	public NodeStatsDAO()
+	{
+		super(Arrays.asList(Query.values()));
+	}
 	
+	public NodeStatsDAO(Connection conn)
+		throws Exception
+	{
+		super(Arrays.asList(Query.values()));
+
+		setConnection(conn);
+	}
+	
+	/*
 	public void setConnection(Connection conn)
 	{
 		this.conn = conn;
-	}
+	}*/
 	
 	
 	private static String getTableNameKForZoom(int zoom)
@@ -275,7 +303,8 @@ public class NodeStatsDAO
 		
 		return result;
 	}
-	
+
+
 	Map<Long, Long> getCounts(Collection<Long> tileIds, int zoom, String k, String v)
 		throws SQLException
 	{
@@ -479,24 +508,6 @@ public class NodeStatsDAO
 	}
 	
 	
-	public static String escape(Object o)
-	{
-		return o.toString().replace("'", "\'");
-	}
-	
-	public String quote(Object o)
-	{
-		return "'" + escape(o) + "'";
-	}
-	
-	public List<String> quote(Iterable<?> items)
-	{
-		List<String> result = new ArrayList<String>();
-		for(Object item : items)
-			result.add(quote(item));
-		
-		return result;
-	}	
 	
 	public Map<String, Map<String, Long>> getStatsNodeTagsKV(RectangularShape rect, Iterable<String> ks)
 		throws SQLException
@@ -526,7 +537,7 @@ public class NodeStatsDAO
 			//+   "INNER JOIN lgd_tag_mapping_simple_class sc ON (sc.id = db.id) "
 			+ "WHERE "
 			+ 	"t.geom && " + LGDQueries.BBox(rect) + " "
-			+   "t.k = (" + StringUtil.implode(",", quote(ks)) + ") "
+			+   "t.k = (" + StringUtil.implode(",", SQLUtil.quotePostgres(ks)) + ") "
 			//+ 	filterPart + " "
 			+ "GROUP BY "
 			+ 	"t.k, t.v "
@@ -544,7 +555,7 @@ public class NodeStatsDAO
 				+ 	"lgd_stats_node_tags_tilekv_" + zoom + " t "
 				+ "WHERE "
 				+ 	"tile_id IN (" + StringUtil.implode(",", tileIds) + ") "
-				+	"AND k IN (" +  StringUtil.implode(",", quote(ks)) + ") " 
+				+	"AND k IN (" +  StringUtil.implode(",", SQLUtil.quotePostgres(ks)) + ") " 
 				//+ 	filterPart + " "
 				+ "GROUP BY "
 				+ 	"t.k, t.v "

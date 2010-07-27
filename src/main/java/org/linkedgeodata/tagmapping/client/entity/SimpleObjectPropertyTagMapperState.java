@@ -39,6 +39,7 @@ public class SimpleObjectPropertyTagMapperState
 	private static final long serialVersionUID = 1L;
 
 	//private static final Logger logger = Logger.getLogger(SimpleDataTypeTagMapper.class);
+	private boolean objectAsPrefix;
 	private String object;
 	
 	public SimpleObjectPropertyTagMapperState()
@@ -58,10 +59,11 @@ public class SimpleObjectPropertyTagMapperState
 	 * @param method
 	 * @param tag
 	 */
-	public SimpleObjectPropertyTagMapperState(String property, String object, SimpleTagPattern tagPattern, boolean isOSMEntity)
+	public SimpleObjectPropertyTagMapperState(String property, String object, boolean objectAsPrefix, SimpleTagPattern tagPattern, boolean isOSMEntity)
 	{
 		super(property, tagPattern, isOSMEntity);
 		this.object = object;
+		this.objectAsPrefix = objectAsPrefix;
 	}
 	
 	public String getObject()
@@ -72,6 +74,16 @@ public class SimpleObjectPropertyTagMapperState
 	public void setObject(String object)
 	{
 		this.object = object;
+	}
+	
+	public boolean isObjectAsPrefix()
+	{
+		return objectAsPrefix;
+	}
+	
+	public void setObjectAsPrefix(boolean value)
+	{
+		this.objectAsPrefix = value;
 	}
 	
 	/*

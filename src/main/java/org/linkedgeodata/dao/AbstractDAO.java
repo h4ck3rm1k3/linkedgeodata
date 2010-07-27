@@ -25,6 +25,7 @@ public class AbstractDAO
 	{
 	}
 	
+	
 	protected AbstractDAO(Collection<? extends IQuery> queries)
 	{
 		//this.queries = queries;
@@ -34,7 +35,6 @@ public class AbstractDAO
 		}
 	}
 	//*/
-	
 
 	protected void setPreparedStatement(Object id, String query)
 	{
@@ -45,7 +45,7 @@ public class AbstractDAO
 
 	
 	private void close()
-		throws Exception
+		throws SQLException
 	{
 		for(PreparedStatement item : queryToStmt.values()) {
 			if(item != null)
@@ -57,7 +57,7 @@ public class AbstractDAO
 
 	
 	public void setConnection(Connection conn)
-		throws Exception
+		throws SQLException
 	{
 		close();
 		
@@ -80,7 +80,7 @@ public class AbstractDAO
 	}
 	
 	public <T> T execute(Object id, Class<T> clazz, Object ...args)
-		throws Exception
+		throws SQLException
 	{
 		PreparedStatement stmt = getPreparedStatement(id);
 		
@@ -90,7 +90,7 @@ public class AbstractDAO
 	}
 	
 	public <T> List<T> executeList(Object id, Class<T> clazz, Object ...args)
-		throws Exception
+		throws SQLException
 	{
 		PreparedStatement stmt = getPreparedStatement(id);
 		

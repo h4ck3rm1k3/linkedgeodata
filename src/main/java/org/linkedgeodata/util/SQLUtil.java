@@ -348,5 +348,27 @@ public class SQLUtil
 		
 		return v;
 	}
-	*/	
+	*/
+	
+	public static String escapePostgres(Object o)
+	{
+		return o.toString().replace("\\", "\\\\").replace("'", "\\'");
+	}
+	
+	public static String quotePostgres(Object o)
+	{
+		if(o == null)
+			return null;
+		
+		return "E'" + escapePostgres(o) + "'";
+	}
+	
+	public static List<String> quotePostgres(Iterable<?> items)
+	{
+		List<String> result = new ArrayList<String>();
+		for(Object item : items)
+			result.add(quotePostgres(item));
+		
+		return result;
+	}		
 }

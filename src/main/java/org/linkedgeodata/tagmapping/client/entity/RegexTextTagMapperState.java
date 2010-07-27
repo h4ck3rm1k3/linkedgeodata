@@ -27,14 +27,23 @@ public class RegexTextTagMapperState
 	 * 
 	 */
 	private static final long	serialVersionUID	= 7573969687628794907L;
-	private String keyPattern;
 	private String  property;
+	private String keyPattern;
 	private boolean describesOSMEntity;
-	
+
 	public RegexTextTagMapperState()
 	{
 	}
-	
+
+	public RegexTextTagMapperState(String property, String keyPattern,
+			boolean describesOSMEntity)
+	{
+		super();
+		this.keyPattern = keyPattern;
+		this.property = property;
+		this.describesOSMEntity = describesOSMEntity;
+	}
+
 	public String getKeyPattern()
 	{
 		return keyPattern;

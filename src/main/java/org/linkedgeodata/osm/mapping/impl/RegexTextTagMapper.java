@@ -21,6 +21,7 @@
 package org.linkedgeodata.osm.mapping.impl;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -41,6 +42,11 @@ public class RegexTextTagMapper
 {
 	private static Set<String> knownLangTags = new HashSet<String>(Arrays.asList(
 			"en","de","fr","pl","ja","it","nl","pt","es","ru","sv","zh","no","fi","ca","uk","tr","cs","hu","ro","vo","eo","da","sk","id","ar","ko","he","lt","vi","sl","sr","bg","et","fa","hr","simple","new","ht","nn","gl","th","te","el","ms","eu","ceb","mk","hi","ka","la","bs","lb","br","is","bpy","mr","sq","cy","az","sh","tl","lv","pms","bn","be_x_old","jv","ta","oc","io","be","an","su","nds","scn","nap","ku","ast","af","fy","sw","wa","zh_yue","bat_smg","qu","ur","cv","ksh"));
+	
+	public Set<String> getKnownLanguageTags()
+	{
+		return Collections.unmodifiableSet(knownLangTags);
+	}
 	
 	private static Logger logger = Logger.getLogger(RegexTextTagMapper.class);
 	
@@ -71,6 +77,11 @@ public class RegexTextTagMapper
 		this.isOSMEntity = isOSMEntity;
 	}
 	
+	public Pattern getKeyPattern()
+	{
+		return keyPattern;
+	}
+	
 	@Override
 	public Model map(String subject, Tag tag, Model model)
 	{
@@ -85,13 +96,18 @@ public class RegexTextTagMapper
 		
 		return model;
 	}
-	
+
 	public String matchLangTag(Tag tag)
 	{
-		Matcher matcher = keyPattern.matcher(tag.getKey());
+		return matchLangTag(tag.getKey());
+	}
+	
+	public String matchLangTag(String key)
+	{
+		Matcher matcher = keyPattern.matcher(key);
 		if(matcher.matches()) {
 			if(matcher.groupCount() != 1) {
-				String msg ="Key [" + tag.getKey() + "] matched the pattern [" + keyPattern + "] but no language tag could be extracted."; 
+				String msg ="Key [" + key + "] matched the pattern [" + keyPattern + "] but no language tag could be extracted."; 
 				throw new RuntimeException(msg);
 				//logger.error(msg);
 			}

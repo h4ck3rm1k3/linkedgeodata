@@ -12,7 +12,6 @@ import org.linkedgeodata.osm.mapping.IOneOneTagMapper;
 import org.linkedgeodata.osm.mapping.InMemoryTagMapper;
 import org.linkedgeodata.osm.mapping.impl.ISimpleOneOneTagMapper;
 import org.linkedgeodata.osm.mapping.impl.ISimpleOneOneTagMapperVisitor;
-import org.linkedgeodata.osm.mapping.impl.SimpleClassTagMapper;
 import org.linkedgeodata.osm.mapping.impl.SimpleDataTypeTagMapper;
 import org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper;
 import org.linkedgeodata.osm.mapping.impl.SimpleTagPattern;
@@ -143,19 +142,20 @@ class D2RConfigGeneratorVisitor
 		return result;
 	}
 	
+	/*
 	@Override
 	public Void accept(SimpleClassTagMapper mapper)
 	{
 		String result =
 			buildFullLabel(mapper.getTagPattern()) +
 			"\td2rq:property rdf:type;\n" +
-			"\td2rq:constantValue " + "<" + mapper.getResource() + ">;\n" +
+			"\td2rq:constantValue " + "<" + mapper.getProperty() + ">;\n" +
 			buildFullCondition(mapper.getTagPattern()) +
 			"\t.\n";
 
 		out.println(result);
 		return null;
-	}
+	}*/
 
 	
 	private String buildDataType(String dataType)
@@ -172,7 +172,7 @@ class D2RConfigGeneratorVisitor
 	{
 		String result =
 			buildFullLabel(mapper.getTagPattern()) +
-			"\td2rq:property <" + mapper.getResource() + ">;\n" +
+			"\td2rq:property <" + mapper.getProperty() + ">;\n" +
 		    "\td2rq:column \"" + relationName + ".v" + "\";\n" +
 		    buildDataType(mapper.getDataType()) +
 			buildFullCondition(mapper.getTagPattern()) +
@@ -199,7 +199,7 @@ class D2RConfigGeneratorVisitor
 		
 		String result =
 			buildFullLabel(mapper.getTagPattern()) +
-			"\td2rq:property <" + mapper.getResource() + ">;\n" +
+			"\td2rq:property <" + mapper.getProperty() + ">;\n" +
 		    "\td2rq:column \"" + relationName + ".v" + "\";\n" +
 		    buildLang(mapper.getLanguageTag()) +
 			buildFullCondition(mapper.getTagPattern()) +
@@ -214,8 +214,8 @@ class D2RConfigGeneratorVisitor
 	{
 		String result =
 			buildFullLabel(mapper.getTagPattern()) +
-			"\td2rq:property <" + mapper.getResource() + ">;\n" +
-			"\td2rq:constantValue " + "<" + mapper.getResource() + ">;\n" +
+			"\td2rq:property <" + mapper.getProperty() + ">;\n" +
+			"\td2rq:constantValue " + "<" + mapper.getProperty() + ">;\n" +
 			buildFullCondition(mapper.getTagPattern()) +
 			"\t.\n";
 

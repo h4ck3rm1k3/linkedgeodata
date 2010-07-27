@@ -25,7 +25,6 @@ import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 import com.hp.hpl.jena.datatypes.RDFDatatype;
 import com.hp.hpl.jena.datatypes.TypeMapper;
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.vocabulary.XSD;
 
 public class SimpleDataTypeTagMapper
@@ -98,7 +97,7 @@ public class SimpleDataTypeTagMapper
 
 		model.add(
 				model.getResource(subject),
-				model.getProperty(super.getResource().toString()),
+				model.getProperty(super.getProperty()),
 				str,
 				rdfDataType);
 		
@@ -109,6 +108,13 @@ public class SimpleDataTypeTagMapper
 	public <T> T accept(ISimpleOneOneTagMapperVisitor<T> visitor)
 	{
 		return visitor.accept(this);
+	}
+
+	@Override
+	public String getObject(Tag tag)
+	{
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	/*

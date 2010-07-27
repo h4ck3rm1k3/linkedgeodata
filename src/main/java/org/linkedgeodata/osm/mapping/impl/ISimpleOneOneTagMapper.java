@@ -8,13 +8,12 @@ import com.hp.hpl.jena.rdf.model.Model;
 public interface ISimpleOneOneTagMapper
 	extends IOneOneTagMapper
 {
-	// TODO The following method should be renamed getBaseResource
-	String getResource();
+	String getProperty();
 	SimpleTagPattern getTagPattern();
 	
 	
 	// Returns the resource corresponding to a tag.
-	String getResource(Tag tag);
+	String getObject(Tag tag);
 
 	//Model map(String subject, Tag tag, Model model);
 	

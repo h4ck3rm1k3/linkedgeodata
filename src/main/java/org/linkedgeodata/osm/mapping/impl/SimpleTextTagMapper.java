@@ -98,7 +98,7 @@ public class SimpleTextTagMapper
 		else {*/
 		model.add(
 				model.getResource(subject),
-				model.getProperty(super.getResource().toString() + suffix),
+				model.getProperty(super.getProperty().toString() + suffix),
 				tag.getValue(),
 				langTag);
 			
@@ -111,6 +111,13 @@ public class SimpleTextTagMapper
 	public <T> T accept(ISimpleOneOneTagMapperVisitor<T> visitor)
 	{
 		return visitor.accept(this);
+	}
+
+	@Override
+	public String getObject(Tag tag)
+	{
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	/*

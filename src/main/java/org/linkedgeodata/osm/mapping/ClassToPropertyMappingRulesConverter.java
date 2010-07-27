@@ -12,6 +12,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.linkedgeodata.osm.mapping.impl.ISimpleOneOneTagMapper;
 import org.linkedgeodata.osm.mapping.impl.ISimpleOneOneTagMapperVisitor;
+import org.linkedgeodata.osm.mapping.impl.SimpleClassTagMapper;
 import org.linkedgeodata.osm.mapping.impl.SimpleDataTypeTagMapper;
 import org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper;
 import org.linkedgeodata.osm.mapping.impl.SimpleTextTagMapper;
@@ -20,10 +21,12 @@ import org.linkedgeodata.tagmapping.client.entity.SimpleObjectPropertyTagMapperS
 import org.linkedgeodata.tagmapping.client.entity.SimpleTagPattern;
 import org.linkedgeodata.tagmapping.client.entity.SimpleTextTagMapperState;
 
+import com.hp.hpl.jena.vocabulary.RDF;
 
 
 
-public class MappingRulesConverter
+
+public class ClassToPropertyMappingRulesConverter
 	implements ISimpleOneOneTagMapperVisitor<Void>
 {
 	private Session session; 
@@ -50,31 +53,31 @@ public class MappingRulesConverter
 		
 		InMemoryTagMapper mapper = new InMemoryTagMapper();
 		mapper.load(file);
-	
-		Session session = TagMappingDB.getSession();
-		MappingRulesConverter converter = new MappingRulesConverter(session);
-		Transaction tx = session.beginTransaction();
+
+		
+		InMemoryTagMapper output = new InMemoryTagMapper();
 		
 		for(IOneOneTagMapper item : mapper.asList()) {
-			if(item instanceof ISimpleOneOneTagMapper) {
-				ISimpleOneOneTagMapper x = (ISimpleOneOneTagMapper)item;
+			if(item instanceof SimpleClassTagMapper) {
+				SimpleClassTagMapper m  = (SimpleClassTagMapper)item;
 				
-				x.accept(converter);
+				SimpleObjectPropertyTagMapper x = new SimpleObjectPropertyTagMapper(RDF.type.toString(), m.getProperty(), false, m.getTagPattern(), m.describesOSMEntity());
+			
+				output.add(x);
 			}
-		}	
+			else {
+				output.add(item);
+			}
+			
+		}
 		
-		
-		tx.commit();
-		
-	}
-	
-	
-	public MappingRulesConverter(Session session)
-		throws Exception
-	{
-		this.session = session;		
-	}
+		output.save(new File("data/triplify/config/LGDMappingRules.2.0.xml.new"));
 
+
+		
+	}
+	
+	
 	
 	/*
 	@Override
@@ -108,7 +111,7 @@ public class MappingRulesConverter
 	@Override
 	public Void accept(SimpleObjectPropertyTagMapper mapper)
 	{
-		Object entity = new SimpleObjectPropertyTagMapperState(mapper.getProperty(), mapper.getObject(), mapper.isObjectAsPrefix(), new SimpleTagPattern(mapper.getTagPattern().getKey(), mapper.getTagPattern().getValue()), mapper.describesOSMEntity());
+		Object entity = new SimpleObjectPropertyTagMapperState(mapper.getProperty(), mapper.getProperty(), mapper.isObjectAsPrefix(), new SimpleTagPattern(mapper.getTagPattern().getKey(), mapper.getTagPattern().getValue()), mapper.describesOSMEntity());
 		session.persist(entity);
 
 		return null;

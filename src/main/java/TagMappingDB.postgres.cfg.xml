@@ -25,7 +25,6 @@
 		<mapping class="org.linkedgeodata.tagmapping.client.entity.AbstractTagMapperState" />
 		<mapping class="org.linkedgeodata.tagmapping.client.entity.AbstractSimpleTagMapperState" />
 		
-		<mapping class="org.linkedgeodata.tagmapping.client.entity.SimpleClassTagMapperState" />
 		<mapping class="org.linkedgeodata.tagmapping.client.entity.SimpleDataTypeTagMapperState" />
 		<mapping class="org.linkedgeodata.tagmapping.client.entity.SimpleObjectPropertyTagMapperState" />
 		<mapping class="org.linkedgeodata.tagmapping.client.entity.SimpleTextTagMapperState" />

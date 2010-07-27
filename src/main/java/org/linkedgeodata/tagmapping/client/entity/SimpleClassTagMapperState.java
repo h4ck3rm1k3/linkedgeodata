@@ -27,7 +27,7 @@ import javax.persistence.Table;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-
+/*
 @Entity
 @Table(name="lgd_tag_mapping_simple_class")
 public class SimpleClassTagMapperState
@@ -36,7 +36,7 @@ public class SimpleClassTagMapperState
 {
 	/**
 	 * 
-	 */
+	 * /
 	private static final long serialVersionUID = 1L;
 
 	//private static final Logger logger = Logger.getLogger(SimpleDataTypeTagMapper.class);
@@ -57,7 +57,7 @@ public class SimpleClassTagMapperState
 	 * @param resource
 	 * @param method
 	 * @param tag
-	 */
+	 * /
 	public SimpleClassTagMapperState(String clazz, SimpleTagPattern tagPattern, boolean isOSMEntity)
 		//throws Exception
 	{
@@ -70,3 +70,4 @@ public class SimpleClassTagMapperState
 		return visitor.visit(this);
 	}	
 }
+*/

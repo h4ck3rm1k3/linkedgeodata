@@ -3,7 +3,6 @@ package org.linkedgeodata.scripts;
 import java.io.File;
 import java.net.URLEncoder;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -25,24 +24,18 @@ import org.apache.commons.collections15.multimap.MultiHashMap;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.linkedgeodata.core.LGDVocab;
-import org.linkedgeodata.jtriplify.TagEntityMap;
-import org.linkedgeodata.osm.mapping.InMemoryTagMapper;
 import org.linkedgeodata.osm.mapping.impl.ISimpleOneOneTagMapper;
-import org.linkedgeodata.osm.mapping.impl.SimpleClassTagMapper;
 import org.linkedgeodata.osm.mapping.impl.SimpleDataTypeTagMapper;
+import org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper;
 import org.linkedgeodata.osm.mapping.impl.SimpleTagPattern;
 import org.linkedgeodata.osm.mapping.impl.SimpleTextTagMapper;
-import org.linkedgeodata.util.ModelUtil;
 import org.linkedgeodata.util.PostGISUtil;
 import org.linkedgeodata.util.SerializationUtil;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
-import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
-import com.hp.hpl.jena.vocabulary.OWL;
 import com.hp.hpl.jena.vocabulary.RDF;
 import com.hp.hpl.jena.vocabulary.RDFS;
 import com.hp.hpl.jena.vocabulary.XSD;
@@ -223,7 +216,8 @@ class VocabularyStats
 	{
 		String resource = keyToURI(k);
 
-		SimpleClassTagMapper tagMapper = new SimpleClassTagMapper(resource, new SimpleTagPattern(k, null), false);
+		SimpleObjectPropertyTagMapper tagMapper = new SimpleObjectPropertyTagMapper(RDF.type.toString(), resource, false, new SimpleTagPattern(k, null), false);
+		//SimpleClassTagMapper tagMapper = new SimpleClassTagMapper(resource, new SimpleTagPattern(k, null), false);
 		tagMappers.add(tagMapper);		
 	}
 
@@ -237,7 +231,9 @@ class VocabularyStats
 
 		String subClass = keyToURI(subClassStr);
 
-		SimpleClassTagMapper tagMapper = new SimpleClassTagMapper(subClass, new SimpleTagPattern(k, v), false);
+		//SimpleClassTagMapper tagMapper = new SimpleClassTagMapper(subClass, new SimpleTagPattern(k, v), false);
+		SimpleObjectPropertyTagMapper tagMapper = new SimpleObjectPropertyTagMapper(RDF.type.toString(), subClass, false, new SimpleTagPattern(k, null), false);
+
 		tagMappers.add(tagMapper);
 	}
 

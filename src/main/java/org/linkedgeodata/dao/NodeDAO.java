@@ -60,7 +60,7 @@ public class NodeDAO
 	}
 	
 	public NodeDAO(Connection conn)
-		throws SQLException
+		throws Exception
 	{
 		setConnection(conn);
 		nodeStatsDAO.setConnection(conn);

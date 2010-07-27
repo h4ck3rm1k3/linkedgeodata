@@ -64,27 +64,36 @@ public class SimpleClassTagMapper
 	
 	@Override
 	public Model _map(String subject, Tag tag, Model model)
-	{		
-		String suffix = "";
-		
-		if(super.getTagPattern().getValue() == null) {
-			// suffix = tag.getValue()
-			suffix = URIUtil.myEncode(tag.getValue());
-		}
-		
+	{
 		model.add(
 				model.getResource(subject.toString()),
 				RDF.type,
-				model.getResource(super.getResource().toString() + suffix)
+				model.getResource(super.getProperty().toString())
 		);
 		
 		return model;
 	}
 
+	/*
 	@Override
 	public <T> T accept(ISimpleOneOneTagMapperVisitor<T> visitor)
 	{
 		return visitor.accept(this);
+	}
+	*/
+
+	@Override
+	public String getObject(Tag tag)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <T> T accept(ISimpleOneOneTagMapperVisitor<T> visitor)
+	{
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 /*
@@ -134,3 +143,4 @@ public class SimpleClassTagMapper
 	}
 	*/
 }
+

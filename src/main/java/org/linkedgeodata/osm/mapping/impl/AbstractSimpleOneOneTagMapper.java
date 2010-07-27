@@ -22,12 +22,10 @@ package org.linkedgeodata.osm.mapping.impl;
 
 import java.io.Serializable;
 
-import org.linkedgeodata.util.URIUtil;
 import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.vocabulary.RDF;
 
 /**
  * Abstract Mapping rule between a single tag pattern and a resource.
@@ -46,7 +44,7 @@ public abstract class AbstractSimpleOneOneTagMapper
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private String resource;
+	private String property;
 	private String method;
 	private SimpleTagPattern tagPattern;
 
@@ -56,7 +54,7 @@ public abstract class AbstractSimpleOneOneTagMapper
 	
 	protected AbstractSimpleOneOneTagMapper(String resource, SimpleTagPattern tagPattern, boolean describesOSMEntity)
 	{
-		this.resource = resource;
+		this.property = resource;
 		this.method = null;
 		this.tagPattern = tagPattern;
 		this.describesOSMEntity = describesOSMEntity;
@@ -64,7 +62,7 @@ public abstract class AbstractSimpleOneOneTagMapper
 
 	protected AbstractSimpleOneOneTagMapper(String resource, String method, SimpleTagPattern tagPattern, boolean describesOSMEntity)
 	{
-		this.resource = resource;
+		this.property = resource;
 		this.method = method;
 		this.tagPattern = tagPattern;
 		this.describesOSMEntity = describesOSMEntity;
@@ -80,9 +78,9 @@ public abstract class AbstractSimpleOneOneTagMapper
 		return describesOSMEntity;
 	}
 
-	public String getResource()
+	public String getProperty()
 	{
-		return resource;
+		return property;
 	}
 
 	public SimpleTagPattern getTagPattern()
@@ -114,24 +112,37 @@ public abstract class AbstractSimpleOneOneTagMapper
 		return _map(subject, tag, model);
 	}
 
-	@Override
-	public String getResource(Tag tag)
+	
+	/**
+	 * Method for reverse mapping an URI to a tag
+	 * Not sure if this method belongs here
+	 *  
+	 */ 
+	public Tag getTag(String res)
+	{
+		if(!res.startsWith(property))
+			return null;
+		
+		return new Tag(tagPattern.getKey(), tagPattern.getValue()); 
+	}
+
+
+	/**
+	 * Returns the resource that may be build on the tag
+	 * 
+	 */
+	//@Override
+	//public String getObject(Tag tag);
+	/*
 	{
 		if(!tagPattern.matches(tag)) {
 			return null;
 		}
 
-		String suffix = "";
-		
-		if(tagPattern.getValue() == null) {
-			// suffix = tag.getValue()
-			suffix = URIUtil.myEncode(tag.getValue());
-		}
-		
-		String result = resource + suffix;
+		String result = property;
 		
 		return result;
-	}
+	}*/
 	
 
 	protected abstract Model _map(String subject, Tag tag, Model model);

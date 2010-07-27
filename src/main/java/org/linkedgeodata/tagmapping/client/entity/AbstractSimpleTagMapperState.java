@@ -52,7 +52,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 		appliesTo="lgd_tag_mapping_simple_base",
 		indexes = {
 				@Index(name="idx_lgd_abstract_simple_tag_mapper_state_k_v", columnNames={"key", "value"}),
-				@Index(name="idx_lgd_abstract_simple_tag_mapper_state_r", columnNames={"resource"})
+				@Index(name="idx_lgd_abstract_simple_tag_mapper_state_r", columnNames={"property"})
 		}
 )
 public abstract class AbstractSimpleTagMapperState
@@ -73,7 +73,8 @@ public abstract class AbstractSimpleTagMapperState
     */
 	private SimpleTagPattern tagPattern;
 	
-	private String resource;
+	//boolean isPropertyPrefixMode = false;
+	private String property;
 
 	// Whether the tag pertains to the OSM entity, or the concept that
 	// the resource represents
@@ -84,17 +85,17 @@ public abstract class AbstractSimpleTagMapperState
 	}
 	
 	
-	protected AbstractSimpleTagMapperState(String resource, SimpleTagPattern tagPattern, boolean describesOSMEntity)
+	protected AbstractSimpleTagMapperState(String property, SimpleTagPattern tagPattern, boolean describesOSMEntity)
 	{
-		this.resource = resource;
+		this.property = property;
 		//this.method = null;
 		this.tagPattern = tagPattern;
 		this.describesOSMEntity = describesOSMEntity;
 	}
 
-	protected AbstractSimpleTagMapperState(String resource, String method, SimpleTagPattern tagPattern, boolean describesOSMEntity)
+	protected AbstractSimpleTagMapperState(String property, String method, SimpleTagPattern tagPattern, boolean describesOSMEntity)
 	{
-		this.resource = resource;
+		this.property = property;
 		//this.method = method;
 		this.tagPattern = tagPattern;
 		this.describesOSMEntity = describesOSMEntity;
@@ -110,9 +111,9 @@ public abstract class AbstractSimpleTagMapperState
 		return describesOSMEntity;
 	}
 
-	public String getResource()
+	public String getProperty()
 	{
-		return resource;
+		return property;
 	}
 
 	public SimpleTagPattern getTagPattern()
@@ -142,9 +143,9 @@ public abstract class AbstractSimpleTagMapperState
 		this.describesOSMEntity = describesOSMEntity;
 	}
 
-	public void setResource(String resource)
+	public void setProperty(String property)
 	{
-		this.resource = resource;
+		this.property = property;
 	}
 
 	public void setTagPattern(SimpleTagPattern tagPattern)
@@ -155,7 +156,7 @@ public abstract class AbstractSimpleTagMapperState
 	@Override
 	public String toString()
 	{
-		return tagPattern.getKey() + ", " + tagPattern.getValue() + ", " + resource + ", " + describesOSMEntity; 
+		return tagPattern.getKey() + ", " + tagPattern.getValue() + ", " + property + ", " + describesOSMEntity; 
 	}
 	
 	@Transient

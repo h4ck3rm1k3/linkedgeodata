@@ -18,14 +18,14 @@ public class TagLabelDAO
 	enum Query
 		implements IQuery
 	{
-		INSERT      ("INSERT INTO lgd_tags_labels(k, v, language, label) VALUES (?, ?, ?, ?)"),
-		DELETE_EXACT("DELETE FROM lgd_tags_labels WHERE (k, v, language, label) = (?, ?, ?, ?)"),
-		DELETE_LANG ("DELETE FROM lgd_tags_labels WHERE language = ?"),
-		DELETE_ALL  ("DELETE FROM lgd_tags_labels"),
-		SELECT_KVL  ("SELECT label FROM lgd_tags_labels WHERE (k, v, language) = (?, ?, ?)"),
+		INSERT      ("INSERT INTO lgd_tag_labels(k, v, language, label) VALUES (?, ?, ?, ?)"),
+		DELETE_EXACT("DELETE FROM lgd_tag_labels WHERE (k, v, language, label) = (?, ?, ?, ?)"),
+		DELETE_LANG ("DELETE FROM lgd_tag_labels WHERE language = ?"),
+		DELETE_ALL  ("DELETE FROM lgd_tag_labels"),
+		SELECT_KVL  ("SELECT label FROM lgd_tag_labels WHERE (k, v, language) = (?, ?, ?)"),
 		
-		GET_PREFERRED_LABEL("SELECT label FROM lgd_tags_labels WHERE (k, v, language) = (?, ?, ?) LIMIT 1"),
-		GET_LABELS_KV("SELECT language, label FROM lgd_tags_labels WHERE (k, v) = (?, ?)"),
+		GET_PREFERRED_LABEL("SELECT label FROM lgd_tag_labels WHERE (k, v, language) = (?, ?, ?) LIMIT 1"),
+		GET_LABELS_KV("SELECT language, label FROM lgd_tag_labels WHERE (k, v) = (?, ?)"),
 		;
 
 		private String sql;
@@ -49,7 +49,7 @@ public class TagLabelDAO
 	}
 	
 	public TagLabelDAO(Connection conn)
-		throws Exception
+		throws SQLException
 	{
 		super(Arrays.asList(Query.values()));
 

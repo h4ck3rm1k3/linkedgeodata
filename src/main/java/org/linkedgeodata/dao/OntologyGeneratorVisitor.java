@@ -4,9 +4,7 @@ import java.util.Collection;
 
 import org.linkedgeodata.osm.mapping.IOneOneTagMapper;
 import org.linkedgeodata.osm.mapping.ITagMapper;
-import org.linkedgeodata.osm.mapping.InMemoryTagMapper;
 import org.linkedgeodata.osm.mapping.impl.ISimpleOneOneTagMapperVisitor;
-import org.linkedgeodata.osm.mapping.impl.SimpleClassTagMapper;
 import org.linkedgeodata.osm.mapping.impl.SimpleDataTypeTagMapper;
 import org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper;
 import org.linkedgeodata.osm.mapping.impl.SimpleTextTagMapper;
@@ -36,11 +34,12 @@ public class OntologyGeneratorVisitor
 		this.tagMapper = tagMapper;
 	}
 	
+	/*
 	@Override
 	public Void accept(SimpleClassTagMapper m)
 	{
 		if(m.getTagPattern().getKey() != null) {
-			Resource subClass = model.createResource(m.getResource());
+			Resource subClass = model.createResource(m.getProperty());
 			subClass.addProperty(RDF.type, OWL.Class);
 	
 	
@@ -52,7 +51,7 @@ public class OntologyGeneratorVisitor
 					if(item instanceof SimpleClassTagMapper) {
 						SimpleClassTagMapper classMapper = (SimpleClassTagMapper)item;
 						
-						Resource parentClass = model.createResource(classMapper.getResource());
+						Resource parentClass = model.createResource(classMapper.getProperty());
 						
 						parentClass.addProperty(RDF.type, OWL.Class);
 						
@@ -64,11 +63,51 @@ public class OntologyGeneratorVisitor
 		
 		return null;
 	}
+	*/
+	private boolean isClassMapping(SimpleObjectPropertyTagMapper m)
+	{
+		return RDF.type.toString().equals(m.getProperty());
+	}
+	
+	public Void processClass(SimpleObjectPropertyTagMapper m)
+	{
+		if(!isClassMapping(m))
+			return null;
+		
+		if(m.getTagPattern().getKey() != null) {
+			Resource subClass = model.createResource(m.getObject());
+			subClass.addProperty(RDF.type, OWL.Class);
+	
+	
+			if(m.getTagPattern().getValue() != null) {
+				
+				// Check if there might be a parent class
+				Collection<? extends IOneOneTagMapper> candidates = tagMapper.lookup(m.getTagPattern().getKey(), null);
+				for(IOneOneTagMapper item : candidates) {
+					if(item instanceof SimpleObjectPropertyTagMapper) {
+						SimpleObjectPropertyTagMapper classMapper = (SimpleObjectPropertyTagMapper)item;
+						
+						if(!isClassMapping(classMapper))
+							continue;
+						
+						Resource parentClass = model.createResource(classMapper.getObject());
+						
+						parentClass.addProperty(RDF.type, OWL.Class);
+						
+						subClass.addProperty(RDFS.subClassOf, parentClass);
+					}
+				}
+			}
+		}
+		
+		return null;
+	}
+
 	
 	@Override
 	public Void accept(SimpleDataTypeTagMapper m)
 	{
-		model.createProperty(m.getResource())
+		model.createProperty(m.getProperty())
 			.addProperty(RDF.type, OWL.DatatypeProperty)
 			.addProperty(RDFS.domain, model.createResource(m.getDataType()));
 	
@@ -78,7 +117,7 @@ public class OntologyGeneratorVisitor
 	@Override
 	public Void accept(SimpleTextTagMapper m)
 	{
-		model.createProperty(m.getResource())
+		model.createProperty(m.getProperty())
 			.addProperty(RDF.type, OWL.DatatypeProperty);
 		
 		return null;
@@ -87,9 +126,19 @@ public class OntologyGeneratorVisitor
 	@Override
 	public Void accept(SimpleObjectPropertyTagMapper m)
 	{
-		model.createProperty(m.getResource())
+		/*
+		model.createProperty(m.getProperty())
 			.addProperty(RDF.type, OWL.ObjectProperty);
-	
+		*/
+
+		if(isClassMapping(m)) {
+			processClass(m);
+		}
+		else {
+			model.createProperty(m.getProperty())
+			.addProperty(RDF.type, OWL.Thing);
+		}
+		
 		return null;
 	}
 	

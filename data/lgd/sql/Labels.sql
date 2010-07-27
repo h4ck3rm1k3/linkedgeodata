@@ -12,8 +12,8 @@
  * lgd:Park.
  * 
  */
-DROP TABLE lgd_tags_labels;
-CREATE TABLE lgd_tags_labels (
+DROP TABLE lgd_tag_labels;
+CREATE TABLE lgd_tag_labels (
 	k TEXT NOT NULL,
 	v TEXT, /* Note: If v is NULL, the label applies to the class identified solely by k */ 
 	language VARCHAR(16) NOT NULL,
@@ -24,8 +24,8 @@ CREATE TABLE lgd_tags_labels (
 );
 
 /* Index for searching by label */ 
-CREATE INDEX idx_lgd_tags_labels_lablan ON lgd_tags_labels(label, language);
+CREATE INDEX idx_lgd_tag_labels_lablan ON lgd_tags_labels(label, language);
 
 /* Index for searching by language */
-CREATE INDEX idx_lgd_tags_labels_lanlab ON lgd_tags_labels(language, label);
+CREATE INDEX idx_lgd_tag_labels_lanlab ON lgd_tags_labels(language, label);
 

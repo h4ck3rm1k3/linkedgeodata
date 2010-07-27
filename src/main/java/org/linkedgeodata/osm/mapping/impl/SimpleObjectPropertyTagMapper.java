@@ -22,13 +22,31 @@ package org.linkedgeodata.osm.mapping.impl;
 
 import java.io.Serializable;
 
+import org.linkedgeodata.util.URIUtil;
 import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 
-import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.vocabulary.RDF;
 
 
+/**
+ * Mapper for relating a single tag to a triple with an object property.
+ * 
+ * If the value in tagPattern is NULL, the following mapping will be made:
+ * (k, v) -> $subject resource prefix:UTF8Encode(v)
+ * 
+ * Otherwise
+ * (k, v) -> $subject resource prefix
+ * 
+ * Note: super.resource is used for the object of the generated triples.
+ * This is because then the SimpleObjectPropertyTagMapper can be seen as a more
+ * general version of the SimpleClassTagMapper, where the property is not
+ * restricted to rdf:type.
+ * 
+ * 
+ * 
+ * @author raven
+ *
+ */
 public class SimpleObjectPropertyTagMapper
 	extends AbstractSimpleOneOneTagMapper
 	implements Serializable
@@ -39,6 +57,7 @@ public class SimpleObjectPropertyTagMapper
 	private static final long serialVersionUID = 1L;
 
 	//private static final Logger logger = Logger.getLogger(SimpleDataTypeTagMapper.class);
+	private boolean objectAsPrefix;
 	private final String object;
 	
 	/**
@@ -54,15 +73,21 @@ public class SimpleObjectPropertyTagMapper
 	 * @param method
 	 * @param tag
 	 */
-	public SimpleObjectPropertyTagMapper(String property, String object, SimpleTagPattern tagPattern, boolean isOSMEntity)
+	public SimpleObjectPropertyTagMapper(String property, String object, boolean objectAsPrefix, SimpleTagPattern tagPattern, boolean isOSMEntity)
 	{
 		super(property, tagPattern, isOSMEntity);
 		this.object = object;
+		this.objectAsPrefix = objectAsPrefix;
 	}
 	
 	public String getObject()
 	{
 		return object;
+	}
+	
+	public boolean isObjectAsPrefix()
+	{
+		return objectAsPrefix;		
 	}
 	
 	@Override
@@ -71,13 +96,13 @@ public class SimpleObjectPropertyTagMapper
 		String suffix = "";
 		
 		if(super.getTagPattern().getValue() == null) {
-			suffix = tag.getValue();
+			suffix = URIUtil.encodeUTF8(tag.getValue());
 		}
 		
 		model.add(
 				model.getResource(subject.toString()),
-				model.getProperty(this.object + suffix),
-				model.getResource(super.getResource().toString() + suffix)
+				model.getProperty(super.getProperty()),
+				model.getResource(this.object + suffix)
 		);
 		
 		return model;
@@ -89,6 +114,40 @@ public class SimpleObjectPropertyTagMapper
 		return visitor.accept(this);
 	}
 
+	
+	public Tag getTag(String uri)
+	{
+		if(getTagPattern().getValue() != null && object.equals(uri)) {
+			return new Tag(getTagPattern().getKey(), getTagPattern().getValue()); 
+		}
+		else if(uri.startsWith(object)) {
+			String value = uri.substring(object.length());
+
+			value = URIUtil.decodeUTF8(value);
+			
+			return new Tag(getTagPattern().getKey(), value); 
+		}
+		
+		return null;		
+	}
+
+	
+	@Override
+	public String getObject(Tag tag)
+	{
+		if(!getTagPattern().matches(tag)) {
+			return null;
+		}
+
+		String suffix = (getTagPattern().getValue() == null)
+			? URIUtil.encodeUTF8(tag.getValue())
+			: "";
+		
+		String result = getObject() + suffix;
+		
+		return result;
+	}
+	
 	/*
 	@Override
 	public String toString()
