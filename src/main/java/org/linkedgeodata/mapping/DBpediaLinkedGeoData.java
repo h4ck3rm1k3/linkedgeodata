@@ -22,14 +22,13 @@ package org.linkedgeodata.mapping;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.io.RandomAccessFile;
 import java.net.URI;
 import java.net.URL;
@@ -43,13 +42,6 @@ import java.util.Map;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.linkedgeodata.mapping.Cache;
-import org.linkedgeodata.mapping.DBpediaPoint;
-import org.linkedgeodata.mapping.Files;
-import org.linkedgeodata.mapping.LGDPoint;
-import org.linkedgeodata.mapping.POIClass;
-import org.linkedgeodata.mapping.SPARQLTasks;
-import org.linkedgeodata.mapping.SparqlEndpoint;
 
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
@@ -111,13 +103,22 @@ public class DBpediaLinkedGeoData {
 
 	/** Checks, if all data was successfully written to the file which is written as a boolean value
 	 * at the beginning of the file.*/
-	private static boolean fileComplete(String filename) throws IOException
+	private static boolean binaryFileComplete(String filename) throws IOException
 	{
 		if(!new File(filename).exists()) return false;
 		DataInputStream f = new DataInputStream(new FileInputStream(filename));
 		boolean b = f.readBoolean();
 		f.close();
 		return b;
+	}
+
+	private static boolean textFileComplete(String filename) throws IOException
+	{
+		if(!new File(filename).exists()) return false;
+		BufferedReader f = new BufferedReader(new FileReader(filename));
+		String s = f.readLine();
+		f.close();
+		return s.equals("y");
 	}
 
 	public static void main(String[] args) throws IOException {
@@ -128,7 +129,7 @@ public class DBpediaLinkedGeoData {
 		if(!dbpediaFile.exists() || regenerateFile ) {
 			createDBpediaFile();
 		}
-		if(!fileComplete(dbpediaFile.getAbsolutePath()))
+		if(!textFileComplete(dbpediaFile.getAbsolutePath()))
 		{
 			System.out.println("dbpedia file not marked as complete. recreate file? (y/n)");
 			String s = new BufferedReader(new InputStreamReader(System.in)).readLine();
@@ -155,8 +156,10 @@ public class DBpediaLinkedGeoData {
 		BufferedWriter fosMiss = new BufferedWriter(new FileWriter(missesFile, true));
 		// read file point by point
 		BufferedReader br = new BufferedReader(new FileReader(dbpediaFile));
-		// skip the first byte (the completeness byte)
-		br.skip(1);
+		// // skip the first byte (the completeness byte)
+		// // br.skip(2);
+		// skip the first line (the completeness line)
+		br.readLine();
 		String line;
 
 		// temporary variables needed while reading in file
@@ -306,9 +309,11 @@ public class DBpediaLinkedGeoData {
 
 		int counter = 0;
 		int points = 0;
-		DataOutputStream fos = new DataOutputStream(new FileOutputStream(dbpediaFile, true));
-		fos.writeBoolean(false); // mark as not complete, overwrite with true at the end
-
+//		DataOutputStream fos = new DataOutputStream(new FileOutputStream(dbpediaFile, true));
+//		fos.writeBoolean(false); // mark as not complete, overwrite with true at the end
+		PrintWriter fos = new PrintWriter(new BufferedWriter(new FileWriter(dbpediaFile)));
+		fos.println("n"); // mark as not complete, overwrite with true at the end
+		
 		do {
 			counter = 0;
 
@@ -352,7 +357,7 @@ public class DBpediaLinkedGeoData {
 					//						type = typeTmp;
 					//					}						
 				} else {
-					if(previousObject != null) {
+					if(previousObject != null && !types.isEmpty()) {
 						// we have new a new point => write previous point to file
 						String content = "";
 						if(dbpediaFileFormat.equals("nt")) {
@@ -363,10 +368,10 @@ public class DBpediaLinkedGeoData {
 							content += "<" + previousObject + ">" + " <http://www.w3.org/2003/01/geo/wgs84_pos#lat> \"" + geoLat + "\"^^<http://www.w3.org/2001/XMLSchema#float> .\n";
 							content += "<" + previousObject + ">" + " <http://www.w3.org/2003/01/geo/wgs84_pos#long> \"" + geoLong + "\"^^<http://www.w3.org/2001/XMLSchema#float> .\n";					
 						} else {
-							content += previousObject + "\n" + label + "\n" + types.toString().replace(" ", "") + "\n" + geoLat + "\n" + geoLong + "\n\n"; 
+							content += previousObject + "\n" + label + "\n" + types.toString().replace(" ", "") + "\n" + geoLat + "\n" + geoLong + "\n"; 
 						}
 
-						fos.write(content.getBytes());
+						fos.println(content);
 
 					}
 
@@ -409,7 +414,7 @@ public class DBpediaLinkedGeoData {
 		{
 			RandomAccessFile f = new RandomAccessFile(dbpediaFile,"rw");
 			f.seek(0);
-			f.writeBoolean(true);
+			f.writeBytes("y\n");// writeBoolean(true);
 			f.close();
 		}
 	}
