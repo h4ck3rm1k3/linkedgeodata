@@ -309,11 +309,11 @@ public class DBpediaLinkedGeoData {
 
 		int counter = 0;
 		int points = 0;
-//		DataOutputStream fos = new DataOutputStream(new FileOutputStream(dbpediaFile, true));
-//		fos.writeBoolean(false); // mark as not complete, overwrite with true at the end
+		//		DataOutputStream fos = new DataOutputStream(new FileOutputStream(dbpediaFile, true));
+		//		fos.writeBoolean(false); // mark as not complete, overwrite with true at the end
 		PrintWriter fos = new PrintWriter(new BufferedWriter(new FileWriter(dbpediaFile)));
 		fos.println("n"); // mark as not complete, overwrite with true at the end
-		
+
 		do {
 			counter = 0;
 
@@ -330,83 +330,91 @@ public class DBpediaLinkedGeoData {
 
 			//			SparqlQuery query = new SparqlQuery(queryStr, dbpediaEndpoint);
 			//			ResultSet rs = query.send();
-			ResultSet rs = dbpedia.queryAsResultSet(queryStr);
-			String previousObject = null;
-			String geoLat = "";
-			String geoLong = "";
-			String label = "";
-			Collection<String> types = new LinkedList<String>();
+			ResultSet rs;
+			try
+			{
+				rs = dbpedia.queryAsResultSet(queryStr);
 
-			while(rs.hasNext()) {
-				QuerySolution qs = rs.nextSolution();
+				String previousObject = null;
+				String geoLat = "";
+				String geoLong = "";
+				String label = "";
+				Collection<String> types = new LinkedList<String>();
 
-				String object = qs.get("object").toString();
+				while(rs.hasNext())
+				{
+					QuerySolution qs = rs.nextSolution();
 
-				if(object.equals(previousObject)) {
-					// only type has changed compared to previous row
-					if(qs.contains("type"))
-						types.add(qs.get("type").toString());
+					String object = qs.get("object").toString();
 
-					// we are only interested in the most special DBpedia class
-					//					NamedClass nc = new NamedClass(typeTmp);
-					//					if(hierarchy.getSubClasses(nc).size()==1) {
-					// usually there is just one type assigned in the DBpedia ontology
-					//						if(!type.equals("unknown")) {
-					//							throw new Error("two different types for " + object + ": " + type + " and " + typeTmp);
-					//						}
-					//						type = typeTmp;
-					//					}						
-				} else {
-					if(previousObject != null && !types.isEmpty()) {
-						// we have new a new point => write previous point to file
-						String content = "";
-						if(dbpediaFileFormat.equals("nt")) {
-							content += "<" + previousObject + ">" + " <http://www.w3.org/2000/01/rdf-schema#label> \"" + label + "\" .\n";
-							for(String type : types) {
-								content += "<" + previousObject + ">" + " <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> \"" + type + "\" .\n";
-							}
-							content += "<" + previousObject + ">" + " <http://www.w3.org/2003/01/geo/wgs84_pos#lat> \"" + geoLat + "\"^^<http://www.w3.org/2001/XMLSchema#float> .\n";
-							content += "<" + previousObject + ">" + " <http://www.w3.org/2003/01/geo/wgs84_pos#long> \"" + geoLong + "\"^^<http://www.w3.org/2001/XMLSchema#float> .\n";					
-						} else {
-							content += previousObject + "\n" + label + "\n" + types.toString().replace(" ", "") + "\n" + geoLat + "\n" + geoLong + "\n"; 
-						}
-
-						fos.println(content);
-
-					}
-
-					// reset default values
-					types.clear();
-
-					// get new data
-					geoLat = qs.getLiteral("lat").getString();
-					geoLong = qs.getLiteral("long").getString();
-					label = qs.getLiteral("label").getString();
-					if(qs.contains("type")) {
-						types.add(qs.get("type").toString());
+					if(object.equals(previousObject)) {
+						// only type has changed compared to previous row
+						if(qs.contains("type"))
+							types.add(qs.get("type").toString());
 
 						// we are only interested in the most special DBpedia class
-						//						NamedClass nc = new NamedClass(typeTmp);
-						//						if(hierarchy.getSubClasses(nc).size()==1) {
+						//					NamedClass nc = new NamedClass(typeTmp);
+						//					if(hierarchy.getSubClasses(nc).size()==1) {
 						// usually there is just one type assigned in the DBpedia ontology
-						//							if(!type.equals("unknown")) {
-						//								throw new Error("two different types for " + object + ": " + type + " and " + typeTmp);
-						//							}
-						//							type = typeTmp;
-						//						}							
+						//						if(!type.equals("unknown")) {
+						//							throw new Error("two different types for " + object + ": " + type + " and " + typeTmp);
+						//						}
+						//						type = typeTmp;
+						//					}						
+					} else {
+						if(previousObject != null && !types.isEmpty()) {
+							// we have new a new point => write previous point to file
+							String content = "";
+							if(dbpediaFileFormat.equals("nt")) {
+								content += "<" + previousObject + ">" + " <http://www.w3.org/2000/01/rdf-schema#label> \"" + label + "\" .\n";
+								for(String type : types) {
+									content += "<" + previousObject + ">" + " <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> \"" + type + "\" .\n";
+								}
+								content += "<" + previousObject + ">" + " <http://www.w3.org/2003/01/geo/wgs84_pos#lat> \"" + geoLat + "\"^^<http://www.w3.org/2001/XMLSchema#float> .\n";
+								content += "<" + previousObject + ">" + " <http://www.w3.org/2003/01/geo/wgs84_pos#long> \"" + geoLong + "\"^^<http://www.w3.org/2001/XMLSchema#float> .\n";					
+							} else {
+								content += previousObject + "\n" + label + "\n" + types.toString().replace(" ", "") + "\n" + geoLat + "\n" + geoLong + "\n"; 
+							}
+
+							fos.println(content);
+
+						}
+
+						// reset default values
+						types.clear();
+
+						// get new data
+						geoLat = qs.getLiteral("lat").getString();
+						geoLong = qs.getLiteral("long").getString();
+						label = qs.getLiteral("label").getString();
+						if(qs.contains("type")) {
+							types.add(qs.get("type").toString());
+
+							// we are only interested in the most special DBpedia class
+							//						NamedClass nc = new NamedClass(typeTmp);
+							//						if(hierarchy.getSubClasses(nc).size()==1) {
+							// usually there is just one type assigned in the DBpedia ontology
+							//							if(!type.equals("unknown")) {
+							//								throw new Error("two different types for " + object + ": " + type + " and " + typeTmp);
+							//							}
+							//							type = typeTmp;
+							//						}							
+						}
+
+						previousObject = object;					
+						points++;
+
 					}
 
-					previousObject = object;					
-					points++;
+					counter++;
 				}
-
-				counter++;
 			}
+			catch(Exception e) {e.printStackTrace();}
 
 			offset += limit;
 			System.out.println(points + " points queried.");
 
-		} while(counter == limit);
+		} while(counter > 0);
 
 		fos.close();
 		System.out.println("finished!");
