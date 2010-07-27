@@ -339,7 +339,8 @@ public class DBpediaLinkedGeoData {
 
 				if(object.equals(previousObject)) {
 					// only type has changed compared to previous row
-					types.add(qs.get("type").toString());
+					if(qs.contains("type"))
+						types.add(qs.get("type").toString());
 
 					// we are only interested in the most special DBpedia class
 					//					NamedClass nc = new NamedClass(typeTmp);
