@@ -157,7 +157,7 @@ public class ServerMethods
 		NodeStatsDAO nodeStatsDAO = new NodeStatsDAO(dao.getSQLDAO().getConnection());
 		
 		Collection<Long> tileIds = null; //NodeStatsDAO.getTileIds(rect, 16);
-		Collection<Long> nodeIds = nodeStatsDAO.getNodeIds(tileIds, 16, rect, entityTagConditions);
+		Collection<Long> nodeIds = nodeStatsDAO.getNodeIds(tileIds, 16, rect, entityTagConditions, 1000, null);
 		
 		dao.resolveNodes(result, nodeIds, false, null);
 		//dao.getNodesWithinRect(result, rect, false, tagFilter, null, null);

@@ -195,7 +195,7 @@ public class NodeStatsDAO
 		*/
 		
 		List<Long> candidateTiles = nodeStatsDAO.getCandidateTiles(maxRect, entityTagConditions);
-		List<Long> nodeIds = nodeStatsDAO.getNodeIds(candidateTiles, maxZoom, maxRect, entityTagConditions);
+		List<Long> nodeIds = nodeStatsDAO.getNodeIds(candidateTiles, maxZoom, maxRect, entityTagConditions, 1000, null);
 
 		
 		Map<String, Long> statsK = nodeStatsDAO.getStatsNodeTagsK(maxRect, null, false);
@@ -298,9 +298,17 @@ public class NodeStatsDAO
 	 * @return
 	 * @throws SQLException
 	 */
-	public List<Long> getNodeIds(Collection<Long> tileIds, int zoom, RectangularShape filter, Collection<String> tagConditions)
+	public List<Long> getNodeIds(Collection<Long> tileIds, int zoom, RectangularShape filter, Collection<String> tagConditions, Integer limit, Integer offset)
 		throws SQLException
 	{
+		String offsetPart = (offset == null)
+			? ""
+			: " OFFSET " + offset + " ";
+		
+		String limitPart = (limit == null)
+			? ""
+			: " LIMIT " + limit + " ";
+		
 		if(tileIds != null && tileIds.size() == 0)
 			return new ArrayList<Long>();
 		
@@ -318,7 +326,9 @@ public class NodeStatsDAO
 			=  "SELECT nt0.node_id FROM "
 				+ createJoin("node_tags", "nt", "node_id", tagConditions) + " "
 				+ tileFilter
-				+ bbox;
+				+ bbox
+				+ limitPart
+				+ offsetPart;
 
 		/*
 		String query

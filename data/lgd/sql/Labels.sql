@@ -24,8 +24,8 @@ CREATE TABLE lgd_tag_labels (
 );
 
 /* Index for searching by label */ 
-CREATE INDEX idx_lgd_tag_labels_lablan ON lgd_tags_labels(label, language);
+CREATE INDEX idx_lgd_tag_labels_lablan ON lgd_tag_labels(label, language);
 
 /* Index for searching by language */
-CREATE INDEX idx_lgd_tag_labels_lanlab ON lgd_tags_labels(language, label);
+CREATE INDEX idx_lgd_tag_labels_lanlab ON lgd_tag_labels(language, label);
 
