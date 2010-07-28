@@ -70,6 +70,13 @@ public class OntologyDAO
 	}
 	
 	
+	/**
+	 * TODO Make this a unit test
+	 * 
+	 * @param conn
+	 * @param ontologyDAO
+	 * @throws Exception
+	 */
 	private static void testSQLConstraints(Connection conn, OntologyDAO ontologyDAO)
 		throws Exception
 	{
@@ -375,7 +382,9 @@ public class OntologyDAO
 	}
 	
 	
-	public Model getOntology(Model model) {
+	public Model getOntology(Model model)
+		throws SQLException
+	{
 		if(model == null)
 			model = ModelFactory.createDefaultModel();
 		
@@ -391,6 +400,18 @@ public class OntologyDAO
 			
 			ISimpleOneOneTagMapper x = (ISimpleOneOneTagMapper)item;
 			x.accept(visitor);
+			
+			Tag tag = new Tag(x.getTagPattern().getKey(), x.getTagPattern().getValue());
+
+			// Find out whether an (object*)-resource can be built from the tag
+			// * object of an triple
+			String resource = x.getObject(tag);
+			if(resource != null) {
+				// Check if there labels
+				MultiMap<String, String> langToLabels = tagLabelDAO.getLabels(new Tag(x.getTagPattern().getKey(), x.getTagPattern().getValue()));
+				processLabels(model, resource, langToLabels);
+			}
+			
 		}
 		
 		return model;

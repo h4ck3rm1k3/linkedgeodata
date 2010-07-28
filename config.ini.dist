@@ -1,0 +1,11 @@
+[Main]
+log4jConfigFile = log4j.properties
+
+[OSMDataBase]
+uri = 139.18.2.138
+name = lgd
+userName = postgres
+passWord = 498vLIbpk
+
+[MappingRuleDB]
+#hibernateConfig = 

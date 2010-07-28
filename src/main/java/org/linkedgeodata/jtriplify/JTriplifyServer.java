@@ -22,21 +22,17 @@ package org.linkedgeodata.jtriplify;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.sql.Connection;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.activation.UnsupportedDataTypeException;
 import javax.mail.internet.ContentType;
@@ -54,16 +50,15 @@ import org.linkedgeodata.core.ILGDVocab;
 import org.linkedgeodata.core.LGDVocab;
 import org.linkedgeodata.dao.LGDDAO;
 import org.linkedgeodata.dao.LGDRDFDAO;
+import org.linkedgeodata.dao.TagMapperDAO;
 import org.linkedgeodata.jtriplify.methods.DefaultCoercions;
-import org.linkedgeodata.jtriplify.methods.FunctionUtil;
 import org.linkedgeodata.jtriplify.methods.IInvocable;
 import org.linkedgeodata.jtriplify.methods.JavaMethodInvocable;
 import org.linkedgeodata.jtriplify.methods.Pair;
-import org.linkedgeodata.osm.mapping.InMemoryTagMapper;
+import org.linkedgeodata.osm.mapping.ITagMapper;
 import org.linkedgeodata.util.ExceptionUtil;
 import org.linkedgeodata.util.ModelUtil;
 import org.linkedgeodata.util.PostGISUtil;
-import org.linkedgeodata.util.StreamUtil;
 import org.linkedgeodata.util.URIUtil;
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -880,8 +875,9 @@ public class JTriplifyServer
 		Map<String, String> prefixMap = prefixModel.getNsPrefixMap();
 	
 		logger.info("Loading mapping rules");
-		InMemoryTagMapper tagMapper = new InMemoryTagMapper();
-		tagMapper.load(new File("data/triplify/config/2.0/LGDMappingRules.2.0.xml"));
+		//InMemoryTagMapper tagMapper = new InMemoryTagMapper();
+		//tagMapper.load(new File("data/triplify/config/2.0/LGDMappingRules.2.0.xml"));
+		ITagMapper tagMapper = new TagMapperDAO();
 		
 		LGDDAO innerDAO = new LGDDAO(conn);
 		

@@ -81,6 +81,7 @@ public class SimpleDataTypeTagMapper
 	@Override
 	public Model _map(String subject, Tag tag, Model model)
 	{
+		// FIXME Converting to lower case here doesn't seem right
 		String str = tag.getValue().trim().toLowerCase();
 		
 		// If the datatype is boolean

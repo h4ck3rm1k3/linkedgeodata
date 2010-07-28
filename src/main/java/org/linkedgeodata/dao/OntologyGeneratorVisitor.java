@@ -109,7 +109,7 @@ public class OntologyGeneratorVisitor
 	{
 		model.createProperty(m.getProperty())
 			.addProperty(RDF.type, OWL.DatatypeProperty)
-			.addProperty(RDFS.domain, model.createResource(m.getDataType()));
+			.addProperty(RDFS.range, model.createResource(m.getDataType()));
 	
 		return null;
 	}

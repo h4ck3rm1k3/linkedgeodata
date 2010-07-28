@@ -55,7 +55,9 @@ public class TagFilterUtils
 	
 	public enum MatchMode {
 		EQUALS,
+		//IEQUALS,
 		LIKE,
+		ILIKE,
 		REGEX
 	}
 	
@@ -132,6 +134,8 @@ public class TagFilterUtils
 		switch(matchMode) {
 			case EQUALS: op = " = "; break;
 			case LIKE: op = " LIKE "; break;
+			case ILIKE: op = " ILIKE "; break;
+			//case IEQUALS: op = "
 			case REGEX: op = " ~* "; break;
 			default: throw new NotImplementedException();
 		}

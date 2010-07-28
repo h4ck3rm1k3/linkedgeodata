@@ -2,6 +2,7 @@ package org.linkedgeodata.jtriplify;
 
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -121,13 +122,22 @@ public class ServerMethods
 		
 		TagFilterUtils.MatchMode mm = TagFilterUtils.MatchMode.EQUALS;
 		if(matchMode.equalsIgnoreCase("contains")) {
-			mm = TagFilterUtils.MatchMode.LIKE;
+			mm = TagFilterUtils.MatchMode.ILIKE;
 			label = "%" + label.replace("%", "\\%") + "%";
 		}
 		else if(matchMode.equalsIgnoreCase("startsWith")) {
-			mm = TagFilterUtils.MatchMode.LIKE;
-			label = "%" + label.replace("%", "\\%");
+			mm = TagFilterUtils.MatchMode.ILIKE;
+			label = label.replace("%", "\\%") + "%";
 		}
+		if(matchMode.equalsIgnoreCase("ccontains")) {
+			mm = TagFilterUtils.MatchMode.LIKE;
+			label = "%" + label.replace("%", "\\%") + "%";
+		}
+		else if(matchMode.equalsIgnoreCase("cstartsWith")) {
+			mm = TagFilterUtils.MatchMode.LIKE;
+			label = label.replace("%", "\\%") + "%";
+		}
+
 		
 		// FIXME Add this to some kind of facade
 		TagFilterUtils filterUtil = new TagFilterUtils(dao.getOntologyDAO());
@@ -157,6 +167,7 @@ public class ServerMethods
 	}
 	
 	public Model publicGetOntology()
+		throws SQLException
 	{
 		Model model = dao.getOntologyDAO().getOntology(null);
 		
