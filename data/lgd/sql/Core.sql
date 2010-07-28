@@ -8,6 +8,7 @@ CREATE TYPE LGDOWLEntityType AS ENUM ('class', 'objectProperty', 'dataTypeProper
  * A view for uniform access to all sorts of tags
  * 
  */
+DROP VIEW IF EXISTS lgd_tags; 
 CREATE VIEW lgd_tags AS
 	SELECT
 		t.osm_entity_type, t.osm_entity_id, t.k, t.v
