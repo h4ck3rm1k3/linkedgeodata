@@ -330,9 +330,9 @@ public class DBpediaLinkedGeoData {
 
 			//			SparqlQuery query = new SparqlQuery(queryStr, dbpediaEndpoint);
 			//			ResultSet rs = query.send();
-			ResultSet rs;
 			try
 			{
+				ResultSet rs;
 				rs = dbpedia.queryAsResultSet(queryStr);
 
 				String previousObject = null;
@@ -492,7 +492,8 @@ public class DBpediaLinkedGeoData {
 			// (we make sure that returned points are in the same POI class)
 			String restriction = LGDPoint.getSPARQLRestriction(dbpediaPoint.getPoiClass(), "?point");
 			if(restriction==null) {return null;}
-			String queryStr = "select ?point ?lat ?long ?name ?name_en ?name_int where { ";
+			//String queryStr = "select ?point ?lat ?long ?name ?name_en ?name_int where { ";
+			String queryStr = "select ?point ?lat ?long ?label where { ";			
 			queryStr += restriction;
 			queryStr += "?point <http://www.w3.org/2003/01/geo/wgs84_pos#lat> ?lat .";
 			queryStr += "FILTER ("+usedDatatype+"(?lat) > " + minLat + ") .";
@@ -500,9 +501,11 @@ public class DBpediaLinkedGeoData {
 			queryStr += "?point <http://www.w3.org/2003/01/geo/wgs84_pos#long> ?long .";
 			queryStr += "FILTER ("+usedDatatype+"(?long) > " + minLong + ") .";
 			queryStr += "FILTER ("+usedDatatype+"(?long) < " + maxLong + ") .";
-			queryStr += "?point <http://linkedgeodata.org/vocabulary#name> ?name .";
-			queryStr += "OPTIONAL { ?point <http://linkedgeodata.org/vocabulary#name%25en> ?name_en } .";
-			queryStr += "OPTIONAL { ?point <http://linkedgeodata.org/vocabulary#name_int> ?name_int } .";
+			queryStr += "?point rdfs:label ?label .";
+			queryStr += "FILTER (langmatches(lang(?label),\"\")) .";
+//			queryStr += "?point <http://linkedgeodata.org/vocabulary#name> ?name .";
+//			queryStr += "OPTIONAL { ?point <http://linkedgeodata.org/vocabulary#name%25en> ?name_en } .";
+//			queryStr += "OPTIONAL { ?point <http://linkedgeodata.org/vocabulary#name_int> ?name_int } .";
 			// filter out ways => we assume that it is always better to match a point and not a way
 			// (if there is a way, there should also be a point but not vice versa)
 			// => according to OSM data model, ways do not have longitude/latitude, so we should
@@ -532,21 +535,21 @@ public class DBpediaLinkedGeoData {
 				//				System.out.println("label 1: " + dbpediaLabel1);
 				//				System.out.println("label 2: " + dbpediaLabel2);
 
-				String lgdLabel1 = qs.getLiteral("name").toString();
+				String lgdLabel1 = qs.getLiteral("label").toString();
 				stringSimilarity = distance.score(dbpediaLabel1, lgdLabel1);
 				stringSimilarity = Math.max(distance.score(dbpediaLabel2, lgdLabel1), stringSimilarity);
-				if(qs.contains("name_en")) {
-					String lgdLabel2 = qs.getLiteral("name_en").toString();
-					stringSimilarity = distance.score(dbpediaLabel1, lgdLabel2);
-					stringSimilarity = Math.max(distance.score(dbpediaLabel2, lgdLabel2), stringSimilarity);
-					System.out.println(qs.getResource("point").getURI());
-					System.exit(0);
-				}
-				if(qs.contains("name_int")) {
-					String lgdLabel3 = qs.getLiteral("name_int").toString();
-					stringSimilarity = distance.score(dbpediaLabel1, lgdLabel3);
-					stringSimilarity = Math.max(distance.score(dbpediaLabel2, lgdLabel3), stringSimilarity);					
-				}				
+//				if(qs.contains("name_en")) {
+//					String lgdLabel2 = qs.getLiteral("name_en").toString();
+//					stringSimilarity = distance.score(dbpediaLabel1, lgdLabel2);
+//					stringSimilarity = Math.max(distance.score(dbpediaLabel2, lgdLabel2), stringSimilarity);
+//					System.out.println(qs.getResource("point").getURI());
+//					System.exit(0);
+//				}
+//				if(qs.contains("name_int")) {
+//					String lgdLabel3 = qs.getLiteral("name_int").toString();
+//					stringSimilarity = distance.score(dbpediaLabel1, lgdLabel3);
+//					stringSimilarity = Math.max(distance.score(dbpediaLabel2, lgdLabel3), stringSimilarity);					
+//				}				
 
 				// step 2: spatial distance
 				double lat = qs.getLiteral("lat").getDouble();
