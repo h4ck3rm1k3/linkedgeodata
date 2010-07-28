@@ -303,6 +303,7 @@ public class DBpediaLinkedGeoData {
 	// downloads information about DBpedia into a separate file
 	private static void createDBpediaFile() throws IOException {
 
+		
 		// use this to set the "chunk size" for getting DBpedia points
 		int limit = 1000;
 		int offset = 0;
@@ -313,7 +314,7 @@ public class DBpediaLinkedGeoData {
 		//		fos.writeBoolean(false); // mark as not complete, overwrite with true at the end
 		PrintWriter fos = new PrintWriter(new BufferedWriter(new FileWriter(dbpediaFile)));
 		fos.println("n"); // mark as not complete, overwrite with true at the end
-
+		boolean error = false;
 		do {
 			counter = 0;
 
@@ -408,13 +409,14 @@ public class DBpediaLinkedGeoData {
 
 					counter++;
 				}
+				error = false;
 			}
-			catch(Exception e) {e.printStackTrace();}
+			catch(Exception e) {e.printStackTrace();error = true;}
 
 			offset += limit;
 			System.out.println(points + " points queried.");
 
-		} while(counter > 0);
+		} while(counter > 0 && !error);
 
 		fos.close();
 		System.out.println("finished!");
