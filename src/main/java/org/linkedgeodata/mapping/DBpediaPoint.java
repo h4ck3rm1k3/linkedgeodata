@@ -36,6 +36,7 @@ import com.hp.hpl.jena.query.ResultSet;
  */
 public class DBpediaPoint extends Point {
 	
+	
 	private String label;
 	
 	private String[] classes;
@@ -64,6 +65,7 @@ public class DBpediaPoint extends Point {
 		queryStr += "<"+uri+"> <http://www.w3.org/2003/01/geo/wgs84_pos#lat> ?lat .";
 		queryStr += "<"+uri+"> <http://www.w3.org/2003/01/geo/wgs84_pos#long> ?long .";
 		queryStr += "<"+uri+"> rdfs:label ?label . ";
+		queryStr += "FILTER (langmatches(lang(?label),\"\")||langmatches(lang(?label),\"en\")) .";
 		queryStr += "OPTIONAL { <"+uri+"> rdf:type ?type . ";
 		queryStr += "FILTER (!(?type LIKE <http://dbpedia.org/ontology/Resource>)) .";
 		queryStr += "FILTER (?type LIKE <http://dbpedia.org/ontology/%> || ?type LIKE <http://umbel.org/umbel/sc/%>) .";
@@ -123,9 +125,11 @@ public class DBpediaPoint extends Point {
 	 * @return Returns only first characters until a special symbol occurs, i.e. instead
 	 * of "Stretton, Derbyshire" it returns "Stretton". 
 	 */
+
 	public String getPlainLabel() {
 		Matcher matcher = pattern.matcher(label);
-		matcher.find();
+		boolean found = matcher.find();
+		if(!found) return "";
 		return label.substring(0, matcher.end());
 	}
 	
