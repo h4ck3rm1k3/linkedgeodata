@@ -411,12 +411,12 @@ public class DBpediaLinkedGeoData {
 				}
 				error = false;
 			}
-			catch(Exception e) {e.printStackTrace();counter++;}//error = true; <- inelegant but works
+			catch(Exception e) {e.printStackTrace();error = true;System.out.println("Error with query "+queryStr);}
 
 			offset += limit;
 			System.out.println(points + " points queried.");
 
-		} while(counter > 0 );//|| !error
+		} while(counter > 0 || error );
 
 		fos.close();
 		System.out.println("finished!");
