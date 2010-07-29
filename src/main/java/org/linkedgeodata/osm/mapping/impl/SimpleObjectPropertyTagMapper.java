@@ -139,9 +139,9 @@ public class SimpleObjectPropertyTagMapper
 			return null;
 		}
 
-		String suffix = (getTagPattern().getValue() == null)
-			? ""
-			: URIUtil.encodeUTF8(tag.getValue());
+		String suffix = (isObjectAsPrefix() && (getTagPattern().getValue() == null))
+			? URIUtil.encodeUTF8(tag.getValue())
+			: "";
 		
 		String result = getObject() + suffix;
 		
