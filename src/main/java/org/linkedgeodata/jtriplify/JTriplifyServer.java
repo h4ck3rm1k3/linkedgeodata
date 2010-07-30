@@ -20,19 +20,28 @@
  */
 package org.linkedgeodata.jtriplify;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.Writer;
 import java.lang.reflect.Method;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.NavigableMap;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import javax.activation.UnsupportedDataTypeException;
 import javax.mail.internet.ContentType;
@@ -59,10 +68,20 @@ import org.linkedgeodata.osm.mapping.ITagMapper;
 import org.linkedgeodata.util.ExceptionUtil;
 import org.linkedgeodata.util.ModelUtil;
 import org.linkedgeodata.util.PostGISUtil;
+import org.linkedgeodata.util.RDFNodePrettyComparator;
+import org.linkedgeodata.util.StatementPrettyComparator;
 import org.linkedgeodata.util.URIUtil;
 
+import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.RDFErrorHandler;
+import com.hp.hpl.jena.rdf.model.RDFNode;
+import com.hp.hpl.jena.rdf.model.RDFWriter;
+import com.hp.hpl.jena.rdf.model.ResIterator;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -117,11 +136,150 @@ class MyHttpHandler
 }
 
 
+class HTMLJenaWriter
+	implements RDFWriter
+{
+	
+	String nodeToString(RDFNode node, NavigableMap<String, String> nsToPrefix, String attributes)
+	{
+		if(node.isURIResource()) {
+			String uri = node.as(Resource.class).getURI();
+			String prettyURI = ModelUtil.prettyURI(uri, nsToPrefix);
+			
+			return "<a href='" + uri + "' " + attributes + ">" + StringEscapeUtils.escapeHtml(prettyURI) + "</a>";
+		}
+		else if(node.isLiteral()) {
+			Literal literal = node.as(Literal.class);
+			String valuePart = literal.getValue().toString();
+			String suffixPart;
+			if(literal.getDatatype() != null) {
+				suffixPart = "^^" + ModelUtil.prettyURI(literal.getDatatypeURI(), nsToPrefix);
+			}
+			else {
+				suffixPart = literal.getLanguage().isEmpty()
+					? ""
+					: "@" + literal.getLanguage();
+			}
+			
+			return StringEscapeUtils.escapeHtml(valuePart + suffixPart);
+		}
+		else if(node.isAnon()) {
+			return StringEscapeUtils.escapeHtml(node.toString());
+		}
+		
+		throw new RuntimeException("Should not happen");
+	}
+	
+	@Override
+	public void write(Model model, Writer out, String base)
+	{
+		try {
+			_write(model, out, base);
+		} catch(Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	//@Override
+	public void _write(Model model, Writer out, String base)
+		throws IOException
+	{
+		// Create the reverse map for mapping namespaces to prefixes
+		Map<String, String> prefixToNs = model.getNsPrefixMap();
+		NavigableMap<String, String> nsToPrefix = new TreeMap<String, String>();
+		for(Map.Entry<String, String> item : prefixToNs.entrySet())
+			nsToPrefix.put(item.getValue(), item.getKey());
 
-class Model2Handler
+		
+		// Sort the for output
+		Comparator<RDFNode> comp = new RDFNodePrettyComparator();		
+		
+		StmtIterator itStmt = model.listStatements();
+		Map<RDFNode, Map<RDFNode, Set<RDFNode>>> spo = new TreeMap<RDFNode, Map<RDFNode, Set<RDFNode>>>(comp);
+		while(itStmt.hasNext()) {
+			Statement stmt = itStmt.next();
+			
+			
+			Map<RDFNode, Set<RDFNode>> po = spo.get(stmt.getSubject());
+			if(po == null) {
+				po = new TreeMap<RDFNode, Set<RDFNode>>(comp);
+				spo.put(stmt.getSubject(), po);
+			}
+			
+			Set<RDFNode> p = po.get(stmt.getPredicate());
+			if(p == null) {
+				p = new TreeSet<RDFNode>(comp);
+				po.put(stmt.getPredicate(), p);
+			}
+			
+			p.add(stmt.getObject());
+		}
+		itStmt.close();
+
+		boolean isOdd = true;
+
+		out.write("<table class='properties'>\n");
+		
+		// Output HTML
+		for(Map.Entry<RDFNode, Map<RDFNode, Set<RDFNode>>> s2po : spo.entrySet()) {
+			RDFNode subject = s2po.getKey();
+			
+
+			out.write("<tr><td>" + nodeToString(subject, nsToPrefix, "style='font-size:12pt;font-weight:bold;'") + "</td></tr>\n");
+
+			for(Map.Entry<RDFNode, Set<RDFNode>> p2o : s2po.getValue().entrySet()) {
+				RDFNode predicate = p2o.getKey();
+				
+				String predField = nodeToString(predicate, nsToPrefix, "");
+				
+				for(RDFNode o : p2o.getValue()) {
+					
+					String cssClass = isOdd ? "odd" : "even";
+					isOdd = !isOdd;
+					
+					out.write("<tr class = '" + cssClass + "'><td style='margin-right:5em;'> " + predField + "</td><td style='width:100%;'>" + nodeToString(o, nsToPrefix, "") + "</td><tr>\n");				
+					
+					predField = "";
+				}
+				
+				
+			}
+			//out.write("<hr />\n");
+			//out.write("<br />\n");
+			out.write("<tr class='even'><td colspan='2'>&nbsp;</td></tr>\n"); 				
+		}
+
+		out.write("<table>\n");
+
+		out.flush();
+	}
+
+	@Override
+	public void write(Model model, OutputStream out, String base)
+	{		
+		write(model, new PrintWriter(out), base);
+	}
+
+	@Override
+	public Object setProperty(String propName, Object propValue)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public RDFErrorHandler setErrorHandler(RDFErrorHandler errHandler)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}	
+}
+
+
+class DataHandler
 	implements IMyHandler
 {
-	private static final Logger logger = Logger.getLogger(Model2Handler.class);
+	private static final Logger logger = Logger.getLogger(DataHandler.class);
 	
 	private RegexInvocationContainer ric = new RegexInvocationContainer();
 	
@@ -146,6 +304,29 @@ class Model2Handler
 			throw new RuntimeException(e);
 		}
 	}
+	
+	public static String generateHTMLRepresentation(Model model)
+	{
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		HTMLJenaWriter writer = new HTMLJenaWriter();
+		writer.write(model, baos, "");
+		
+		
+		String content
+			= "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" "
+	        + "\"http://www.w3.org/TR/html4/loose.dtd\">\n"
+	        + "<html>\n"
+	        + "<head>\n"
+	        + "<title></title>\n"
+	        + "<link rel='stylesheet' type='text/css' href='http://localhost/LinkedGeoData/class.css' />\n"
+	        + "</head>\n"
+	        + "<body>\n"
+	        + baos.toString()
+	        + "</body>\n"
+	        + "</html>\n";
+		
+		return content;
+	}
 
 	private boolean _handle(HttpExchange x)
 		throws Exception
@@ -167,11 +348,12 @@ class Model2Handler
 		if(model == null)
 			return false;
 
-		String body = ModelUtil.toString(model, resultType.getKey());
-
+		String body;
 		if(resultType.getValue().match("text/html")) {
-			body = StringEscapeUtils.escapeHtml(body);
-			body = body.replace("\n", "<br />");
+			body = generateHTMLRepresentation(model);
+		}
+		else {		
+			body = ModelUtil.toString(model, resultType.getKey());
 		}
 		
 		if(resultType != null) {
@@ -184,10 +366,10 @@ class Model2Handler
 }
 
 
-class Model3Handler
+class PageHandler
 	implements IMyHandler
 {
-	private static final Logger logger = Logger.getLogger(Model2Handler.class);
+	private static final Logger logger = Logger.getLogger(DataHandler.class);
 	
 	private RegexInvocationContainer ric = new RegexInvocationContainer();
 	
@@ -237,7 +419,8 @@ class Model3Handler
 		String body = ModelUtil.toString(model, resultType.getKey());
 	
 		if(resultType.getValue().match("text/html"))
-			body = StringEscapeUtils.escapeHtml(body);
+			//body = StringEscapeUtils.escapeHtml(body);
+			body = DataHandler.generateHTMLRepresentation(model);
 
 		if(resultType != null) {
 			MyHandler.sendResponse(x, 200, resultType.getValue().toString(), body);
@@ -748,9 +931,6 @@ class MyHandler
 
 
 
-
-
-
 public class JTriplifyServer
 {
 	private static final Logger logger = Logger.getLogger(JTriplifyServer.class);
@@ -863,7 +1043,7 @@ public class JTriplifyServer
 	
 	
 	
-	private static void initCurrent(MyHttpHandler handler, Connection conn)
+	private static void initCurrent(MyHttpHandler mainHandler, Connection conn)
 		throws Exception
 	{
 		String prefixModelPath = "Namespaces.2.0.ttl";
@@ -890,7 +1070,7 @@ public class JTriplifyServer
 
 		// Set up redirects
 		LinkedDataRedirectHandler redirectHandler = new LinkedDataRedirectHandler();
-		handler.getSubHandlers().add(redirectHandler);
+		mainHandler.getSubHandlers().add(redirectHandler);
 		
 		m = ServerMethods.class.getMethod("getNode", String.class);
 		redirectHandler.getDataRIC().put("(.*)/triplify/(.*)", new RedirectInvocable("$0/data/$1"), "$0", "$1");
@@ -900,8 +1080,8 @@ public class JTriplifyServer
 	
 		
 		// Set up actual data URIs
-		Model2Handler dataHandler = new Model2Handler();
-		handler.getSubHandlers().add(dataHandler);
+		DataHandler dataHandler = new DataHandler();
+		mainHandler.getSubHandlers().add(dataHandler);
 		
 		m = ServerMethods.class.getMethod("getNode", String.class);
 		dataHandler.getRIC().put(".*data/node([^.]*).*", new JavaMethodInvocable(m, methods), "$0");
@@ -911,8 +1091,8 @@ public class JTriplifyServer
 		
 		
 		// Set up page URIs
-		Model3Handler pageHandler = new Model3Handler();
-		handler.getSubHandlers().add(pageHandler);
+		PageHandler pageHandler = new PageHandler();
+		mainHandler.getSubHandlers().add(pageHandler);
 
 		m = ServerMethods.class.getMethod("getNode", String.class);
 		dataHandler.getRIC().put(".*page/node([^/?]*)/?(\\?.*)?", new JavaMethodInvocable(m, methods), "$0");

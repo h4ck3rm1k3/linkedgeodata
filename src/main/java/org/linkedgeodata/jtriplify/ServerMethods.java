@@ -169,7 +169,8 @@ public class ServerMethods
 	public Model publicGetOntology()
 		throws SQLException
 	{
-		Model model = dao.getOntologyDAO().getOntology(null);
+		Model model = createModel();
+		dao.getOntologyDAO().getOntology(model);
 		
 		return model;
 	}
@@ -177,12 +178,14 @@ public class ServerMethods
 	public Model publicDescribe(String uri)
 		throws Exception
 	{
+		Model model = createModel();
+		
 		// Replace the prefix with the appropriate namespace
 		// The reason not to use the full original URI is because in testing
 		// the domain and port may be differ.
 		uri = uri.replaceFirst("^ontology/", dao.getVocabulary().getOntologyNS());
 
-		Model model = dao.getOntologyDAO().describe(uri, null);
+		dao.getOntologyDAO().describe(uri, model);
 		
 		return model;
 	}

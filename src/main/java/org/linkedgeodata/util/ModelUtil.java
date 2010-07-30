@@ -7,6 +7,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.NavigableMap;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -80,5 +84,39 @@ public class ModelUtil
 		//model.write(baos, null, "");
 		//System.out.println("WROTE RDF: " + baos.toString());
 		return baos.toString();
+	}
+
+	
+	public static NsURI decompose(String uri, NavigableMap<String, String> prefixMap)
+	{
+		String prefix = "";
+		String name = uri;
+
+		NavigableMap<String, String> candidates = prefixMap.headMap(uri, false).descendingMap();
+		Map.Entry<String, String> candidate = candidates.firstEntry();
+				
+		if(candidate != null && uri.startsWith(candidate.getKey())) {
+			String candidateNs = candidate.getKey();
+			String candidatePrefix = candidate.getValue();
+			
+			int splitIdx = candidateNs.length(); 
+
+			prefix = candidatePrefix;
+			name = uri.substring(splitIdx);
+		}
+		
+		NsURI result = new NsURI(prefix, name);
+		return result;
+	}
+
+	public static String prettyURI(String uri, NavigableMap<String, String> prefixMap)
+	{
+		NsURI tmp = decompose(uri, prefixMap);
+		
+		String result = (tmp.getPrefix().isEmpty())
+			? URIUtil.decodeUTF8(tmp.getName())
+			: tmp.getPrefix() + ":" + URIUtil.decodeUTF8(tmp.getName());
+			
+			return result;
 	}
 }
