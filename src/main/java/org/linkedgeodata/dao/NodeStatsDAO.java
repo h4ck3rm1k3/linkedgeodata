@@ -56,6 +56,22 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.RDF;
 
+
+class Join {
+	private String joinClause;
+	private String whereClause;
+	
+	public Join(String joinClause, String whereClause)
+	{
+		this.joinClause = joinClause;
+		this.whereClause = whereClause;
+	}
+	
+	public String getJoinClause() { return joinClause; }
+	public String getWhereClause() { return whereClause; }
+}
+
+
 /**
  * TODO Implements this class
  * What I'm trying to do here:
@@ -287,6 +303,73 @@ public class NodeStatsDAO
 		return 0;
 	}
 	
+	
+
+	/**
+	 * TODO Not working yet
+	 * Works with standard osm 0.6 schema
+	 * 
+	 * Query should be:
+	 * Select From nodes n JOIN {node_tags ntx} ON n.id = nt0.node_id WHERE {n.geom && bbox AND other conditions}
+	 * 
+	 * @param tileIds
+	 * @param zoom
+	 * @param filter
+	 * @param tagConditions
+	 * @param limit
+	 * @param offset
+	 * @return
+	 * @throws SQLException
+	 */
+	//@Override
+	public List<Long> getNodeIds(Collection<Long> tileIds, int zoom, RectangularShape filter, Collection<String> tagConditions, Integer limit, Integer offset)
+		throws SQLException
+	{
+		String offsetPart = (offset == null)
+			? ""
+			: " OFFSET " + offset + " ";
+		
+		String limitPart = (limit == null)
+			? ""
+			: " LIMIT " + limit + " ";
+		
+		if(tileIds != null && tileIds.size() == 0)
+			return new ArrayList<Long>();
+		
+		String tileFilter = (tileIds == null)
+			? ""
+			: " AND LGD_ToTile(nt0.geom, " + zoom + ") IN (" + StringUtil.implode(",", tileIds) + ") ";
+	
+		
+		String bbox = (filter == null)
+			? ""
+			: "AND nt0.geom::geometry && " + LGDQueries.BBox(filter) + " ";
+		
+	
+		String query
+				= "SELECT n.id FROM "
+				+ createJoin("nodes n", "n.id=nt0.node_id", "node_tags", "nt", "node_id", tagConditions) + " "
+				+ tileFilter
+				+ bbox
+				+ limitPart
+				+ offsetPart;
+	
+		/*
+		String query
+			= "SELECT node_id FROM node_tags "
+			+ "WHERE "
+			+ "LGD_ToTile(geom, " + zoom + ") IN (" + StringUtil.implode(",", tileIds) + ") "
+			+ bbox
+			+ strTagFilter;
+		*/
+		System.out.println(query);
+	
+		ResultSet rs = conn.createStatement().executeQuery(query);
+		List<Long> result = SQLUtil.list(rs, Long.class);
+		
+		return result;
+	}
+
 
 	/**
 	 * Requires denormed schema
@@ -298,7 +381,7 @@ public class NodeStatsDAO
 	 * @return
 	 * @throws SQLException
 	 */
-	public List<Long> getNodeIds(Collection<Long> tileIds, int zoom, RectangularShape filter, Collection<String> tagConditions, Integer limit, Integer offset)
+	public List<Long> getNodeIdsDenorm(Collection<Long> tileIds, int zoom, RectangularShape filter, Collection<String> tagConditions, Integer limit, Integer offset)
 		throws SQLException
 	{
 		String offsetPart = (offset == null)
@@ -324,7 +407,7 @@ public class NodeStatsDAO
 
 		String query
 			=  "SELECT nt0.node_id FROM "
-				+ createJoin("node_tags", "nt", "node_id", tagConditions) + " "
+				+ createJoin(null, null, "node_tags", "nt", "node_id", tagConditions) + " "
 				+ tileFilter
 				+ bbox
 				+ limitPart
@@ -376,20 +459,27 @@ public class NodeStatsDAO
 		return result;
 	}
 	*/
-
-	public static String createJoin(String tableName, String aliasPrefix, String joinColumn, Collection<String> tagFilters)
+	
+	public static String createJoin(String prevJoin, String on, String tableName, String aliasPrefix, String joinColumn, Collection<String> tagFilters)
 	{
-		String joinPart = "";
+		String joinPart = (prevJoin == null) ? "" : prevJoin;
 		String wherePart = "";
 		
-		if(tagFilters.isEmpty())
-			joinPart += tableName + " " + aliasPrefix + "0";
+		//if(tagFilters.isEmpty())
+			//joinPart += tableName + " " + aliasPrefix + "0";
 		
 		int aliasCounter = 0;
 		for(String filter : tagFilters) {
 			String currentAlias = aliasPrefix + aliasCounter;
 
-			if(!joinPart.isEmpty()) {
+			if(aliasCounter == 0 && prevJoin != null && on != null) {
+				//joinPart = prevJoin + " INNER JOIN " + tableName + " " + currentAlias;
+				
+				if(on != null) {
+					joinPart += " INNER JOIN " + tableName + " " + currentAlias + " ON (" + on + ") ";
+				}
+			}
+			else if(!joinPart.isEmpty()) {
 				String oldAlias = aliasPrefix + (aliasCounter - 1);
 				joinPart += " INNER JOIN " + tableName + " " + currentAlias + " ON (" + currentAlias + "." + joinColumn + " = " + oldAlias + "." + joinColumn + ")";
 			}
@@ -408,6 +498,7 @@ public class NodeStatsDAO
 		if(wherePart.isEmpty())
 			wherePart += " TRUE ";
 		
+		//return new Join(joinPart, wherePart);
 		return joinPart + " WHERE " + wherePart;
 	}
 
@@ -454,9 +545,13 @@ public class NodeStatsDAO
 		" WHERE " + filterPart + " AND tile_id IN (" + StringUtil.implode(",", tileIds) + ") GROUP BY tile_id";
 		*/
 		
+		String joinPart = tagConditions.isEmpty()
+			? "tableName alias0"
+			: createJoin(null, null, tableName, "alias", "tile_id", tagConditions);
+		
 		String query
 			=  "SELECT alias0.tile_id, SUM(alias0.usage_count) FROM "
-			+ createJoin(tableName, "alias", "tile_id", tagConditions) + " "
+			+ joinPart + " "
 			+ " AND alias0.tile_id IN (" + StringUtil.implode(",", tileIds) + ") GROUP BY alias0.tile_id";
 			
 		//" WHERE " + filterPart + " AND tile_id IN (" + StringUtil.implode(",", tileIds) + ") GROUP BY tile_id";

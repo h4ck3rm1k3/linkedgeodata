@@ -3,9 +3,9 @@ package org.linkedgeodata.util;
 import java.util.Comparator;
 
 /**
- * Identifies integers in strings and applies integer comparision for those
- * parts.
- *
+ * Identifies sub-strings that correspond to integers and compares those parts
+ * as integers. Therefore strings like a1, a10 a2 will be sorted as
+ * a1, a2, a10 rather than a1, a10, a2
  * 
  * @author raven
  *

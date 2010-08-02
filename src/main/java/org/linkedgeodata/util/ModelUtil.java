@@ -9,13 +9,12 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.NavigableMap;
-import java.util.SortedMap;
-import java.util.TreeMap;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
+import com.hp.hpl.jena.rdf.model.RDFWriter;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 
@@ -73,17 +72,23 @@ public class ModelUtil
 		return toString(model, "N3");
 	}
 
+	public static String toString(Model model, RDFWriter writer)
+	{
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		writer.write(model, baos, ""); 
+		
+		return baos.toString();
+		
+	}
+	
 	public static String toString(Model model, String format)
 	{
 		if(model == null)
 			return "null";
 
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		//model.write(baos, "N-TRIPLE", "");
-		model.write(baos, format, "");
-		//model.write(baos, null, "");
-		//System.out.println("WROTE RDF: " + baos.toString());
-		return baos.toString();
+		RDFWriter writer = model.getWriter(format);
+
+		return toString(model, writer);
 	}
 
 	

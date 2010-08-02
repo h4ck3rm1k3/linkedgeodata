@@ -17,6 +17,7 @@ import org.hibernate.Transaction;
 import org.linkedgeodata.access.TagFilterUtils;
 import org.linkedgeodata.osm.mapping.IOneOneTagMapper;
 import org.linkedgeodata.osm.mapping.ITagMapper;
+import org.linkedgeodata.osm.mapping.InMemoryTagMapper;
 import org.linkedgeodata.osm.mapping.TagMapperInstantiator;
 import org.linkedgeodata.osm.mapping.TagMappingDB;
 import org.linkedgeodata.osm.mapping.impl.ISimpleOneOneTagMapper;
@@ -387,10 +388,20 @@ public class OntologyDAO
 	{
 		if(model == null)
 			model = ModelFactory.createDefaultModel();
+
 		
-		OntologyGeneratorVisitor visitor = new OntologyGeneratorVisitor(model, tagMapper);
+		// TODO This always loads all all mapping rules into memory
+		// A real least recently used (LRU)-cache might be a better solution.
+		InMemoryTagMapper cache = new InMemoryTagMapper();
+
+		for(IOneOneTagMapper item : tagMapper.getAllMappers())
+			cache.add(item);
 		
-		for(IOneOneTagMapper item : tagMapper.getAllMappers()) {
+		
+		OntologyGeneratorVisitor visitor = new OntologyGeneratorVisitor(model, cache);
+		
+		
+		for(IOneOneTagMapper item : cache.getAllMappers()) {
 			
 			if(!(item instanceof ISimpleOneOneTagMapper))
 				continue;
