@@ -7,6 +7,7 @@ import org.linkedgeodata.util.ConnectionConfig;
 import org.linkedgeodata.util.PostGISUtil;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 
 public class MyBeanFactory
@@ -21,7 +22,8 @@ public class MyBeanFactory
     
     private MyBeanFactory()
     {
-    	this.context = new ClassPathXmlApplicationContext("ApplicationContext.xml");
+    	this.context = new FileSystemXmlApplicationContext("ApplicationContext.xml");
+    	//this.context = new ClassPathXmlApplicationContext("ApplicationContext.xml");
     }
     
     public static MyBeanFactory getSingleton()
