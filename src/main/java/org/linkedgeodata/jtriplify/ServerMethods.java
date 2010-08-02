@@ -185,7 +185,8 @@ public class ServerMethods
 		// the domain and port may be differ.
 		uri = uri.replaceFirst("^ontology/", dao.getVocabulary().getOntologyNS());
 
-		dao.getOntologyDAO().describe(uri, model);
+		// FIXME The model returned differs from the one being passed in!
+		model = dao.getOntologyDAO().describe(uri, model);
 		
 		return model;
 	}

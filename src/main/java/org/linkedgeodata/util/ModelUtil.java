@@ -21,7 +21,6 @@ import com.hp.hpl.jena.rdf.model.Statement;
 public class ModelUtil
 {
 	/**
-	 * TODO copy the namespaces
 	 * 
 	 * @param model
 	 * @param resource
@@ -31,6 +30,8 @@ public class ModelUtil
 	{
 		Iterator<Statement> it = model.listStatements(resource, (Property)null, (RDFNode)null);
 		Model result = ModelFactory.createDefaultModel();
+		
+		result.setNsPrefixes(model.getNsPrefixMap());
 		
 		while(it.hasNext()) {
 			result.add(it.next());
