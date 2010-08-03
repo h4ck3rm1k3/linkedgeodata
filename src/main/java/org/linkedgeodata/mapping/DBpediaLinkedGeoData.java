@@ -37,7 +37,7 @@ import java.text.DecimalFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.HashSet;
 import java.util.Map;
 
 import org.apache.log4j.Level;
@@ -117,8 +117,35 @@ public class DBpediaLinkedGeoData {
 		if(!new File(filename).exists()) return false;
 		BufferedReader f = new BufferedReader(new FileReader(filename));
 		String s = f.readLine();
+		if(s==null) return false;
 		f.close();
 		return s.equals("y");
+	}
+
+	private static int getLastOffset(String filename) throws IOException
+	{
+		if(!new File(filename).exists()) return 0;
+		BufferedReader f = new BufferedReader(new FileReader(filename));
+		String s = f.readLine(); // skip completeness indicator line
+		if(s==null) return 0;
+
+		String lastLine = null;
+		do
+		{
+			lastLine = s;
+		}
+		while((s=f.readLine())!=null);//read up until the last line, not the fastest way but works...
+
+		if(lastLine==null) return 0; // no line read 
+		try
+		{
+			int offset = Integer.valueOf(lastLine.split("\t")[0]);
+			return offset;
+		}
+		catch(NumberFormatException e)
+		{
+			return 0;
+		}		
 	}
 
 	public static void main(String[] args) throws IOException {
@@ -131,17 +158,18 @@ public class DBpediaLinkedGeoData {
 		}
 		if(!textFileComplete(dbpediaFile.getAbsolutePath()))
 		{
-			System.out.println("dbpedia file not marked as complete. recreate file? (y/n)");
-			String s = new BufferedReader(new InputStreamReader(System.in)).readLine();
-			if(s.equalsIgnoreCase("y"))
-			{
-				System.out.println("recreating file...");
-				createDBpediaFile();
-			}
-			else
-			{
-				System.out.println("not recreating file");
-			}
+			//			System.out.println("dbpedia file not marked as complete. recreate file? (y/n)");
+			//			String s = new BufferedReader(new InputStreamReader(System.in)).readLine();
+			//			if(s.equalsIgnoreCase("y"))
+			//			{
+			//				System.out.println("recreating file...");
+			System.out.println("File not complete, adding additional queries");
+			createDBpediaFile();
+			//			}
+			//			else
+			//			{
+			//				System.out.println("not recreating file");
+			//			}
 		}
 
 		for(POIClass poiClass : POIClass.values()) {
@@ -164,92 +192,151 @@ public class DBpediaLinkedGeoData {
 
 		// temporary variables needed while reading in file
 		int itemCount = 0;
-		URI uri = null;
-		String label = null;
-		String[] classes = null;
-		int decimalCount = 0;
-		Double geoLat = null;
-		Double geoLong = null;
+
+		//		Double geoLat = null;
+		//		Double geoLong = null;
 
 		startDate = new Date();
 		System.out.println("Start matching process at date " + startDate);
-		while ((line = br.readLine()) != null) {
-			System.out.println(line);
-			if(line.isEmpty()) {
-				DBpediaPoint dp = new DBpediaPoint(uri, label, classes, geoLat, geoLong, decimalCount);
-				POIClass poiClass = dp.getPoiClass();
-
-				//				System.out.println("DBpedia Point: " + dp);
-
-				if(poiClass != null) {
-					// find match (we assume there is exactly one match)
-					URI matchURI = findGeoDataMatch(dp);
-					if(matchURI == null) {
-						String missStr = dp.toString() + "\n";
-						fosMiss.write(missStr);
-						noMatchPerClass.put(poiClass, noMatchPerClass.get(poiClass)+1);
-					} else {
-						String matchStr = "<" + dp.getUri() + "> <http://www.w3.org/2002/07/owl#sameAs> <" + matchURI + "> .\n";
-						fos.write(matchStr);	
-
-						// strip off http://dbpedia.org/resource/
-						String dpName = dp.getUri().toString().substring(28);
-						String uriStr = matchURI.toString();
-						String nodeWay = uriStr.contains("/node/") ? "node" : "way";
-						String lgdID = uriStr.substring(uriStr.lastIndexOf("/"));
-						String matchStrMySQL = dpName + "\t" + nodeWay + "\t" + lgdID + "\n";
-						fosMySQL.write(matchStrMySQL);
-
-						System.out.println(matchStrMySQL);
-
-						matches++;
-						matchPerClass.put(poiClass, matchPerClass.get(poiClass)+1);
-					}
-					//					System.out.println(poiClass);
-					counter++;
-
-					if(counter % 1000 == 0) {
-						//						System.out.println(new Date().toString() + ": " + counter + " points processed. " + matches + " matches found. " + skipCount + " POIs skipped.");
-						printSummary();
-					}
-				} else {
-					//					System.out.println(dp.getUri() + " " + dp.getClasses());
-					skipCount++;
-				}
-
-				itemCount = 0;
+		while ((line = br.readLine()) != null)
+		{
+			//System.out.println(line);
+			String[] tokens = line.split("\t");
+			URI uri = URI.create(tokens[1]);
+			String label = tokens[2];
+			String[] classes = null;
+			tokens[3] = tokens[3].substring(1, tokens[3].length()-1); // strip brackets
+			if(tokens[3].length()>1) {
+				classes = tokens[3].split(",");
 			} else {
-				switch(itemCount) {
-				case 0 : uri = URI.create(line); break;
-				case 1 : label = line; break;
-				case 2 : line = line.substring(1, line.length()-1); // strip brackets
-				if(line.length()>1) {
-					classes = line.split(",");
-				} else {
-					classes = new String[0];
-				}
-				break;
-				case 3 : 
-					geoLat = new Double(line);
-					// we avoid "computerized scientific notation" e.g. 9.722222457639873E-4
-					// since it causes problems in the REST interface
-					if(geoLat.toString().contains("E")) {
-						geoLat = 0.0;
-					}
-					decimalCount = 0; 
-					String[] tmp = line.split(".");
-					if(tmp.length == 2) {
-						decimalCount = tmp[1].length();
-					}
-					break;
-				case 4: geoLong = new Double(line); 
-				if(geoLong.toString().contains("E")) {
-					geoLong = 0.0;
-				}
-				}
-
-				itemCount++;
+				classes = new String[0];
 			}
+
+			Double geoLat = new Double(tokens[4]);
+			// we avoid "computerized scientific notation" e.g. 9.722222457639873E-4
+			// since it causes problems in the REST interface
+			if(geoLat.toString().contains("E")) {
+				geoLat = 0.0;
+			}
+			int decimalCount = 0;
+			String[] tmp = tokens[4].split(".");
+			if(tmp.length == 2) {
+				decimalCount = tmp[1].length();
+			}
+			Double geoLong = new Double(tokens[5]); 
+			if(geoLong.toString().contains("E")) {
+				geoLong = 0.0;
+			}
+
+			DBpediaPoint dp = new DBpediaPoint(uri, label, classes, geoLat, geoLong, decimalCount);
+			//System.out.println("DBpedia Point: " + dp);
+
+			POIClass poiClass = dp.getPoiClass();
+
+			if(poiClass != null)
+			{
+				// find match (we assume there is exactly one match)
+				URI matchURI = findGeoDataMatch(dp);
+				if(matchURI == null) {
+					String missStr = dp.toString() + "\n";
+					fosMiss.write(missStr);
+					noMatchPerClass.put(poiClass, noMatchPerClass.get(poiClass)+1);
+				}
+				else
+				{
+					String matchStr = "<" + dp.getUri() + "> <http://www.w3.org/2002/07/owl#sameAs> <" + matchURI + "> .\n";
+					fos.write(matchStr);	
+
+					// strip off http://dbpedia.org/resource/
+					String dpName = dp.getUri().toString().substring(28);
+					String uriStr = matchURI.toString();
+					String nodeWay = uriStr.contains("/node/") ? "node" : "way";
+					String lgdID = uriStr.substring(uriStr.lastIndexOf("/"));
+					String matchStrMySQL = dpName + "\t" + nodeWay + "\t" + lgdID + "\n";
+					fosMySQL.write(matchStrMySQL);
+
+					System.out.println(matchStrMySQL);
+
+					matches++;
+					matchPerClass.put(poiClass, matchPerClass.get(poiClass)+1);
+				}
+			}
+
+			//			if(line.isEmpty()) {
+			//				DBpediaPoint dp = new DBpediaPoint(uri, label, classes, geoLat, geoLong, decimalCount);
+			//				POIClass poiClass = dp.getPoiClass();
+			//
+			//				//				System.out.println("DBpedia Point: " + dp);
+			//
+			//				if(poiClass != null) {
+			//					// find match (we assume there is exactly one match)
+			//					URI matchURI = findGeoDataMatch(dp);
+			//					if(matchURI == null) {
+			//						String missStr = dp.toString() + "\n";
+			//						fosMiss.write(missStr);
+			//						noMatchPerClass.put(poiClass, noMatchPerClass.get(poiClass)+1);
+			//					} else {
+			//						String matchStr = "<" + dp.getUri() + "> <http://www.w3.org/2002/07/owl#sameAs> <" + matchURI + "> .\n";
+			//						fos.write(matchStr);	
+			//
+			//						// strip off http://dbpedia.org/resource/
+			//						String dpName = dp.getUri().toString().substring(28);
+			//						String uriStr = matchURI.toString();
+			//						String nodeWay = uriStr.contains("/node/") ? "node" : "way";
+			//						String lgdID = uriStr.substring(uriStr.lastIndexOf("/"));
+			//						String matchStrMySQL = dpName + "\t" + nodeWay + "\t" + lgdID + "\n";
+			//						fosMySQL.write(matchStrMySQL);
+			//
+			//						System.out.println(matchStrMySQL);
+			//
+			//						matches++;
+			//						matchPerClass.put(poiClass, matchPerClass.get(poiClass)+1);
+			//					}
+			//					//					System.out.println(poiClass);
+			//					counter++;
+			//
+			//					if(counter % 1000 == 0) {
+			//						//						System.out.println(new Date().toString() + ": " + counter + " points processed. " + matches + " matches found. " + skipCount + " POIs skipped.");
+			//						printSummary();
+			//					}
+			//				} else {
+			//					//					System.out.println(dp.getUri() + " " + dp.getClasses());
+			//					skipCount++;
+			//				}
+			//
+			//				itemCount = 0;
+			//			} else {
+			//				switch(itemCount) {
+			//				case 0 : uri = URI.create(line); break;
+			//				case 1 : label = line; break;
+			//				case 2 : line = line.substring(1, line.length()-1); // strip brackets
+			//				if(line.length()>1) {
+			//					classes = line.split(",");
+			//				} else {
+			//					classes = new String[0];
+			//				}
+			//				break;
+			//				case 3 : 
+			//					geoLat = new Double(line);
+			//					// we avoid "computerized scientific notation" e.g. 9.722222457639873E-4
+			//					// since it causes problems in the REST interface
+			//					if(geoLat.toString().contains("E")) {
+			//						geoLat = 0.0;
+			//					}
+			//					decimalCount = 0; 
+			//					String[] tmp = line.split(".");
+			//					if(tmp.length == 2) {
+			//						decimalCount = tmp[1].length();
+			//					}
+			//					break;
+			//				case 4: geoLong = new Double(line); 
+			//				if(geoLong.toString().contains("E")) {
+			//					geoLong = 0.0;
+			//				}
+			//				}
+			//
+			//				itemCount++;
+			//			}
 
 		}
 		br.close();
@@ -282,7 +369,7 @@ public class DBpediaLinkedGeoData {
 		double pointPercentage = 100 * total / (double) totalPOICount;
 		double pointsPerMs = total / (double) diffMs;
 		double pointsPerHour = 3600 * 1000 * pointsPerMs;
-		long estimatedMs = totalPOICount * diffMs / total;
+		long estimatedMs = (total==0)?0:(totalPOICount * diffMs / total);
 		Date estimatedDate = new Date(startDate.getTime() + estimatedMs);
 		System.out.println("algorithm runtime: " + diffHours + " hours " + diffMinutes + " minutes, estimated to finish at " + estimatedDate);
 		System.out.println(df.format(pointPercentage) + "% of points skipped or processed = " + df.format(pointsPerHour) + " points per hour");
@@ -302,22 +389,23 @@ public class DBpediaLinkedGeoData {
 
 	// downloads information about DBpedia into a separate file
 	private static void createDBpediaFile() throws IOException {
-
-		
+		System.err.println("Creating DBpedia File");
+		PrintWriter fos = new PrintWriter(new BufferedWriter(new FileWriter(dbpediaFile,true)));
 		// use this to set the "chunk size" for getting DBpedia points
 		int limit = 1000;
-		int offset = 0;
-
+		int offset = getLastOffset(dbpediaFile.getAbsolutePath());
+		if(offset>0) System.out.println("File already existing, appending...");
+		else
+			fos.println("n"); // mark as not complete, overwrite with true at the end
 		int counter = 0;
 		int points = 0;
 		//		DataOutputStream fos = new DataOutputStream(new FileOutputStream(dbpediaFile, true));
 		//		fos.writeBoolean(false); // mark as not complete, overwrite with true at the end
-		PrintWriter fos = new PrintWriter(new BufferedWriter(new FileWriter(dbpediaFile)));
-		fos.println("n"); // mark as not complete, overwrite with true at the end
+
+
 		boolean error = false;
 		do {
 			counter = 0;
-
 			// query DBpedia for all objects having geo-coordinates
 			String queryStr = "SELECT ?object, ?lat, ?long, ?label, ?type  WHERE {"; 
 			queryStr += "?object <http://www.w3.org/2003/01/geo/wgs84_pos#lat> ?lat .";
@@ -327,7 +415,7 @@ public class DBpediaLinkedGeoData {
 			queryStr += "FILTER (!(?type LIKE <http://dbpedia.org/ontology/Resource>)) .";
 			queryStr += "FILTER (?type LIKE <http://dbpedia.org/ontology/%> || ?type LIKE <http://umbel.org/umbel/sc/%>) .";
 			queryStr += "} }";
-			queryStr += "LIMIT " + limit + " OFFSET " + offset;
+			queryStr += " LIMIT " + limit + " OFFSET " + offset;
 
 			//			SparqlQuery query = new SparqlQuery(queryStr, dbpediaEndpoint);
 			//			ResultSet rs = query.send();
@@ -340,7 +428,7 @@ public class DBpediaLinkedGeoData {
 				String geoLat = "";
 				String geoLong = "";
 				String label = "";
-				Collection<String> types = new LinkedList<String>();
+				Collection<String> types = new HashSet<String>();
 
 				while(rs.hasNext())
 				{
@@ -374,11 +462,10 @@ public class DBpediaLinkedGeoData {
 								content += "<" + previousObject + ">" + " <http://www.w3.org/2003/01/geo/wgs84_pos#lat> \"" + geoLat + "\"^^<http://www.w3.org/2001/XMLSchema#float> .\n";
 								content += "<" + previousObject + ">" + " <http://www.w3.org/2003/01/geo/wgs84_pos#long> \"" + geoLong + "\"^^<http://www.w3.org/2001/XMLSchema#float> .\n";					
 							} else {
-								content += previousObject + "\n" + label + "\n" + types.toString().replace(" ", "") + "\n" + geoLat + "\n" + geoLong + "\n"; 
+								content += offset+"\t"+previousObject + "\t" + label + "\t" + types.toString().replace(" ", "") + "\t" + geoLat + "\t" + geoLong + "\t"; 
 							}
 
 							fos.println(content);
-
 						}
 
 						// reset default values
@@ -414,7 +501,8 @@ public class DBpediaLinkedGeoData {
 			catch(Exception e) {e.printStackTrace();error = true;System.out.println("Error with query "+queryStr);}
 
 			offset += limit;
-			System.out.println(points + " points queried.");
+			fos.flush();
+			System.out.println(points + " points queried, offset = "+offset);
 
 		} while(counter > 0 || error );
 
@@ -505,9 +593,9 @@ public class DBpediaLinkedGeoData {
 			queryStr += "FILTER ("+usedDatatype+"(?long) < " + maxLong + ") .";
 			queryStr += "?point rdfs:label ?label .";
 			queryStr += "FILTER (langmatches(lang(?label),\"\")) .";
-//			queryStr += "?point <http://linkedgeodata.org/vocabulary#name> ?name .";
-//			queryStr += "OPTIONAL { ?point <http://linkedgeodata.org/vocabulary#name%25en> ?name_en } .";
-//			queryStr += "OPTIONAL { ?point <http://linkedgeodata.org/vocabulary#name_int> ?name_int } .";
+			//			queryStr += "?point <http://linkedgeodata.org/vocabulary#name> ?name .";
+			//			queryStr += "OPTIONAL { ?point <http://linkedgeodata.org/vocabulary#name%25en> ?name_en } .";
+			//			queryStr += "OPTIONAL { ?point <http://linkedgeodata.org/vocabulary#name_int> ?name_int } .";
 			// filter out ways => we assume that it is always better to match a point and not a way
 			// (if there is a way, there should also be a point but not vice versa)
 			// => according to OSM data model, ways do not have longitude/latitude, so we should
@@ -540,18 +628,18 @@ public class DBpediaLinkedGeoData {
 				String lgdLabel1 = qs.getLiteral("label").toString();
 				stringSimilarity = distance.score(dbpediaLabel1, lgdLabel1);
 				stringSimilarity = Math.max(distance.score(dbpediaLabel2, lgdLabel1), stringSimilarity);
-//				if(qs.contains("name_en")) {
-//					String lgdLabel2 = qs.getLiteral("name_en").toString();
-//					stringSimilarity = distance.score(dbpediaLabel1, lgdLabel2);
-//					stringSimilarity = Math.max(distance.score(dbpediaLabel2, lgdLabel2), stringSimilarity);
-//					System.out.println(qs.getResource("point").getURI());
-//					System.exit(0);
-//				}
-//				if(qs.contains("name_int")) {
-//					String lgdLabel3 = qs.getLiteral("name_int").toString();
-//					stringSimilarity = distance.score(dbpediaLabel1, lgdLabel3);
-//					stringSimilarity = Math.max(distance.score(dbpediaLabel2, lgdLabel3), stringSimilarity);					
-//				}				
+				//				if(qs.contains("name_en")) {
+				//					String lgdLabel2 = qs.getLiteral("name_en").toString();
+				//					stringSimilarity = distance.score(dbpediaLabel1, lgdLabel2);
+				//					stringSimilarity = Math.max(distance.score(dbpediaLabel2, lgdLabel2), stringSimilarity);
+				//					System.out.println(qs.getResource("point").getURI());
+				//					System.exit(0);
+				//				}
+				//				if(qs.contains("name_int")) {
+				//					String lgdLabel3 = qs.getLiteral("name_int").toString();
+				//					stringSimilarity = distance.score(dbpediaLabel1, lgdLabel3);
+				//					stringSimilarity = Math.max(distance.score(dbpediaLabel2, lgdLabel3), stringSimilarity);					
+				//				}				
 
 				// step 2: spatial distance
 				double lat = qs.getLiteral("lat").getDouble();
