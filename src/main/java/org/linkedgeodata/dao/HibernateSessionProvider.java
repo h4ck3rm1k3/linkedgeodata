@@ -28,6 +28,7 @@ import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.linkedgeodata.osm.mapping.TagMappingDB;
+import org.linkedgeodata.util.SQLUtil;
 import org.hibernate.Query;
 
 /**
@@ -52,6 +53,7 @@ public class HibernateSessionProvider
 		return TagMappingDB.getSession();
 	}
 
+	private long counter = 1000;
 	/**
 	 * Validates a hibernate session object.
 	 * Cannot be used when there is already an open transaction on the session.
@@ -68,7 +70,12 @@ public class HibernateSessionProvider
 		//SQLQuery q = session.createSQLQuery(/"SELECT * FROM information_sche)
 		
 		//SQLQuery q = session.createSQLQuery("SELECT table_name FROM information_schema.tables LIMIT 1");
-		SQLQuery q = session.createSQLQuery("SELECT table_name FROM information_schema.tables WHERE table_name = '' || RANDOM()");
+		//SQLQuery q = session.createSQLQuery("SELECT table_name FROM information_schema.tables WHERE table_name = '' || RANDOM()");
+		//SQLQuery q  = session.createSQLQuery("SELECT table_name FROM nodes WHERE table_name = '" + (counter++) + "'");
+
+		SQLQuery q = session.createSQLQuery("SELECT 1");
+		
+		//SQLQuery q  = session.createSQLQuery("SELECT user_id FROM nodes WHERE id = '" + (counter++) + "'");
 		Object o = q.uniqueResult();
 		logger.debug("Result of test query: " + o);
 		

@@ -37,6 +37,7 @@ import org.hibernate.cfg.AnnotationConfiguration;
  */
 public class TagMappingDB
 {
+	private static final String configFile = "TagMappingDB.postgres.cfg.xml";
 	private static final Logger logger = Logger.getLogger(TagMappingDB.class);
 	
 	private static SessionFactory sessionFactory = null;
@@ -52,7 +53,7 @@ public class TagMappingDB
     public static SessionFactory getSessionFactory()
     {
     	if(sessionFactory == null) {
-    		init("TagMappingDB.postgres.cfg.xml");
+    		init(configFile);
     	}
     	
         return sessionFactory;
@@ -61,6 +62,9 @@ public class TagMappingDB
    
     public static void init(String resourceName)
     {
+    	if(sessionFactory != null)
+    		sessionFactory.close();
+
     	cfg = new AnnotationConfiguration();
 
     	URL url = ClassLoader.getSystemResource(resourceName);
@@ -77,15 +81,12 @@ public class TagMappingDB
     		cfg.configure(file);
     	}
 
-     	reset();
+		sessionFactory = cfg.buildSessionFactory();    
     }
    
     
     public static void reset()
-    {
-    	if(sessionFactory != null)
-    		sessionFactory.close();
-
-		sessionFactory = cfg.buildSessionFactory();    
+    {    	
+    	init(configFile);	
     }
 }

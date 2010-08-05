@@ -33,6 +33,7 @@ import org.apache.log4j.Logger;
 import org.linkedgeodata.util.SQLUtil;
 
 public class AbstractDAO
+	implements ISQLDAO
 {
 	protected Connection conn;
 	protected Map<Object, PreparedStatement> queryToStmt = new HashMap<Object, PreparedStatement>();
@@ -76,6 +77,7 @@ public class AbstractDAO
 	}
 
 	
+	@Override
 	public void setConnection(Connection conn)
 		throws SQLException
 	{
@@ -125,5 +127,12 @@ public class AbstractDAO
 		PreparedStatement stmt = getPreparedStatement(id);
 		
 		return SQLUtil.execute(stmt, args);
+	}
+
+
+	@Override
+	public Connection getConnection()
+	{
+		return conn;
 	}
 }

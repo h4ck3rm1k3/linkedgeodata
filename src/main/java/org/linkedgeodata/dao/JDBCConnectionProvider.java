@@ -39,6 +39,8 @@ public class JDBCConnectionProvider
 	private ConnectionConfig config;
 	private volatile Connection conn;
 	
+	private long counter = 0;
+	
 	public JDBCConnectionProvider(ConnectionConfig config)
 	{
 		this.config = config;
@@ -54,8 +56,11 @@ public class JDBCConnectionProvider
 	void sendTestQuery()
 		throws SQLException
 	{
+		Object o = SQLUtil.execute(conn, "SELECT 1", Object.class);
 		//Object o = SQLUtil.execute(conn, "SELECT table_name FROM information_schema.tables LIMIT 1", Object.class);
-		Object o = SQLUtil.execute(conn, "SELECT table_name FROM information_schema.tables WHERE table_name = '' || RANDOM()", Object.class);
+		//Object o = SQLUtil.execute(conn, "SELECT table_name FROM information_schema.tables WHERE table_name = '' || RANDOM()", Object.class);
+		//Object o = SQLUtil.execute(conn, "SELECT table_name FROM information_schema.tables WHERE table_name = '" + (counter++) + "'", Object.class);
+		//Object o = SQLUtil.execute(conn, "SELECT user_id FROM nodes WHERE id = '" + (counter++) + "'", Object.class);
 		logger.debug("Result of test query: " + o);
 		
 

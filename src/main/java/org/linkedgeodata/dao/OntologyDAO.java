@@ -96,6 +96,10 @@ public class OntologyDAO
 		return tagMapper;
 	}
 
+	public TagLabelDAO getTagLabelDAO()
+	{
+		return tagLabelDAO;
+	}
 	/**
 	 * 
 	 * @param uri

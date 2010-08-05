@@ -107,6 +107,10 @@ public class ServerMethods
 		hibernateDAOs.add(lgdRDFDAO.getOntologyDAO());
 		jdbcDAOs.add(lgdRDFDAO);
 		
+		jdbcDAOs.add(lgdRDFDAO.getOntologyDAO().getTagDAO());
+		jdbcDAOs.add(lgdRDFDAO.getOntologyDAO().getTagLabelDAO());
+		
+		
 		ITagMapper tagMapper = lgdRDFDAO.getOntologyDAO().getTagMapper();
 		if(tagMapper instanceof ISQLDAO)
 			jdbcDAOs.add((ISQLDAO)tagMapper);
