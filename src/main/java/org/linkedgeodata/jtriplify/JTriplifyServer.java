@@ -20,7 +20,6 @@
  */
 package org.linkedgeodata.jtriplify;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -46,8 +45,13 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.collections15.MultiMap;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import org.hibernate.Session;
 import org.linkedgeodata.core.ILGDVocab;
 import org.linkedgeodata.core.LGDVocab;
+import org.linkedgeodata.dao.HibernateSessionProvider;
+import org.linkedgeodata.dao.IConnectionFactory;
+import org.linkedgeodata.dao.ISessionProvider;
+import org.linkedgeodata.dao.JDBCConnectionProvider;
 import org.linkedgeodata.dao.LGDDAO;
 import org.linkedgeodata.dao.LGDRDFDAO;
 import org.linkedgeodata.dao.TagMapperDAO;
@@ -55,11 +59,11 @@ import org.linkedgeodata.jtriplify.methods.DefaultCoercions;
 import org.linkedgeodata.jtriplify.methods.IInvocable;
 import org.linkedgeodata.jtriplify.methods.JavaMethodInvocable;
 import org.linkedgeodata.jtriplify.methods.Pair;
-import org.linkedgeodata.osm.mapping.ITagMapper;
+import org.linkedgeodata.osm.mapping.TagMappingDB;
+import org.linkedgeodata.util.ConnectionConfig;
 import org.linkedgeodata.util.ExceptionUtil;
 import org.linkedgeodata.util.HTMLJenaWriter;
 import org.linkedgeodata.util.ModelUtil;
-import org.linkedgeodata.util.PostGISUtil;
 import org.linkedgeodata.util.StringUtil;
 import org.linkedgeodata.util.URIUtil;
 
@@ -187,14 +191,17 @@ class DataHandler
 
 		if(x.getRequestURI().toString().contains("page")) {
 			resultType = new Pair<String, ContentType>("HTML", new ContentType("text/html; charset=utf-8"));
-		} else {
+		}
+		else {
 			Map<String, ContentType> accepts = MyHandler.getPreferredFormats(x.getRequestHeaders());
  
 			// Remove text/html accept - as we are requesting data
-			Iterator<Map.Entry<String, ContentType>> it = accepts.entrySet().iterator();
-			while(it.hasNext()) {
-				if(it.next().getValue().match(new ContentType("text/html")))
-					it.remove();
+			if(x.getRequestURI().toString().contains("data")) {
+				Iterator<Map.Entry<String, ContentType>> it = accepts.entrySet().iterator();
+				while(it.hasNext()) {
+					if(it.next().getValue().match(new ContentType("text/html")))
+						it.remove();
+				}
 			}
 			
 			String requestedFormat = MyHandler.getJenaFormatByExtension(x.getRequestURI());
@@ -944,7 +951,7 @@ public class JTriplifyServer
 		
 		
 		logger.info("Connecting to db");
-		Connection conn = PostGISUtil.connectPostGIS(hostName, dbName, userName, passWord);
+		ConnectionConfig connectionConfig = new ConnectionConfig(hostName, dbName, userName, passWord);
 
 		MyHttpHandler myHandler = new MyHttpHandler(); 
 
@@ -953,7 +960,7 @@ public class JTriplifyServer
 		RegexInvocationContainer ric = new RegexInvocationContainer();
 		
 		//initLegacy(myHandler, conn);
-		initCurrent(myHandler, conn);
+		initCurrent(myHandler, connectionConfig);
 		
 		//MyHandler handler = new MyHandler();
 		//handler.setInvocationMap(ric);
@@ -966,9 +973,18 @@ public class JTriplifyServer
 	
 	
 	
-	private static void initCurrent(MyHttpHandler mainHandler, Connection conn)
+	private static void initCurrent(MyHttpHandler mainHandler, ConnectionConfig connectionConfig)
 		throws Exception
 	{
+		// FIXME Somehow get rid of the need for the following line
+		TagMappingDB.getSession();
+		
+		ISessionProvider sessionFactory = new HibernateSessionProvider();
+		IConnectionFactory connectionFactory = new JDBCConnectionProvider(connectionConfig);
+		
+		Connection conn = connectionFactory.createConnection();
+
+		
 		String prefixModelPath = "Namespaces.2.0.ttl";
 		
 		// Setup
@@ -980,14 +996,21 @@ public class JTriplifyServer
 		logger.info("Loading mapping rules");
 		//InMemoryTagMapper tagMapper = new InMemoryTagMapper();
 		//tagMapper.load(new File("data/triplify/config/2.0/LGDMappingRules.2.0.xml"));
-		ITagMapper tagMapper = new TagMapperDAO();
-		
+
+		TagMapperDAO tagMapper = new TagMapperDAO();
 		LGDDAO innerDAO = new LGDDAO(conn);
 		
 		ILGDVocab vocab = new LGDVocab();
+		
 		LGDRDFDAO dao = new LGDRDFDAO(innerDAO, tagMapper, vocab);
 		
-		ServerMethods methods = new ServerMethods(dao, prefixMap);
+		
+		dao.setConnection(conn);
+		Session session = sessionFactory.createSession(); 
+		dao.setSession(session);
+		tagMapper.setSession(session);
+		
+		ServerMethods methods = new ServerMethods(dao, prefixMap, connectionFactory, sessionFactory);
 		
 		Method m;
 

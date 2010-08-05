@@ -27,9 +27,12 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 
 public class TagMapperDAO
-	implements ITagMapper
+	implements IHibernateDAO, ITagMapper
 {
 	private static final Logger logger = Logger.getLogger(TagMapperDAO.class);
+
+	private Session session;
+	
 	
 	
 	/*
@@ -47,9 +50,6 @@ public class TagMapperDAO
 	{
 		//int limit = 100;
 		//limit = constrain(limit, 0, 100);
-		
-		Session session = TagMappingDB.getSession();
-		Transaction tx = session.beginTransaction();
 
 		//k = k.replace("%", "\\%") + "%";
 		//v = v.replace("%", "\\%") + "%";
@@ -94,12 +94,9 @@ public class TagMapperDAO
 				}
 			}
 			
-			
-			tx.commit();
 		}
 		catch(Exception e) {
 			logger.error(ExceptionUtils.getFullStackTrace(e));
-			tx.rollback();
 		}
 		
 		return result;
@@ -147,9 +144,6 @@ public class TagMapperDAO
 	@Override
 	public List<IOneOneTagMapper> getAllMappers()
 	{
-		Session session = TagMappingDB.getSession();
-		Transaction tx = session.beginTransaction();
-
 		List<IOneOneTagMapper> result = new ArrayList<IOneOneTagMapper>();
 
 		Criteria criteria = session.createCriteria(AbstractTagMapperState.class);
@@ -161,8 +155,22 @@ public class TagMapperDAO
 			result.add(mapper);
 		}
 		
-		tx.commit();
-		
 		return result;
+	}
+
+
+
+	@Override
+	public void setSession(Session session)
+	{
+		this.session = session;
+	}
+
+
+
+	@Override
+	public Session getSession()
+	{
+		return session;
 	}
 }

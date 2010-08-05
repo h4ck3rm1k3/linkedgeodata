@@ -17,8 +17,10 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
+import org.linkedgeodata.dao.IHibernateDAO;
 import org.linkedgeodata.dao.OntologyDAO;
 import org.linkedgeodata.osm.mapping.IOneOneTagMapper;
+import org.linkedgeodata.osm.mapping.ITagMapper;
 import org.linkedgeodata.osm.mapping.TagMapperInstantiator;
 import org.linkedgeodata.osm.mapping.TagMappingDB;
 import org.linkedgeodata.osm.mapping.impl.ISimpleOneOneTagMapper;
@@ -39,13 +41,19 @@ import com.hp.hpl.jena.vocabulary.RDFS;
  *
  */
 public class TagFilterUtils
+	implements IHibernateDAO
 {
 	private static final Logger logger = Logger.getLogger(TagFilterUtils.class);
 	
 	private String lgdO = "http://linkedgeodata.org/ontology/";
 	
 	private OntologyDAO ontologyDAO;
+
 	
+	// FIXME This class probably shouldn't have a dependency on a session
+	// Rather move the respective methods to some DAO (e.g. to the ITagMapper)
+	//private ITagMapper tagMapper;
+	private Session session;
 	
 	
 	public TagFilterUtils(OntologyDAO ontologyDAO)
@@ -64,14 +72,6 @@ public class TagFilterUtils
 	public String restrictByText(String property, String label, String language, MatchMode matchMode, String tableAlias)
 		throws Exception
 	{	
-		//String uri = RDFS.label.toString();
-	
-		//MultiMap<Tag, IOneOneTagMapper> matches = ontologyDAO.reverseMapResource(uri);
-	
-		Session session = TagMappingDB.getSession();
-		Transaction tx = session.beginTransaction();
-		
-		//MultiMap<Tag, IOneOneTagMapper> matches = new MultiHashMap<Tag, IOneOneTagMapper>();
 		Set<String> keys = new HashSet<String>();
 		
 		Criteria criteria = session.createCriteria(SimpleTextTagMapperState.class)
@@ -118,9 +118,6 @@ public class TagFilterUtils
 				keys.add(k);
 			}
 		}
-		
-		tx.commit();
-		
 
 		tableAlias = (tableAlias == null || tableAlias.isEmpty())
 			? ""
@@ -183,7 +180,7 @@ public class TagFilterUtils
 		String tabV = tableAlias + "v";
 		
 		
-		MultiMap<Tag, IOneOneTagMapper> matches = ontologyDAO.reverseMapResource(propertyURI, objectURI);
+		MultiMap<Tag, IOneOneTagMapper> matches = ontologyDAO.reverseMapResourceObject(propertyURI, objectURI);
 		
 		List<String> constraints = new ArrayList<String>();
 		
@@ -223,5 +220,19 @@ public class TagFilterUtils
 			result = "FALSE";
 		
 		return result;
+	}
+
+
+	@Override
+	public void setSession(Session session)
+	{
+		this.session = session;
+	}
+
+
+	@Override
+	public Session getSession()
+	{
+		return session;
 	}
 }

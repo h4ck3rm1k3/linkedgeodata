@@ -24,26 +24,25 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
- * Simple interface for Data Access Objects that are based on JDBC connection
- * objects.
+ * Interface intended for obtaining preconfigured fresh JDBC connection object.  
  * 
- * @author Claus Stadler
+ * 
+ * @author raven
+ *
  */
-public interface ISQLDAO
+public interface IConnectionFactory
 {
+	Connection getConnection()
+		throws Exception;
+	
+	
 	/**
-	 * Set the JDBC connection object to be used by the DAO.
+	 * Creates a new jdbc connection object.  
 	 * 
-	 * @param session The JDBC connection bject
+	 * @return
+	 * @throws SQLException
 	 */
-	Connection getConnection();
-
-	/**
-	 * Retrieve the JDBC connection object that is currently associated with
-	 * this DAO.
-	 * 
-	 * @return The JDBC connection object currently associated with this DAO.
-	 */
-	void setConnection(Connection conn)
-		throws SQLException;
+	@Deprecated
+	Connection createConnection()
+		throws Exception;
 }

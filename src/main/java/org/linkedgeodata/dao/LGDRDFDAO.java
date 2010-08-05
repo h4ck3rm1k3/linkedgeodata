@@ -22,6 +22,7 @@ package org.linkedgeodata.dao;
 
 import java.awt.geom.Point2D;
 import java.awt.geom.RectangularShape;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections15.MultiMap;
+import org.hibernate.Session;
 import org.linkedgeodata.core.ILGDVocab;
 import org.linkedgeodata.core.OSMEntityType;
 import org.linkedgeodata.osm.mapping.ITagMapper;
@@ -46,9 +48,10 @@ import com.hp.hpl.jena.vocabulary.RDF;
 
 
 public class LGDRDFDAO
+	implements ISQLDAO, IHibernateDAO
 {
 	private LGDDAO dao;
-	private ITagMapper tagMapper;
+	//private ITagMapper tagMapper;
 
 	private OntologyDAO ontologyDAO;
 	
@@ -66,7 +69,7 @@ public class LGDRDFDAO
 		throws SQLException
 	{
 		this.dao = dao;
-		this.tagMapper = tagMapper;
+		//this.tagMapper = tagMapper;
 		this.vocab = vocab;
 
 		// FIXME Don't pull the connection out of the DAO like this
@@ -241,5 +244,35 @@ public class LGDRDFDAO
 	public LGDDAO getSQLDAO()
 	{
 		return dao;
+	}
+
+	
+
+	/*************************************************************************/
+	/* Getters and Setters for JDBC connections and hibernate sessions       */
+	/*************************************************************************/
+	@Override
+	public void setSession(Session session)
+	{
+		this.ontologyDAO.setSession(session);
+	}
+
+	@Override
+	public Session getSession()
+	{
+		return this.ontologyDAO.getSession();
+	}
+
+	@Override
+	public void setConnection(Connection conn)
+		throws SQLException
+	{
+		this.dao.setConnection(conn);
+	}
+
+	@Override
+	public Connection getConnection()
+	{
+		return this.dao.getConnection();
 	}
 }
