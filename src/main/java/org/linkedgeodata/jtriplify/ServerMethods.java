@@ -193,9 +193,17 @@ public class ServerMethods
 		Long id = Long.parseLong(idStr);
 
 		Model result = createModel();
-		lgdRDFDAO.resolveNodes(result, Collections.singleton(id), false, null);
-	
-		return result;
+
+		prepare();
+		Transaction tx = lgdRDFDAO.getSession().beginTransaction();
+		try {				
+			lgdRDFDAO.resolveNodes(result, Collections.singleton(id), false, null);
+			tx.commit();
+			return result;
+		} catch(Throwable t) {
+			tx.rollback();
+			throw new RuntimeException(t);
+		}	
 	}
 	
 	public Model getWay(String idStr)
@@ -204,11 +212,20 @@ public class ServerMethods
 		Long id = Long.parseLong(idStr);
 		
 		Model result = createModel();
-		lgdRDFDAO.resolveWays(result, Collections.singleton(id), false, null);
-	
-		return result;
+
+		prepare();
+		Transaction tx = lgdRDFDAO.getSession().beginTransaction();
+		try {				
+			lgdRDFDAO.resolveWays(result, Collections.singleton(id), false, null);
+			tx.commit();
+			return result;
+		} catch(Throwable t) {
+			tx.rollback();
+			throw new RuntimeException(t);
+		}	
 	}
 	
+	/*
 	public Model publicGetEntitiesWithinRadius2010Aug5(Double lat, Double lon, Double radius, String k, String v, Boolean bOr)
 		throws Exception
 	{
@@ -228,6 +245,7 @@ public class ServerMethods
 		
 		return result;
 	}
+	*/
 	
 
 	public Model publicGetEntitiesWithinRectOld(Double latMin, Double latMax, Double lonMin, Double lonMax, String k, String v, Boolean bOr)
@@ -250,17 +268,20 @@ public class ServerMethods
 	
 
 	
-	public Model publicGetEntitiesWithinRadius(Double lat, Double lon, Double radius, String className, String label, String language, String matchMode)
+	public Model publicGetEntitiesWithinRadius(Double lat, Double lon, Double radius, String className, String language, String matchMode, String label, Long offset, Long limit)
 		throws Exception
 	{
 		prepare();
+
+		if(limit == null || limit > 1000l)
+			limit = 1000l;
 
 		Transaction tx = lgdRDFDAO.getSession().beginTransaction();
 		try {		
 			List<String> entityTagConditions = getEntityTagCondititions(className, label, language, matchMode);
 			Ellipse2D circle = new Ellipse2D.Double(lon, lat, radius, radius);
 		
-			Model result = getEntitiesWithinShape(circle, entityTagConditions);
+			Model result = getEntitiesWithinShape(circle, entityTagConditions, offset, limit);
 			
 			tx.commit();
 			return result;
@@ -271,17 +292,21 @@ public class ServerMethods
 	}
 
 	
-	public Model publicGetEntitiesWithinRect(Double latMin, Double latMax, Double lonMin, Double lonMax, String className, String label, String language, String matchMode)
+	public Model publicGetEntitiesWithinRect(Double latMin, Double latMax, Double lonMin, Double lonMax, String className, String language, String matchMode, String label, Long offset, Long limit)
 		throws Exception
 	{
 		prepare();		
 
+		if(limit == null || limit > 1000l)
+			limit = 1000l;
+
+		
 		Transaction tx = lgdRDFDAO.getSession().beginTransaction();
 		try {		
 			Rectangle2D rect = new Rectangle2D.Double(lonMin, latMin, lonMax - lonMin, latMax - latMin);
 			List<String> entityTagConditions = getEntityTagCondititions(className, label, language, matchMode);
 		
-			Model result = getEntitiesWithinShape(rect, entityTagConditions);
+			Model result = getEntitiesWithinShape(rect, entityTagConditions, offset, limit);
 			
 			tx.commit();
 			return result;
@@ -292,14 +317,17 @@ public class ServerMethods
 	}
 	
 	
-	private Model getEntitiesWithinShape(RectangularShape shape, List<String> entityTagConditions)
+	private Model getEntitiesWithinShape(RectangularShape shape, List<String> entityTagConditions, Long offset, Long limit)
 		throws Exception
 	{
+		if(limit == null || limit > 1000l)
+			limit = 1000l;
+		
 		Model result = createModel();
 		NodeStatsDAO nodeStatsDAO = new NodeStatsDAO(lgdRDFDAO.getSQLDAO().getConnection());
 		
 		Collection<Long> tileIds = null; //NodeStatsDAO.getTileIds(rect, 16);
-		Collection<Long> nodeIds = nodeStatsDAO.getNodeIds(tileIds, 16, shape, entityTagConditions, 1000, null);
+		Collection<Long> nodeIds = nodeStatsDAO.getNodeIds(tileIds, 16, shape, entityTagConditions, offset, limit);
 		
 		lgdRDFDAO.resolveNodes(result, nodeIds, false, null);
 		//dao.getNodesWithinRect(result, rect, false, tagFilter, null, null);
@@ -360,6 +388,9 @@ public class ServerMethods
 	/*************************************************************************/
 	private Pair<String, TagFilterUtils.MatchMode> getMatchConfig(String label, String matchMode)
 	{
+		if(label == null || matchMode == null)
+			return null;
+		
 		TagFilterUtils.MatchMode mm = TagFilterUtils.MatchMode.EQUALS;
 		if(matchMode.equalsIgnoreCase("contains")) {
 			mm = TagFilterUtils.MatchMode.ILIKE;
@@ -393,6 +424,7 @@ public class ServerMethods
 		
 		// FIXME Add this to some kind of facade
 		TagFilterUtils filterUtil = new TagFilterUtils(lgdRDFDAO.getOntologyDAO());
+		filterUtil.setSession(lgdRDFDAO.getOntologyDAO().getSession());
 
 		List<String> entityTagConditions = new ArrayList<String>();
 		

@@ -28,11 +28,11 @@ public class RegexInvocationContainer
 		throws Exception
 	{
 		logger.info("Invoking: " + invocable);
-		int groupCount = matcher.groupCount();
+		int groupCount = matcher.groupCount() + 1;
 		Object[] matches = new Object[groupCount];
 		
 		for(int i = 0; i < groupCount; ++i) {
-			matches[i] = matcher.group(i + 1);
+			matches[i] = matcher.group(i);
 		}
 		
 		Object[] args = new Object[argMap.length];

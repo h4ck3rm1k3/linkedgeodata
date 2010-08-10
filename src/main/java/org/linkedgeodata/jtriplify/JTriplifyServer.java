@@ -982,7 +982,7 @@ public class JTriplifyServer
 		ISessionProvider sessionFactory = new HibernateSessionProvider();
 		IConnectionFactory connectionFactory = new JDBCConnectionProvider(connectionConfig);
 		
-		Connection conn = connectionFactory.createConnection();
+		Connection conn = connectionFactory.getConnection();
 
 		
 		String prefixModelPath = "Namespaces.2.0.ttl";
@@ -1031,10 +1031,10 @@ public class JTriplifyServer
 		mainHandler.getSubHandlers().add(dataHandler);
 		
 		m = ServerMethods.class.getMethod("getNode", String.class);
-		dataHandler.getRIC().put(".*/node([^.]*).*", new JavaMethodInvocable(m, methods), "$0");
+		dataHandler.getRIC().put(".*/node([^.]*).*", new JavaMethodInvocable(m, methods), "$1");
 	
 		m = ServerMethods.class.getMethod("getWay", String.class);
-		dataHandler.getRIC().put(".*/way([^.]*).*", new JavaMethodInvocable(m, methods), "$0");
+		dataHandler.getRIC().put(".*/way([^.]*).*", new JavaMethodInvocable(m, methods), "$1");
 		
 		
 		// Set up page URIs
@@ -1051,19 +1051,38 @@ public class JTriplifyServer
 		
 		
 		//m = ServerMethods.class.getMethod("getNear", String.class, String.class, String.class);
+		String pattern = "";
 		IInvocable nearFn = DefaultCoercions.wrap(methods, "publicGetEntitiesWithinRadius.*");
+		pattern = ".*/near/(-?[^,-]*),(-?[^-/]*)/([^/?]*)(/class/([^/]*))?(/label/([^/]*)/([^/]*)/([^/]*))?(/(\\d+))?(/(\\d+))?/?(\\?.*)?";
+	
+		dataHandler.getRIC().put(pattern, nearFn, "$1", "$2", "$3", "$5", "$7", "$8", "$9", "$11", "$13");
+
 		
-		dataHandler.getRIC().put(".*/near/([^,]*),([^/]*)/([^/?]*)/?(\\?.*)?", nearFn, "$0", "$1", "$2", null, null, false);
-		dataHandler.getRIC().put(".*/near/([^,]*),([^/]*)/([^/]*)/([^/=?]*)/?(\\?.*)?", nearFn, "$0", "$1", "$2", "$3", null, false);
-		dataHandler.getRIC().put(".*/near/([^,]*),([^/]*)/([^/]*)/([^=]*)=([^/?]*)/?(\\?.*)?", nearFn, "$0", "$1", "$2", "$3", "$4", false);
-		dataHandler.getRIC().put(".*/near/([^,]*),([^/]*)/([^/]*)/class/([^/?]*)/?(\\?.*)?", nearFn, "$0", "$1", "$2", "$3", "$3", true);
+		//dataHandler.getRIC().put(pattern, bboxFn, "$1", "$2", "$3", "$4", "$6", "$8", "$9", "$10", "$11", "$12");
+
+		//dataHandler.getRIC().put(".*/near/([^,]*),([^/]*)/([^/]*)/([^/=?]*)/?(\\?.*)?", nearFn, "$0", "$1", "$2", "$3", null, false);
+		//dataHandler.getRIC().put(".*/near/([^,]*),([^/]*)/([^/]*)/([^=]*)=([^/?]*)/?(\\?.*)?", nearFn, "$0", "$1", "$2", "$3", "$4", false);
+		//dataHandler.getRIC().put(".*/near/([^,]*),([^/]*)/([^/]*)/class/([^/?]*)/?(\\?.*)?", nearFn, "$0", "$1", "$2", "$3", "$3", true);
 		
+		
+
+		//dataHandler.getRIC().put(".*/near/([^,]*),([^/]*)/([^/?]*)/?(\\?.*)?", nearFn, "$0", "$1", "$2", null, null, false);
+		//dataHandler.getRIC().put(".*/near/([^,]*),([^/]*)/([^/]*)/([^/=?]*)/?(\\?.*)?", nearFn, "$0", "$1", "$2", "$3", null, false);
+		//dataHandler.getRIC().put(".*/near/([^,]*),([^/]*)/([^/]*)/([^=]*)=([^/?]*)/?(\\?.*)?", nearFn, "$0", "$1", "$2", "$3", "$4", false);
+		//dataHandler.getRIC().put(".*/near/([^,]*),([^/]*)/([^/]*)/class/([^/?]*)/?(\\?.*)?", nearFn, "$0", "$1", "$2", "$3", "$3", true);
+
 		
 		IInvocable bboxFn = DefaultCoercions.wrap(methods, "publicGetEntitiesWithinRect.*");
 		// lat-lat lon-lon class lable lang matchmode
-		dataHandler.getRIC().put(".*/near/(-?[^-]+)-(-?[^,]+),(-?[^-]+)-(-?[^/]+)/?(\\?.*)?", bboxFn, "$0", "$1", "$2", "$3", null, null, null, null);
-		dataHandler.getRIC().put(".*/near/(-?[^-]+)-(-?[^,]+),(-?[^-]+)-(-?[^/]+)/class/([^/]*)/?(\\?.*)?", bboxFn, "$0", "$1", "$2", "$3", "$4", null, null, null);
-		dataHandler.getRIC().put(".*/near/(-?[^-]+)-(-?[^,]+),(-?[^-]+)-(-?[^/]+)/class/([^/]*)/label/([^/]*)/([^/]*)/(.*)/?(\\?.*)?", bboxFn, "$0", "$1", "$2", "$3", "$4", "$7", "$5", "$6");
+		pattern = ".*/near/(-?[^-]+)-(-?[^,]+),(-?[^-]+)-(-?[^/]+)(/class/([^/]*))?(/label/([^/]*)/([^/]*)/([^/]*))?(/(\\d+))?(/(\\d+))?/?(\\?.*)?";
+		//           latMin    latMax    lonMin    lonMax           classname        lang  matchMode value offset? limit?      
+		dataHandler.getRIC().put(pattern, bboxFn, "$1", "$2", "$3", "$4", "$6", "$8", "$9", "$10", "$12", "$14");
+
+		//latMin, latMax, lonMin, lonMax, className,  language, matchMode, label, offset, limit)
+		
+		//dataHandler.getRIC().put(".*/near/(-?[^-]+)-(-?[^,]+),(-?[^-]+)-(-?[^/]+)/?(\\?.*)?", bboxFn, "$0", "$1", "$2", "$3", null, null, null, null);
+		//dataHandler.getRIC().put(".*/near/(-?[^-]+)-(-?[^,]+),(-?[^-]+)-(-?[^/]+)/class/([^/]*)/?(\\?.*)?", bboxFn, "$0", "$1", "$2", "$3", "$4", null, null, null);
+		//dataHandler.getRIC().put(".*/near/(-?[^-]+)-(-?[^,]+),(-?[^-]+)-(-?[^/]+)/class/([^/]*)/label/([^/]*)/([^/]*)/(.*)/?(\\?.*)?", bboxFn, "$0", "$1", "$2", "$3", "$4", "$7", "$5", "$6");
 		
 		//dataHandler.getRIC().put(".*/near/(-?[^-]+)-(-?[^,]+),(-?[^-]+)-(-?[^/]+)/class/([^/]*)/label/(.*)/?(\\?.*)?", bboxFn, "$0", "$1", "$2", "$3", "$4", "$5", null, null);
 		//dataHandler.getRIC().put(".*/near/(-?[^-]+)-(-?[^,]+),(-?[^-]+)-(-?[^/]+)/class/([^/]*)/label/([^/]*)/(.*)/?(\\?.*)?", bboxFn, "$0", "$1", "$2", "$3", "$5", "$4", null);
@@ -1075,7 +1094,7 @@ public class JTriplifyServer
 		dataHandler.getRIC().put(".*/ontology/?(\\?.*)?", getOntologyFn);		
 
 		IInvocable describeFn = DefaultCoercions.wrap(methods, "publicDescribe.*");
-		dataHandler.getRIC().put(".*/(ontology/.*)(\\?.*)?", describeFn, "$0");		
+		dataHandler.getRIC().put(".*/(ontology/.*)(\\?.*)?", describeFn, "$1");
 	}
 	
 

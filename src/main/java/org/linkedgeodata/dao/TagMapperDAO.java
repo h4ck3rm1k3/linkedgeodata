@@ -85,15 +85,24 @@ public class TagMapperDAO
 			
 			if(result.isEmpty()) {
 				query = session.createQuery("SELECT o FROM " + AbstractSimpleTagMapperState.class.getName() + " o WHERE o.tagPattern.key = :k AND o.tagPattern.value IS NULL");
-				
-				query.setParameter("k", k);				
+
+				query.setParameter("k", k);
 				//query.setMaxResults(limit);
 				
 				for(Object o: query.list()) {
 					result.add((AbstractTagMapperState)o);
 				}
 			}
-			
+
+			if(result.isEmpty()) {
+				query = session.createQuery("SELECT o FROM " + AbstractSimpleTagMapperState.class.getName() + " o WHERE o.tagPattern.key IS NULL AND o.tagPattern.value IS NULL");
+				//query.setMaxResults(limit);
+				
+				for(Object o: query.list()) {
+					result.add((AbstractTagMapperState)o);
+				}
+			}
+
 		}
 		catch(Exception e) {
 			logger.error(ExceptionUtils.getFullStackTrace(e));

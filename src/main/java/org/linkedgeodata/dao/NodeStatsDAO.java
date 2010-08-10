@@ -212,7 +212,7 @@ public class NodeStatsDAO
 		*/
 		
 		List<Long> candidateTiles = nodeStatsDAO.getCandidateTiles(maxRect, entityTagConditions);
-		List<Long> nodeIds = nodeStatsDAO.getNodeIds(candidateTiles, maxZoom, maxRect, entityTagConditions, 1000, null);
+		List<Long> nodeIds = nodeStatsDAO.getNodeIds(candidateTiles, maxZoom, maxRect, entityTagConditions, null, 1000l);
 
 		
 		Map<String, Long> statsK = nodeStatsDAO.getStatsNodeTagsK(maxRect, null, false);
@@ -315,6 +315,11 @@ public class NodeStatsDAO
 	 * A circle is assumed if the width and height of the ellipses are off less than 1percent.
 	 * (This gets rid of rounding problems such as 0.00001 and 0.000009)
 	 * 
+	 * FIXME This method computes a wrong bounding box for ellipses -
+	 * this is because the radius in meters is added to the radians
+	 * 
+	 * FIXME It seems that the origin of an ellipse is not its center
+	 * at least getCenterX returns different coordinates than getX()
 	 * 
 	 * @param geographyColumn
 	 * @param shape
@@ -331,12 +336,12 @@ public class NodeStatsDAO
 			double smaller = Math.min(ellipse.getWidth(), ellipse.getHeight());
 
 			double error = 1.0 - smaller / larger;
-			if(error > 0.1) {
+			if(error < 0.01) {
 				
 				String result
 					= "ST_DWithin("
 						+ geographyColumn + ", "
-						+ LGDQueries.buildPoint(ellipse.getCenterY(), ellipse.getCenterX()) + ", "
+						+ LGDQueries.buildPoint(ellipse.getY(), ellipse.getX()) + ", "
 						+ larger + ", "
 						+ "true)"
 						;
@@ -370,7 +375,7 @@ public class NodeStatsDAO
 	 * @throws SQLException
 	 */
 	//@Override
-	public List<Long> getNodeIds(Collection<Long> tileIds, int zoom, RectangularShape filter, Collection<String> tagConditions, Integer limit, Integer offset)
+	public List<Long> getNodeIds(Collection<Long> tileIds, int zoom, RectangularShape filter, Collection<String> tagConditions, Long offset, Long limit)
 		throws SQLException
 	{
 		// Limit and offset
@@ -391,7 +396,7 @@ public class NodeStatsDAO
 			: " AND LGD_ToTile(nt0.geom, " + zoom + ") IN (" + StringUtil.implode(",", tileIds) + ") ";
 	
 		// BBox part
-		String bbox = createGeographyFilter("nt0.geom", filter);
+		String bbox = createGeographyFilter("n.geom", filter);
 		
 		if(!bbox.isEmpty())
 			bbox = "AND " + bbox;
