@@ -20,6 +20,10 @@
  */
 package org.linkedgeodata.core;
 
+import org.openstreetmap.osmosis.core.domain.v0_6.Entity;
+import org.openstreetmap.osmosis.core.domain.v0_6.Node;
+import org.openstreetmap.osmosis.core.domain.v0_6.Way;
+
 public class LGDVocab
 	implements ILGDVocab
 {
@@ -90,5 +94,18 @@ public class LGDVocab
 	public String getOntologyNS()
 	{
 		return ONTOLOGY_NS;
+	}
+
+	@Override
+	public String createResource(Entity entity)
+	{
+		if(entity instanceof Node) {
+			return createNIRNodeURI(entity.getId());
+		}
+		else if(entity instanceof Way) {
+			return createNIRWayURI(entity.getId());
+		}
+		
+		return null;
 	}	
 }

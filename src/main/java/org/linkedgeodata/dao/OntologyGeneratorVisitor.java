@@ -117,6 +117,9 @@ public class OntologyGeneratorVisitor
 	@Override
 	public Void accept(SimpleTextTagMapper m)
 	{
+		if(m.getTagPattern().getKey() == null && m.getTagPattern().getValue() == null)
+			return null;
+		
 		model.createProperty(m.getProperty())
 			.addProperty(RDF.type, OWL.DatatypeProperty);
 		

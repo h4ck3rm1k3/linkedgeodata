@@ -1,10 +1,10 @@
 <?xml version="1.0" ?>
 <!DOCTYPE plugin PUBLIC "-//JPF//Java Plug-in Manifest 1.0" "http://jpf.sourceforge.net/plugin_1_0.dtd">
-<plugin id="LGD_RDFDelta" version="1.0">
+<plugin id="LGD_LiveRDFDelta" version="1.0">
 
 	<!--these are plugins we require. Usualy only org.openstreetmap.osmosis.core.plugin.Core will be required.-->
 	<requires>
-		<import plugin-id="org.openstreetmap.osmosis.core.plugin.Core" plugin-version="0.30.2" reverse-lookup="false"/>
+		<import plugin-id="org.openstreetmap.osmosis.core.plugin.Core" plugin-version="0.35" reverse-lookup="false"/>
 	</requires>
 
 	<!--These are library-files we require including our own code. -->
@@ -15,8 +15,8 @@
 	<!--This is where our plugin plugs into.
     	The extension-point 'task' with a subclass of PluginLoader named 'WriteOSMBinPlugin'
     	that tells Osmosis what tasks are provided.-->
-	<extension plugin-id="org.openstreetmap.osmosis.core.plugin.Core" point-id="Task" id="LibOSM/writeOsmBin-Task">
-		<parameter id="name" value="writeOsmBin"/>
-		<parameter id="class" value="org.openstreetmap.osm.data.osmbin.WriteOSMBinPlugin"/>
+	<extension plugin-id="org.openstreetmap.osmosis.core.plugin.Core" point-id="Task" id="LibLGD/liveRDFDelta-Task">
+		<parameter id="name" value="liveRDFDelta"/>
+		<parameter id="class" value="org.linkedgeodata.osm.osmosis.plugins.LiveRDFDeltaPluginLoader"/>
 	</extension>
 </plugin>

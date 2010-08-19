@@ -1094,7 +1094,7 @@ public class JTriplifyServer
 		dataHandler.getRIC().put(".*/ontology/?(\\?.*)?", getOntologyFn);		
 
 		IInvocable describeFn = DefaultCoercions.wrap(methods, "publicDescribe.*");
-		dataHandler.getRIC().put(".*/(ontology/.*)(\\?.*)?", describeFn, "$1");
+		dataHandler.getRIC().put(".*/(ontology/[^/]+)(\\?.*)?", describeFn, "$1");
 	}
 	
 

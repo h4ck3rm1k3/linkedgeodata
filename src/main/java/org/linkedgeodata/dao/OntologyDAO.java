@@ -298,11 +298,22 @@ public class OntologyDAO
 			if(!(item instanceof ISimpleOneOneTagMapper))
 				continue;
 			
+			
 			// Optional: filter ontology only to things that actually exist in the DB
 			//tagDAO.doesTagExist(item.)
 			
 			ISimpleOneOneTagMapper x = (ISimpleOneOneTagMapper)item;
+			
+			/*
+			if(x.getProperty().contains("property")) {
+				System.out.println("Property");
+			}
+			*/
+			
 			x.accept(visitor);
+			
+			if(x.getTagPattern().getKey() == null && x.getTagPattern().getValue() == null)
+				continue;
 			
 			Tag tag = new Tag(x.getTagPattern().getKey(), x.getTagPattern().getValue());
 

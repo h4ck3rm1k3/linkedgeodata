@@ -1,5 +1,7 @@
 package org.linkedgeodata.core;
 
+import org.openstreetmap.osmosis.core.domain.v0_6.Entity;
+
 public interface ILGDVocab
 {
 	String getBaseNS();
@@ -15,5 +17,7 @@ public interface ILGDVocab
 	String createNIRWayURI(long id);
 	String createOSMWayURI(long id);
  
+	String createResource(Entity entity);
+	
 	String getOntologyNS();
 }

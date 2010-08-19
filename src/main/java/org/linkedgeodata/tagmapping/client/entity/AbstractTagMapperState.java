@@ -11,7 +11,6 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 
 
 /**
- * Subject to renaming: Rename to AbstractTagMapperState
  * 
  * @author raven
  *

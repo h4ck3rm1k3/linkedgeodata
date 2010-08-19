@@ -1,5 +1,8 @@
 package org.linkedgeodata.core;
 
+import org.apache.commons.lang.NotImplementedException;
+import org.openstreetmap.osmosis.core.domain.v0_6.Entity;
+
 public class DeprecatedLGDVocab
 	implements ILGDVocab
 {
@@ -71,5 +74,11 @@ public class DeprecatedLGDVocab
 	public String getOntologyNS()
 	{
 		return ONTOLOGY;
+	}
+
+	@Override
+	public String createResource(Entity entity)
+	{
+		throw new NotImplementedException();
 	}	
 }

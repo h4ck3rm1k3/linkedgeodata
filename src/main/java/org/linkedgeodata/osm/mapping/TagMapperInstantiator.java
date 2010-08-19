@@ -66,13 +66,18 @@ public class TagMapperInstantiator
 	@Override
 	public SimpleObjectPropertyTagMapper visit(SimpleObjectPropertyTagMapperState state)
 	{
+		SimpleTagPattern tagPattern = (state.getTagPattern() == null)
+		? new SimpleTagPattern(null, null)
+		: new SimpleTagPattern(
+				state.getTagPattern().getKey(), 
+				state.getTagPattern().getValue());
+
+		
 		return new SimpleObjectPropertyTagMapper(
 				state.getProperty(),
 				state.getObject(),
 				state.isObjectAsPrefix(),
-				new SimpleTagPattern(
-						state.getTagPattern().getKey(), 
-						state.getTagPattern().getValue()),
+				tagPattern,
 				state.describesOSMEntity());
 	}
 
