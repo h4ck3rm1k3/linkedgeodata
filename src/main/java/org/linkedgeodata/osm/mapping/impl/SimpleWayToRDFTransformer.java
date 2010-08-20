@@ -20,13 +20,20 @@
  */
 package org.linkedgeodata.osm.mapping.impl;
 
+import java.util.Collection;
+import java.util.Map;
+
 import org.linkedgeodata.core.ILGDVocab;
 import org.linkedgeodata.osm.mapping.ITagMapper;
 import org.linkedgeodata.util.ITransformer;
 import org.openstreetmap.osmosis.core.domain.v0_6.Way;
+import org.openstreetmap.osmosis.core.domain.v0_6.WayNode;
 
+import com.hp.hpl.jena.rdf.model.AnonId;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.vocabulary.RDF;
 
 public class SimpleWayToRDFTransformer
 	implements ITransformer<Way, Model>
@@ -45,14 +52,16 @@ public class SimpleWayToRDFTransformer
 	@Override
 	public Model transform(Model model, Way way)
 	{
-		
+
 		String subject = getSubject(way);
 		//Resource subjectRes = model.getResource(subject + "#id");
 		
 		//generateWGS84(model, subjectRes, node);
 		//generateGeoRSS(model, subjectRes, node);
+
 		SimpleNodeToRDFTransformer.generateTags(tagMapper, model, subject, way.getTags());
 
+		generateWayNodes(model, vocab, way);
 		//model.createResource(subject).addProperty(RDF.type, model.createResource(WGS84_WAY));
 		
 		return model;
@@ -74,6 +83,32 @@ public class SimpleWayToRDFTransformer
 	private String getSubject(Way way)
 	{
 		return getSubject(way.getId());
+	}
+	
+	private static void generateWayNodes(Model model, ILGDVocab vocab, Way way)
+	{
+		//for(Map.Entry<Long, Collection<Long>> entry : members.entrySet()) {
+		Long wayId = way.getId();
+			
+		//Resource memberRes = model.createResource(new AnonId());
+		Resource memberRes = vocab.getHasNodesResource(wayId);
+		
+		model.add(
+				model.createResource(vocab.createOSMWayURI(wayId)),
+				model.createProperty(vocab.getHasNodesPred()),
+				memberRes);
+
+		model.add(memberRes, RDF.type, RDF.Seq);
+		
+		int i = 0;
+		for(WayNode wayNode : way.getWayNodes()) {
+			Long nodeId = wayNode.getNodeId();
+
+			model.add(
+					memberRes,
+					model.createProperty(RDF.getURI() + "_" + (++i)),
+					model.createResource(vocab.createOSMNodeURI(nodeId)));
+		}	
 	}
 	
 	//public static void generateGeoRSS(Model model, Resource subjectRes, node);

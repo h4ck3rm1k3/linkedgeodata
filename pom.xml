@@ -151,16 +151,16 @@
 
 	<!--  Virtuoso specific stuff -->
 		<dependency>
-			<groupId>com.virtuoso.virtjdbc3</groupId>
-			<artifactId>virtjdbc3</artifactId>
-			<version>3.0</version>
+			<groupId>com.virtuoso.virtjdbc4</groupId>
+			<artifactId>virtjdbc4</artifactId>
+			<version>4.0</version>
 			<scope>system</scope>
-			<systemPath>${basedir}/lib/virt-jena/virtjdbc3.jar</systemPath>
+			<systemPath>${basedir}/lib/virt-jena/virtjdbc4.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>com.virtuoso.virt_jena</groupId>
 			<artifactId>virt_jena</artifactId>
-			<version>3.0</version>
+			<version>4.0</version>
 			<scope>system</scope>
 			<systemPath>${basedir}/lib/virt-jena/virt_jena.jar</systemPath>
 		</dependency>

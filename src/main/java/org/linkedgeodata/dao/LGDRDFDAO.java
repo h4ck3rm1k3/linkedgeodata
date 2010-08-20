@@ -99,6 +99,7 @@ public class LGDRDFDAO
 		}
 	}
 
+	/*
 	private void writeWayNodes(Model model, MultiMap<Long, Long> members)
 	{
 		for(Map.Entry<Long, Collection<Long>> entry : members.entrySet()) {
@@ -121,7 +122,7 @@ public class LGDRDFDAO
 						model.createResource(vocab.createOSMNodeURI(nodeId)));
 			}
 		}	
-	}
+	}*/
 	
 	public int resolveNodes(Model model, Collection<Long> ids, boolean skipUntagged, String tagFilter)
 		throws SQLException
@@ -146,7 +147,11 @@ public class LGDRDFDAO
 			throws SQLException
 	{	
 		Collection<Way> ways = dao.getWayDAO().getWays(ids, true, tagFilter);
-			
+		
+		
+		//MultiMap<Long, Long> members = dao.getWayDAO().getNodeMemberships(subIds);
+		
+		
 		List<Long> subIds = new ArrayList<Long>();
 		for(Way way : ways) {
 			subIds.add(way.getId());
@@ -154,8 +159,7 @@ public class LGDRDFDAO
 			wayTransformer.transform(model, way);
 		}
 	
-		MultiMap<Long, Long> members = dao.getWayDAO().getNodeMemberships(subIds);
-		writeWayNodes(model, members);
+		//writeWayNodes(model, members);
 
 		return subIds.size();
 	}

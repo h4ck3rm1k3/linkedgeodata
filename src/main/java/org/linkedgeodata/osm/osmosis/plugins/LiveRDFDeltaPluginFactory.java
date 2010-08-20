@@ -23,11 +23,13 @@ public class LiveRDFDeltaPluginFactory
 
 	private TaskManager _createTaskManagerImpl(TaskConfiguration taskConfig)
 		throws Exception
-	{		
-		String fileName = getStringArgument(taskConfig,
-				TEST_ARG_NAME,
-				 getDefaultStringArgument(taskConfig, DEFAULT_TEST_ARG)
-				 ); 
+	{
+		String fileName = (taskConfig == null)
+			? ""
+			: getStringArgument(taskConfig,
+					TEST_ARG_NAME,
+					getDefaultStringArgument(taskConfig, DEFAULT_TEST_ARG)); 
+
 
 		LiveRDFDeltaPlugin task = new LiveRDFDeltaPlugin(fileName);
 		return new ChangeSinkManager(taskConfig.getId(), task, taskConfig.getPipeArgs());

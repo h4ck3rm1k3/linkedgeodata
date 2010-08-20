@@ -22,7 +22,9 @@ package org.linkedgeodata.osm.mapping.impl;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.Map;
 
+import org.apache.commons.collections15.MultiMap;
 import org.apache.log4j.Logger;
 import org.linkedgeodata.core.ILGDVocab;
 import org.linkedgeodata.core.vocab.WGS84Pos;
@@ -34,9 +36,11 @@ import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 
 import com.hp.hpl.jena.datatypes.RDFDatatype;
 import com.hp.hpl.jena.datatypes.TypeMapper;
+import com.hp.hpl.jena.rdf.model.AnonId;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.vocabulary.RDF;
 import com.hp.hpl.jena.vocabulary.XSD;
 
 
@@ -77,7 +81,7 @@ public class SimpleNodeToRDFTransformer
 		generateWGS84(model, subjectRes, node);
 		generateGeoRSS(model, subjectRes, node);
 		generateTags(tagMapper, model, subject, node.getTags());
-
+		
 		return model;		
 	}
 	
@@ -88,6 +92,7 @@ public class SimpleNodeToRDFTransformer
 		return transform(model, node);
 	}
 	
+	// FIXME Move this method to a class common for ways, nodes and relations.
 	public static void generateTags(ITagMapper tagMapper, Model model, String subject, Collection<Tag> tags)
 	{
 		//if(tags == null)
@@ -104,8 +109,10 @@ public class SimpleNodeToRDFTransformer
 			else if(model == null) {
 				model = subModel;
 			}
-
-			//model.add(subModel);
+			/*
+			else {
+				model.add(subModel);
+			}*/
 		}		
 	}
 
@@ -136,15 +143,14 @@ public class SimpleNodeToRDFTransformer
 	private static final String wgs84Long = wgs84NS + "long";
 	*/
 	
-	public static  void generateWGS84(Model model, Resource subject, Node node)
+	public static void generateWGS84(Model model, Resource subject, Node node)
 	{
 		TypeMapper tm = TypeMapper.getInstance();
 		RDFDatatype dataType = tm.getSafeTypeByName(XSD.decimal.getURI());
 
 		model.add(subject, WGS84Pos.xlat, Double.toString(node.getLatitude()), dataType);
 		model.add(subject, WGS84Pos.xlong, Double.toString(node.getLongitude()), dataType);		
-	}
-
+	}	
 	
 	public static Node createNode(long id)
 	{

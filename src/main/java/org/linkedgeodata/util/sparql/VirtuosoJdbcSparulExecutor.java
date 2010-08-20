@@ -9,13 +9,14 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.linkedgeodata.util.ModelUtil;
 import org.linkedgeodata.util.SQLUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import virtuoso.jdbc3.VirtuosoExtendedString;
-import virtuoso.jdbc3.VirtuosoRdfBox;
-import virtuoso.jdbc3.VirtuosoResultSet;
+import virtuoso.jdbc4.VirtuosoExtendedString;
+import virtuoso.jdbc4.VirtuosoRdfBox;
+import virtuoso.jdbc4.VirtuosoResultSet;
 
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.QuerySolutionMap;
@@ -33,7 +34,7 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 public class VirtuosoJdbcSparulExecutor
 	implements ISparulExecutor
 {
-	private static final Logger logger = Logger.getLogger(VirtuosoJdbcSparulExecutor.class);
+	private static final Logger logger = LoggerFactory.getLogger(VirtuosoJdbcSparulExecutor.class);
 	
 	private Connection con;
 	private String defaultGraphName;
@@ -246,6 +247,8 @@ public class VirtuosoJdbcSparulExecutor
 			query += "From <" + graphName + "> ";
 		
 		query += "{" + ntriples + "}";
+		
+		logger.trace("Sending query: " + query);
 		
 		executeUpdate(query);
 		

@@ -60,9 +60,9 @@ public class OSMEntityToRDFTransformer
 		
 		
 		if(in instanceof Node) {
-			nodeTransformer.transform((Node)in);
+			nodeTransformer.transform(out, (Node)in);
 		} else if (in instanceof Way) {
-			wayTransformer.transform((Way)in);
+			wayTransformer.transform(out, (Way)in);
 		}
 			
 		return out;

@@ -2,6 +2,9 @@ package org.linkedgeodata.core;
 
 import org.openstreetmap.osmosis.core.domain.v0_6.Entity;
 
+import com.hp.hpl.jena.rdf.model.AnonId;
+import com.hp.hpl.jena.rdf.model.Resource;
+
 public interface ILGDVocab
 {
 	String getBaseNS();
@@ -20,4 +23,6 @@ public interface ILGDVocab
 	String createResource(Entity entity);
 	
 	String getOntologyNS();
+
+	Resource getHasNodesResource(Long wayId);
 }

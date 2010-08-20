@@ -26,16 +26,17 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.collections15.MultiMap;
 import org.apache.commons.collections15.multimap.MultiHashMap;
 import org.apache.log4j.Logger;
 import org.linkedgeodata.util.StringUtil;
-import org.openstreetmap.osmosis.core.domain.v0_6.Node;
 import org.openstreetmap.osmosis.core.domain.v0_6.OsmUser;
 import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 import org.openstreetmap.osmosis.core.domain.v0_6.Way;
+import org.openstreetmap.osmosis.core.domain.v0_6.WayNode;
 import org.postgis.LineString;
 import org.postgis.PGgeometry;
 import org.postgis.Point;
@@ -82,8 +83,28 @@ public class WayDAO
 		return result;
 	}
 	
-	
 	public Collection<Way> getWays(Collection<Long> ids, boolean skipUntagged, String tagFilterStr)
+		throws SQLException
+	{
+		Collection<Way> result = getWaysRaw(ids, skipUntagged, tagFilterStr);
+		
+		Map<Long, Way> idToWay = new HashMap<Long, Way>();
+		for(Way way : result)
+			idToWay.put(way.getId(), way);
+		
+		MultiMap<Long, Long> wayToNodes = getNodeMemberships(idToWay.keySet());
+		
+		for(Map.Entry<Long, Collection<Long>> entry : wayToNodes.entrySet()) {
+			Way way = idToWay.get(entry.getKey());
+			
+			for(Long nodeId : entry.getValue())
+				way.getWayNodes().add(new WayNode(nodeId));
+		}
+		
+		return result;
+	}
+		
+	public Collection<Way> getWaysRaw(Collection<Long> ids, boolean skipUntagged, String tagFilterStr)
 		throws SQLException
 	{
 		// First fetch way-tags - so we can skip ways that do not have any tags

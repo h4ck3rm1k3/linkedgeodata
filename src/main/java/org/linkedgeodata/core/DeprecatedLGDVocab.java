@@ -3,6 +3,8 @@ package org.linkedgeodata.core;
 import org.apache.commons.lang.NotImplementedException;
 import org.openstreetmap.osmosis.core.domain.v0_6.Entity;
 
+import com.hp.hpl.jena.rdf.model.Resource;
+
 public class DeprecatedLGDVocab
 	implements ILGDVocab
 {
@@ -80,5 +82,12 @@ public class DeprecatedLGDVocab
 	public String createResource(Entity entity)
 	{
 		throw new NotImplementedException();
+	}
+
+	@Override
+	public Resource getHasNodesResource(Long wayId)
+	{
+		// TODO Auto-generated method stub
+		return null;
 	}	
 }

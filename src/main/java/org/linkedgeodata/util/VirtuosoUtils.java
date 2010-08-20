@@ -15,7 +15,7 @@ public class VirtuosoUtils
 	public static Connection connect(String hostName, String userName, String passWord)
 		throws Exception
 	{
-		Class.forName("virtuoso.jdbc3.Driver");
+		Class.forName("virtuoso.jdbc4.Driver");
 		String url = "jdbc:virtuoso://" + hostName + "/charset=UTF-8";
 		//Connection connection = DriverManager.getConnection(url);
 		Connection conn = DriverManager.getConnection(url, userName, passWord);

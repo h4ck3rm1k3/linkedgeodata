@@ -24,6 +24,10 @@ import org.openstreetmap.osmosis.core.domain.v0_6.Entity;
 import org.openstreetmap.osmosis.core.domain.v0_6.Node;
 import org.openstreetmap.osmosis.core.domain.v0_6.Way;
 
+import com.hp.hpl.jena.query.DatasetFactory;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.ResourceFactory;
+
 public class LGDVocab
 	implements ILGDVocab
 {
@@ -107,5 +111,15 @@ public class LGDVocab
 		}
 		
 		return null;
+	}
+
+	@Override
+	public Resource getHasNodesResource(Long wayId)
+	{
+		// http://linkedgeodata.org/resource/way123/nodes
+		String res = createNIRWayURI(wayId) + "/nodes";
+
+		Resource result = ResourceFactory.createResource(res);
+		return result;
 	}	
 }
