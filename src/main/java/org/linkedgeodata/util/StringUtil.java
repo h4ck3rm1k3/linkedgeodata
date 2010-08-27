@@ -3,6 +3,8 @@ package org.linkedgeodata.util;
 import java.util.Arrays;
 import java.util.Iterator;
 
+import org.apache.commons.collections15.Transformer;
+
 public class StringUtil
 {
 	public static <T> T coalesce(T ...args)
@@ -64,7 +66,7 @@ public class StringUtil
 	{
 		return implode(separator, items.iterator());
 	}
-	
+
 	
 	public static String toCamelCase(String s)
 	{

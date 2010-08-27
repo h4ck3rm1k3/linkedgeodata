@@ -20,16 +20,19 @@
  */
 package org.linkedgeodata.osm.osmosis.plugins;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.linkedgeodata.core.ILGDVocab;
 import org.linkedgeodata.util.Diff;
 import org.linkedgeodata.util.IDiff;
 import org.linkedgeodata.util.ITransformer;
+import org.linkedgeodata.util.sparql.ISparqlExecutor;
 import org.linkedgeodata.util.sparql.ISparulExecutor;
 import org.openstreetmap.osmosis.core.container.v0_6.ChangeContainer;
 import org.openstreetmap.osmosis.core.domain.v0_6.Entity;
-import org.openstreetmap.osmosis.core.domain.v0_6.Node;
-import org.openstreetmap.osmosis.core.domain.v0_6.Way;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -40,6 +43,8 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
  * Therefore this strategy always performs a diff.
  * 
  * @author raven
+ *
+ * FIXME Somehow separate the store update code from the timely diff code
  *
  */
 public class IgnoreModifyDeleteDiffUpdateStrategy
@@ -52,77 +57,33 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 	private ISparulExecutor graphDAO;	
 	private String graphName;
 
+	private List<Entity> entities = new ArrayList<Entity>();
+	
+	// Number of entities that should be processed as a batch
+	private int maxEntityBatchSize = 100;
+	
+	long entityDiffTimeSpan = 60000;
+	RDFDiff timelyDiff = new RDFDiff();
+	
+	private Date timeStamp = null;
 
+
+	private RDFDiffWriter rdfDiffWriter;
+	
 	public IgnoreModifyDeleteDiffUpdateStrategy(
 			ILGDVocab vocab,
 			ITransformer<Entity, Model> entityTransformer,
 			ISparulExecutor graphDAO,
-			String graphName)
+			String graphName,
+			RDFDiffWriter rdfDiffWriter)
 	{
 		this.vocab = vocab;
 		this.entityTransformer = entityTransformer;
 		this.graphDAO = graphDAO;
 		this.graphName = graphName;
+		
+		this.rdfDiffWriter = rdfDiffWriter;
 	}
-
-
-	/*
-	private static String constructBySubject(String iri, String graphName)
-	{
-		String fromPart = (graphName != null)
-			? "From <" + graphName + "> "
-			: "";
-
-		String result =
-			"Construct { ?s ?p ?o . } " + fromPart + "{ ?s ?p ?o . Filter(?s = <" + iri + ">) . }";
-		
-		return result;
-	}
-	*/
-
-	private static String constructNodeModelQuery(ILGDVocab vocab, long nodeId, String graphName)
-	{
-		String nodeIRI = vocab.createNIRNodeURI(nodeId);
-		
-		String fromPart = (graphName != null)
-			? "From <" + graphName + "> "
-					: "";
-
-		String result =
-			"Construct { ?s ?p ?o . } " + fromPart + "{ ?s ?p ?o . Filter(?s = <" + nodeIRI + ">) . }";
-	
-	return result;
-	}
-	
-	private static String constructWayModelQuery(ILGDVocab vocab, long wayId, String graphName)
-	{
-		String wayIRI = vocab.createNIRWayURI(wayId);
-		String wayNodesIRI = vocab.getHasNodesResource(wayId).toString();
-		
-		String fromPart = (graphName != null)
-			? "From <" + graphName + "> "
-			: "";
-
-		String result =
-			"Construct { ?s ?p ?o . } " + fromPart + "{ ?s ?p ?o . Filter(?s = <" + wayIRI + "> || ?s = <" + wayNodesIRI + ">) . }";
-	
-		return result;
-	}
-	
-
-	/*
-	private static Model getBySubject(ISparqlExecutor graphDAO, String iri, String graphName)
-		throws Exception
-	{
-		String query = constructBySubject(iri, graphName);
-		
-		//logger.info("Created query: " + query);
-		
-		Model model = graphDAO.executeConstruct(query);
-		
-		return model;
-	}*/
-	
 	
 	/**
 	 * NOTE Does not set retained triples
@@ -157,55 +118,197 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		}
 	}
 
+	
+	private static Model executeConstruct(ISparqlExecutor graphDAO, Iterable<String> queries)
+		throws Exception
+	{
+		Model result = ModelFactory.createDefaultModel();
+		for(String query : queries) {
+			Model tmp = graphDAO.executeConstruct(query);
+			
+			result.add(tmp);
+		}
+		
+		return result;
+	}
 
+	/**
+	 * Note: Hopefully entites come in in timely order :/
+	 * Otherwise the diff output would get messed up
+	 * 
+	 * @param c
+	 * @throws Exception
+	 */
 	public void _update(ChangeContainer c)
 		throws Exception
 	{
-		Entity entity = c.getEntityContainer().getEntity();
-		String subject = vocab.createResource(entity);
+		/*
+		if(timeStamp == null)
+			timeStamp = new Date();
 
-		// If there is no subject the entity is implicitely not supported
-		if(subject == null)
-			return;
+		Date now = new Date();
+		*/
+
+		Entity entity = c.getEntityContainer().getEntity();
+
+		if(timeStamp == null)
+			timeStamp = entity.getTimestamp(); 
+
+		Date now = entity.getTimestamp();
 		
-		Model oldModel;
-		
-		if(entity instanceof Node) {
-			oldModel = graphDAO.executeConstruct(constructNodeModelQuery(vocab, entity.getId(), graphName));
-		} else if (entity instanceof Way) {
-			oldModel = graphDAO.executeConstruct(constructWayModelQuery(vocab, entity.getId(), graphName));			
-		} else {
-			oldModel = ModelFactory.createDefaultModel();
+		if(now.getTime() - timeStamp.getTime() <= entityDiffTimeSpan) {
+			process();
+			
+			timeStamp = now;
 		}
 
-		Model newModel = entityTransformer.transform(entity);
+		entities.add(entity);
+	}
+
+	private void process()
+		throws Exception
+	{
+		List<Entity> batch = new ArrayList<Entity>(); 
+		for(Entity entity : entities) {
+			batch.add(entity);
+
+			if(batch.size() >= maxEntityBatchSize) {
+				processBatch(batch);
+				batch.clear();
+			}
+		}
+		
+		processBatch(batch);
+		batch.clear();
+		
+		rdfDiffWriter.write(timelyDiff);
+		timelyDiff.clear();
+	}
+
+	private void processBatch(Iterable<Entity> entityBatch)
+		throws Exception
+	{
+		List<String> queries = GraphDAORDFEntityDAO.constructQuery(
+				entityBatch,
+				vocab,
+				graphName);
+
+		Model oldModel = executeConstruct(graphDAO, queries);
+		
+		Model newModel = ModelFactory.createDefaultModel();
+		for(Entity entity : entityBatch) {
+			entityTransformer.transform(newModel, entity);
+		}
 		
 		IDiff<Model> diff = diff(oldModel, newModel);
 		
 		graphDAO.remove(diff.getRemoved(), graphName);
 		graphDAO.insert(diff.getAdded(), graphName);
-
 		
-/*		
-		ChangeAction action = c.getAction();
-		if(action.equals(ChangeAction.Create)) {
-			System.out.println("Create");
-		}
-		else if(action.equals(ChangeAction.Modify)) {
-			System.out.println("Modify");
-		}
-		else if(action.equals(ChangeAction.Delete)) {
-			System.out.println("Delete");			
-		}
-		System.out.println(    "-> " + c.getEntityContainer().getEntity());
-*/	
+		timelyDiff.remove(diff.getRemoved());
+		timelyDiff.add(diff.getAdded());
 	}
-
-
+		
+	
 	@Override
 	public void complete()
 	{
-		// TODO Auto-generated method stub
-		
-	}	
+		try {
+			process();
+		} catch(Exception e) {
+			logger.error("An error occurred at the completion phase of a task", e);
+		}
+	}
 }
+
+
+
+
+/*
+ * Following code can be removed as soon as the plugin is working - 
+ * because then its definitely not needed anymore
+private static String constructBySubject(String iri, String graphName)
+{
+	String fromPart = (graphName != null)
+		? "From <" + graphName + "> "
+		: "";
+
+	String result =
+		"Construct { ?s ?p ?o . } " + fromPart + "{ ?s ?p ?o . Filter(?s = <" + iri + ">) . }";
+	
+	return result;
+}
+*/
+
+/*
+private static String constructNodeModelQuery(ILGDVocab vocab, long nodeId, String graphName)
+{
+	String nodeIRI = vocab.createNIRNodeURI(nodeId);
+	
+	String fromPart = (graphName != null)
+		? "From <" + graphName + "> "
+				: "";
+
+	String result =
+		"Construct { ?s ?p ?o . } " + fromPart + "{ ?s ?p ?o . Filter(?s = <" + nodeIRI + ">) . }";
+
+return result;
+}
+*/	
+
+/*
+private static String constructQuery(final ILGDVocab vocab, Iterable<Long> nodeIds, Iterable<Long> wayIds, String graphName)
+{
+	if(!wayIds.iterator().hasNext())
+		return "";
+
+	String resources = "";
+	
+	resources += StringUtil.implode(",",
+			new TransformIterable<Long, String>(
+					nodeIds,
+					new Transformer<Long, String>() {
+						@Override
+						public String transform(Long nodeId)
+						{
+							return vocab.createNIRNodeURI(nodeId);
+						}
+					}));
+
+	resources += StringUtil.implode(",",
+			new TransformIterable<Long, String>(
+					nodeIds,
+					new Transformer<Long, String>() {
+						@Override
+						public String transform(Long wayId)
+						{
+							return
+								"<" + vocab.createNIRWayURI(wayId) + ">,<" +
+								vocab.getHasNodesResource(wayId).toString() + ">";
+						}
+					}));
+	
+		
+	String fromPart = (graphName != null)
+		? "From <" + graphName + "> "
+		: "";
+
+	String result =
+		"Construct { ?s ?p ?o . } " + fromPart + "{ ?s ?p ?o . Filter(?s In (" + resources + ")) . }";
+
+	return result;
+}
+*/
+
+/*
+private static Model getBySubject(ISparqlExecutor graphDAO, String iri, String graphName)
+	throws Exception
+{
+	String query = constructBySubject(iri, graphName);
+	
+	//logger.info("Created query: " + query);
+	
+	Model model = graphDAO.executeConstruct(query);
+	
+	return model;
+}*/

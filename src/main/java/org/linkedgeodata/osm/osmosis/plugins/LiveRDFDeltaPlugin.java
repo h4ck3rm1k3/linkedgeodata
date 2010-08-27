@@ -20,6 +20,8 @@
  */
 package org.linkedgeodata.osm.osmosis.plugins;
 
+import java.io.File;
+
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.linkedgeodata.core.ILGDVocab;
@@ -62,12 +64,17 @@ public class LiveRDFDeltaPlugin
 		
 		tx.commit();
 		
+		File diffRepo = new File("/tmp/lgddiff");
+		diffRepo.mkdirs();
+		
+		RDFDiffWriter rdfDiffWriter = new RDFDiffWriter(diffRepo, 0);
+		
 		ILGDVocab vocab = new LGDVocab();
 		ITransformer<Entity, Model> entityTransformer =
 			new OSMEntityToRDFTransformer(tagMapper, vocab);
 		
 		IUpdateStrategy updateStrategy = new IgnoreModifyDeleteDiffUpdateStrategy(
-				vocab, entityTransformer, graphDAO, graphName);
+				vocab, entityTransformer, graphDAO, graphName, rdfDiffWriter);
 		
 		this.updateStrategy = updateStrategy;		
 	}
@@ -91,18 +98,5 @@ public class LiveRDFDeltaPlugin
 	public void process(ChangeContainer c)
 	{
 		updateStrategy.update(c);
-		/*
-		ChangeAction action = c.getAction();
-		if(action.equals(ChangeAction.Create)) {
-			System.out.println("Create");
-		}
-		else if(action.equals(ChangeAction.Modify)) {
-			System.out.println("Modify");
-		}
-		else if(action.equals(ChangeAction.Delete)) {
-			System.out.println("Delete");			
-		}
-		System.out.println(    "-> " + c.getEntityContainer().getEntity());
-		*/
 	}
 }

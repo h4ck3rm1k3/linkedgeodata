@@ -20,12 +20,17 @@
  */
 package org.linkedgeodata.osm.osmosis.plugins;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
 import org.apache.log4j.PropertyConfigurator;
 import org.junit.Test;
+import org.linkedgeodata.util.ConnectionConfig;
+import org.linkedgeodata.util.VirtuosoUtils;
+import org.linkedgeodata.util.sparql.ISparulExecutor;
+import org.linkedgeodata.util.sparql.VirtuosoJdbcSparulExecutor;
 import org.openstreetmap.osmosis.core.container.v0_6.ChangeContainer;
 import org.openstreetmap.osmosis.core.container.v0_6.EntityContainer;
 import org.openstreetmap.osmosis.core.container.v0_6.NodeContainer;
@@ -66,6 +71,23 @@ public class IgnoreModifyDeleteDiffUpdateStrategyTest
 		CommonEntityData ced = new CommonEntityData(666, 1, new Date(), new OsmUser(10, "user"), 0, tags);
 		Node node = new Node(ced, 51.2f, 10.1f);
 		
+
+		ConnectionConfig cConfig = new ConnectionConfig(
+				"localhost",
+				"http://linkedgeodata.org",
+				"dba",
+				"dba");
+		
+		Connection conn = VirtuosoUtils.connect(
+				cConfig.getHostName(),
+				cConfig.getUserName(),
+				cConfig.getPassWord());
+
+		ISparulExecutor graphDAO =
+			new VirtuosoJdbcSparulExecutor(conn, cConfig.getDataBaseName());
+
+		LiveRDFDeltaPlugin task = new LiveRDFDeltaPlugin(graphDAO, cConfig.getDataBaseName());
+
 		//IUpdateStrategy updateStrategy = new IgnoreModifyDeleteDiffUpdateStrategy(vocab, entityTransformer, graphDAO, graphName)
 		//LiveRDFDeltaPlugin pluginFac
 		//LiveRDFDeltaPlugin plugin = new LiveRDFDeltaPlugin();
@@ -73,6 +95,7 @@ public class IgnoreModifyDeleteDiffUpdateStrategyTest
 		EntityContainer entityContainer = new NodeContainer(node);
 		ChangeContainer changeContainer = new ChangeContainer(entityContainer, ChangeAction.Modify);
 
+		task.process(changeContainer);
 		/*
 		plugin.process(changeContainer);
 		plugin.complete();

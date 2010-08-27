@@ -9,9 +9,7 @@ passWord="postres"
 
 sleepInterval=60
 
-echo "This script is not done yet, however it already contains the neccessary statements commented out."
-echo "Starting an infinite loop of fetching data and patching the database..."
-
+echo "Starting LinkedGeoData live update (based on osmosis)..."
 
 mkdir -p $targetPath
 
@@ -32,19 +30,22 @@ fi
 
 while [ 1 ]
 do
+        # TODO Decide whether the old diffs should be kept or removed
+	# Remove possibly existing diff.osc file
+        rm "$targetPath/diff.osc"
+
 	./osmosis --rri workingDirectory=$targetPath --write-xml-change "$targetPath/diff.osc"
 
 	# Synching with a triple store
 	# TODO Add the database connection params
-	./osmosis	-v --read-xml-change file="$targetPath/diff.osc" --liveRDFPluginFactory
+	./osmosis -v --read-xml-change file="$targetPath/diff.osc" --liveRDFPluginFactory
 
-	#./osmosis	-v --read-xml-change file="$targetPath/diff.osc" --liveRDFPluginFactory host=$hostName database=$dataBaseName user=$userName password=$passWord
-
-	# TODO Decide whether the old diffs should be kept or removed
-	rm "$targetPath/diff.osc"
+	#./osmosis -v --read-xml-change file="$targetPath/diff.osc" --liveRDFPluginFactory host=$hostName database=$dataBaseName user=$userName password=$passWord
 
 	echo "Going to sleep for $sleepInterval seconds..."
 	sleep $sleepInterval
+
+
 done
 
 
