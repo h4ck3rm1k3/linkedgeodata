@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.lang.NotImplementedException;
 import org.linkedgeodata.core.ILGDVocab;
 import org.linkedgeodata.util.StringUtil;
 import org.linkedgeodata.util.sparql.ISparulExecutor;
@@ -103,7 +102,8 @@ public class GraphDAORDFEntityDAO
 	@Override
 	public void delete(Iterable<Entity> entities)
 	{
-		throw new NotImplementedException();
+		//throw new NotImplementedException();
+		throw new RuntimeException("Not implemented");
 	}
 
 	@Override

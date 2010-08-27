@@ -38,7 +38,7 @@ do
 
 	# Synching with a triple store
 	# TODO Add the database connection params
-	./osmosis -v --read-xml-change file="$targetPath/diff.osc" --liveRDFPluginFactory
+	./osmosis -v 1 --read-xml-change file="$targetPath/diff.osc" --liveRDFPluginFactory
 
 	#./osmosis -v --read-xml-change file="$targetPath/diff.osc" --liveRDFPluginFactory host=$hostName database=$dataBaseName user=$userName password=$passWord
 

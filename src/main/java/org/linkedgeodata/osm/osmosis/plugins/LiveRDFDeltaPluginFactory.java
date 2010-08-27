@@ -51,8 +51,6 @@ public class LiveRDFDeltaPluginFactory
 	public LiveRDFDeltaPluginFactory()
 	{
 		super();
-		
-		System.out.println("Weee: Loading " + this.getClass());
 	}
 
 
