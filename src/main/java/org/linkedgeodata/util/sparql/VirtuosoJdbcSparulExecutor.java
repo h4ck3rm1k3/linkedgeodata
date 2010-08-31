@@ -7,10 +7,13 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import org.linkedgeodata.util.ModelUtil;
 import org.linkedgeodata.util.SQLUtil;
+import org.linkedgeodata.util.SinglePrefetchIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,6 +26,7 @@ import com.hp.hpl.jena.query.QuerySolutionMap;
 import com.hp.hpl.jena.rdf.model.AnonId;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.StmtIterator;
 
 /**
  * 
@@ -44,6 +48,9 @@ public class VirtuosoJdbcSparulExecutor
 	 * according to http://docs.openlinksw.com/virtuoso/fn_ttlp.html
 	 */
 	private int ttlpFlags = 255;
+	
+	// Maximum number of statements to insert/delete
+	private int maxChunkSize = 1024;
 	
 	public VirtuosoJdbcSparulExecutor(String defaultGraphName)
 	{
@@ -206,8 +213,20 @@ public class VirtuosoJdbcSparulExecutor
 		return defaultGraphName;
 	}
 
+	
 	@Override
 	public boolean insert(Model model, String graphName)
+		throws SQLException
+	{
+		Iterable<Model> chunks = new ModelChunkIterable(model, maxChunkSize);
+		for(Model item : chunks) {
+			insertBatch(item, graphName);
+		}
+		
+		return true;
+	}
+
+	public boolean insertBatch(Model model, String graphName)
 		throws SQLException
 	{
 		if(model.isEmpty())
@@ -228,8 +247,8 @@ public class VirtuosoJdbcSparulExecutor
 		return result;
 	}
 
-	@Override
-	public boolean remove(Model model, String graphName)
+	
+	public boolean removeBatch(Model model, String graphName)
 		throws Exception
 	{
 		if(model.isEmpty())
@@ -252,6 +271,19 @@ public class VirtuosoJdbcSparulExecutor
 		
 		executeUpdate(query);
 		
+		return true;		
+	}
+	
+	
+	@Override
+	public boolean remove(Model model, String graphName)
+		throws Exception
+	{
+		Iterable<Model> chunks = new ModelChunkIterable(model, maxChunkSize);
+		for(Model item : chunks) {
+			removeBatch(item, graphName);
+		}
+		
 		return true;
 	}
 
@@ -273,5 +305,68 @@ public class VirtuosoJdbcSparulExecutor
 		result.read(in, "", "N3");
 		
 		return result;
+	}
+}
+
+
+class ModelChunkIterator
+	extends SinglePrefetchIterator<Model>
+{
+	private Model model;
+	private int maxChunkSize;
+
+	private StmtIterator it;
+	
+	public ModelChunkIterator(Model model, int maxChunkSize)
+	{
+		this.model = model;
+		this.maxChunkSize = maxChunkSize;
+	}
+	
+	@Override
+	protected Model prefetch()
+		throws Exception
+	{		
+		Model tmp = ModelFactory.createDefaultModel();
+		
+		if(it == null)
+			it = model.listStatements();
+
+		while(it.hasNext()) {
+			tmp.add(it.next());
+			
+			if(tmp.size() > maxChunkSize)
+				return tmp;
+		}
+
+		if(!tmp.isEmpty())
+			return tmp;
+		else {
+			it.close();
+			return finish();
+		}
+	}
+}
+
+class ModelChunkIterable
+	implements Iterable<Model>
+{
+	private Model model;
+	private int maxChunkSize;
+
+	public ModelChunkIterable(Model model, int maxChunkSize)
+	{
+		this.model = model;
+		this.maxChunkSize = maxChunkSize;
+	}
+
+
+	@Override
+	public Iterator<Model> iterator()
+	{
+		if(model.size() <= maxChunkSize)
+			return Collections.singleton(model).iterator();
+		else
+			return new ModelChunkIterator(model, maxChunkSize);
 	}
 }

@@ -34,6 +34,7 @@ import org.linkedgeodata.osm.mapping.impl.OSMEntityToRDFTransformer;
 import org.linkedgeodata.tagmapping.client.entity.AbstractTagMapperState;
 import org.linkedgeodata.tagmapping.client.entity.IEntity;
 import org.linkedgeodata.util.ITransformer;
+import org.linkedgeodata.util.sparql.ISparqlExecutor;
 import org.linkedgeodata.util.sparql.ISparulExecutor;
 import org.openstreetmap.osmosis.core.container.v0_6.ChangeContainer;
 import org.openstreetmap.osmosis.core.domain.v0_6.Entity;
@@ -42,13 +43,20 @@ import org.openstreetmap.osmosis.core.task.v0_6.ChangeSink;
 import com.hp.hpl.jena.rdf.model.Model;
 
 
+/**
+ * This plugin writes out an RDF delta based on transforming incoming osm-changes
+ * to RDF and comparing them to a store.
+ * 
+ * @author raven
+ *
+ */
 public class LiveRDFDeltaPlugin
 	implements ChangeSink 
 {
 	private IUpdateStrategy updateStrategy;	
 
 
-	public LiveRDFDeltaPlugin(ISparulExecutor graphDAO, String graphName)
+	public LiveRDFDeltaPlugin(ISparqlExecutor graphDAO, String graphName, RDFDiffWriter rdfDiffWriter)
 		throws Exception
 	{
 		InMemoryTagMapper tagMapper = new InMemoryTagMapper();
@@ -64,10 +72,10 @@ public class LiveRDFDeltaPlugin
 		
 		tx.commit();
 		
-		File diffRepo = new File("/tmp/lgddiff");
-		diffRepo.mkdirs();
+		//File diffRepo = new File("/tmp/lgddiff");
+		//diffRepo.mkdirs();
 		
-		RDFDiffWriter rdfDiffWriter = new RDFDiffWriter(diffRepo, 0);
+		//RDFDiffWriter rdfDiffWriter = new RDFDiffWriter(diffRepo, 0);
 		
 		ILGDVocab vocab = new LGDVocab();
 		ITransformer<Entity, Model> entityTransformer =
@@ -83,8 +91,7 @@ public class LiveRDFDeltaPlugin
 	@Override
 	public void complete()
 	{
-		// TODO Auto-generated method stub
-		
+		this.updateStrategy.complete();
 	}
 
 	@Override

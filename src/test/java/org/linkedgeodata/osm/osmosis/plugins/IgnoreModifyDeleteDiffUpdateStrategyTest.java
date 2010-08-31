@@ -20,6 +20,7 @@
  */
 package org.linkedgeodata.osm.osmosis.plugins;
 
+import java.io.File;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -39,6 +40,8 @@ import org.openstreetmap.osmosis.core.domain.v0_6.Node;
 import org.openstreetmap.osmosis.core.domain.v0_6.OsmUser;
 import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 import org.openstreetmap.osmosis.core.task.common.ChangeAction;
+import org.openstreetmap.osmosis.core.xml.common.CompressionMethod;
+import org.openstreetmap.osmosis.core.xml.v0_6.XmlChangeReader;
 
 
 public class IgnoreModifyDeleteDiffUpdateStrategyTest
@@ -74,7 +77,7 @@ public class IgnoreModifyDeleteDiffUpdateStrategyTest
 
 		ConnectionConfig cConfig = new ConnectionConfig(
 				"localhost",
-				"http://linkedgeodata.org",
+				"http://test.org",
 				"dba",
 				"dba");
 		
@@ -85,17 +88,28 @@ public class IgnoreModifyDeleteDiffUpdateStrategyTest
 
 		ISparulExecutor graphDAO =
 			new VirtuosoJdbcSparulExecutor(conn, cConfig.getDataBaseName());
+		
+		RDFDiffWriter rdfDiffWriter = new RDFDiffWriter("/tmp/test");
 
-		LiveRDFDeltaPlugin task = new LiveRDFDeltaPlugin(graphDAO, cConfig.getDataBaseName());
+		XmlChangeReader reader = new XmlChangeReader(new File("/home/raven/Projects/Current/Eclipse/GoogleCodeLinkedGeoData/data/live/diff.osc"), true, CompressionMethod.None);
+		
+		LiveRDFDeltaPlugin task = new LiveRDFDeltaPlugin(graphDAO, cConfig.getDataBaseName(), rdfDiffWriter);
 
+		reader.setChangeSink(task);
+		
+		reader.run();
+
+		
+		//graphDAO.insert(
+		
 		//IUpdateStrategy updateStrategy = new IgnoreModifyDeleteDiffUpdateStrategy(vocab, entityTransformer, graphDAO, graphName)
 		//LiveRDFDeltaPlugin pluginFac
 		//LiveRDFDeltaPlugin plugin = new LiveRDFDeltaPlugin();
 
-		EntityContainer entityContainer = new NodeContainer(node);
-		ChangeContainer changeContainer = new ChangeContainer(entityContainer, ChangeAction.Modify);
+		//EntityContainer entityContainer = new NodeContainer(node);
+		//hangeContainer changeContainer = new ChangeContainer(entityContainer, ChangeAction.Modify);
 
-		task.process(changeContainer);
+		//task.process(changeContainer);
 		/*
 		plugin.process(changeContainer);
 		plugin.complete();

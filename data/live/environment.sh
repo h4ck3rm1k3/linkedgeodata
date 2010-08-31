@@ -1,0 +1,3 @@
+export JAVACMD_OPTIONS="-Xmx1024M"
+export OSMOSIS_OPTIONS="-q"
+

@@ -37,16 +37,17 @@ public class LiveRDFDeltaPluginFactory
 {
 	private static final Logger logger = Logger.getLogger(LiveRDFDeltaPluginFactory.class);
 	
-	private static final String ARG_GRAPH_NAME = "graph";
-	private static final String ARG_HOST_NAME = "host";
-	private static final String ARG_USER_NAME = "user";
-	private static final String ARG_PASSWORD = "password";
-	
+	private static final String ARG_GRAPH_NAME = "graphName";
+	private static final String ARG_HOST_NAME = "hostName";
+	private static final String ARG_USER_NAME = "userName";
+	private static final String ARG_PASSWORD = "passWord";
+	private static final String ARG_OUTPUT_BASE_NAME = "outFileBase";
 	
 	private static final String DEFAULT_GRAPH_NAME = "linkedgeodata.org";
 	private static final String DEFAULT_HOST_NAME = "localhost";
 	private static final String DEFAULT_USER_NAME = "dba";
 	private static final String DEFAULT_PASSWORD = "dba";
+	private static final String DEFAULT_OUTPUT_BASE_NAME = "diff";
 	
 	public LiveRDFDeltaPluginFactory()
 	{
@@ -93,8 +94,13 @@ public class LiveRDFDeltaPluginFactory
 		ISparulExecutor graphDAO =
 			new VirtuosoJdbcSparulExecutor(conn, cConfig.getDataBaseName());
 
+		String outputBaseName =
+			getStringArgument(taskConfig, ARG_OUTPUT_BASE_NAME,
+			getDefaultStringArgument(taskConfig, DEFAULT_OUTPUT_BASE_NAME));
+		
+		RDFDiffWriter rdfDiffWriter = new RDFDiffWriter(outputBaseName);
 
-		LiveRDFDeltaPlugin task = new LiveRDFDeltaPlugin(graphDAO, cConfig.getDataBaseName());
+		LiveRDFDeltaPlugin task = new LiveRDFDeltaPlugin(graphDAO, cConfig.getDataBaseName(), rdfDiffWriter);
 		
 		TaskManager result =
 			new ChangeSinkManager(taskConfig.getId(), task, taskConfig.getPipeArgs());

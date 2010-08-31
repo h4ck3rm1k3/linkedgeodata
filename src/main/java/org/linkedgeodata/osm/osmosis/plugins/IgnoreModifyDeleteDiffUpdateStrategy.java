@@ -20,22 +20,146 @@
  */
 package org.linkedgeodata.osm.osmosis.plugins;
 
+import java.util.AbstractCollection;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
+import org.apache.commons.collections15.Transformer;
 import org.apache.log4j.Logger;
 import org.linkedgeodata.core.ILGDVocab;
 import org.linkedgeodata.util.Diff;
 import org.linkedgeodata.util.IDiff;
 import org.linkedgeodata.util.ITransformer;
+import org.linkedgeodata.util.TransformIterable;
 import org.linkedgeodata.util.sparql.ISparqlExecutor;
 import org.linkedgeodata.util.sparql.ISparulExecutor;
 import org.openstreetmap.osmosis.core.container.v0_6.ChangeContainer;
+import org.openstreetmap.osmosis.core.container.v0_6.EntityContainer;
 import org.openstreetmap.osmosis.core.domain.v0_6.Entity;
+import org.openstreetmap.osmosis.core.sort.v0_6.EntityByTypeThenIdComparator;
+import org.openstreetmap.osmosis.core.sort.v0_6.EntityByIdComparator;
+import org.openstreetmap.osmosis.core.task.common.ChangeAction;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
+
+/*
+class ChunkIterator<T>
+	implements Iterator<Collection<T>>
+{
+	private Collection<T> source;
+	private int batchSize;
+
+	public CollectionChunker(Collection<T> source, int batchSize)
+	{
+		this.source = source;
+		this.batchSize = batchSize;
+	}
+
+	@Override
+	public boolean hasNext()
+	{
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Collection<T> next()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void remove()
+	{
+		throw new UnsupportedOperationException();
+	}
+}
+
+
+class CollectionChunker<T>
+	extends AbstractCollection<Collection<T>>
+{
+	private Collection<T> source;
+	private int batchSize;
+	
+	public CollectionChunker(Collection<T> source, int batchSize)
+	{
+		this.source = source;
+		this.batchSize = batchSize;
+	}
+
+	@Override
+	public Iterator<Collection<T>> iterator()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int size()
+	{
+		return source.size() / batchSize; 
+	}
+}
+*/
+
+
+class SetDiff<T>
+	extends CollectionDiff<T, Set<T>>
+{
+	/*
+	public SetDiff(Comparator<T> comparator)
+	{
+	}
+	*/
+
+	public SetDiff(Comparator<T> comparator)
+	{
+		super(
+				new TreeSet<T>(comparator),
+				new TreeSet<T>(comparator),
+				new TreeSet<T>(comparator));
+	}	
+}
+
+abstract class CollectionDiff<T, C extends Collection<T>>
+	extends Diff<C>
+{	
+	public CollectionDiff(C added, C removed, C retained)
+	{
+		super(added, removed, retained);
+	}
+
+	public void add(T item) {
+		getRemoved().remove(item);
+		getAdded().add(item);
+	}
+	
+	public void remove(T item) {
+		getAdded().remove(item);
+		getRemoved().add(item);
+	}
+	
+	public void clear() {
+		getAdded().clear();
+		getRemoved().clear();
+	}
+	
+	
+	public int size()
+	{
+		return getAdded().size() + getRemoved().size();
+	}
+}
 
 /**
  * Update Strategy which ignores the information of deleted tags - and in consequence triples -
@@ -54,18 +178,20 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 	
 	private ILGDVocab vocab; 
 	private ITransformer<Entity, Model> entityTransformer;
-	private ISparulExecutor graphDAO;	
+	private ISparqlExecutor graphDAO;	
 	private String graphName;
 
-	private List<Entity> entities = new ArrayList<Entity>();
+	//private Set<Entity> entities = new HashSet<Entity>();
+	
+	SetDiff<EntityContainer> entityDiff = new SetDiff<EntityContainer>(new EntityByTypeThenIdComparator());
 	
 	// Number of entities that should be processed as a batch
 	private int maxEntityBatchSize = 100;
 	
-	long entityDiffTimeSpan = 60000;
-	RDFDiff timelyDiff = new RDFDiff();
-	
+	/*
+	long entityDiffTimeSpan = 60000;	
 	private Date timeStamp = null;
+	*/
 
 
 	private RDFDiffWriter rdfDiffWriter;
@@ -73,7 +199,7 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 	public IgnoreModifyDeleteDiffUpdateStrategy(
 			ILGDVocab vocab,
 			ITransformer<Entity, Model> entityTransformer,
-			ISparulExecutor graphDAO,
+			ISparqlExecutor graphDAO,
 			String graphName,
 			RDFDiffWriter rdfDiffWriter)
 	{
@@ -111,10 +237,11 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 	@Override
 	public void update(ChangeContainer c)
 	{
-		try { 
-			_update(c);
-		} catch(Exception e) {
-			logger.error("Error processing an element", e);
+		if(c.getAction().equals(ChangeAction.Delete)) {
+			entityDiff.remove(c.getEntityContainer());
+		}		
+		else {
+			entityDiff.add(c.getEntityContainer());
 		}
 	}
 
@@ -132,60 +259,56 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		return result;
 	}
 
-	/**
-	 * Note: Hopefully entites come in in timely order :/
-	 * Otherwise the diff output would get messed up
-	 * 
-	 * @param c
-	 * @throws Exception
-	 */
-	public void _update(ChangeContainer c)
-		throws Exception
+
+	public static <T> Iterable<Iterable<T>> chunk(Iterable<T> col, int batchSize)
 	{
-		/*
-		if(timeStamp == null)
-			timeStamp = new Date();
-
-		Date now = new Date();
-		*/
-
-		Entity entity = c.getEntityContainer().getEntity();
-
-		if(timeStamp == null)
-			timeStamp = entity.getTimestamp(); 
-
-		Date now = entity.getTimestamp();
+		List<Iterable<T>> result = new ArrayList<Iterable<T>>();
 		
-		if(now.getTime() - timeStamp.getTime() <= entityDiffTimeSpan) {
-			process();
-			
-			timeStamp = now;
-		}
+		List<T> chunk = new ArrayList<T>();
+		
+		Iterator<T> it = col.iterator();
+		while(it.hasNext()) {
+			chunk.add(it.next());
 
-		entities.add(entity);
-	}
-
-	private void process()
-		throws Exception
-	{
-		List<Entity> batch = new ArrayList<Entity>(); 
-		for(Entity entity : entities) {
-			batch.add(entity);
-
-			if(batch.size() >= maxEntityBatchSize) {
-				processBatch(batch);
-				batch.clear();
+			if(chunk.size() >= batchSize || !it.hasNext()) {
+				result.add(chunk);
+				
+				if(it.hasNext())
+					chunk = new ArrayList<T>();
 			}
 		}
-		
-		processBatch(batch);
-		batch.clear();
-		
-		rdfDiffWriter.write(timelyDiff);
-		timelyDiff.clear();
-	}
 
-	private void processBatch(Iterable<Entity> entityBatch)
+		return result;
+	}
+	
+		
+	private void process(IDiff<? extends Iterable<EntityContainer>> inDiff, RDFDiff outDiff, int batchSize)
+		throws Exception
+	{
+		Iterable<Iterable<EntityContainer>> parts;
+
+		Transformer<EntityContainer, Entity> entityExtractor = new Transformer<EntityContainer, Entity>() {
+			@Override
+			public Entity transform(EntityContainer input)
+			{
+				return input.getEntity();
+			}
+		};
+		
+		parts = chunk(inDiff.getRemoved(), batchSize);
+		for(Iterable<EntityContainer> part : parts) {
+			processBatch(outDiff, ChangeAction.Delete, TransformIterable.transformedView(part, entityExtractor));
+		}		
+
+		parts = chunk(inDiff.getAdded(), batchSize);
+		for(Iterable<EntityContainer> part : parts) {
+			processBatch(outDiff, ChangeAction.Create, TransformIterable.transformedView(part, entityExtractor));
+		}
+	}
+	
+	
+
+	private void processBatch(RDFDiff outDiff, ChangeAction changeAction, Iterable<Entity> entityBatch)
 		throws Exception
 	{
 		List<String> queries = GraphDAORDFEntityDAO.constructQuery(
@@ -202,19 +325,22 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		
 		IDiff<Model> diff = diff(oldModel, newModel);
 		
-		graphDAO.remove(diff.getRemoved(), graphName);
-		graphDAO.insert(diff.getAdded(), graphName);
-		
-		timelyDiff.remove(diff.getRemoved());
-		timelyDiff.add(diff.getAdded());
+		outDiff.remove(diff.getRemoved());
+		outDiff.add(diff.getAdded());
 	}
 		
 	
 	@Override
 	public void complete()
 	{
+		//logger.info(this.getClass() + " completed");
 		try {
-			process();
+			RDFDiff timelyDiff = new RDFDiff();
+			process(entityDiff, timelyDiff, maxEntityBatchSize);
+
+			logger.info("Diff(triples added - deleted) = " + timelyDiff.getAdded().size() + " - " + timelyDiff.getRemoved().size());
+			
+			rdfDiffWriter.write(timelyDiff);
 		} catch(Exception e) {
 			logger.error("An error occurred at the completion phase of a task", e);
 		}
@@ -311,4 +437,36 @@ private static Model getBySubject(ISparqlExecutor graphDAO, String iri, String g
 	Model model = graphDAO.executeConstruct(query);
 	
 	return model;
+}*/
+
+/*
+if(timeStamp == null)
+	timeStamp = new Date();
+
+Date now = new Date();
+*/
+
+/*
+if(timeStamp == null)
+	timeStamp = entity.getTimestamp(); 
+
+Date now = entity.getTimestamp();
+
+if(timeStamp.getTime() > now.getTime()) {
+	logger.warn("Warning: Entities arriving out of order: " + timeStamp + " > " + now);
+}*/
+
+
+/*
+if(timeStamp == null)
+	timeStamp = new Date();
+
+Date now = new Date();
+
+if(now.getTime() - timeStamp.getTime() > entityDiffTimeSpan) {
+	process(timelyDiff);
+	
+	timeStamp = now;
+	
+	entities.clear();
 }*/

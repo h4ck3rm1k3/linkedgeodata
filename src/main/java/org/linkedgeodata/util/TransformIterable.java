@@ -34,5 +34,10 @@ public class TransformIterable<I, O>
 	public Iterator<O> iterator()
 	{		
 		return new TransformIterator<I, O>(src.iterator(), transformer);
-	}	
+	}
+	
+	public static <I, O> Iterable<O> transformedView(Iterable<I> src, Transformer<I, O> transformer)
+	{
+		return new TransformIterable<I, O>(src, transformer);
+	}
 }

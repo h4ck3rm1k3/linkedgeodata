@@ -23,22 +23,33 @@ public class RDFDiffWriter
 {
 	private static final Logger logger = LoggerFactory.getLogger(RDFDiffWriter.class);
 	
-	private long sequenceId;
-	private File basePath;
+	//private long sequenceId;
+	//private File basePath;
 	
+	private String baseName;
+	
+	/*
 	public RDFDiffWriter(File basePath, long sequenceId)
 	{
 		this.basePath = basePath;
 		this.sequenceId = sequenceId;
 	}
+	*/
+	
+	public RDFDiffWriter(String baseName)
+	{
+		this.baseName = baseName;
+	}
 	
 	public void write(IDiff<Model> diff)
 		throws IOException
 	{
-		logger.info("Writing diff: +" + diff.getAdded().size() + ", -" + diff.getRemoved().size());
-		write(basePath, diff, sequenceId);
+		//logger.info("Writing diff: +" + diff.getAdded().size() + ", -" + diff.getRemoved().size());
+		//write(basePath, diff, sequenceId);
 		
-		++sequenceId;
+		write(baseName, diff);
+		
+		//++sequenceId;
 	}
 
 	// 5 10 100
@@ -64,15 +75,11 @@ public class RDFDiffWriter
 		
 		return result;
 	}
-	
+
+	/*
 	public static void write(File basePath, IDiff<Model> diff, long sequenceId)
 		throws IOException
 	{
-		String fileNameExtension = "tll";
-		String jenaFormat = "N3";
-
-		RDFWriter rdfWriter = ModelFactory.createDefaultModel().getWriter(jenaFormat);
-		
 		List<Long> filePathIds = chunkValue(sequenceId, 1000l, 1000l);
 		List<Long> dirIds = filePathIds.subList(0, filePathIds.size() - 1);
 		Long fileId = filePathIds.get(filePathIds.size() - 1);
@@ -87,10 +94,27 @@ public class RDFDiffWriter
 		
 		String seqPath = dirPath + "/" + fileId;
 
-		String addedFileName = seqPath + ".added." + fileNameExtension;		
+	}
+	*/
+	
+	public static void write(String baseName, IDiff<Model> diff)
+		throws IOException
+	{
+		File file = new File(baseName);
+		File parentDir = file.getParentFile();
+		if(parentDir != null)
+			parentDir.mkdir();
+	
+		
+		String fileNameExtension = "nt";
+		String jenaFormat = "N-TRIPLE";
+
+		RDFWriter rdfWriter = ModelFactory.createDefaultModel().getWriter(jenaFormat);
+
+		String addedFileName = baseName + ".added." + fileNameExtension;		
 		write(diff.getAdded(), rdfWriter, addedFileName);
 		
-		String removedFileName = seqPath + ".removed." + fileNameExtension;
+		String removedFileName = baseName + ".removed." + fileNameExtension;
 		write(diff.getRemoved(), rdfWriter, removedFileName);
 	}	
 
