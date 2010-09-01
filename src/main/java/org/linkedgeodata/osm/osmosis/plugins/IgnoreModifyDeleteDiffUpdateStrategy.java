@@ -37,6 +37,7 @@ import org.linkedgeodata.core.ILGDVocab;
 import org.linkedgeodata.util.Diff;
 import org.linkedgeodata.util.IDiff;
 import org.linkedgeodata.util.ITransformer;
+import org.linkedgeodata.util.ModelUtil;
 import org.linkedgeodata.util.TransformIterable;
 import org.linkedgeodata.util.sparql.ISparqlExecutor;
 import org.linkedgeodata.util.sparql.ISparulExecutor;
@@ -181,6 +182,8 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 	private ISparqlExecutor graphDAO;	
 	private String graphName;
 
+	private ITransformer<Model, Model> postStatmentTransformer = new VirtuosoStatementNormalizer();
+	
 	//private Set<Entity> entities = new HashSet<Entity>();
 	
 	SetDiff<EntityContainer> entityDiff = new SetDiff<EntityContainer>(new EntityByTypeThenIdComparator());
@@ -323,7 +326,12 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 			entityTransformer.transform(newModel, entity);
 		}
 		
-		IDiff<Model> diff = diff(oldModel, newModel);
+		// Transform the triples that were added
+		Model processedNewModel = postStatmentTransformer.transform(newModel);
+		//System.out.println(ModelUtil.toString(added));
+		
+		
+		IDiff<Model> diff = diff(oldModel, processedNewModel);		
 		
 		outDiff.remove(diff.getRemoved());
 		outDiff.add(diff.getAdded());

@@ -20,7 +20,6 @@
  */
 package org.linkedgeodata.osm.osmosis.plugins;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,9 +32,11 @@ public class LiveRDFDeltaPluginLoader
 	@Override
 	public Map<String, TaskManagerFactory> loadTaskFactories()
 	{
-		Map<String, TaskManagerFactory> result = new HashMap<String, TaskManagerFactory>(
-			Collections.singletonMap("liveRDFPluginFactory", new LiveRDFDeltaPluginFactory()));
-			
+		Map<String, TaskManagerFactory> result = new HashMap<String, TaskManagerFactory>();
+		result.put("liveRDFPluginFactory", new LiveRDFDeltaPluginFactory());
+		result.put("entityFilter", new EntityFilterPluginFactory());
+		result.put("tagFilter", new TagFilterPluginFactory());
+
 		return result;
 	}
 }

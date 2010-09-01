@@ -6,7 +6,7 @@ import java.util.Iterator;
 import org.apache.commons.collections15.Transformer;
 
 public class StringUtil
-{
+{	
 	public static <T> T coalesce(T ...args)
 	{
 		for(T arg : args) {

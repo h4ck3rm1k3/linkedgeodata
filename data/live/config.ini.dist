@@ -12,6 +12,9 @@ rdfStore_userName="dba"
 rdfStore_passWord="dba"
 rdfStore_graphName="http://test.org"
 
+entityFilter="--entityFilter fileName=LiveEntityFilter.txt"
+tagFilter="--tagFilter fileName=LiveTagFilter.txt"
+
 publishDiffRepoPath="/var/www/downloads.linkedgeodata.org/changesets/minutely"
 
 sleepInterval=60

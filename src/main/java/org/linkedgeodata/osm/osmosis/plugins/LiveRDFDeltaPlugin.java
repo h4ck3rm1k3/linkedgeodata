@@ -20,8 +20,7 @@
  */
 package org.linkedgeodata.osm.osmosis.plugins;
 
-import java.io.File;
-
+import org.apache.commons.collections15.Predicate;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.linkedgeodata.core.ILGDVocab;
@@ -35,9 +34,9 @@ import org.linkedgeodata.tagmapping.client.entity.AbstractTagMapperState;
 import org.linkedgeodata.tagmapping.client.entity.IEntity;
 import org.linkedgeodata.util.ITransformer;
 import org.linkedgeodata.util.sparql.ISparqlExecutor;
-import org.linkedgeodata.util.sparql.ISparulExecutor;
 import org.openstreetmap.osmosis.core.container.v0_6.ChangeContainer;
 import org.openstreetmap.osmosis.core.domain.v0_6.Entity;
+import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 import org.openstreetmap.osmosis.core.task.v0_6.ChangeSink;
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -54,7 +53,6 @@ public class LiveRDFDeltaPlugin
 	implements ChangeSink 
 {
 	private IUpdateStrategy updateStrategy;	
-
 
 	public LiveRDFDeltaPlugin(ISparqlExecutor graphDAO, String graphName, RDFDiffWriter rdfDiffWriter)
 		throws Exception

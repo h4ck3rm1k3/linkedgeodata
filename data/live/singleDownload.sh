@@ -63,7 +63,7 @@ echo "Starting osmosis task for updating the DB"
 
 echo "Starting osmosis task for writing out the diff"
 
-if ! $osmosisPath/osmosis --read-xml-change file="$tmpPath/diff.osc" --liveRDFPluginFactory hostName="$rdfStore_hostName" graphName="$rdfStore_graphName" userName="$rdfStore_userName" passWord="$rdfStore_passWord" outFileBase="$tmpPath/diff"; then
+if ! $osmosisPath/osmosis --read-xml-change file="$tmpPath/diff.osc" $entityFilter $tagFilter --liveRDFPluginFactory hostName="$rdfStore_hostName" graphName="$rdfStore_graphName" userName="$rdfStore_userName" passWord="$rdfStore_passWord" outFileBase="$tmpPath/diff"; then
 	m_error "Osmosis task failed"
 fi
 
