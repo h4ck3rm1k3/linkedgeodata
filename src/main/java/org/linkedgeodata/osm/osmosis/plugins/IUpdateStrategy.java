@@ -20,7 +20,11 @@
  */
 package org.linkedgeodata.osm.osmosis.plugins;
 
+import org.linkedgeodata.util.IDiff;
 import org.openstreetmap.osmosis.core.container.v0_6.ChangeContainer;
+import org.openstreetmap.osmosis.core.task.v0_6.ChangeSink;
+
+import com.hp.hpl.jena.rdf.model.Model;
 
 /**
  * This interface is more or less a duplicate of the osmosis ChangeSink
@@ -32,7 +36,15 @@ import org.openstreetmap.osmosis.core.container.v0_6.ChangeContainer;
  *
  */
 public interface IUpdateStrategy
+	extends ChangeSink
 {
+	/*
 	void update(ChangeContainer c);
 	void complete();
+	
+	void release();
+	*/
+	
+	// This method may only be called after complete()
+	IDiff<Model> getDiff();
 }

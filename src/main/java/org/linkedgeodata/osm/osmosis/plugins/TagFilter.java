@@ -1,4 +1,4 @@
-package org.linkedgeodata.scripts;
+package org.linkedgeodata.osm.osmosis.plugins;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -78,6 +78,14 @@ public class TagFilter
 	}
 	//*/
 	
+	public void load(File file)
+		throws IOException
+	{
+		BufferedReader reader = new BufferedReader(new FileReader(file));
+		
+		read(reader);
+	}
+	
 	public static TagFilter create(File file)
 		throws IOException
 	{
@@ -92,7 +100,7 @@ public class TagFilter
 	private void read(BufferedReader reader)
 		throws IOException
 	{
-		Pattern stringPattern = Pattern.compile("'([^']*)'");
+		Pattern stringPattern = Pattern.compile("'((\\'|[^'])*)'");
 		
 		String line;
 		while(null != (line = reader.readLine())) {

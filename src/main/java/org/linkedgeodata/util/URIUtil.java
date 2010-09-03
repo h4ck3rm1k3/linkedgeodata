@@ -1,5 +1,11 @@
 package org.linkedgeodata.util;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Collection;
@@ -10,6 +16,15 @@ import org.apache.commons.collections15.multimap.MultiHashMap;
 
 public class URIUtil
 {
+	public static void download(URL url, File file)
+		throws IOException
+	{
+		InputStream in = url.openStream();
+		FileOutputStream out = new FileOutputStream(file);
+		
+		StreamUtil.copyThenClose(in, out);
+	}
+	
 	/**
 	 * Just a wrapper for URLEncoder.encode so we don't have to care about
 	 * exception handling.

@@ -20,7 +20,9 @@
  */
 package org.linkedgeodata.osm.osmosis.plugins;
 
-import org.apache.commons.collections15.Predicate;
+import java.io.IOException;
+
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.linkedgeodata.core.ILGDVocab;
@@ -32,12 +34,14 @@ import org.linkedgeodata.osm.mapping.TagMappingDB;
 import org.linkedgeodata.osm.mapping.impl.OSMEntityToRDFTransformer;
 import org.linkedgeodata.tagmapping.client.entity.AbstractTagMapperState;
 import org.linkedgeodata.tagmapping.client.entity.IEntity;
+import org.linkedgeodata.util.IDiff;
 import org.linkedgeodata.util.ITransformer;
 import org.linkedgeodata.util.sparql.ISparqlExecutor;
 import org.openstreetmap.osmosis.core.container.v0_6.ChangeContainer;
 import org.openstreetmap.osmosis.core.domain.v0_6.Entity;
-import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 import org.openstreetmap.osmosis.core.task.v0_6.ChangeSink;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.hp.hpl.jena.rdf.model.Model;
 
@@ -52,8 +56,12 @@ import com.hp.hpl.jena.rdf.model.Model;
 public class LiveRDFDeltaPlugin
 	implements ChangeSink 
 {
+	private static final Logger logger = LoggerFactory.getLogger(LiveRDFDeltaPlugin.class);
+	
 	private IUpdateStrategy updateStrategy;	
 
+	private RDFDiffWriter rdfDiffWriter;
+	
 	public LiveRDFDeltaPlugin(ISparqlExecutor graphDAO, String graphName, RDFDiffWriter rdfDiffWriter)
 		throws Exception
 	{
@@ -80,7 +88,7 @@ public class LiveRDFDeltaPlugin
 			new OSMEntityToRDFTransformer(tagMapper, vocab);
 		
 		IUpdateStrategy updateStrategy = new IgnoreModifyDeleteDiffUpdateStrategy(
-				vocab, entityTransformer, graphDAO, graphName, rdfDiffWriter);
+				vocab, entityTransformer, graphDAO, graphName);
 		
 		this.updateStrategy = updateStrategy;		
 	}
@@ -90,18 +98,27 @@ public class LiveRDFDeltaPlugin
 	public void complete()
 	{
 		this.updateStrategy.complete();
+
+		IDiff<Model> diff = updateStrategy.getDiff();
+		logger.info("Diff(triples added - deleted) = " + diff.getAdded().size() + " - " + diff.getRemoved().size());
+		
+		try {
+			rdfDiffWriter.write(diff);
+		} catch (IOException e) {
+			logger.error(ExceptionUtils.getFullStackTrace(e));
+		}
+		
 	}
 
 	@Override
 	public void release()
 	{
-		// TODO Auto-generated method stub
-		
+		updateStrategy.release();
 	}
 
 	@Override
 	public void process(ChangeContainer c)
 	{
-		updateStrategy.update(c);
+		updateStrategy.process(c);
 	}
 }

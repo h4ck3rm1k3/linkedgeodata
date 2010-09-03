@@ -7,6 +7,20 @@ import org.apache.commons.collections15.Transformer;
 
 public class StringUtil
 {	
+	public static String strip(String str, String ... chars)
+	{
+		for(String c : chars) {
+			if(str.length() < 2)
+				return str;
+			
+			if(str.startsWith(c) && str.endsWith(c))
+				str = str.substring(1, str.length() - 1);
+		}
+		
+		return str;
+	}
+
+	
 	public static <T> T coalesce(T ...args)
 	{
 		for(T arg : args) {

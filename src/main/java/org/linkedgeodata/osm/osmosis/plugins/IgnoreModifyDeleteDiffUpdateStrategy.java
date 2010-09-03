@@ -184,34 +184,30 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 
 	private ITransformer<Model, Model> postStatmentTransformer = new VirtuosoStatementNormalizer();
 	
+	private RDFDiff timelyDiff;
+	
 	//private Set<Entity> entities = new HashSet<Entity>();
 	
 	SetDiff<EntityContainer> entityDiff = new SetDiff<EntityContainer>(new EntityByTypeThenIdComparator());
 	
 	// Number of entities that should be processed as a batch
-	private int maxEntityBatchSize = 100;
+	private int maxEntityBatchSize = 500;
 	
 	/*
 	long entityDiffTimeSpan = 60000;	
 	private Date timeStamp = null;
 	*/
-
-
-	private RDFDiffWriter rdfDiffWriter;
 	
 	public IgnoreModifyDeleteDiffUpdateStrategy(
 			ILGDVocab vocab,
 			ITransformer<Entity, Model> entityTransformer,
 			ISparqlExecutor graphDAO,
-			String graphName,
-			RDFDiffWriter rdfDiffWriter)
+			String graphName)
 	{
 		this.vocab = vocab;
 		this.entityTransformer = entityTransformer;
 		this.graphDAO = graphDAO;
 		this.graphName = graphName;
-		
-		this.rdfDiffWriter = rdfDiffWriter;
 	}
 	
 	/**
@@ -238,7 +234,7 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 	
 	
 	@Override
-	public void update(ChangeContainer c)
+	public void process(ChangeContainer c)
 	{
 		if(c.getAction().equals(ChangeAction.Delete)) {
 			entityDiff.remove(c.getEntityContainer());
@@ -343,16 +339,28 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 	{
 		//logger.info(this.getClass() + " completed");
 		try {
-			RDFDiff timelyDiff = new RDFDiff();
+			timelyDiff = new RDFDiff();
 			process(entityDiff, timelyDiff, maxEntityBatchSize);
-
-			logger.info("Diff(triples added - deleted) = " + timelyDiff.getAdded().size() + " - " + timelyDiff.getRemoved().size());
-			
-			rdfDiffWriter.write(timelyDiff);
+			entityDiff.clear();
 		} catch(Exception e) {
 			logger.error("An error occurred at the completion phase of a task", e);
 		}
 	}
+	
+	
+	
+	public RDFDiff getDiff()
+	{
+		return timelyDiff;
+	}
+
+	@Override
+	public void release()
+	{
+		timelyDiff = null;
+	}
+	
+	
 }
 
 

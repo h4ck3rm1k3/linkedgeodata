@@ -81,6 +81,8 @@ public class LiveRDFDeltaPluginFactory
 		return result;
 	}
 	
+	//private TaskManager createTask(ConnectionConfig cConfig, 
+	
 	private TaskManager _createTaskManagerImpl(TaskConfiguration taskConfig)
 		throws Exception
 	{

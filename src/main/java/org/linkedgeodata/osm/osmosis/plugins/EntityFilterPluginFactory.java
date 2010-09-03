@@ -3,8 +3,6 @@ package org.linkedgeodata.osm.osmosis.plugins;
 import java.io.File;
 import java.io.IOException;
 
-import org.linkedgeodata.scripts.EntityFilter;
-import org.linkedgeodata.scripts.TagFilter;
 import org.openstreetmap.osmosis.core.pipeline.common.TaskConfiguration;
 import org.openstreetmap.osmosis.core.pipeline.common.TaskManager;
 import org.openstreetmap.osmosis.core.pipeline.common.TaskManagerFactory;

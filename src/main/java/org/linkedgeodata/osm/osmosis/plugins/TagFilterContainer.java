@@ -1,4 +1,4 @@
-package org.linkedgeodata.scripts;
+package org.linkedgeodata.osm.osmosis.plugins;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

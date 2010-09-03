@@ -1,4 +1,4 @@
-package org.linkedgeodata.scripts;
+package org.linkedgeodata.osm.osmosis.plugins;
 
 import org.apache.commons.collections15.Predicate;
 import org.openstreetmap.osmosis.core.domain.v0_6.Entity;
