@@ -3,8 +3,6 @@ package org.linkedgeodata.util;
 import java.util.Arrays;
 import java.util.Iterator;
 
-import org.apache.commons.collections15.Transformer;
-
 public class StringUtil
 {	
 	public static String strip(String str, String ... chars)

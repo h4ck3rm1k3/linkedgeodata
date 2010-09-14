@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream;
 import org.linkedgeodata.util.IDiff;
 import org.linkedgeodata.util.StringUtil;
 import org.slf4j.Logger;
@@ -27,6 +28,9 @@ public class RDFDiffWriter
 	//private File basePath;
 	
 	private String baseName;
+	
+	
+	private boolean zip = true;
 	
 	/*
 	public RDFDiffWriter(File basePath, long sequenceId)
@@ -47,7 +51,7 @@ public class RDFDiffWriter
 		//logger.info("Writing diff: +" + diff.getAdded().size() + ", -" + diff.getRemoved().size());
 		//write(basePath, diff, sequenceId);
 		
-		write(baseName, diff);
+		write(baseName, diff, zip);
 		
 		//++sequenceId;
 	}
@@ -97,35 +101,46 @@ public class RDFDiffWriter
 	}
 	*/
 	
-	public static void write(String baseName, IDiff<Model> diff)
+	public static void write(String baseName, IDiff<Model> diff, boolean zip)
 		throws IOException
 	{
 		File file = new File(baseName);
 		File parentDir = file.getParentFile();
 		if(parentDir != null)
 			parentDir.mkdir();
-	
-		
+			
 		String fileNameExtension = "nt";
 		String jenaFormat = "N-TRIPLE";
 
+		if(zip == true)
+			fileNameExtension += ".gz";
+		
+		
 		RDFWriter rdfWriter = ModelFactory.createDefaultModel().getWriter(jenaFormat);
 
 		String addedFileName = baseName + ".added." + fileNameExtension;		
-		write(diff.getAdded(), rdfWriter, addedFileName);
+		write(diff.getAdded(), rdfWriter, addedFileName, zip);
 		
 		String removedFileName = baseName + ".removed." + fileNameExtension;
-		write(diff.getRemoved(), rdfWriter, removedFileName);
+		write(diff.getRemoved(), rdfWriter, removedFileName, zip);
 	}	
 
-	public static void write(Model model, RDFWriter rdfWriter, String fileName)
+	public static void write(Model model, RDFWriter rdfWriter, String fileName, boolean zip)
 		throws IOException
 	{
 		logger.info("Attempting to write diff-file: " + fileName);
 		
 		File file = new File(fileName);
 		
-		OutputStream out = new FileOutputStream(file);
+		OutputStream tmp = new FileOutputStream(file);
+		
+		OutputStream out;
+		if(zip) {
+			out = new GzipCompressorOutputStream(tmp);
+		}
+		else {
+			out = tmp;
+		}
 		
 		rdfWriter.write(model, out, "");
 		

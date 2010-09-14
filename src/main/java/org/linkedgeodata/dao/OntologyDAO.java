@@ -280,20 +280,12 @@ public class OntologyDAO
 	{
 		if(model == null)
 			model = ModelFactory.createDefaultModel();
-
-		
-		// TODO This always loads all all mapping rules into memory
-		// A real least recently used (LRU)-cache might be a better solution.
-		InMemoryTagMapper cache = new InMemoryTagMapper();
-
-		for(IOneOneTagMapper item : tagMapper.getAllMappers())
-			cache.add(item);
 		
 		
-		OntologyGeneratorVisitor visitor = new OntologyGeneratorVisitor(model, cache);
+		OntologyGeneratorVisitor visitor = new OntologyGeneratorVisitor(model, tagMapper);
 		
 		
-		for(IOneOneTagMapper item : cache.getAllMappers()) {
+		for(IOneOneTagMapper item : tagMapper.getAllMappers()) {
 			
 			if(!(item instanceof ISimpleOneOneTagMapper))
 				continue;

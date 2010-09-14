@@ -59,6 +59,8 @@ import org.linkedgeodata.jtriplify.methods.DefaultCoercions;
 import org.linkedgeodata.jtriplify.methods.IInvocable;
 import org.linkedgeodata.jtriplify.methods.JavaMethodInvocable;
 import org.linkedgeodata.jtriplify.methods.Pair;
+import org.linkedgeodata.osm.mapping.CachingTagMapper;
+import org.linkedgeodata.osm.mapping.ITagMapper;
 import org.linkedgeodata.osm.mapping.TagMappingDB;
 import org.linkedgeodata.util.ConnectionConfig;
 import org.linkedgeodata.util.ExceptionUtil;
@@ -997,7 +999,9 @@ public class JTriplifyServer
 		//InMemoryTagMapper tagMapper = new InMemoryTagMapper();
 		//tagMapper.load(new File("data/triplify/config/2.0/LGDMappingRules.2.0.xml"));
 
-		TagMapperDAO tagMapper = new TagMapperDAO();
+		TagMapperDAO dbTagMapper = new TagMapperDAO();		
+		ITagMapper tagMapper = new CachingTagMapper(dbTagMapper);
+		
 		LGDDAO innerDAO = new LGDDAO(conn);
 		
 		ILGDVocab vocab = new LGDVocab();
@@ -1008,7 +1012,7 @@ public class JTriplifyServer
 		dao.setConnection(conn);
 		Session session = sessionFactory.createSession(); 
 		dao.setSession(session);
-		tagMapper.setSession(session);
+		dbTagMapper.setSession(session);
 		
 		ServerMethods methods = new ServerMethods(dao, prefixMap, connectionFactory, sessionFactory);
 		

@@ -75,7 +75,7 @@ public class WayIdIterator
 				? "WHERE "
 				: "AND ";
 			
-			sql += "wt.way_id NOT IN (SELECT filter.way_id FROM way_tags filter WHERE filter.way_id = wt.way_id AND " + entityFilterStr + ") ";
+			sql += "NOT EXISTS (SELECT filter.way_id FROM way_tags filter WHERE filter.way_id = wt.way_id AND " + entityFilterStr + ") ";
 		}
 	
 		sql += " ORDER BY way_id ASC ";

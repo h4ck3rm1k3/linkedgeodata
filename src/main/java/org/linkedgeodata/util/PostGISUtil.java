@@ -23,8 +23,28 @@ package org.linkedgeodata.util;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
+import org.apache.commons.collections15.Transformer;
+
 public class PostGISUtil
 {
+	public static <T> Iterable<String> escapedView(Iterable<T> iterable) {
+		return
+			TransformIterable.transformedView(iterable,
+					new Transformer<T, String>() {
+					@Override
+					public String transform(T input)
+					{
+						return "'" + SQLUtil.escapePostgres(input) + "'";
+					}
+				}
+			);
+	}
+	
+	public static <T> String escapedList(Iterable<T> iterable) {
+		return StringUtil.implode(",", escapedView(iterable));
+	}
+	
+	
 	public static Connection connectPostGIS(ConnectionConfig config)
 		throws Exception
 	{

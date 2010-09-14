@@ -1,4 +1,4 @@
-package org.linkedgeodata.scripts;
+package org.linkedgeodata.deleteme;
 
 import java.util.ArrayList;
 import java.util.List;

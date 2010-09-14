@@ -45,6 +45,7 @@ import org.linkedgeodata.dao.LGDRDFDAO;
 import org.linkedgeodata.dao.NodeStatsDAO;
 import org.linkedgeodata.dao.TagMapperDAO;
 import org.linkedgeodata.jtriplify.methods.Pair;
+import org.linkedgeodata.osm.mapping.CachingTagMapper;
 import org.linkedgeodata.osm.mapping.ITagMapper;
 import org.linkedgeodata.util.SQLUtil;
 
@@ -112,6 +113,11 @@ public class ServerMethods
 		
 		
 		ITagMapper tagMapper = lgdRDFDAO.getOntologyDAO().getTagMapper();
+		
+		if(tagMapper instanceof CachingTagMapper) {
+			tagMapper = ((CachingTagMapper)tagMapper).getSource();
+		}
+		
 		if(tagMapper instanceof ISQLDAO)
 			jdbcDAOs.add((ISQLDAO)tagMapper);
 		

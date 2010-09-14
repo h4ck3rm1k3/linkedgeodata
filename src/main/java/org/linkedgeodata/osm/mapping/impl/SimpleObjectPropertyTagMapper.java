@@ -120,7 +120,10 @@ public class SimpleObjectPropertyTagMapper
 		if(getTagPattern().getValue() != null && object.equals(uri)) {
 			return new Tag(getTagPattern().getKey(), getTagPattern().getValue()); 
 		}
-		else if(uri.startsWith(object)) {
+		else if(objectAsPrefix == false && object.equals(uri)) {
+			return new Tag(getTagPattern().getKey(), getTagPattern().getValue()); 			
+		}
+		else if(objectAsPrefix == false && uri.startsWith(object)) {
 			String value = uri.substring(object.length());
 
 			value = URIUtil.decodeUTF8(value);

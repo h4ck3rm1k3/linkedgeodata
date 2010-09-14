@@ -39,17 +39,25 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.Options;
+import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.linkedgeodata.core.ILGDVocab;
 import org.linkedgeodata.core.LGDVocab;
 import org.linkedgeodata.core.vocab.GeoRSS;
 import org.linkedgeodata.core.vocab.WGS84Pos;
 import org.linkedgeodata.dao.LGDDAO;
 import org.linkedgeodata.dao.LGDRDFDAO;
+import org.linkedgeodata.dao.TagMapperDAO;
 import org.linkedgeodata.dump.NodeIdIterator;
 import org.linkedgeodata.dump.WayIdIterator;
+import org.linkedgeodata.osm.mapping.CachingTagMapper;
+import org.linkedgeodata.osm.mapping.ITagMapper;
 import org.linkedgeodata.osm.mapping.InMemoryTagMapper;
+import org.linkedgeodata.osm.mapping.TagMappingDB;
+import org.linkedgeodata.osm.osmosis.plugins.TagFilter;
 import org.linkedgeodata.util.ExceptionUtil;
 import org.linkedgeodata.util.ModelUtil;
 import org.linkedgeodata.util.PostGISUtil;
@@ -62,8 +70,16 @@ import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.RDFNode;
+import com.hp.hpl.jena.rdf.model.RDFWriter;
 import com.hp.hpl.jena.rdf.model.Statement;
 
+/**
+ * Deprecated: Example command line args
+ * -hlocalhost -dunittest_lgd -upostgres -n500 -wpostgres -xnt -ooutput/NodeTags.n3 -tf "k NOT IN ('created_by','ele','time','layer','source','tiger:tlid','tiger:county','tiger:upload_uuid','attribution','source_ref','KSJ2:coordinate','KSJ2:lat','KSJ2:long','KSJ2:curve_id','AND_nodes','converted_by','TMC:cid_58:tabcd_1:LocationCode','TMC:cid_58:tabcd_1:LCLversion','TMC:cid_58:tabcd_1:NextLocationCode','TMC:cid_58:tabcd_1:PrevLocationCode','TMC:cid_58:tabcd_1:LocationCode')" -ef "(filter.k IN ('highway', 'barrier', 'power') OR (filter.k = 'railway' AND filter.v NOT IN ('station')))"
+ * 
+ * Now:
+ * -hlocalhost -dunittest_lgd -upostgres -n500 -wpostgres -xnt -ooutput/NodeTags.n3 -tff /data/live/LiveTagFilter.txt -eff /data/live/LiveEntityFilter.txt
+ */
 
 abstract class ResolveTask
 	implements Runnable
@@ -113,7 +129,8 @@ abstract class ResolveTask
 
 		tracker.update(count);			
 		//if(model.size() > 10000) {
-			LGDDumper.writeModel(model, out, false);
+			//LGDDumper.writeModel(model, out, false);
+			throw new NotImplementedException();
 		//}
 	}
 	
@@ -180,7 +197,8 @@ public class LGDDumper
 		String dbName   = commandLine.getOptionValue("d", "lgd");
 		String userName = commandLine.getOptionValue("u", "lgd");
 		String passWord = commandLine.getOptionValue("w", "lgd");
-		String outFileName = commandLine.getOptionValue("o", "out.n3");
+		String outputFormat = commandLine.getOptionValue("of", "N-TRIPLE");
+		String outFileName = commandLine.getOptionValue("o", "out.nt");
 	
 		String batchSizeStr = commandLine.getOptionValue("n", "1000");
 		
@@ -194,16 +212,28 @@ public class LGDDumper
 
 		boolean enableVirtuosoPredicates = commandLine.hasOption("V");
 		
-		String entityFilter =commandLine.getOptionValue("ef", null);
-		String tagFilter = commandLine.getOptionValue("tf", null);
+		//String entityFilter =commandLine.getOptionValue("ef", null);
+		//String tagFilter = commandLine.getOptionValue("tf", null);
 		
+		String entityFilterFileName =commandLine.getOptionValue("eff", null);
+		String tagFilterFileName = commandLine.getOptionValue("tff", null);
+		
+		TagFilter entityFilterObj = new TagFilter(true);
+		entityFilterObj.load(new File(entityFilterFileName));
+		
+		TagFilter tagFilterObj = new TagFilter();
+		tagFilterObj.load(new File(tagFilterFileName));
+		
+		String entityFilter = TagFilter.createFilterSQL(entityFilterObj, "filter.k", "filter.v");
+		String tagFilter = TagFilter.createFilterSQL(tagFilterObj, "k", "v");
 		
 		//entityFilter = null;
 		//tagFilter = null;
-
-		
 		//String mappingRulesPath = "data/triplify/config/2.0/LGDMappingRules.2.0.xml";
-		String mappingRulesPath = "output/LGDMappingRules.2.0.xml";
+		//String mappingRulesPath = "output/LGDMappingRules.2.0.xml";
+		
+		
+		
 		String rootModelPath    = "Namespaces.2.0.ttl";
 		
 		
@@ -220,9 +250,16 @@ public class LGDDumper
 		Map<String, String> prefixMap = baseModel.getNsPrefixMap();
 		//System.exit(0);
 		
-		logger.info("Loading mapping rules: " + mappingRulesPath);
-		InMemoryTagMapper tagMapper = new InMemoryTagMapper();
-		tagMapper.load(new File(mappingRulesPath));
+		logger.info("Loading mapping rules from database");
+		// TODO Write scripts for loading and exporting dumps
+		TagMapperDAO dbTagMapper = new TagMapperDAO();
+		Session session = TagMappingDB.getSession();
+		Transaction tx = session.beginTransaction();
+		dbTagMapper.setSession(session);
+		ITagMapper tagMapper = new InMemoryTagMapper(dbTagMapper);
+		tx.commit();
+		//InMemoryTagMapper tagMapper = new InMemoryTagMapper();
+		//tagMapper.load(new File(mappingRulesPath));
 
 		
 		
@@ -237,7 +274,9 @@ public class LGDDumper
 		logger.info("Opening output stream: " + outFileName);
 		OutputStream out = new FileOutputStream(outFileName);
 
-		baseModel.write(out, "N3");
+		RDFWriter rdfWriter = baseModel.getWriter(outputFormat); 
+		rdfWriter.write(baseModel, out, "");
+		//baseModel.write(out, outputFormat);
 
 		
 		StopWatch sw = new StopWatch();
@@ -247,18 +286,18 @@ public class LGDDumper
 			//NodeTagIteratorDenorm1 it = new NodeTagIteratorDenorm1(conn, batchSize);
 			Iterator<Collection<Long>> it = new NodeIdIterator(conn, batchSize, entityFilter);
 
-			runNodeTags(it, tagFilter, prefixMap, dao, out, enableVirtuosoPredicates);		
+			runNodeTags(it, tagFilter, prefixMap, dao, rdfWriter, out, enableVirtuosoPredicates);		
 		}
 		
 		if(exportWayTags) {
 			Iterator<Collection<Long>> it = new WayIdIterator(conn, batchSize, entityFilter);
 
-			runWayTags(it, tagFilter, prefixMap, dao, out, enableVirtuosoPredicates);
+			runWayTags(it, tagFilter, prefixMap, dao, rdfWriter, out, enableVirtuosoPredicates);
 		}
 		
 		
 		executor.shutdown();
-		executor.awaitTermination(60, TimeUnit.HOURS);
+		executor.awaitTermination(14, TimeUnit.DAYS);
 		
 		sw.stop();
 		logger.info("Time taken: " + sw.getTotalTimeSeconds());
@@ -321,7 +360,7 @@ public class LGDDumper
 	}
 	
 	
-	public static void runNodeTags(Iterator<Collection<Long>> it, String tagFilter, Map<String, String> prefixMap, LGDRDFDAO dao, OutputStream out, boolean enableVirtuosoPredicates)
+	public static void runNodeTags(Iterator<Collection<Long>> it, String tagFilter, Map<String, String> prefixMap, LGDRDFDAO dao, RDFWriter rdfWriter, OutputStream out, boolean enableVirtuosoPredicates)
 		throws Exception
 	{	
 		SimpleStatsTracker tracker = new SimpleStatsTracker();
@@ -336,13 +375,13 @@ public class LGDDumper
 			tracker.update(count);
 			
 			if(model.size() > 10000) {
-				writeModel(model, out, enableVirtuosoPredicates);
+				writeModel(model, rdfWriter, out, enableVirtuosoPredicates);
 			}
 		}
-		writeModel(model, out, enableVirtuosoPredicates);
+		writeModel(model, rdfWriter, out, enableVirtuosoPredicates);
 	}
 	
-	public static void runWayTags(Iterator<Collection<Long>> it, String tagFilter, Map<String, String> prefixMap, LGDRDFDAO dao, OutputStream out, boolean enableVirtuosoPredicates)
+	public static void runWayTags(Iterator<Collection<Long>> it, String tagFilter, Map<String, String> prefixMap, LGDRDFDAO dao, RDFWriter rdfWriter, OutputStream out, boolean enableVirtuosoPredicates)
 		throws Exception
 	{	
 		SimpleStatsTracker tracker = new SimpleStatsTracker();
@@ -357,15 +396,15 @@ public class LGDDumper
 			tracker.update(count);
 			
 			if(model.size() > 10000) {
-				writeModel(model, out, enableVirtuosoPredicates);
+				writeModel(model, rdfWriter, out, enableVirtuosoPredicates);
 			}
 		}
-		writeModel(model, out, enableVirtuosoPredicates);
+		writeModel(model, rdfWriter, out, enableVirtuosoPredicates);
 	}
 
 	private static Pattern directivePattern = Pattern.compile("^@.*$.?\\n?", Pattern.MULTILINE);
 
-	public static synchronized void writeModel(Model model, OutputStream out, boolean enableVirtuosoPredicates)
+	public static synchronized void writeModel(Model model, RDFWriter rdfWriter, OutputStream out, boolean enableVirtuosoPredicates)
 		throws IOException
 	{
 		if(model.isEmpty())
@@ -374,8 +413,8 @@ public class LGDDumper
 		if(enableVirtuosoPredicates) {
 			augmentGeoRSSWithVirtuoso(model);
 		}
-		
-		String str = ModelUtil.toString(model, "N3");
+
+		String str = ModelUtil.toString(model, rdfWriter);
 		
 		Matcher matcher = directivePattern.matcher(str); 
 		str = matcher.replaceAll("");
@@ -405,8 +444,11 @@ public class LGDDumper
 		cliOptions.addOption("xwt", "tagsw", false, "eXport way tags");
 		cliOptions.addOption("xrt", "tagsr", false, "eXport relation tags");
 		
-		cliOptions.addOption("ef", "entityfilter", true, "");
-		cliOptions.addOption("tf", "tagfilter", true, "");
+		//cliOptions.addOption("ef", "entityfilter", true, "");
+		//cliOptions.addOption("tf", "tagfilter", true, "");
+
+		cliOptions.addOption("eff", "entityfilterFile", true, "");
+		cliOptions.addOption("tff", "tagfilterFile", true, "");
 		
 		cliOptions.addOption("V", "virtuoso predicates", false, "");
 	}

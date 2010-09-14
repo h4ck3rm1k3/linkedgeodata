@@ -93,7 +93,7 @@ public class NodeIdIterator
 				? "WHERE "
 				: "AND ";
 			
-			sql += "nt.node_id NOT IN (SELECT filter.node_id FROM node_tags filter WHERE filter.node_id = nt.node_id AND " + entityFilterStr + ") ";
+			sql += "NOT EXISTS (SELECT filter.node_id FROM node_tags filter WHERE filter.node_id = nt.node_id AND " + entityFilterStr + ") ";
 		}
 
 		sql += " ORDER BY node_id ASC ";

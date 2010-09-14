@@ -78,6 +78,8 @@ public class LiveSync
 	private ISparulExecutor graphDAO;
 	
 	private ChangeSink workFlow;
+
+	//private RDFDiffWriter rdfDiffWriter;
 	
 	public static Map<String, String> loadIniFile(File file)
 		throws IOException
@@ -141,7 +143,7 @@ public class LiveSync
 	{
 		this.config = config;
 		
-		publishDiffBaseName = config.get("publishDiffBaseName");
+		publishDiffBaseName = config.get("publishDiffRepoPath");
 		
 		//LiveRDFDeltaPluginFactory factory.create();		
 		Connection conn = VirtuosoUtils.connect(
@@ -155,7 +157,8 @@ public class LiveSync
 			new VirtuosoJdbcSparulExecutor(conn, graphName);
 		
 		//RDFDiffWriter rdfDiffWriter = new RDFDiffWriter(outputBaseName);
-
+		//rdfDiffWriter = new RDFDiffWriter();
+		
 		InMemoryTagMapper tagMapper = new InMemoryTagMapper();
 		
 		Session session = TagMappingDB.getSession();
@@ -260,7 +263,7 @@ public class LiveSync
 		applyDiff(diff);
 		
 		logger.info("Publishing diff");
-		publishDiff(diff);
+		publishDiff(sequenceNumber, diff);
 		
 		
 		logger.info("Downloading new state");
@@ -294,8 +297,10 @@ public class LiveSync
 		File parent = new File(fileName).getParentFile();
 		if(parent != null)
 			parent.mkdirs();
-		
-		RDFDiffWriter.write(fileName, diff);
+
+		RDFDiffWriter rdfDiffWriter = new RDFDiffWriter(fileName);
+		rdfDiffWriter.write(diff);
+		//RDFDiffWriter.writ
 	}
 	
 	/*
@@ -388,9 +393,5 @@ public class LiveSync
 		workFlow.release();
 		
 		return diff;
-	}
-	
-	private void publishDiff(IDiff<Model> diff)
-	{
 	}
 }

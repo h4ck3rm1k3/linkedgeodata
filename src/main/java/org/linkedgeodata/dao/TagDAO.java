@@ -39,7 +39,8 @@ public class TagDAO
 	enum Query
 		implements IQuery
 	{
-		DOES_TAG_EXIST("SELECT tile_id FROM " + TABLE_PREFIX_KV + "0 WHERE (tile_id, k, v) = (0, ?, ?) LIMIT 1"),
+		DOES_TAG_K_EXIST("SELECT tile_id FROM " + TABLE_PREFIX_K + "0 WHERE (tile_id, k) = (0, ?) LIMIT 1"),
+		DOES_TAG_KV_EXIST("SELECT tile_id FROM " + TABLE_PREFIX_KV + "0 WHERE (tile_id, k, v) = (0, ?, ?) LIMIT 1"),
 		GET_KEYS_BY_PATTERN("SELECT DISTINCT k FROM " + TABLE_PREFIX_KV + "0 WHERE tile_id = 0 AND k ~* ?"),
 		;
 	
@@ -58,7 +59,9 @@ public class TagDAO
 	public boolean doesTagExist(Tag tag)
 		throws SQLException
 	{
-		 Long tileId = execute(Query.DOES_TAG_EXIST, Long.class, tag.getKey(), tag.getValue());
+		Long tileId = (tag.getValue() == null)
+		 ? execute(Query.DOES_TAG_K_EXIST, Long.class, tag.getKey())
+		 : execute(Query.DOES_TAG_KV_EXIST, Long.class, tag.getKey(), tag.getValue());
 		 
 		 return tileId != null;
 	}

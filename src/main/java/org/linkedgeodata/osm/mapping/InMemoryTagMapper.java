@@ -50,6 +50,18 @@ public class InMemoryTagMapper
 	{
 	}
 	
+	/**
+	 * This constructor is intended to load a database-based tag mapper into
+	 * memory
+	 * 
+	 * @param other
+	 */
+	public InMemoryTagMapper(ITagMapper other)
+	{
+		for(IOneOneTagMapper item : other.getAllMappers())
+			this.add(item);
+	}
+	
 	@SuppressWarnings("unchecked")
 	public void load(File file)
 		throws Exception

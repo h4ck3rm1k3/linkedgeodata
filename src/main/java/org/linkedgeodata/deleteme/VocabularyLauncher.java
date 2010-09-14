@@ -1,4 +1,4 @@
-package org.linkedgeodata.scripts;
+package org.linkedgeodata.deleteme;
 
 import groovy.lang.Binding;
 import groovy.util.GroovyScriptEngine;

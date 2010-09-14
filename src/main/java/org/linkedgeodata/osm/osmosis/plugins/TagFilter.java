@@ -2,17 +2,23 @@ package org.linkedgeodata.osm.osmosis.plugins;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.collections15.Predicate;
+import org.apache.commons.collections15.Transformer;
+import org.linkedgeodata.util.PostGISUtil;
+import org.linkedgeodata.util.SQLUtil;
+import org.linkedgeodata.util.StringUtil;
+import org.linkedgeodata.util.TransformIterable;
 import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 
 
@@ -65,16 +71,96 @@ class Rule
 public class TagFilter
 	implements Predicate<Tag>
 {
-	Map<String, Rule> keyToRule = new HashMap<String, Rule>();
+	private Map<String, Rule> keyToRule = new HashMap<String, Rule>();
+	private boolean inverted = false;
+	
+	public TagFilter()
+	{
+	}
+	
+	public TagFilter(boolean inverted)
+	{
+		this.inverted = inverted;
+	}
+	
+	
+	public Map<String, Rule> getRuleMap()
+	{
+		return keyToRule;
+	}
+	
+	public boolean isInverted()
+	{
+		return inverted;
+	}
+	
+	/**
+	 * TODO Somehow deal with negation of filters 
+	 * 
+	 * @param tagFilter
+	 * @param kName
+	 * @param vName
+	 * @return
+	 */
+	public static String createFilterSQL(TagFilter tagFilter, String kName, String vName)
+	{
+		Map<String, Rule> keyToRule = tagFilter.getRuleMap();
+		
+	//	-tf "k NOT IN ('created_by','ele','time','layer','source','tiger:tlid','tiger:county','tiger:upload_uuid','attribution','source_ref','KSJ2:coordinate','KSJ2:lat','KSJ2:long','KSJ2:curve_id','AND_nodes','converted_by','TMC:cid_58:tabcd_1:LocationCode','TMC:cid_58:tabcd_1:LCLversion','TMC:cid_58:tabcd_1:NextLocationCode','TMC:cid_58:tabcd_1:PrevLocationCode','TMC:cid_58:tabcd_1:LocationCode')"
+		
+	//	-ef "(filter.k IN ('highway', 'barrier', 'power') OR (filter.k = 'railway' AND filter.v NOT IN ('station')))"
+
+		List<String> parts = new ArrayList<String>();
+		
+		List<String> withoutException = new ArrayList<String>();
+
+		// Gather all conditions without exceptions
+		for(Map.Entry<String, Rule> entry : keyToRule.entrySet()) {
+			if(entry.getValue().getExceptions().isEmpty())
+				withoutException.add(entry.getKey());
+		}
+
+		//String notIn = tagFilter.isInverted() ? " IN " : " NOT IN ";
+		
+		if(!withoutException.isEmpty()) {
+			String part = "(" + kName + " IN (" + PostGISUtil.escapedList(withoutException) + "))"; 
+			parts.add(part);
+		}
+		
+		for(Map.Entry<String, Rule> entry : keyToRule.entrySet()) {
+			if(entry.getValue().getExceptions().isEmpty())
+				continue;
+			
+			String part = "(" + kName + "='" + SQLUtil.escapePostgres(entry.getKey()) + "' AND " + vName + " IN (";
+
+			part += PostGISUtil.escapedList(entry.getValue().getExceptions());
+			
+			part += "))";
+			parts.add(part);
+		}
+		
+		String result = "(" + StringUtil.implode(" OR ", parts) + ")";
+		
+		if(!tagFilter.isInverted())
+			result = "NOT " + result;
+		
+		return result;
+	}
+	
 	
 	//*
 	public static void main(String[] args) throws IOException {
-		//File file = new File("/home/raven/Projects/Current/Eclipse/GoogleCodeLinkedGeoData/data/lgd/dump/ElementsEntityFilter.txt");
-		File file = new File("/home/raven/Projects/Current/Eclipse/GoogleCodeLinkedGeoData/data/lgd/dump/ElementsTagFilter.txt");
+		File file = new File("/home/raven/Projects/Current/Eclipse/GoogleCodeLinkedGeoData/data/lgd/dump/ElementsEntityFilter.txt");
+		//File file = new File("/home/raven/Projects/Current/Eclipse/GoogleCodeLinkedGeoData/data/lgd/dump/ElementsTagFilter.txt");
 		BufferedReader reader = new BufferedReader(new FileReader(file));
 	
 		TagFilter tf = new TagFilter();
 		tf.read(reader);
+		
+		//String sql = createFilterSQL(tf, "k", "v");
+		String sql = createFilterSQL(tf, "filter.k", "filter.v");
+		System.out.println(sql);
+		
 	}
 	//*/
 	
@@ -100,7 +186,7 @@ public class TagFilter
 	private void read(BufferedReader reader)
 		throws IOException
 	{
-		Pattern stringPattern = Pattern.compile("'((\\'|[^'])*)'");
+		Pattern stringPattern = Pattern.compile("'((\\\\\\'|[^'])*)'");
 		
 		String line;
 		while(null != (line = reader.readLine())) {
