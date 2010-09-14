@@ -44,7 +44,7 @@ public class StringUtil
 			: str.substring(0,1).toLowerCase() + str.substring(1); 
 	}
 	
-	public static <T> String implode(Object separator, T ... items)
+	public static String implode(Object separator, Object ... items)
 	{
 		return implode(separator, Arrays.asList(items));
 	}

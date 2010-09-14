@@ -131,7 +131,7 @@ public class TagFilter
 			if(entry.getValue().getExceptions().isEmpty())
 				continue;
 			
-			String part = "(" + kName + "='" + SQLUtil.escapePostgres(entry.getKey()) + "' AND " + vName + " IN (";
+			String part = "(" + kName + "='" + SQLUtil.escapePostgres(entry.getKey()) + "' AND NOT " + vName + " IN (";
 
 			part += PostGISUtil.escapedList(entry.getValue().getExceptions());
 			
@@ -154,7 +154,7 @@ public class TagFilter
 		//File file = new File("/home/raven/Projects/Current/Eclipse/GoogleCodeLinkedGeoData/data/lgd/dump/ElementsTagFilter.txt");
 		BufferedReader reader = new BufferedReader(new FileReader(file));
 	
-		TagFilter tf = new TagFilter();
+		TagFilter tf = new TagFilter(true);
 		tf.read(reader);
 		
 		//String sql = createFilterSQL(tf, "k", "v");
