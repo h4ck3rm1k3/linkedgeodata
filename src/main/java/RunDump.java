@@ -1,5 +1,5 @@
 
-public class CreateDump
+public class RunDump
 {
 	public static void main(String[] args)
 		throws Exception
