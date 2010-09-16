@@ -1,4 +1,4 @@
-osmReplicationConfigPath="/opt/LinkedGeoData/live"
+osmReplicationConfigPath="./"
 
 tmpPath="/tmp/lgd"
 
