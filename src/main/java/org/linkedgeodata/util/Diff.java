@@ -7,6 +7,7 @@ public class Diff<T>
 	private T removed;
 	private T retained;
 	
+	
 	public Diff(T added, T removed, T retained)
 	{
 		this.added = added;
