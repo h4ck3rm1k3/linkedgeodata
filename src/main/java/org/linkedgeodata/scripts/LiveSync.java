@@ -208,7 +208,7 @@ public class LiveSync
 	public static void main(String[] args)
 		throws Exception
 	{
-		PropertyConfigurator.configure("../../log4j.properties");
+		PropertyConfigurator.configure("log4j.properties");
 		
 		File configFile = new File("config.ini");
 
