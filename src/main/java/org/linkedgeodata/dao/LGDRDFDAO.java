@@ -72,7 +72,7 @@ public class LGDRDFDAO
 		//this.tagMapper = tagMapper;
 		this.vocab = vocab;
 
-		// FIXME Don't pull the connection out of the DAO like this
+		// TODO Don't pull the connection out of the DAO like this
 		ontologyDAO = new OntologyDAO(tagMapper, dao.getConnection());
 		
 		this.nodeTransformer = new SimpleNodeToRDFTransformer(tagMapper, vocab);

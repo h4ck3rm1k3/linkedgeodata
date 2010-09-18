@@ -32,6 +32,7 @@ public class VirtuosoSparqlExecutor
 
 		VirtuosoQueryExecution vqe = VirtuosoQueryExecutionFactory.create(
 				sparql, graph);
+
 		ResultSet rs = vqe.execSelect();
 		List<QuerySolution> result = ResultSetFormatter.toList(rs);
 

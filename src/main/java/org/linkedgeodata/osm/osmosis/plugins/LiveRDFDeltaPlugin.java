@@ -99,7 +99,7 @@ public class LiveRDFDeltaPlugin
 	{
 		this.updateStrategy.complete();
 
-		IDiff<Model> diff = updateStrategy.getDiff();
+		IDiff<Model> diff = updateStrategy.getMainGraphDiff();
 		logger.info("Diff(triples added - deleted) = " + diff.getAdded().size() + " - " + diff.getRemoved().size());
 		
 		try {

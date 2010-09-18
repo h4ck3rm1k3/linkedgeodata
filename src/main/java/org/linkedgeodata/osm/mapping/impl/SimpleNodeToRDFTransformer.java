@@ -37,6 +37,7 @@ import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 import com.hp.hpl.jena.datatypes.RDFDatatype;
 import com.hp.hpl.jena.datatypes.TypeMapper;
 import com.hp.hpl.jena.rdf.model.AnonId;
+import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -55,6 +56,10 @@ import com.hp.hpl.jena.vocabulary.XSD;
 public class SimpleNodeToRDFTransformer
 	implements ITransformer<Node, Model>
 {
+	private static final TypeMapper tm = TypeMapper.getInstance();
+	private static final RDFDatatype virtrdfGeometry = tm.getSafeTypeByName("http://www.openlinksw.com/schemas/virtrdf#Geometry");
+	
+	
 	private static final Logger logger = Logger.getLogger(SimpleNodeToRDFTransformer.class);
 	private ITagMapper tagMapper;
 	private ILGDVocab vocab;
@@ -85,12 +90,23 @@ public class SimpleNodeToRDFTransformer
 		return model;		
 	}
 	
+	
+	
 	@Override
 	public Model transform(Node node) {
 		Model model = ModelFactory.createDefaultModel();
 
 		return transform(model, node);
 	}
+
+	
+	public static void generateVirtusoPosition(Model model, Resource subject, Node node)
+	{
+		Literal virtLit = model.createTypedLiteral("POINT(" + node.getLongitude() + " " + node.getLatitude() + ")", virtrdfGeometry);
+	
+		model.add(subject, WGS84Pos.geometry, virtLit);
+	}
+
 	
 	// FIXME Move this method to a class common for ways, nodes and relations.
 	public static void generateTags(ITagMapper tagMapper, Model model, String subject, Collection<Tag> tags)

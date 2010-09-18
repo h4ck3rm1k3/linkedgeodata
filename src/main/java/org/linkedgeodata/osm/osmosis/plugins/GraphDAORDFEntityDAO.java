@@ -1,18 +1,21 @@
 package org.linkedgeodata.osm.osmosis.plugins;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.linkedgeodata.core.ILGDVocab;
+import org.linkedgeodata.util.CollectionUtils;
 import org.linkedgeodata.util.StringUtil;
 import org.linkedgeodata.util.sparql.ISparulExecutor;
 import org.openstreetmap.osmosis.core.domain.v0_6.Entity;
 import org.openstreetmap.osmosis.core.domain.v0_6.Node;
 import org.openstreetmap.osmosis.core.domain.v0_6.Way;
 
+import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
@@ -56,29 +59,59 @@ public class GraphDAORDFEntityDAO
 		return new String[]{};
 	}
 	
-	public static List<String> constructQuery(Iterable<Entity> entities, ILGDVocab vocab, String graphName)
+	public static List<String> constructQuery(Iterable<Entity> entities, ILGDVocab vocab, String graphName, int batchSize)
 	{
 		Set<String> uris = new HashSet<String>();
 		
 		for(Entity entity : entities) {
 			uris.addAll(Arrays.asList(getInvolvedResources(entity, vocab)));
 		}
-
 		
-		if(uris.isEmpty())
-			return Collections.emptyList();
-		
-		String resources = "<" + StringUtil.implode(">,<", uris) + ">";
-		
-		String fromPart = (graphName != null)
-			? "From <" + graphName + "> "
-			: "";
-
-		String result =
-			"Construct { ?s ?p ?o . } " + fromPart + "{ ?s ?p ?o . Filter(?s In (" + resources + ")) . }";
-	
-		return Collections.singletonList(result);
+		return constructQuery(uris, graphName, 1024);
 	}
+	
+	
+	public static List<String> constructQuery(Collection<String> subjects, String graphName, int batchSize)
+	{
+		List<String> result = new ArrayList<String>();
+		if(subjects.isEmpty())
+			return result;
+		
+		List<List<String>> chunks = CollectionUtils.chunk(subjects, batchSize);
+		
+		for(List<String> chunk : chunks) {
+			String resources = "<" + StringUtil.implode(">,<", chunk) + ">";
+			
+			String fromPart = (graphName != null)
+				? "From <" + graphName + "> "
+				: "";
+	
+			String query =
+				"Construct { ?s ?p ?o . } " + fromPart + "{ ?s ?p ?o . Filter(?s In (" + resources + ")) . }";
+	
+			result.add(query);
+		}
+		
+		return result;
+	}
+	
+
+
+		
+	
+	//public String lookup(
+	
+	/*
+	public String lookupWays(Collection<String> subjects) {
+	
+		String query =
+			"Construct { ?s ?p ?o . } " + fromPart + "{ ?s ?p ?o . Filter(?s In (" + resources + ")) . }";
+		
+	}
+	*/
+	
+	
+	
 
 	public GraphDAORDFEntityDAO(ISparulExecutor graphDAO)
 	{

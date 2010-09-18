@@ -20,7 +20,7 @@ public interface ILGDVocab
 	String createNIRWayURI(long id);
 	String createOSMWayURI(long id);
  
-	String createResource(Entity entity);
+	Resource createResource(Entity entity);
 	
 	String getOntologyNS();
 

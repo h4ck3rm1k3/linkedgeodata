@@ -79,7 +79,7 @@ public class DeprecatedLGDVocab
 	}
 
 	@Override
-	public String createResource(Entity entity)
+	public Resource createResource(Entity entity)
 	{
 		throw new NotImplementedException();
 	}

@@ -46,5 +46,5 @@ public interface IUpdateStrategy
 	*/
 	
 	// This method may only be called after complete()
-	IDiff<Model> getDiff();
+	IDiff<Model> getMainGraphDiff();
 }

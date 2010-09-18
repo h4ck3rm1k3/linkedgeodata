@@ -101,16 +101,17 @@ public class LGDVocab
 	}
 
 	@Override
-	public String createResource(Entity entity)
+	public Resource createResource(Entity entity)
 	{
+		String uri = null;
 		if(entity instanceof Node) {
-			return createNIRNodeURI(entity.getId());
+			uri = createNIRNodeURI(entity.getId());
 		}
 		else if(entity instanceof Way) {
-			return createNIRWayURI(entity.getId());
+			uri = createNIRWayURI(entity.getId());
 		}
 		
-		return null;
+		return uri == null ? null : ResourceFactory.createResource(uri);
 	}
 
 	@Override

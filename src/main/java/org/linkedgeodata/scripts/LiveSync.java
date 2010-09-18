@@ -19,6 +19,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.apache.commons.collections15.Transformer;
 import org.apache.log4j.PropertyConfigurator;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -56,6 +57,23 @@ import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 import com.hp.hpl.jena.rdf.model.Model;
+
+/*
+class EntityClassifier
+	implements Transformer<Entity, String>
+{
+	private Predicate<EntityFilter> entityFilter
+	
+	@Override
+	public String transform(Entity input)
+	{
+		
+		
+	}
+	 
+}
+*/
+
 
 public class LiveSync
 {
@@ -388,7 +406,7 @@ public class LiveSync
 		//diffStrategy.complete();
 		workFlow.complete();
 		
-		IDiff<Model> diff = diffStrategy.getDiff();
+		IDiff<Model> diff = diffStrategy.getMainGraphDiff();
 		//diffStrategy.release();
 		workFlow.release();
 		
