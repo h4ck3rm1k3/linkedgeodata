@@ -19,6 +19,10 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.GnuParser;
+import org.apache.commons.cli.Options;
 import org.apache.commons.collections15.Transformer;
 import org.apache.log4j.PropertyConfigurator;
 import org.hibernate.Session;
@@ -79,7 +83,8 @@ public class LiveSync
 {
 	private Logger logger = LoggerFactory.getLogger(LiveSync.class);
 	
-	
+    protected static Options cliOptions;
+
 	private Map<String, String> config;
 	
 	private IUpdateStrategy diffStrategy;
@@ -228,7 +233,14 @@ public class LiveSync
 	{
 		PropertyConfigurator.configure("log4j.properties");
 		
-		File configFile = new File("config.ini");
+		initCLIOptions();
+		
+		CommandLineParser cliParser = new GnuParser();
+		CommandLine commandLine = cliParser.parse(cliOptions, args);
+	
+		String configFileName = commandLine.getOptionValue("c", "config.ini");
+
+		File configFile = new File(configFileName);
 
 		Map<String, String> config = loadIniFile(configFile);
 
@@ -412,4 +424,15 @@ public class LiveSync
 		
 		return diff;
 	}
+	
+	/*************************************************************************/
+	/* Init                                                                  */
+	/*************************************************************************/	
+	private static void initCLIOptions()
+	{
+		cliOptions = new Options();
+		
+		cliOptions.addOption("c", "config", true, "Config filename");
+	}
+
 }

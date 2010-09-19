@@ -475,11 +475,14 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 	}
 
 	
-	private static Model executeConstruct(ISparqlExecutor graphDAO, Iterable<String> queries)
+	private static Model executeConstruct(ISparqlExecutor graphDAO, Collection<String> queries)
 		throws Exception
 	{
 		Model result = ModelFactory.createDefaultModel();
+		int i = 1;
 		for(String query : queries) {
+			logger.info("Executing query " + (i++) + "/" + queries.size());
+			
 			Model tmp = graphDAO.executeConstruct(query);
 			
 			result.add(tmp);
@@ -560,7 +563,38 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 	}
 
 	
-	private void populatePointPosMapping(Model model, Map<Resource, String> nodeToPos)
+	private static Pattern pointPattern = Pattern.compile("POINT\\s+\\(([^)]+)\\)", Pattern.CASE_INSENSITIVE);
+	
+	private static String tryParsePoint(String value)
+	{
+		Matcher m = pointPattern.matcher(value);
+
+		return m.find()
+			? m.group(1)
+			: null;
+	}
+	
+	private void populatePointPosMappingVirtuoso(Model model, Map<Resource, String> nodeToPos)
+	{
+		StmtIterator it = model.listStatements(null, GeoRSS.geo, (RDFNode)null);
+		try {
+			while(it.hasNext()) {
+				Statement stmt = it.next();
+				
+				String value = stmt.getLiteral().getValue().toString();
+				String pointStr = tryParsePoint(value);
+				if(pointStr == null)
+					continue;
+				
+				
+				nodeToPos.put(stmt.getSubject(), pointStr);
+			}
+		} finally {
+			it.close();
+		}
+	}
+	
+	private void populatePointPosMappingGeoRSS(Model model, Map<Resource, String> nodeToPos)
 	{
 		StmtIterator it = model.listStatements(null, GeoRSS.point, (RDFNode)null);
 		try {
@@ -638,9 +672,12 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		return ResourceFactory.createResource(res.getURI().toString() + "/nodes");
 	}
 		
-	private void process(IDiff<? extends Iterable<EntityContainer>> inDiff, RDFDiff outDiff, int batchSize)
+	private void process(IDiff<? extends Collection<EntityContainer>> inDiff, RDFDiff outDiff, int batchSize)
 		throws Exception
 	{
+		logger.info("Processing entities. Added/removed = " + inDiff.getAdded().size() + "/" + inDiff.getRemoved().size());
+		long start = System.nanoTime();
+		
 		List<List<EntityContainer>> parts;
 
 		Transformer<EntityContainer, Entity> entityExtractor = new Transformer<EntityContainer, Entity>() {
@@ -665,6 +702,9 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		Model oldModel = executeConstruct(graphDAO, mainGraphQueries);		
 
 		
+		logger.info("" + ((System.nanoTime() - start) / 1000000000.0) + " Completed fetching data for deleted entities, " + oldModel.size() + " triples fetched");
+		
+		
 		List<String> mainGraphQueries2 = GraphDAORDFEntityDAO.constructQuery(
 				TransformIterable.transformedView(inDiff.getAdded(), entityExtractor),
 				vocab,
@@ -673,12 +713,15 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		
 		// Fetch all data for current entities
 		Model oldModel2 = executeConstruct(graphDAO, mainGraphQueries2);		
+		logger.info("" + ((System.nanoTime() - start) / 1000000000.0) + " Completed fetching data for added entities, " + oldModel2.size() + " triples fetched");
+
 		oldModel.add(oldModel2);
 		
 		Model newModel = ModelFactory.createDefaultModel();
 		
 		//processBatch(TransformIterable.transformedView(inDiff.getRemoved(), entityExtractor), ChangeAction.Delete, mainGraphName, oldModel, newModel);
 		transformToModel(TransformIterable.transformedView(inDiff.getAdded(), entityExtractor), mainGraphName, newModel);		
+		logger.info("" + ((System.nanoTime() - start) / 1000000000.0) + " Completed RDF transformation of entities");
 		
 		
 		
@@ -715,7 +758,8 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		// FIXME Should we scan the "remove"-model first and remove corresponding
 		// point-pos mappings, so we can detect dangling references? Otherwise
 		// the old positions would still be referencable.
-		populatePointPosMapping(diff.getAdded(), nodeToPos);
+		populatePointPosMappingGeoRSS(diff.getAdded(), nodeToPos);
+		logger.info("" + ((System.nanoTime() - start) / 1000000000.0) + " Completed populating point-position mapping based on old model, indexed " +  nodeToPos.size() + " mappings");
 			
 		
 		
@@ -727,11 +771,12 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		// nodes.
 		// HOWEVER: With this osmosis pipe architecture, we probably don't
 		// know where a changeset starts and ends.
-		logger.info(nodeToPos.keySet() + " nodes were created or repositioned");
+		//logger.info(nodeToPos.keySet() + " nodes were created or repositioned");
 
 		// This model is basically a map containing the changes that need to be injected into the
 		// ways polygon: way -> index -> update
 		Model changeSet = selectWayNodesByNodes(graphDAO, graphName, nodeToPos.keySet());
+		logger.info("" + ((System.nanoTime() - start) / 1000000000.0) + " Completed fetching ways for repositioned nodes, " + changeSet.size() + " waynodes affected");
 		
 		// Mixin the changes from diff.added
 		StmtIterator it = diff.getAdded().listStatements();
@@ -774,11 +819,9 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		georss.add(georssOfWaysWithRepositionedPoints);
 		
 		
-		// FIXME: We need to take the removed triples into account when patching
+		// Note We need to take the removed triples into account when patching
 		// the georss point list for that case that n nodes are removed
 		// from the end of a way.
-		
-		
 		for(Resource way : ways) {
 			Resource wayNode = wayToWayNode(way);
 			
@@ -828,13 +871,7 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 			}
 			
 		}
-		
-		
-		
-		// for each affected way retrieve the georss:line/polygon triple
-		// in order to update it.
-		// FIXME Create the triple for ways that do not have it yet
-		// (for some reason)
+		logger.info("" + ((System.nanoTime() - start) / 1000000000.0) + " Completed processing of entities");
 	}
 
 	
@@ -864,12 +901,24 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 			// As these nodes are not very informative, but are required
 			// in order to lookup ways
 
-			if(isTaglessNode(entity)) {
+			if(entity instanceof Node) {
 				// Only generate a virtuoso specific triple in order to
 				// to relate the node's uri to a position.
 				Node node = (Node)entity;
 				Resource subject = vocab.createResource(entity);
-				SimpleNodeToRDFTransformer.generateVirtusoPosition(newNodeModel, subject, node);
+
+
+				// FIXME Meh, the Open Source version of virtuoso has no special
+				// geo support, and yields errors when attempting to insert
+				// geoms (rather then silently accept them)
+				// Add a switch to toggle special virtuoso stuff on and off 
+				//SimpleNodeToRDFTransformer.generateVirtusoPosition(newNodeModel, subject, node);
+				SimpleNodeToRDFTransformer.generateGeoRSS(newNodeModel, subject, node);
+				
+				if(!node.getTags().isEmpty()) {
+					entityTransformer.transform(newModel, entity);
+				}
+				
 			} else {
 				entityTransformer.transform(newModel, entity);
 			}
@@ -877,7 +926,7 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		
 		
 		// Virtuoso-specific transforms for the triples that were added
-		postProcessTransformer.transform(newModel, outModel);
+		postProcessTransformer.transform(outModel, newModel);
 		//System.out.println(ModelUtil.toString(added));
 	}
 		
@@ -919,19 +968,25 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 	public static Model constructGeoRSSLinePolygon(ISparqlExecutor graphDAO, String graphName, Set<Resource> ways)
 		throws Exception
 	{
-		String query = "Construct {?s ?p ?o . } From <" + graphName + "> { ?s ?p ?o . Filter(?w In (" + StringUtil.implode(",", ways) + ") && ?p In (<" + GeoRSS.point.toString() + "> || <" + GeoRSS.polygon + ">)) . }";
+		if(ways.isEmpty())
+			return ModelFactory.createDefaultModel();
+		
+		String query = "Construct {?s ?p ?o . } From <" + graphName + "> { ?s ?p ?o . Filter(?s In (<" + StringUtil.implode(">,<", ways) + ">) && ?p In (<" + GeoRSS.point.toString() + "> || <" + GeoRSS.polygon + ">)) . }";
 		Model result = graphDAO.executeConstruct(query);
 		
 		return result;
 	}
 	
-	public static Model selectWayNodesByNodes(ISparqlExecutor graphDAO, String graphName, Iterable<Resource> nodes)
+	public static Model selectWayNodesByNodes(ISparqlExecutor graphDAO, String graphName, Collection<Resource> nodes)
 		throws Exception
 	{
+		if(nodes.isEmpty())
+			return ModelFactory.createDefaultModel();
+		
 		List<List<Resource>> chunks = CollectionUtils.chunk(nodes, 1024);
 		Model result = ModelFactory.createDefaultModel();
 		for(List<Resource> chunk : chunks) {
-			String query = "Construct { ?wn ?p ?n } From <" + graphName + "> { ?wn ?p ?n . Filter(?n In (" + StringUtil.implode(",", chunk) + ")) . }";
+			String query = "Construct { ?wn ?p ?n } From <" + graphName + "> { ?wn ?p ?n . Filter(?n In (<" + StringUtil.implode(">,<", chunk) + ">)) . }";
 			
 			// FIXME Make executeConstruct accept the output model as an parameter 
 			Model tmp = graphDAO.executeConstruct(query);

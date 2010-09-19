@@ -26,4 +26,5 @@ public class GeoRSS
     public static final Property point = property("point");
     public static final Property line = property("line");
     public static final Property polygon = property("polygon");
+    public static final Property geo = property("geo");
 }
