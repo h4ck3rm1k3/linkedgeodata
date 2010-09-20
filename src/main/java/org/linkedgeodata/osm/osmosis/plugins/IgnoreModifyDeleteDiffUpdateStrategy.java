@@ -510,7 +510,7 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 	}
 	
 	
-	private static Pattern rdfSeqPattern = Pattern.compile("/_(\\d+)$");
+	private static Pattern rdfSeqPattern = Pattern.compile("_(\\d+)$");
 	
 	public static Integer tryParseSeqPredicate(Resource res)
 	{
@@ -534,6 +534,7 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 	 * @param model
 	 * @return
 	 */
+	/*
 	public Map<Resource, SortedMap<Integer, RDFNode>> processSeq(Model model) {
 		Map<Resource, SortedMap<Integer, RDFNode>> result = new HashMap<Resource, SortedMap<Integer, RDFNode>>();
 		
@@ -544,7 +545,20 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		}
 		
 		return result;
+	}*/
+	public void processSeq(Map<Resource, SortedMap<Integer, RDFNode>> result, Model model) {
+		//Map<Resource, SortedMap<Integer, RDFNode>> result = new HashMap<Resource, SortedMap<Integer, RDFNode>>();
+		
+		
+		for(Resource subject : model.listSubjects().toSet()) {
+			SortedMap<Integer, RDFNode> part = processSeq(subject, model);
+			result.put(subject, part);
+		}
+		
+		//return result;
 	}
+
+	
 	
 	private SortedMap<Integer, RDFNode> processSeq(Resource res, Model model)
 	{
@@ -810,6 +824,11 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		// ways polygon: way -> index -> update
 		Model changeSet = selectWayNodesByNodes(graphDAO, graphName, nodeToPos.keySet());
 		logger.info("" + ((System.nanoTime() - start) / 1000000000.0) + " Completed fetching ways for repositioned nodes, " + changeSet.size() + " waynodes affected");
+
+		// Now that we know which nodes changed positions,
+		// index the positions of all nodes
+		populatePointPosMappingGeoRSS(newModel, nodeToPos);
+
 		
 		// Mixin the changes from diff.added
 		StmtIterator it = diff.getAdded().listStatements();
@@ -824,7 +843,6 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		} finally {
 			it.close();
 		}
-		
 		
 		// From this model retrieve the set of wayNode resources
 		Set<Resource> wayNodes = changeSet.listSubjects().toSet();
@@ -945,7 +963,9 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 			}
 			
 			
-			Map<Resource, SortedMap<Integer, RDFNode>> ws = processSeq(wayNodesToNodes);
+			Map<Resource, SortedMap<Integer, RDFNode>> ws = new HashMap<Resource, SortedMap<Integer, RDFNode>>();
+			processSeq(ws, wayNodesToNodes);
+			processSeq(ws, newModel);
 			
 			// Finally, for each way generate the georss
 			for(Map.Entry<Resource, SortedMap<Integer, RDFNode>> w : ws.entrySet()) {
@@ -980,6 +1000,7 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 	}
 
 	
+	/*
 	public static boolean isTaglessNode(Entity entity)
 	{
 		if(!(entity instanceof Node))
@@ -987,20 +1008,22 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		
 		return entity.getTags().isEmpty();
 	}
+	*/
 
 	
 	private void transformToModel(Iterable<Entity> entityBatch, String graphName, Model outModel)
 		throws Exception
 	{
 
-				
+		/*
 		Model newModel = ModelFactory.createDefaultModel();
 		for(Entity entity : entityBatch) {
 			if(!isTaglessNode(entity))
 				entityTransformer.transform(newModel, entity);
 		} 
+		*/
 		
-		Model newNodeModel = ModelFactory.createDefaultModel();
+		Model newModel = ModelFactory.createDefaultModel();
 		for(Entity entity : entityBatch) {
 			// Tagless nodes are put into a separate graph
 			// As these nodes are not very informative, but are required
@@ -1018,7 +1041,7 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 				// geoms (rather then silently accept them)
 				// Add a switch to toggle special virtuoso stuff on and off 
 				//SimpleNodeToRDFTransformer.generateVirtusoPosition(newNodeModel, subject, node);
-				SimpleNodeToRDFTransformer.generateGeoRSS(newNodeModel, subject, node);
+				SimpleNodeToRDFTransformer.generateGeoRSS(newModel, subject, node);
 				
 				if(!node.getTags().isEmpty()) {
 					entityTransformer.transform(newModel, entity);
