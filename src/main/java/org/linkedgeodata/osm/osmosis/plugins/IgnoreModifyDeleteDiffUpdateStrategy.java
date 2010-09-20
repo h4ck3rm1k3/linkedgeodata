@@ -552,12 +552,12 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 	// returned.
 	// However, actually all resources that are "a rdf:Seq" should be in the map
 	// (i guess)
-	public void processSeq(Map<Resource, SortedMap<Integer, RDFNode>> result, Model model) {
+	public void processSeq(Map<Resource, TreeMap<Integer, RDFNode>> result, Model model) {
 		//Map<Resource, SortedMap<Integer, RDFNode>> result = new HashMap<Resource, SortedMap<Integer, RDFNode>>();
 		
 		
 		for(Resource subject : model.listSubjects().toSet()) {
-			SortedMap<Integer, RDFNode> part = processSeq(subject, model);
+			TreeMap<Integer, RDFNode> part = processSeq(subject, model);
 			if(!part.isEmpty())
 				result.put(subject, part);
 		}
@@ -567,9 +567,9 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 
 	
 	
-	private SortedMap<Integer, RDFNode> processSeq(Resource res, Model model)
+	private TreeMap<Integer, RDFNode> processSeq(Resource res, Model model)
 	{
-		SortedMap<Integer, RDFNode> indexToObject = new TreeMap<Integer, RDFNode>();
+		TreeMap<Integer, RDFNode> indexToObject = new TreeMap<Integer, RDFNode>();
 		StmtIterator it =  model.listStatements(res, null, (RDFNode)null);
 		try {
 			while(it.hasNext()) {
@@ -865,6 +865,27 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		
 		
 		// Patch ways
+		// Index all newly updated ways - we use that in order to determine
+		// whether a way is a line or a polygon
+		Map<Resource, TreeMap<Integer, RDFNode>> ws = new HashMap<Resource, TreeMap<Integer, RDFNode>>();
+		processSeq(ws, newModel);
+
+		// Determine nodes for which we yet have to fetch the positions
+		Set<Resource> unindexedNodes = new HashSet<Resource>(); 
+		for(SortedMap<Integer, RDFNode> indexToNode : ws.values()) {
+			for(RDFNode node : indexToNode.values()) {
+				if(!nodeToPos.containsKey(node))
+					unindexedNodes.add((Resource)node);
+			}
+		}
+		Map<Resource, RDFNode> mappings = fetchNodePositions(graphDAO, graphName, unindexedNodes);
+		
+		for(Map.Entry<Resource, RDFNode> mapping : mappings.entrySet()) {
+			nodeToPos.put(mapping.getKey(), mapping.getValue().toString());
+		}
+		logger.info("" + ((System.nanoTime() - start) / 1000000000.0) + " Completed fetching positions for " + mappings.size() + " additional nodes");
+
+		
 		
 		// Load all georss:(line|polygon) strings of the old model into a new one
 		Model georss = ModelFactory.createDefaultModel();
@@ -941,13 +962,27 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 						if(index > highestUpdateIndex)
 							positions.remove(index); // FIXME This does array shifting
 					}
+
+					Property predicate = base.getPredicate(); 
 					
 					// FIXME: A line may have become a polygon
+					Resource wayNode2 = wayToWayNode(base.getSubject());
+					TreeMap<Integer, RDFNode> indexToNode = ws.get(wayNode2);
+					if(indexToNode != null && !indexToNode.isEmpty()) {
+						predicate = indexToNode.firstEntry().getValue().equals(indexToNode.lastEntry().getValue())
+								? GeoRSS.polygon
+								: GeoRSS.line;
+					}
+					
+					
+					// Check whether the way (and therefore everything of it)
+					// is part of the newModel
+					
 					
 					String newValue = StringUtil.implode(" ", positions);
 					
 					outDiff.getRemoved().add(base);
-					outDiff.getAdded().add(base.getSubject(), base.getPredicate(), newValue);
+					outDiff.getAdded().add(base.getSubject(), predicate, newValue);
 				}
 				
 			}
@@ -956,7 +991,7 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 
 		// If there are ways left that did not have georss (line|polygon)
 		// triple, generate that for them.
-		// Note: We are not creating a copy of ways at this time, as this
+		// Note: We are not creating a copy of the ways set because this
 		// is the last time we need that set
 		Set<Resource> waysWithoutGeoRSS = ways;
 		waysWithoutGeoRSS.removeAll(georss.listSubjects().toSet());
@@ -965,40 +1000,41 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 			
 			List<Resource> wayNodes2 = new ArrayList<Resource>();
 			for(Resource res : waysWithoutGeoRSS) {
-				 wayNodes.add(wayToWayNode(res));
+				 wayNodes2.add(wayToWayNode(res));
 			}
 			
 			logger.info("Creating GeoRSS for " + waysWithoutGeoRSS.size() + " ways");
 			Model wayNodesToNodes = selectNodesByWayNodes(graphDAO, graphName, wayNodes2);
 			
 			// Create the set of nodes of which we do not have positions
-			Set<Resource> unindexedNodes = new HashSet<Resource>();
+			//Set<Resource> 
+			unindexedNodes = new HashSet<Resource>();
 			for(RDFNode node : wayNodesToNodes.listObjects().toSet()) {
-				if(!node.isResource() || node.toString().startsWith("http://linkedgeodata.org/node"))
-					continue;
-				
-				unindexedNodes.add((Resource)node);
+				if(node.isResource()
+						&& node.toString().startsWith("http://linkedgeodata.org/node")
+						&& !nodeToPos.containsKey(node)) {
+					
+					unindexedNodes.add((Resource)node);
+				}
 			}
-			
-			// subtract all nodes of which we already have positions
-			unindexedNodes.removeAll(nodeToPos.keySet());
 			
 			populatePointPosMappingGeoRSS(wayNodesToNodes, nodeToPos);
 
 			// finally fetch the positions
-			Map<Resource, RDFNode> mappings = fetchNodePositions(graphDAO, graphName, unindexedNodes);
+			//Map<Resource, RDFNode>
+			mappings = fetchNodePositions(graphDAO, graphName, unindexedNodes);
 			
 			for(Map.Entry<Resource, RDFNode> mapping : mappings.entrySet()) {
 				nodeToPos.put(mapping.getKey(), mapping.getValue().toString());
 			}
 			
 			
-			Map<Resource, SortedMap<Integer, RDFNode>> ws = new HashMap<Resource, SortedMap<Integer, RDFNode>>();
+			//Map<Resource, SortedMap<Integer, RDFNode>> ws = new HashMap<Resource, SortedMap<Integer, RDFNode>>();
 			processSeq(ws, wayNodesToNodes);
-			processSeq(ws, newModel);
+			//processSeq(ws, newModel);
 			
 			// Finally, for each way generate the georss
-			for(Map.Entry<Resource, SortedMap<Integer, RDFNode>> w : ws.entrySet()) {
+			for(Map.Entry<Resource, TreeMap<Integer, RDFNode>> w : ws.entrySet()) {
 				List<String> geoRSSParts = new ArrayList<String>();
 				
 				int i = 1;
@@ -1015,7 +1051,7 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 				if(w.getValue().isEmpty())
 					continue;
 				
-				Property predicate = w.getValue().firstKey().equals(w.getValue().lastKey())
+				Property predicate = w.getValue().firstEntry().getValue().equals(w.getValue().lastEntry().getValue())
 					? GeoRSS.polygon
 					: GeoRSS.line;
 				
@@ -1140,7 +1176,7 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 			//Model tmp = graphDAO.executeConstruct(query);
 			List<QuerySolution> qs = graphDAO.executeSelect(query);
 			for(QuerySolution q : qs) {
-				result.put(q.getResource("n"), q.get("p"));
+				result.put(q.getResource("n"), q.get("o"));
 			}
 		}
 		
