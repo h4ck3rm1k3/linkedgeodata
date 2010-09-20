@@ -825,6 +825,7 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		// nodes.
 		// HOWEVER: With this osmosis pipe architecture, we probably don't
 		// know where a changeset starts and ends.
+		// But STILL: Probably no node is referenced before it is created.
 		//logger.info(nodeToPos.keySet() + " nodes were created or repositioned");
 
 		// This model is basically a map containing the changes that need to be injected into the
@@ -873,7 +874,12 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		// Load all georss:(line|polygon) strings of ways with repositioned nodes
 		// Some of that data may already be part of the old model 
 		Set<Resource> lookupWays = new HashSet<Resource>(ways);
-		lookupWays.remove(georss.listSubjects().toSet());
+		Set<Resource> alreadyHaveGeoRSS = georss.listSubjects().toSet(); 
+		lookupWays.removeAll(alreadyHaveGeoRSS);
+		
+		// FIXME: If the positions of all nodes of a way are already known,
+		// there is no need to fetch its georss, as it can be computed
+		// directly.
 		Model georssOfWaysWithRepositionedPoints = constructGeoRSSLinePolygon(graphDAO, graphName, lookupWays);
 		georss.add(georssOfWaysWithRepositionedPoints);
 		
@@ -889,22 +895,37 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 				ArrayList<String> positions = tryParseGeoRRSPointList(geoStr);
 				
 				int highestUpdateIndex = -1;
-				for(Statement fix : changeSet.listStatements(wayNode, null, (RDFNode)null).toList()) {
-					Integer index = tryParseSeqPredicate(fix.getPredicate());
-					if(index == null)
-						continue;
+				
+				SortedMap<Integer, RDFNode> fixes = processSeq(wayNode, changeSet);
+				//for(Statement fix : changeSet.listStatements(wayNode, null, (RDFNode)null).toList()) {
+				for(Map.Entry<Integer, RDFNode> fix : fixes.entrySet()) {
+					int index = fix.getKey() - 1;
+					//Integer index = tryParseSeqPredicate(fix.getPredicate());
+					//if(index == null)
+						//continue;
 					
 					highestUpdateIndex = Math.max(highestUpdateIndex, index);
 					
 					//String value = fix.getLiteral().getValue().toString().trim();
-					String value = nodeToPos.get(fix.getObject());
+					String value = nodeToPos.get(fix.getValue());
 					if(value == null) {
-						logger.warn("Cannot patch way " + way + " because its point list references node " + fix.getObject() + " for which no position was found");
+						logger.warn("Cannot patch way " + way + " because its point list references node " + fix.getValue() + " for which no position was found");
 						positions = null;
 						break;
 					}
 					
-					positions.set(index.intValue(), value);
+					if(index >= positions.size()) {
+						while(index > positions.size()) {
+							logger.warn("Adding dummy node at index " + positions.size() + " for wayNode " + wayNode);
+							positions.add("-180.0 -90.0");
+						}
+						
+						positions.add(value);
+						
+					}
+					else {					
+						positions.set(index, value);
+					}
 				}
 				
 				
@@ -921,10 +942,12 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 							positions.remove(index); // FIXME This does array shifting
 					}
 					
+					// FIXME: A line may have become a polygon
+					
 					String newValue = StringUtil.implode(" ", positions);
 					
-					diff.getRemoved().add(base);
-					diff.getAdded().add(base.getSubject(), base.getPredicate(), newValue);
+					outDiff.getRemoved().add(base);
+					outDiff.getAdded().add(base.getSubject(), base.getPredicate(), newValue);
 				}
 				
 			}
@@ -996,7 +1019,7 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 					? GeoRSS.polygon
 					: GeoRSS.line;
 				
-				outDiff.getAdded().add(w.getKey(), predicate, geoRSS); 
+				outDiff.getAdded().add(wayNodeToWay(w.getKey()), predicate, geoRSS); 
 			}
 			
 			
