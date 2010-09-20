@@ -546,13 +546,20 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		
 		return result;
 	}*/
+	// FIXME: Clearify semantics: If a resource does not have a seq associated
+	// should it appear in the result?
+	// Currently the answer is "no" (therefore only resources with seqs are
+	// returned.
+	// However, actually all resources that are "a rdf:Seq" should be in the map
+	// (i guess)
 	public void processSeq(Map<Resource, SortedMap<Integer, RDFNode>> result, Model model) {
 		//Map<Resource, SortedMap<Integer, RDFNode>> result = new HashMap<Resource, SortedMap<Integer, RDFNode>>();
 		
 		
 		for(Resource subject : model.listSubjects().toSet()) {
 			SortedMap<Integer, RDFNode> part = processSeq(subject, model);
-			result.put(subject, part);
+			if(!part.isEmpty())
+				result.put(subject, part);
 		}
 		
 		//return result;
@@ -982,11 +989,14 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 				
 				String geoRSS = StringUtil.implode(" ", geoRSSParts);
 				
+				if(w.getValue().isEmpty())
+					continue;
+				
 				Property predicate = w.getValue().firstKey().equals(w.getValue().lastKey())
 					? GeoRSS.polygon
 					: GeoRSS.line;
 				
-				diff.getAdded().add(w.getKey(), predicate, geoRSS); 
+				outDiff.getAdded().add(w.getKey(), predicate, geoRSS); 
 			}
 			
 			
