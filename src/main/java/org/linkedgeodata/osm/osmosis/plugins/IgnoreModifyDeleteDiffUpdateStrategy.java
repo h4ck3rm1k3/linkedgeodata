@@ -65,6 +65,7 @@ import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
@@ -525,6 +526,26 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		return null;
 	}
 	
+	
+	/**
+	 * Scans the given models for triples having a rdf:_n predicate and
+	 * returns a map of subject-> index -> object
+	 * 
+	 * @param model
+	 * @return
+	 */
+	public Map<Resource, SortedMap<Integer, RDFNode>> processSeq(Model model) {
+		Map<Resource, SortedMap<Integer, RDFNode>> result = new HashMap<Resource, SortedMap<Integer, RDFNode>>();
+		
+		
+		for(Resource subject : model.listSubjects().toSet()) {
+			SortedMap<Integer, RDFNode> part = processSeq(subject, model);
+			result.put(subject, part);
+		}
+		
+		return result;
+	}
+	
 	private SortedMap<Integer, RDFNode> processSeq(Resource res, Model model)
 	{
 		SortedMap<Integer, RDFNode> indexToObject = new TreeMap<Integer, RDFNode>();
@@ -672,6 +693,18 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		return ResourceFactory.createResource(res.getURI().toString() + "/nodes");
 	}
 		
+	
+	/**
+	 * Some issues i recently noticed (as of 20 sept 2010):
+	 * .) The nodeToPos map is only populated from the diff,
+	 *    However, all positions that are avaiable in the new set should be placed there.
+	 * 
+	 * 
+	 * @param inDiff
+	 * @param outDiff
+	 * @param batchSize
+	 * @throws Exception
+	 */
 	private void process(IDiff<? extends Collection<EntityContainer>> inDiff, RDFDiff outDiff, int batchSize)
 		throws Exception
 	{
@@ -797,8 +830,9 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		Set<Resource> wayNodes = changeSet.listSubjects().toSet();
 		Set<Resource> ways = new HashSet<Resource>();
 				
-		for(Resource wayNode : wayNodes)
+		for(Resource wayNode : wayNodes) {
 			ways.add(wayNodeToWay(wayNode));
+		}
 		
 		// Retrieve the positions of those nodes of which we don't have it yet
 
@@ -871,6 +905,77 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 			}
 			
 		}
+
+		// If there are ways left that did not have georss (line|polygon)
+		// triple, generate that for them.
+		// Note: We are not creating a copy of ways at this time, as this
+		// is the last time we need that set
+		Set<Resource> waysWithoutGeoRSS = ways;
+		waysWithoutGeoRSS.removeAll(georss.listSubjects().toSet());
+		
+		if(!waysWithoutGeoRSS.isEmpty()) {
+			
+			List<Resource> wayNodes2 = new ArrayList<Resource>();
+			for(Resource res : waysWithoutGeoRSS) {
+				 wayNodes.add(wayToWayNode(res));
+			}
+			
+			logger.info("Creating GeoRSS for " + waysWithoutGeoRSS.size() + " ways");
+			Model wayNodesToNodes = selectNodesByWayNodes(graphDAO, graphName, wayNodes2);
+			
+			// Create the set of nodes of which we do not have positions
+			Set<Resource> unindexedNodes = new HashSet<Resource>();
+			for(RDFNode node : wayNodesToNodes.listObjects().toSet()) {
+				if(!node.isResource() || node.toString().startsWith("http://linkedgeodata.org/node"))
+					continue;
+				
+				unindexedNodes.add((Resource)node);
+			}
+			
+			// subtract all nodes of which we already have positions
+			unindexedNodes.removeAll(nodeToPos.keySet());
+			
+			populatePointPosMappingGeoRSS(wayNodesToNodes, nodeToPos);
+
+			// finally fetch the positions
+			Map<Resource, RDFNode> mappings = fetchNodePositions(graphDAO, graphName, unindexedNodes);
+			
+			for(Map.Entry<Resource, RDFNode> mapping : mappings.entrySet()) {
+				nodeToPos.put(mapping.getKey(), mapping.getValue().toString());
+			}
+			
+			
+			Map<Resource, SortedMap<Integer, RDFNode>> ws = processSeq(wayNodesToNodes);
+			
+			// Finally, for each way generate the georss
+			for(Map.Entry<Resource, SortedMap<Integer, RDFNode>> w : ws.entrySet()) {
+				List<String> geoRSSParts = new ArrayList<String>();
+				
+				int i = 1;
+				for(Map.Entry<Integer, RDFNode> indexToNode : w.getValue().entrySet()) {
+					if(indexToNode.getKey() != (i++)) {
+						logger.warn("Index out of sync: " + w);
+					}
+					
+					geoRSSParts.add(nodeToPos.get(indexToNode.getValue()));
+				}
+				
+				String geoRSS = StringUtil.implode(" ", geoRSSParts);
+				
+				Property predicate = w.getValue().firstKey().equals(w.getValue().lastKey())
+					? GeoRSS.polygon
+					: GeoRSS.line;
+				
+				diff.getAdded().add(w.getKey(), predicate, geoRSS); 
+			}
+			
+			
+			//Map<Resource, SortedMap<Integer, RDFNode>> index = processSeq(wayNodesToNodes);
+		}
+		
+		
+		
+		
 		logger.info("" + ((System.nanoTime() - start) / 1000000000.0) + " Completed processing of entities");
 	}
 
@@ -963,6 +1068,28 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 	}
 	
 	
+	public static Map<Resource, RDFNode> fetchNodePositions(ISparqlExecutor graphDAO, String graphName, Set<Resource> nodes)
+		throws Exception
+	{
+		Map<Resource, RDFNode> result = new HashMap<Resource, RDFNode>();
+		
+		if(nodes.isEmpty())
+			return result;
+		
+		List<List<Resource>> chunks = CollectionUtils.chunk(nodes, 1024);
+		for(List<Resource> chunk : chunks) {
+			String query = "Select ?n ?o From <" + graphName + "> { ?n <" + GeoRSS.point + "> ?o . Filter(?n In (<" + StringUtil.implode(">,<", chunk) + ">)) . }";
+			
+			// FIXME Make executeConstruct accept the output model as an parameter 
+			//Model tmp = graphDAO.executeConstruct(query);
+			List<QuerySolution> qs = graphDAO.executeSelect(query);
+			for(QuerySolution q : qs) {
+				result.put(q.getResource("n"), q.get("p"));
+			}
+		}
+		
+		return result;		
+	}
 	
 	
 	public static Model constructGeoRSSLinePolygon(ISparqlExecutor graphDAO, String graphName, Set<Resource> ways)
@@ -995,6 +1122,30 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		
 		return result;
 	}
+
+	/**
+	 * Note: This is just looking up triples by their certain objects.
+	 * So this method could be generalized
+	 */
+	public static Model selectNodesByWayNodes(ISparqlExecutor graphDAO, String graphName, Collection<Resource> wayNodes)
+		throws Exception
+	{
+		if(wayNodes.isEmpty())
+			return ModelFactory.createDefaultModel();
+		
+		List<List<Resource>> chunks = CollectionUtils.chunk(wayNodes, 1024);
+		Model result = ModelFactory.createDefaultModel();
+		for(List<Resource> chunk : chunks) {
+			String query = "Construct { ?wn ?p ?n } From <" + graphName + "> { ?wn ?p ?n . Filter(?wn In (<" + StringUtil.implode(">,<", chunk) + ">)) . }";
+			
+			// FIXME Make executeConstruct accept the output model as an parameter 
+			Model tmp = graphDAO.executeConstruct(query);
+			result.add(tmp);
+		}
+		
+		return result;
+	}
+
 }
 
 
