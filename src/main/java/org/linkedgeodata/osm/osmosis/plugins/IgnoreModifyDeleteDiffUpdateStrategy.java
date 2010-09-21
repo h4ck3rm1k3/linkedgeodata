@@ -510,7 +510,7 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		int i = 1;
 		for(String query : queries) {
 			logger.info("Executing query " + (i++) + "/" + queries.size());
-			logger.info("Query = " + query);
+			//logger.info("Query = " + query);
 			
 			Model tmp = graphDAO.executeConstruct(query);
 			
@@ -784,7 +784,7 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 				TransformIterable.transformedView(inDiff.getRemoved(), entityExtractor),
 				vocab,
 				graphName,
-				1024);
+				512);
 		
 		// Fetch all data for current entities
 		Model oldModel = executeConstruct(graphDAO, mainGraphQueries);		
@@ -797,7 +797,7 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 				TransformIterable.transformedView(inDiff.getAdded(), entityExtractor),
 				vocab,
 				graphName,
-				1024);
+				512);
 		
 		// Fetch all data for current entities
 		Model oldModel2 = executeConstruct(graphDAO, mainGraphQueries2);		
