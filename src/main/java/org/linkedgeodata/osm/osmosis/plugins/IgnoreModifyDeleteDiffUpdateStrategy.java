@@ -71,6 +71,8 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
+import com.hp.hpl.jena.util.iterator.ExtendedIterator;
+import com.hp.hpl.jena.vocabulary.RDF;
 
 
 class SetMultiHashMap<K, V>
@@ -510,7 +512,7 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 	}
 	
 	
-	private static Pattern rdfSeqPattern = Pattern.compile("_(\\d+)$");
+	private static Pattern rdfSeqPattern = Pattern.compile(RDF.getURI() + "#_(\\d+)$");
 	
 	public static Integer tryParseSeqPredicate(Resource res)
 	{
@@ -874,6 +876,10 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		Set<Resource> unindexedNodes = new HashSet<Resource>(); 
 		for(SortedMap<Integer, RDFNode> indexToNode : ws.values()) {
 			for(RDFNode node : indexToNode.values()) {
+				if(!(node instanceof Resource)) {
+					logger.error("Not a node: " + node);
+				}
+				
 				if(!nodeToPos.containsKey(node))
 					unindexedNodes.add((Resource)node);
 			}
@@ -980,8 +986,8 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 					
 					
 					String newValue = StringUtil.implode(" ", positions);
-					
-					outDiff.getRemoved().add(base);
+
+					outDiff.getRemoved().add(base); 
 					outDiff.getAdded().add(base.getSubject(), predicate, newValue);
 				}
 				
@@ -1063,6 +1069,22 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		}
 		
 		
+		// Finally: In the diff: Remove the georss:line/polygon triples
+		// from the "remove" set if the resource exists in the new set but
+		// doesn't have that triple
+		ExtendedIterator<Statement> x =
+			outDiff.getRemoved().listStatements(null, GeoRSS.line, (RDFNode)null).andThen(
+				outDiff.getRemoved().listStatements(null, GeoRSS.polygon, (RDFNode)null));
+		
+		while(x.hasNext()) {
+			Statement stmt = x.next();
+			
+			if(newModel.contains(stmt.getSubject(), null) &&
+					!(	newModel.contains(stmt.getSubject(), GeoRSS.line)
+							|| newModel.contains(stmt.getSubject(), GeoRSS.polygon))) {
+				x.remove();
+			}
+		}
 		
 		
 		logger.info("" + ((System.nanoTime() - start) / 1000000000.0) + " Completed processing of entities");
