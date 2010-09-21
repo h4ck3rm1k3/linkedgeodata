@@ -22,8 +22,10 @@ package org.linkedgeodata.osm.osmosis.plugins;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -35,9 +37,6 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javassist.bytecode.Descriptor.Iterator;
-
-import org.apache.commons.collections15.Predicate;
 import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.map.LRUMap;
 import org.apache.commons.collections15.multimap.MultiHashMap;
@@ -53,10 +52,13 @@ import org.linkedgeodata.util.StringUtil;
 import org.linkedgeodata.util.TransformIterable;
 import org.linkedgeodata.util.sparql.ISparqlExecutor;
 import org.linkedgeodata.util.sparql.ISparulExecutor;
+import org.openstreetmap.osmosis.core.container.v0_6.NodeContainer;
 import org.openstreetmap.osmosis.core.container.v0_6.ChangeContainer;
 import org.openstreetmap.osmosis.core.container.v0_6.EntityContainer;
+import org.openstreetmap.osmosis.core.domain.v0_6.CommonEntityData;
 import org.openstreetmap.osmosis.core.domain.v0_6.Entity;
 import org.openstreetmap.osmosis.core.domain.v0_6.Node;
+import org.openstreetmap.osmosis.core.domain.v0_6.OsmUser;
 import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 import org.openstreetmap.osmosis.core.sort.v0_6.EntityByTypeThenIdComparator;
 import org.openstreetmap.osmosis.core.task.common.ChangeAction;
@@ -384,15 +386,15 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 	private ITransformer<Entity, Model> entityTransformer;
 	private ISparqlExecutor graphDAO;	
 	private String mainGraphName;
-	private String nodeGraphName;
+	//private String nodeGraphName;
 
 	private ITransformer<Model, Model> postProcessTransformer = new VirtuosoStatementNormalizer();
 	
 	
 	private RDFDiff mainGraphDiff;
 	
-	private Predicate<Entity> entityFilter;
-	private Predicate<Tag> tagFilter;
+	//private Predicate<Entity> entityFilter;
+	//private Predicate<Tag> tagFilter;
 	
 	
 	
@@ -421,6 +423,29 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 	//private Set<Entity> entities = new HashSet<Entity>();
 	
 	SetDiff<EntityContainer> entityDiff = new SetDiff<EntityContainer>(new EntityByTypeThenIdComparator());
+
+	
+	public static void main(String[] args) {
+		//SetDiff<EntityContainer> entityDiff = new SetDiff<EntityContainer>(new EntityByTypeThenIdComparator());
+		Comparator<EntityContainer> c = new EntityByTypeThenIdComparator();
+		
+		CommonEntityData ced1 = new CommonEntityData(1l, 1, new Date(), new OsmUser(2, "blah"), 123l);
+		Node e1 = new Node(ced1, 1.0, 2.0);
+
+		
+		
+		
+		CommonEntityData ced2 = new CommonEntityData(0l, 1, new Date(), new OsmUser(2, "blah"), 123l, Arrays.asList(new Tag("hi", "world")));
+		Node e2 = new Node(ced2, 2.0, 3.0f); 
+		
+		EntityContainer ec1 = new NodeContainer(e1);
+		EntityContainer ec2 = new NodeContainer(e2);
+		
+		
+		System.out.println("Comparator: " + c.compare(ec1, ec2));
+		System.out.println("Equals: " + ec1.equals(ec2));
+		
+	}
 	
 	// Number of entities that should be processed as a batch
 	private int maxEntityBatchSize = 500;
@@ -440,7 +465,7 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		this.entityTransformer = entityTransformer;
 		this.graphDAO = graphDAO;
 		this.mainGraphName = mainGraphName;
-		this.nodeGraphName = nodeGraphName;
+		//this.nodeGraphName = nodeGraphName;
 	}
 	
 	/**
@@ -485,6 +510,7 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		int i = 1;
 		for(String query : queries) {
 			logger.info("Executing query " + (i++) + "/" + queries.size());
+			logger.info("Query = " + query);
 			
 			Model tmp = graphDAO.executeConstruct(query);
 			
@@ -733,8 +759,8 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 	{
 		logger.info("Processing entities. Added/removed = " + inDiff.getAdded().size() + "/" + inDiff.getRemoved().size());
 		long start = System.nanoTime();
-		
-		List<List<EntityContainer>> parts;
+	
+		//List<List<EntityContainer>> parts;
 
 		Transformer<EntityContainer, Entity> entityExtractor = new Transformer<EntityContainer, Entity>() {
 			@Override
@@ -746,7 +772,13 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		
 		String graphName = mainGraphName;
 
-
+		/*
+		List<Long> ids = new ArrayList<Long>();
+		for(EntityContainer e : entityDiff.getAdded()) {
+			ids.add(e.getEntity().getId());
+		}
+		System.out.println(ids);
+		*/
 		
 		List<String> mainGraphQueries = GraphDAORDFEntityDAO.constructQuery(
 				TransformIterable.transformedView(inDiff.getRemoved(), entityExtractor),
@@ -838,7 +870,6 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		// Now that we know which nodes changed positions,
 		// index the positions of all nodes
 		populatePointPosMappingGeoRSS(newModel, nodeToPos);
-
 		
 		// Mixin the changes from diff.added
 		StmtIterator it = diff.getAdded().listStatements();

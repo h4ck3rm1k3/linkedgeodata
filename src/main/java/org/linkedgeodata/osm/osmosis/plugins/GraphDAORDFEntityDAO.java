@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.linkedgeodata.core.ILGDVocab;
 import org.linkedgeodata.util.CollectionUtils;
@@ -15,7 +16,6 @@ import org.openstreetmap.osmosis.core.domain.v0_6.Entity;
 import org.openstreetmap.osmosis.core.domain.v0_6.Node;
 import org.openstreetmap.osmosis.core.domain.v0_6.Way;
 
-import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
@@ -61,7 +61,7 @@ public class GraphDAORDFEntityDAO
 	
 	public static List<String> constructQuery(Iterable<Entity> entities, ILGDVocab vocab, String graphName, int batchSize)
 	{
-		Set<String> uris = new HashSet<String>();
+		Set<String> uris = new TreeSet<String>();
 		
 		for(Entity entity : entities) {
 			uris.addAll(Arrays.asList(getInvolvedResources(entity, vocab)));
