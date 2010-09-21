@@ -512,7 +512,7 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 	}
 	
 	
-	private static Pattern rdfSeqPattern = Pattern.compile(RDF.getURI() + "#_(\\d+)$");
+	private static Pattern rdfSeqPattern = Pattern.compile(RDF.getURI() + "_(\\d+)$");
 	
 	public static Integer tryParseSeqPredicate(Resource res)
 	{
@@ -989,6 +989,7 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 
 					outDiff.getRemoved().add(base); 
 					outDiff.getAdded().add(base.getSubject(), predicate, newValue);
+					newModel.add(base.getSubject(), predicate, newValue);
 				}
 				
 			}

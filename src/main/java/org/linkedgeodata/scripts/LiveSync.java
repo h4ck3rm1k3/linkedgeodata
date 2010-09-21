@@ -270,7 +270,7 @@ public class LiveSync
 
 	private void step()
 		throws Exception
-	{		
+	{
 		long startTime = System.nanoTime();
 		
 		// Load the state config
