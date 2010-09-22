@@ -67,7 +67,7 @@ public class GraphDAORDFEntityDAO
 			uris.addAll(Arrays.asList(getInvolvedResources(entity, vocab)));
 		}
 		
-		return constructQuery(uris, graphName, 1024);
+		return constructQuery(uris, graphName, batchSize);
 	}
 	
 	

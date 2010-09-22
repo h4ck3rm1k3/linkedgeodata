@@ -784,7 +784,7 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 				TransformIterable.transformedView(inDiff.getRemoved(), entityExtractor),
 				vocab,
 				graphName,
-				512);
+				1024);
 		
 		// Fetch all data for current entities
 		Model oldModel = executeConstruct(graphDAO, mainGraphQueries);		
@@ -797,7 +797,7 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 				TransformIterable.transformedView(inDiff.getAdded(), entityExtractor),
 				vocab,
 				graphName,
-				512);
+				1024);
 		
 		// Fetch all data for current entities
 		Model oldModel2 = executeConstruct(graphDAO, mainGraphQueries2);		
@@ -937,7 +937,8 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		
 		// FIXME: If the positions of all nodes of a way are already known,
 		// there is no need to fetch its georss, as it can be computed
-		// directly.
+		// directly. (However this is only the case for ways that were edited, where
+		// all nodes are in the same changeset)
 		Model georssOfWaysWithRepositionedPoints = constructGeoRSSLinePolygon(graphDAO, graphName, lookupWays);
 		georss.add(georssOfWaysWithRepositionedPoints);
 		
@@ -946,6 +947,11 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		// the georss point list for that case that n nodes are removed
 		// from the end of a way.
 		for(Resource way : ways) {
+			
+			if(way.getURI().toString().equals("http://linkedgeodata.org/triplify/way54871694")) {
+				System.out.println("GOT IT");
+			}
+			
 			Resource wayNode = wayToWayNode(way);
 			
 			for(Statement base : georss.listStatements(way, null, (RDFNode) null).toList()) {
@@ -973,9 +979,15 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 					}
 					
 					if(index >= positions.size()) {
-						while(index > positions.size()) {
-							logger.warn("Adding dummy node at index " + positions.size() + " for wayNode " + wayNode);
-							positions.add("-180.0 -90.0");
+						while(index > positions.size()) {							
+							// FIXME: The positions.size() that is printed out might be inaccuracte, as some nodes may have already been added, before this error occurred.
+							// The fix would be to print out only the original number of positions in the georrs. 
+							logger.warn("Error patching way " + way + " because its georrs:line/polygon property is out of sync with the actual nodes: It was attempted to patch the georrs value on index " + index + ", although there are only " + positions.size() + " positions.");
+							positions = null;
+							
+							//logger.warn("Creating a dummy node for way " + way);
+							//positions.add("dummy");
+							break;
 						}
 						
 						positions.add(value);
@@ -1002,7 +1014,7 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 
 					Property predicate = base.getPredicate(); 
 					
-					// FIXME: A line may have become a polygon
+					// A line may have become a polygon and vice versa - check what type we have
 					Resource wayNode2 = wayToWayNode(base.getSubject());
 					TreeMap<Integer, RDFNode> indexToNode = ws.get(wayNode2);
 					if(indexToNode != null && !indexToNode.isEmpty()) {
@@ -1018,9 +1030,10 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 					
 					String newValue = StringUtil.implode(" ", positions);
 
-					outDiff.getRemoved().add(base); 
-					outDiff.getAdded().add(base.getSubject(), predicate, newValue);
-					newModel.add(base.getSubject(), predicate, newValue);
+					//outDiff.remove(base); 
+					Statement stmt = newModel.createStatement(base.getSubject(), predicate, newValue);
+					newModel.add(stmt);
+					outDiff.add(stmt);
 				}
 				
 			}
@@ -1075,14 +1088,34 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 			for(Map.Entry<Resource, TreeMap<Integer, RDFNode>> w : ws.entrySet()) {
 				List<String> geoRSSParts = new ArrayList<String>();
 				
+				// The list of nodes for which no positions was found - used for verbose error messages
+				//List<RDFNode> lookupFailures = new ArrayList<RDFNode>();
+				
 				int i = 1;
+				if(w.getKey().getURI().toString().equals("http://linkedgeodata.org/triplify/way54871694/nodes")) {
+					System.out.println("GOT IT");
+				}
+
+				int lookupErrors = 0;
 				for(Map.Entry<Integer, RDFNode> indexToNode : w.getValue().entrySet()) {
 					if(indexToNode.getKey() != (i++)) {
 						logger.warn("Index out of sync: " + w);
 					}
 					
-					geoRSSParts.add(nodeToPos.get(indexToNode.getValue()));
+					String value = nodeToPos.get(indexToNode.getValue());
+					if(value == null) {
+						++lookupErrors;
+					}
+					
+					if(lookupErrors == 0)
+						geoRSSParts.add(value);
 				}
+				
+				if(lookupErrors > 0) {
+					logger.warn("Cannot create georrs for way " + w.getKey() + " because no positions were found for " + lookupErrors + " nodes"); 
+					continue;
+				}
+				
 				
 				String geoRSS = StringUtil.implode(" ", geoRSSParts);
 				
@@ -1093,7 +1126,10 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 					? GeoRSS.polygon
 					: GeoRSS.line;
 				
-				outDiff.getAdded().add(wayNodeToWay(w.getKey()), predicate, geoRSS); 
+				Statement stmt = newModel.createStatement(wayNodeToWay(w.getKey()), predicate, geoRSS);
+				newModel.add(stmt);
+				outDiff.add(stmt);
+				//outDiff.getAdded().add();
 			}
 			
 			
