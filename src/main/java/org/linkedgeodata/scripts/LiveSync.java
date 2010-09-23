@@ -81,7 +81,7 @@ class EntityClassifier
 
 public class LiveSync
 {
-	private Logger logger = LoggerFactory.getLogger(LiveSync.class);
+	private static final Logger logger = LoggerFactory.getLogger(LiveSync.class);
 	
     protected static Options cliOptions;
 
@@ -229,7 +229,7 @@ public class LiveSync
 
 
 	public static void main(String[] args)
-		throws Exception
+		throws Throwable
 	{
 		PropertyConfigurator.configure("log4j.properties");
 		
@@ -252,7 +252,13 @@ public class LiveSync
 		
 		LiveSync liveSync = new LiveSync(config);
 		for(;;) {
-			liveSync.step();
+			try {
+				liveSync.step();
+			} catch(Throwable t) {
+				logger.error("An exception was encountered in the LiveSync update loop", t);
+				throw t;
+			}
+			 
 		}
 	}
 

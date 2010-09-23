@@ -442,12 +442,16 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 	
 	public void addEntity(ChangeAction ca, EntityContainer ec)
 	{
+		// If an entity became deleted but the same becomes recreated (shouldn't happen?)
+		// it must be treated as modified - on other words:
+		// Subsequent recreates must be treated as modified 
 		createdEntities.remove(ec);
-		modifiedEntities.remove(ec);
-		deletedEntities.remove(ec);
+		 
+		boolean didRemove =
+			modifiedEntities.remove(ec) || deletedEntities.remove(ec);
 		
 		switch(ca) {
-		case Create: createdEntities.add(ec); break;
+		case Create: if(didRemove) createdEntities.add(ec); else modifiedEntities.add(ec); break;
 		case Modify: modifiedEntities.add(ec); break;
 		case Delete: deletedEntities.add(ec); break;
 		}
@@ -796,8 +800,17 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 			
 			for(Map.Entry<Integer, RDFNode> entry : seq.entrySet()) {									
 				Resource node = entry.getValue().as(Resource.class);
+				int index = entry.getKey() - 1;
+
+				// FIXME This sometime fails for some reason.
+				// Most likely the nodelist of a way is out of sync with its polygon
+				// Add error checking so its possible to investigate
+				if(index >= positions.size()) {
+					logger.warn("Out of sync: Georss of " + wayNode + " has " + positions.size() + " coordinates, node " + node + " has index " + index);
+					continue;
+				}
 				
-				result.put(node, positions.get(entry.getKey() - 1));
+				result.put(node, positions.get(index));
 			}			
 		}
 
@@ -843,7 +856,7 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		throws Exception
 	{
 		//logger.info("Processing entities. Added/removed = " + inDiff.getAdded().size() + "/" + inDiff.getRemoved().size());
-		logger.info("Processing entities. Added/Modified/Removed = " + createdEntities.size() + "/" + modifiedEntities.size() + "/" + deletedEntities.size());
+		logger.info("Processing entities. Created/Modified/Deleted = " + createdEntities.size() + "/" + modifiedEntities.size() + "/" + deletedEntities.size());
 		long start = System.nanoTime();
 
 		
@@ -1256,9 +1269,13 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 			//process(entityDiff, mainGraphDiff, maxEntityBatchSize);
 			process(null, mainGraphDiff, maxEntityBatchSize);
 			//entityDiff.clear();
-			clear();
-		} catch(Exception e) {
+		}
+		catch(Exception e) {
 			logger.error("An error occurred at the completion phase of a task", e);
+			throw new RuntimeException(e);
+		}
+		finally {
+			clear();
 		}
 	}
 	
