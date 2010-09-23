@@ -580,6 +580,17 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 	// returned.
 	// However, actually all resources that are "a rdf:Seq" should be in the map
 	// (i guess)
+	public Map<Resource, TreeMap<Integer, RDFNode>> indexRdfMemberships(Model model)
+	{
+		Map<Resource, TreeMap<Integer, RDFNode>> result = new HashMap<Resource, TreeMap<Integer, RDFNode>>();
+		
+		processSeq(result, model);
+		
+		
+		return result;
+	}
+	
+	
 	public void processSeq(Map<Resource, TreeMap<Integer, RDFNode>> result, Model model) {
 		//Map<Resource, SortedMap<Integer, RDFNode>> result = new HashMap<Resource, SortedMap<Integer, RDFNode>>();
 		
@@ -663,7 +674,8 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 			it.close();
 		}
 	}
-	
+
+	/*
 	private void populatePointPosMappingGeoRSS(Model model, Map<Resource, String> nodeToPos)
 	{
 		StmtIterator it = model.listStatements(null, GeoRSS.point, (RDFNode)null);
@@ -677,46 +689,57 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		} finally {
 			it.close();
 		}
-	}
+	}*/
+
 	
+	public Map<Resource, String> createNodePosMapFromNodesGeoRSS(Model model)
+	{
+		Map<Resource, String> result = new HashMap<Resource, String>(); 
+
+		for(Statement stmt : model.listStatements(null, GeoRSS.point, (RDFNode)null).toList()) {
+			String value = stmt.getLiteral().getValue().toString();
+			result.put(stmt.getSubject(), value);
+		}
+		
+		return result;
+	}
+
 	
 	// Map<Resource, List<Resource>> wayToNodes
-	private void populatePointPosMapping(StmtIterator it, Model lookupModel, Map<Resource, String> nodeToPos)
+	/**
+	 * Creates a Node-Pos Map by mapping a georss:node-string to triples of the
+	 * corresponding nodes.
+	 * 
+	 * 
+	 */
+	public Map<Resource, String> createNodePosMapFromWays(Model model)
 	{
-		try {
-			while(it.hasNext()) {
-				Statement stmt = it.next();
-				
-				String value = stmt.getObject().as(Literal.class).getValue().toString();
-				
-				List<String> positions = tryParseGeoRRSPointList(value);
+		Map<Resource, String> result = new HashMap<Resource, String>(); 
+		
+		Set<Statement> ways =
+			model.listStatements(null, GeoRSS.line, (RDFNode)null).andThen(
+					model.listStatements(null, GeoRSS.polygon, (RDFNode)null)).toSet();
 
-				
-				Resource wayNodeRes = ResourceFactory.createResource(stmt.getSubject().toString() + "/nodes");
-				SortedMap<Integer, RDFNode> seq = processSeq(wayNodeRes, lookupModel);
-				
-				//List<Resource> wayNodes = new ArrayList<Resource>();
-				//wayToNodes.put(wayNodeRes, wayNodes);
-				
-				int i = 1;
-				for(Map.Entry<Integer, RDFNode> entry : seq.entrySet()) {
-					if(entry.getKey() != i) {
-						logger.warn("WayNodes out of sync");
-					}
-										
-					Resource wayNode = entry.getValue().as(Resource.class);
-					
-					nodeToPos.put(wayNode, positions.get(i));
-					//wayNodes.add(wayNode);
-					
-					
-					++i;
-				}
-				
+		for(Statement stmt : ways) {
+			Resource wayNode = wayToWayNode(stmt.getSubject());
+			SortedMap<Integer, RDFNode> seq = processSeq(wayNode, model);
+			
+			String value = stmt.getObject().as(Literal.class).getValue().toString();
+			List<String> positions = tryParseGeoRRSPointList(value);
+
+			if(positions == null) {
+				logger.warn("Error parsing a geoRSS point list from statement " + stmt);
+				continue;
 			}
-		} finally {
-			it.close();
+			
+			for(Map.Entry<Integer, RDFNode> entry : seq.entrySet()) {									
+				Resource node = entry.getValue().as(Resource.class);
+				
+				result.put(node, positions.get(entry.getKey() - 1));
+			}			
 		}
+
+		return result;
 	}
 	
 	/**
@@ -760,8 +783,6 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		logger.info("Processing entities. Added/removed = " + inDiff.getAdded().size() + "/" + inDiff.getRemoved().size());
 		long start = System.nanoTime();
 	
-		//List<List<EntityContainer>> parts;
-
 		Transformer<EntityContainer, Entity> entityExtractor = new Transformer<EntityContainer, Entity>() {
 			@Override
 			public Entity transform(EntityContainer input)
@@ -772,19 +793,12 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		
 		String graphName = mainGraphName;
 
-		/*
-		List<Long> ids = new ArrayList<Long>();
-		for(EntityContainer e : entityDiff.getAdded()) {
-			ids.add(e.getEntity().getId());
-		}
-		System.out.println(ids);
-		*/
 		
 		List<String> mainGraphQueries = GraphDAORDFEntityDAO.constructQuery(
 				TransformIterable.transformedView(inDiff.getRemoved(), entityExtractor),
 				vocab,
 				graphName,
-				1024);
+				512);
 		
 		// Fetch all data for current entities
 		Model oldModel = executeConstruct(graphDAO, mainGraphQueries);		
@@ -797,7 +811,7 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 				TransformIterable.transformedView(inDiff.getAdded(), entityExtractor),
 				vocab,
 				graphName,
-				1024);
+				512);
 		
 		// Fetch all data for current entities
 		Model oldModel2 = executeConstruct(graphDAO, mainGraphQueries2);		
@@ -823,7 +837,7 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		
 		// Afterwards, we scan the diff, whether any of the positions of the nodes were changed
 		// and update our node-position mapping accordingly
-		Map<Resource, String> nodeToPos = new HashMap<Resource, String>();
+		//Map<Resource, String> nodeToPos = new HashMap<Resource, String>();
 		//Map<Resource, List<Resource>> wayToNodes = new HashMap<Resource, List<Resource>>();
 		
 		// Deduce PointPos mappings based on georss:(line|polygon)s from the old model
@@ -842,70 +856,42 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		outDiff.add(diff.getAdded());
 
 
-		// Update PointPos mappings based on the diff to the new model
-		// FIXME Should we scan the "remove"-model first and remove corresponding
-		// point-pos mappings, so we can detect dangling references? Otherwise
-		// the old positions would still be referencable.
-		populatePointPosMappingGeoRSS(diff.getAdded(), nodeToPos);
-		logger.info("" + ((System.nanoTime() - start) / 1000000000.0) + " Completed populating point-position mapping based on old model, indexed " +  nodeToPos.size() + " mappings");
+		// Determine the set set of nodes that have been repositioned
+		// These are nodes that have a position-related triple in the diff
+		Map<Resource, String> repositionedNodes = createNodePosMapFromNodesGeoRSS(diff.getAdded());
+		logger.info("" + ((System.nanoTime() - start) / 1000000000.0) + " Completed populating " +  repositionedNodes.size() + " repositioned nodes");
 			
-		
-		
-		// for each repositioned node, determine the ways it belongs to
-		// FIXME: The following statement is probably true:
-		// Nodes that were created (rather than modified) can only belong
-		// to ways that are part of the changeset.
-		// Therefore, there is no need to check for way-memberships of these
-		// nodes.
-		// HOWEVER: With this osmosis pipe architecture, we probably don't
-		// know where a changeset starts and ends.
-		// But STILL: Probably no node is referenced before it is created.
-		//logger.info(nodeToPos.keySet() + " nodes were created or repositioned");
+		// FIXME: Add an option to exclude newly created nodes here - as they can't affect
+		// any previously existing ways anyway (however, this may cause problems:
+		// if the store is initialized from a dump, and then change sets are applied starting from before the dump,
+		// then a create wouldn't cause the store to be checked for existing data.
+		// hm, ok this is no problem: as the store would contain the same data then, and only duplicates would be
+		// inserted.
+		Model wayPatchSet = selectWayNodesByNodes(graphDAO, graphName, repositionedNodes.keySet());
+		logger.info("" + ((System.nanoTime() - start) / 1000000000.0) + " Completed fetching ways for repositioned nodes, " + wayPatchSet.size() + " waynodes affected");
 
-		// This model is basically a map containing the changes that need to be injected into the
-		// ways polygon: way -> index -> update
-		Model changeSet = selectWayNodesByNodes(graphDAO, graphName, nodeToPos.keySet());
-		logger.info("" + ((System.nanoTime() - start) / 1000000000.0) + " Completed fetching ways for repositioned nodes, " + changeSet.size() + " waynodes affected");
+		Map<Resource, TreeMap<Integer, RDFNode>> affectedWays = indexRdfMemberships(wayPatchSet);
+		Map<Resource, TreeMap<Integer, RDFNode>> newWays = indexRdfMemberships(newModel);
 
-		// Now that we know which nodes changed positions,
-		// index the positions of all nodes
-		populatePointPosMappingGeoRSS(newModel, nodeToPos);
+		// If an affected way is also a new way, only treat it as a new one
+		// (As only new ways undergo structural changes)
+		for(Resource newWay : newWays.keySet())
+			affectedWays.remove(newWay);
 		
-		// Mixin the changes from diff.added
-		StmtIterator it = diff.getAdded().listStatements();
-		try {
-			while(it.hasNext()) {
-				Statement stmt = it.next();
-				
-				String subject = stmt.getSubject().toString();
-				if(subject.endsWith("/nodes"))
-					changeSet.add(stmt);
-			}
-		} finally {
-			it.close();
-		}
+		// Create inferred node-pos mappings based on georss data in the old model
+		Map<Resource, String> nodeToPos = createNodePosMapFromWays(oldModel);
 		
-		// From this model retrieve the set of wayNode resources
-		Set<Resource> wayNodes = changeSet.listSubjects().toSet();
-		Set<Resource> ways = new HashSet<Resource>();
-				
-		for(Resource wayNode : wayNodes) {
-			ways.add(wayNodeToWay(wayNode));
-		}
+		// Index the positions of all nodes in the new model
+		Map<Resource, String> nodeToPosTmp = createNodePosMapFromNodesGeoRSS(newModel);
 		
-		// Retrieve the positions of those nodes of which we don't have it yet
+		// Note that we overwrite the inferred data with data from the new model
+		nodeToPos.putAll(nodeToPosTmp);
 
-		
-		
-		// Patch ways
-		// Index all newly updated ways - we use that in order to determine
-		// whether a way is a line or a polygon
-		Map<Resource, TreeMap<Integer, RDFNode>> ws = new HashMap<Resource, TreeMap<Integer, RDFNode>>();
-		processSeq(ws, newModel);
-
-		// Determine nodes for which we yet have to fetch the positions
+		// Determine which node positions we yet have to retrieve
+		// These are all nodes of newWays that do not yet have a position
+		// assigned
 		Set<Resource> unindexedNodes = new HashSet<Resource>(); 
-		for(SortedMap<Integer, RDFNode> indexToNode : ws.values()) {
+		for(SortedMap<Integer, RDFNode> indexToNode : newWays.values()) {
 			for(RDFNode node : indexToNode.values()) {
 				if(!(node instanceof Resource)) {
 					logger.error("Not a node: " + node);
@@ -923,217 +909,175 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		logger.info("" + ((System.nanoTime() - start) / 1000000000.0) + " Completed fetching positions for " + mappings.size() + " additional nodes");
 
 		
+		// Retrieve georss of affected ways
+		// Note: There is no point in attempting to reuse georrs from the old model,
+		// as this georss has already been decomposed into the 'nodeToPos' map.
+		// TODO Clearify
 		
-		// Load all georss:(line|polygon) strings of the old model into a new one
-		Model georss = ModelFactory.createDefaultModel();
-		georss.add(oldModel.listStatements(null, GeoRSS.line, (RDFNode)null));
-		georss.add(oldModel.listStatements(null, GeoRSS.polygon, (RDFNode)null));
-		
-		// Load all georss:(line|polygon) strings of ways with repositioned nodes
-		// Some of that data may already be part of the old model 
-		Set<Resource> lookupWays = new HashSet<Resource>(ways);
-		Set<Resource> alreadyHaveGeoRSS = georss.listSubjects().toSet(); 
-		lookupWays.removeAll(alreadyHaveGeoRSS);
 		
 		// FIXME: If the positions of all nodes of a way are already known,
 		// there is no need to fetch its georss, as it can be computed
 		// directly. (However this is only the case for ways that were edited, where
 		// all nodes are in the same changeset)
-		Model georssOfWaysWithRepositionedPoints = constructGeoRSSLinePolygon(graphDAO, graphName, lookupWays);
-		georss.add(georssOfWaysWithRepositionedPoints);
+		Model georssOfAffectedWays = constructGeoRSSLinePolygon(graphDAO, graphName, affectedWays.keySet());
 		
 		
+		
+		// Now patch the georss
 		// Note We need to take the removed triples into account when patching
 		// the georss point list for that case that n nodes are removed
 		// from the end of a way.
-		for(Resource way : ways) {
+		for(Map.Entry<Resource, TreeMap<Integer, RDFNode>> affectedWay : affectedWays.entrySet()) {
+			Resource wayNode = affectedWay.getKey();
+			Resource way = wayNodeToWay(wayNode);
 			
+			TreeMap<Integer, RDFNode> fixes = affectedWay.getValue();
+
 			if(way.getURI().toString().equals("http://linkedgeodata.org/triplify/way54871694")) {
 				System.out.println("GOT IT");
 			}
 			
-			Resource wayNode = wayToWayNode(way);
 			
-			for(Statement base : georss.listStatements(way, null, (RDFNode) null).toList()) {
-				String geoStr = base.getLiteral().getValue().toString();
-				ArrayList<String> positions = tryParseGeoRRSPointList(geoStr);
+			Set<Statement> georssStmts =
+				georssOfAffectedWays.listStatements(null, GeoRSS.line, (RDFNode)null).andThen(
+						georssOfAffectedWays.listStatements(null, GeoRSS.polygon, (RDFNode)null)).toSet();
+
+			if(georssStmts.isEmpty()) {
+				logger.warn("Cannot update georss of way " + way + " because no pre-existing georss found.");
+				continue;
+			} else if(georssStmts.size() > 1) {
+				logger.warn("Cannot update georss of way " + way + " because multiple georss found.");
+				continue;
+			}
+			
+			Statement base = georssStmts.iterator().next();
+			
+			String geoStr = base.getLiteral().getValue().toString();
+			ArrayList<String> positions = tryParseGeoRRSPointList(geoStr);
+							
+			int highestUpdateIndex = fixes.isEmpty()
+				? -1
+				: fixes.lastEntry().getKey() - 1;				
 				
-				int highestUpdateIndex = -1;
+			for(Map.Entry<Integer, RDFNode> fix : fixes.entrySet()) {
+				int index = fix.getKey() - 1;
 				
-				SortedMap<Integer, RDFNode> fixes = processSeq(wayNode, changeSet);
-				//for(Statement fix : changeSet.listStatements(wayNode, null, (RDFNode)null).toList()) {
-				for(Map.Entry<Integer, RDFNode> fix : fixes.entrySet()) {
-					int index = fix.getKey() - 1;
-					//Integer index = tryParseSeqPredicate(fix.getPredicate());
-					//if(index == null)
-						//continue;
-					
-					highestUpdateIndex = Math.max(highestUpdateIndex, index);
-					
-					//String value = fix.getLiteral().getValue().toString().trim();
-					String value = nodeToPos.get(fix.getValue());
-					if(value == null) {
-						logger.warn("Cannot patch way " + way + " because its point list references node " + fix.getValue() + " for which no position was found");
+				String value = nodeToPos.get(fix.getValue());
+				if(value == null) {
+					logger.warn("Cannot patch way " + way + " because its point list references node " + fix.getValue() + " for which no position was found");
+					positions = null;
+					break;
+				}
+				
+				if(index >= positions.size()) {
+					while(index > positions.size()) {							
+						// FIXME: The positions.size() that is printed out might be inaccuracte, as some nodes may have already been added, before this error occurred.
+						// The fix would be to print out only the original number of positions in the georrs. 
+						logger.warn("Error patching way " + way + " because its georrs:line/polygon property is out of sync with the actual nodes: It was attempted to patch the georrs value on index " + index + ", although there are only " + positions.size() + " positions.");
 						positions = null;
 						break;
-					}
-					
-					if(index >= positions.size()) {
-						while(index > positions.size()) {							
-							// FIXME: The positions.size() that is printed out might be inaccuracte, as some nodes may have already been added, before this error occurred.
-							// The fix would be to print out only the original number of positions in the georrs. 
-							logger.warn("Error patching way " + way + " because its georrs:line/polygon property is out of sync with the actual nodes: It was attempted to patch the georrs value on index " + index + ", although there are only " + positions.size() + " positions.");
-							positions = null;
-							
-							//logger.warn("Creating a dummy node for way " + way);
-							//positions.add("dummy");
-							break;
-						}
-						
-						positions.add(value);
-						
-					}
-					else {					
-						positions.set(index, value);
-					}
+					}					
+					positions.add(value);
 				}
-				
-				
-				if(positions != null) {
-					// Check against diff.removed whether we need to remove some positions
-					
-					for(Statement check : diff.getRemoved().listStatements(wayNode, null, (RDFNode)null).toList()) {
-						Integer index = tryParseSeqPredicate(check.getPredicate());
-						if(index == null)
-							continue;
-						
-						// Remove all indexes that are above highestUpdateIndex
-						if(index > highestUpdateIndex)
-							positions.remove(index); // FIXME This does array shifting
-					}
-
-					Property predicate = base.getPredicate(); 
-					
-					// A line may have become a polygon and vice versa - check what type we have
-					Resource wayNode2 = wayToWayNode(base.getSubject());
-					TreeMap<Integer, RDFNode> indexToNode = ws.get(wayNode2);
-					if(indexToNode != null && !indexToNode.isEmpty()) {
-						predicate = indexToNode.firstEntry().getValue().equals(indexToNode.lastEntry().getValue())
-								? GeoRSS.polygon
-								: GeoRSS.line;
-					}
-					
-					
-					// Check whether the way (and therefore everything of it)
-					// is part of the newModel
-					
-					
-					String newValue = StringUtil.implode(" ", positions);
-
-					//outDiff.remove(base); 
-					Statement stmt = newModel.createStatement(base.getSubject(), predicate, newValue);
-					newModel.add(stmt);
-					outDiff.add(stmt);
+				else {					
+					positions.set(index, value);
 				}
+			}
+			
+			
+			if(positions != null) {
+				// Check against diff.removed whether we need to remove some positions
 				
+				for(Statement check : diff.getRemoved().listStatements(wayNode, null, (RDFNode)null).toList()) {
+					Integer index = tryParseSeqPredicate(check.getPredicate());
+					if(index == null)
+						continue;
+					--index;
+					
+					// Remove all indexes that are above highestUpdateIndex
+					if(index > highestUpdateIndex)
+						positions.remove(index); // FIXME This does array shifting
+				}
+
+				Property predicate = base.getPredicate(); 
+				
+				// WRONG: A line may have become a polygon and vice versa - check what type we have
+				// When repositioning nodes, the above can't happen
+				/*
+				Resource wayNode2 = wayToWayNode(base.getSubject());
+				TreeMap<Integer, RDFNode> indexToNode = ws.get(wayNode2);
+				if(indexToNode != null && !indexToNode.isEmpty()) {
+					predicate = indexToNode.firstEntry().getValue().equals(indexToNode.lastEntry().getValue())
+							? GeoRSS.polygon
+							: GeoRSS.line;
+				}
+				*/
+				
+				// Check whether the way (and therefore everything of it)
+				// is part of the newModel				
+				
+				String newValue = StringUtil.implode(" ", positions);
+
+				//outDiff.remove(base); 
+				Statement stmt = newModel.createStatement(base.getSubject(), predicate, newValue);
+				newModel.add(stmt);
+				outDiff.add(stmt);
 			}
 			
 		}
 
-		// If there are ways left that did not have georss (line|polygon)
-		// triple, generate that for them.
-		// Note: We are not creating a copy of the ways set because this
-		// is the last time we need that set
-		Set<Resource> waysWithoutGeoRSS = ways;
-		waysWithoutGeoRSS.removeAll(georss.listSubjects().toSet());
 		
-		if(!waysWithoutGeoRSS.isEmpty()) {
+		// Process new ways
+		
+		// Finally, for each way generate the georss
+		//for(Map.Entry<Resource, TreeMap<Integer, RDFNode>> w : ws.entrySet()) {
+		for(Map.Entry<Resource, TreeMap<Integer, RDFNode>> newWay : newWays.entrySet()) {
+			Resource wayNode = newWay.getKey();
+			Resource way = wayNodeToWay(wayNode);
 			
-			List<Resource> wayNodes2 = new ArrayList<Resource>();
-			for(Resource res : waysWithoutGeoRSS) {
-				 wayNodes2.add(wayToWayNode(res));
-			}
+			TreeMap<Integer, RDFNode> fixes = newWay.getValue();
 			
-			logger.info("Creating GeoRSS for " + waysWithoutGeoRSS.size() + " ways");
-			Model wayNodesToNodes = selectNodesByWayNodes(graphDAO, graphName, wayNodes2);
 			
-			// Create the set of nodes of which we do not have positions
-			//Set<Resource> 
-			unindexedNodes = new HashSet<Resource>();
-			for(RDFNode node : wayNodesToNodes.listObjects().toSet()) {
-				if(node.isResource()
-						&& node.toString().startsWith("http://linkedgeodata.org/node")
-						&& !nodeToPos.containsKey(node)) {
-					
-					unindexedNodes.add((Resource)node);
-				}
-			}
-			
-			populatePointPosMappingGeoRSS(wayNodesToNodes, nodeToPos);
+			List<String> geoRSSParts = new ArrayList<String>();				
+			int i = 1;
+			/*
+			if(wayNode.getURI().toString().equals("http://linkedgeodata.org/triplify/way54871694/nodes")) {
+				System.out.println("GOT IT");
+			}*/
 
-			// finally fetch the positions
-			//Map<Resource, RDFNode>
-			mappings = fetchNodePositions(graphDAO, graphName, unindexedNodes);
-			
-			for(Map.Entry<Resource, RDFNode> mapping : mappings.entrySet()) {
-				nodeToPos.put(mapping.getKey(), mapping.getValue().toString());
-			}
-			
-			
-			//Map<Resource, SortedMap<Integer, RDFNode>> ws = new HashMap<Resource, SortedMap<Integer, RDFNode>>();
-			processSeq(ws, wayNodesToNodes);
-			//processSeq(ws, newModel);
-			
-			// Finally, for each way generate the georss
-			for(Map.Entry<Resource, TreeMap<Integer, RDFNode>> w : ws.entrySet()) {
-				List<String> geoRSSParts = new ArrayList<String>();
-				
-				// The list of nodes for which no positions was found - used for verbose error messages
-				//List<RDFNode> lookupFailures = new ArrayList<RDFNode>();
-				
-				int i = 1;
-				if(w.getKey().getURI().toString().equals("http://linkedgeodata.org/triplify/way54871694/nodes")) {
-					System.out.println("GOT IT");
-				}
+			int lookupErrors = 0;
 
-				int lookupErrors = 0;
-				for(Map.Entry<Integer, RDFNode> indexToNode : w.getValue().entrySet()) {
-					if(indexToNode.getKey() != (i++)) {
-						logger.warn("Index out of sync: " + w);
-					}
-					
-					String value = nodeToPos.get(indexToNode.getValue());
-					if(value == null) {
-						++lookupErrors;
-					}
-					
-					if(lookupErrors == 0)
-						geoRSSParts.add(value);
+			if(fixes.isEmpty())
+				continue;
+			
+			for(Map.Entry<Integer, RDFNode> fix : fixes.entrySet()) {
+				if(fix.getKey() != (i++)) {
+					logger.warn("Index out of sync: " + fix);
 				}
 				
-				if(lookupErrors > 0) {
-					logger.warn("Cannot create georrs for way " + w.getKey() + " because no positions were found for " + lookupErrors + " nodes"); 
-					continue;
+				String value = nodeToPos.get(fix.getValue());
+				if(value == null) {
+					++lookupErrors;
 				}
 				
-				
-				String geoRSS = StringUtil.implode(" ", geoRSSParts);
-				
-				if(w.getValue().isEmpty())
-					continue;
-				
-				Property predicate = w.getValue().firstEntry().getValue().equals(w.getValue().lastEntry().getValue())
-					? GeoRSS.polygon
-					: GeoRSS.line;
-				
-				Statement stmt = newModel.createStatement(wayNodeToWay(w.getKey()), predicate, geoRSS);
-				newModel.add(stmt);
-				outDiff.add(stmt);
-				//outDiff.getAdded().add();
+				if(lookupErrors == 0)
+					geoRSSParts.add(value);
 			}
 			
+			if(lookupErrors > 0) {
+				logger.warn("Cannot create georrs for way " + wayNode + " because no positions were found for " + lookupErrors + " nodes"); 
+				continue;
+			}
 			
-			//Map<Resource, SortedMap<Integer, RDFNode>> index = processSeq(wayNodesToNodes);
+			String geoRSS = StringUtil.implode(" ", geoRSSParts);
+			
+			Property predicate = fixes.firstEntry().getValue().equals(fixes.lastEntry().getValue())
+				? GeoRSS.polygon
+				: GeoRSS.line;
+			
+			Statement stmt = newModel.createStatement(way, predicate, geoRSS);
+			newModel.add(stmt);
+			outDiff.add(stmt);
 		}
 		
 		
