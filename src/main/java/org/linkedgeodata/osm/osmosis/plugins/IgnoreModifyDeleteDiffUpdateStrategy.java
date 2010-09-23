@@ -422,9 +422,68 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 	
 	//private Set<Entity> entities = new HashSet<Entity>();
 	
-	SetDiff<EntityContainer> entityDiff = new SetDiff<EntityContainer>(new EntityByTypeThenIdComparator());
+	//SetDiff<EntityContainer> entityDiff = new SetDiff<EntityContainer>(new EntityByTypeThenIdComparator());
 
+	//Map<ChangeAction, Set<EntityContainer>> entityDiff = new HashMap<ChangeAction, Set<EntityContainer>>();
 	
+	///*
+	Set<EntityContainer> createdEntities = new TreeSet<EntityContainer>(new EntityByTypeThenIdComparator());
+	Set<EntityContainer> deletedEntities = new TreeSet<EntityContainer>(new EntityByTypeThenIdComparator());
+	Set<EntityContainer> modifiedEntities = new TreeSet<EntityContainer>(new EntityByTypeThenIdComparator());
+	//*/
+	
+	
+	public void clear()
+	{
+		createdEntities.clear();
+		modifiedEntities.clear();
+		deletedEntities.clear();
+	}
+	
+	public void addEntity(ChangeAction ca, EntityContainer ec)
+	{
+		createdEntities.remove(ec);
+		modifiedEntities.remove(ec);
+		deletedEntities.remove(ec);
+		
+		switch(ca) {
+		case Create: createdEntities.add(ec); break;
+		case Modify: modifiedEntities.add(ec); break;
+		case Delete: deletedEntities.add(ec); break;
+		}
+		
+		/*
+		if(ca.equals(ChangeAction.Modify)) {
+			
+			if(createdEntities.contains(ec)) {
+				// note the element in the set may be different from the one we insert, however the comparator returns the same result
+				createdEntities.remove(ec); 
+				createdEntities.add(ec);
+			} else {
+				modifiedEntities.add(ec);
+			}
+		
+		} else if(ca.equals(ChangeAction.Create)) {
+
+			if(modifiedEntities.contains(ec)) {
+				logger.warn("Adding " + ec + " for creation, however it is already being modified - leaving on modified");
+				//createdEntities.remove(ec); 
+				//createdEntities.add(ec);
+			} else if(deletedEntities.contains(ec)) {
+				deletedEntities.remove(ec);
+				modifiedEntities.add(ec);
+			} else {
+				createdEntities.add(ec);
+			}
+		} else if(ca.equals(ChangeAction.Delete)) {
+			createdEntities.remove(ec);
+			modifiedEntities.remove(ec);
+			deletedEntities.add(ec);
+		}
+		*/
+	}
+
+
 	public static void main(String[] args) {
 		//SetDiff<EntityContainer> entityDiff = new SetDiff<EntityContainer>(new EntityByTypeThenIdComparator());
 		Comparator<EntityContainer> c = new EntityByTypeThenIdComparator();
@@ -494,12 +553,15 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 	@Override
 	public void process(ChangeContainer c)
 	{
+		addEntity(c.getAction(), c.getEntityContainer());
+		
+		/*
 		if(c.getAction().equals(ChangeAction.Delete)) {
 			entityDiff.remove(c.getEntityContainer());
 		}		
 		else {
 			entityDiff.add(c.getEntityContainer());
-		}
+		}*/
 	}
 
 	
@@ -780,9 +842,17 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 	private void process(IDiff<? extends Collection<EntityContainer>> inDiff, RDFDiff outDiff, int batchSize)
 		throws Exception
 	{
-		logger.info("Processing entities. Added/removed = " + inDiff.getAdded().size() + "/" + inDiff.getRemoved().size());
+		//logger.info("Processing entities. Added/removed = " + inDiff.getAdded().size() + "/" + inDiff.getRemoved().size());
+		logger.info("Processing entities. Added/Modified/Removed = " + createdEntities.size() + "/" + modifiedEntities.size() + "/" + deletedEntities.size());
 		long start = System.nanoTime();
-	
+
+		
+		Set<Resource> createdResources = GraphDAORDFEntityDAO.getInvolvedResources(createdEntities, vocab);
+		//Set<Resource> modifiedResources = GraphDAORDFEntityDAO.getInvolvedResources(modifiedEntities, vocab);
+		Set<Resource> deletedResources = GraphDAORDFEntityDAO.getInvolvedResources(deletedEntities, vocab);
+		
+		logger.info("" + ((System.nanoTime() - start) / 1000000000.0) + " Completed converting entities to resources.");
+
 		Transformer<EntityContainer, Entity> entityExtractor = new Transformer<EntityContainer, Entity>() {
 			@Override
 			public Entity transform(EntityContainer input)
@@ -795,7 +865,8 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 
 		
 		List<String> mainGraphQueries = GraphDAORDFEntityDAO.constructQuery(
-				TransformIterable.transformedView(inDiff.getRemoved(), entityExtractor),
+				//TransformIterable.transformedView(inDiff.getRemoved(), entityExtractor),
+				TransformIterable.transformedView(deletedEntities, entityExtractor),
 				vocab,
 				graphName,
 				512);
@@ -808,21 +879,24 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		
 		
 		List<String> mainGraphQueries2 = GraphDAORDFEntityDAO.constructQuery(
-				TransformIterable.transformedView(inDiff.getAdded(), entityExtractor),
+				//TransformIterable.transformedView(inDiff.getAdded(), entityExtractor),
+				TransformIterable.transformedView(modifiedEntities, entityExtractor),
 				vocab,
 				graphName,
 				512);
 		
 		// Fetch all data for current entities
 		Model oldModel2 = executeConstruct(graphDAO, mainGraphQueries2);		
-		logger.info("" + ((System.nanoTime() - start) / 1000000000.0) + " Completed fetching data for added entities, " + oldModel2.size() + " triples fetched");
+		logger.info("" + ((System.nanoTime() - start) / 1000000000.0) + " Completed fetching data for modified entities, " + oldModel2.size() + " triples fetched");
 
 		oldModel.add(oldModel2);
 		
 		Model newModel = ModelFactory.createDefaultModel();
 		
 		//processBatch(TransformIterable.transformedView(inDiff.getRemoved(), entityExtractor), ChangeAction.Delete, mainGraphName, oldModel, newModel);
-		transformToModel(TransformIterable.transformedView(inDiff.getAdded(), entityExtractor), mainGraphName, newModel);		
+		//transformToModel(TransformIterable.transformedView(inDiff.getAdded(), entityExtractor), mainGraphName, newModel);		
+		transformToModel(TransformIterable.transformedView(createdEntities, entityExtractor), mainGraphName, newModel);
+		transformToModel(TransformIterable.transformedView(modifiedEntities, entityExtractor), mainGraphName, newModel);
 		logger.info("" + ((System.nanoTime() - start) / 1000000000.0) + " Completed RDF transformation of entities");
 		
 		
@@ -867,8 +941,19 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		// then a create wouldn't cause the store to be checked for existing data.
 		// hm, ok this is no problem: as the store would contain the same data then, and only duplicates would be
 		// inserted.
+		
+		// Remove all deleted and created resources from repositionedNodes
+		// - thus all non-modified ones - this can be done more nicely:
+		// Note that a modified node does not imply a repositioned one (as e.g. only the tags could have changed).
+		for(Resource res : createdResources)
+			repositionedNodes.remove(res);
+		for(Resource res : deletedResources)
+			repositionedNodes.remove(res);
+		
+		
+		
 		Model wayPatchSet = selectWayNodesByNodes(graphDAO, graphName, repositionedNodes.keySet());
-		logger.info("" + ((System.nanoTime() - start) / 1000000000.0) + " Completed fetching ways for repositioned nodes, " + wayPatchSet.size() + " waynodes affected");
+		logger.info("" + ((System.nanoTime() - start) / 1000000000.0) + " Completed fetching ways for " + repositionedNodes.keySet().size() + " repositioned nodes, " + wayPatchSet.size() + " waynodes affected");
 
 		Map<Resource, TreeMap<Integer, RDFNode>> affectedWays = indexRdfMemberships(wayPatchSet);
 		Map<Resource, TreeMap<Integer, RDFNode>> newWays = indexRdfMemberships(newModel);
@@ -1168,8 +1253,10 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		//logger.info(this.getClass() + " completed");
 		try {
 			mainGraphDiff = new RDFDiff();
-			process(entityDiff, mainGraphDiff, maxEntityBatchSize);
-			entityDiff.clear();
+			//process(entityDiff, mainGraphDiff, maxEntityBatchSize);
+			process(null, mainGraphDiff, maxEntityBatchSize);
+			//entityDiff.clear();
+			clear();
 		} catch(Exception e) {
 			logger.error("An error occurred at the completion phase of a task", e);
 		}

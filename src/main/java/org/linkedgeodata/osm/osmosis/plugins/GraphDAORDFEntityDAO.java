@@ -12,6 +12,7 @@ import org.linkedgeodata.core.ILGDVocab;
 import org.linkedgeodata.util.CollectionUtils;
 import org.linkedgeodata.util.StringUtil;
 import org.linkedgeodata.util.sparql.ISparulExecutor;
+import org.openstreetmap.osmosis.core.container.v0_6.EntityContainer;
 import org.openstreetmap.osmosis.core.domain.v0_6.Entity;
 import org.openstreetmap.osmosis.core.domain.v0_6.Node;
 import org.openstreetmap.osmosis.core.domain.v0_6.Way;
@@ -40,6 +41,21 @@ public class GraphDAORDFEntityDAO
 				result.add(res);
 			}
 		}
+		
+		return result;
+	}
+	
+	public static Set<Resource> getInvolvedResources(Collection<EntityContainer> ecs, ILGDVocab vocab) {
+		Set<Resource> result = new HashSet<Resource>();
+		
+		for(EntityContainer ec : ecs) {
+			for(String str : getInvolvedResources(ec.getEntity(), vocab)) {
+				Resource res = ResourceFactory.createResource(str);
+				
+				result.add(res);
+			}
+		}
+		
 		
 		return result;
 	}
