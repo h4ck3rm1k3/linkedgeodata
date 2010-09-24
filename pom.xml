@@ -249,7 +249,7 @@
 			<version>10.6.1.0</version>
 			<type>jar</type>
 			<scope>compile</scope>
-		</dependency>
+		</dependency>		
 	</dependencies>
 	<properties>
 		<maven.compiler.source>1.6</maven.compiler.source>

@@ -54,6 +54,16 @@ public class RegexTextTagMapper
 	private String  property;
 	private boolean isOSMEntity;
 	
+	public String getProperty()
+	{
+		return property;
+	}
+	
+	public boolean describesOSMEntity()
+	{
+		return isOSMEntity;
+	}
+	
 	
 	/**
 	 * 
@@ -141,6 +151,50 @@ public class RegexTextTagMapper
 		}
 
 		return model;
+	}
+
+	@Override
+	public <T> T accept(IOneOneTagMapperVisitor<T> visitor)
+	{
+		return visitor.accept(this);
+	}
+
+	@Override
+	public int hashCode()
+	{
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (isOSMEntity ? 1231 : 1237);
+		result = prime * result
+				+ ((keyPattern == null) ? 0 : keyPattern.hashCode());
+		result = prime * result
+				+ ((property == null) ? 0 : property.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof RegexTextTagMapper))
+			return false;
+		RegexTextTagMapper other = (RegexTextTagMapper) obj;
+		if (isOSMEntity != other.isOSMEntity)
+			return false;
+		if (keyPattern == null) {
+			if (other.keyPattern != null)
+				return false;
+		} else if (!keyPattern.equals(other.keyPattern))
+			return false;
+		if (property == null) {
+			if (other.property != null)
+				return false;
+		} else if (!property.equals(other.property))
+			return false;
+		return true;
 	}
 }
 

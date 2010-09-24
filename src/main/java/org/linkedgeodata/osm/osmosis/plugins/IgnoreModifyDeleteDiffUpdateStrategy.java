@@ -787,7 +787,7 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 					model.listStatements(null, GeoRSS.polygon, (RDFNode)null)).toSet();
 
 		for(Statement stmt : ways) {
-			Resource wayNode = wayToWayNode(stmt.getSubject());
+			Resource wayNode = vocab.wayToWayNode(stmt.getSubject());
 			SortedMap<Integer, RDFNode> seq = processSeq(wayNode, model);
 			
 			String value = stmt.getObject().as(Literal.class).getValue().toString();
@@ -820,25 +820,11 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 	/**
 	 * transforms a waynode resource to the corresponding way resource
 	 * 
+	 * 
 	 * @param res
 	 * @return
 	 */
-	private static Resource wayNodeToWay(Resource res)
-	{
-		String str = res.getURI().toString();
-		String suffix = "/nodes";
-		if(!str.endsWith(suffix))
-			return null;
-		
-		str = str.substring(0, str.length() - suffix.length());
-		
-		return ResourceFactory.createResource(str);
-	}
 
-	private static Resource wayToWayNode(Resource res)
-	{
-		return ResourceFactory.createResource(res.getURI().toString() + "/nodes");
-	}
 		
 	
 	/**
@@ -1027,7 +1013,7 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		// from the end of a way.
 		for(Map.Entry<Resource, TreeMap<Integer, RDFNode>> affectedWay : affectedWays.entrySet()) {
 			Resource wayNode = affectedWay.getKey();
-			Resource way = wayNodeToWay(wayNode);
+			Resource way = vocab.wayNodeToWay(wayNode);
 			
 			if(way == null) {
 				logger.error(wayNode + " is not a wayNode");
@@ -1137,7 +1123,7 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		//for(Map.Entry<Resource, TreeMap<Integer, RDFNode>> w : ws.entrySet()) {
 		for(Map.Entry<Resource, TreeMap<Integer, RDFNode>> newWay : newWays.entrySet()) {
 			Resource wayNode = newWay.getKey();
-			Resource way = wayNodeToWay(wayNode);
+			Resource way = vocab.wayNodeToWay(wayNode);
 			
 			if(way == null) {
 				logger.error(way + " is not a way");

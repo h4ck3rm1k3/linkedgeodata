@@ -108,7 +108,7 @@ public class SimpleTextTagMapper
 	}
 	
 	@Override
-	public <T> T accept(ISimpleOneOneTagMapperVisitor<T> visitor)
+	public <T> T accept(IOneOneTagMapperVisitor<T> visitor)
 	{
 		return visitor.accept(this);
 	}
@@ -118,6 +118,33 @@ public class SimpleTextTagMapper
 	{
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public int hashCode()
+	{
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((langTag == null) ? 0 : langTag.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (!(obj instanceof SimpleTextTagMapper))
+			return false;
+		SimpleTextTagMapper other = (SimpleTextTagMapper) obj;
+		if (langTag == null) {
+			if (other.langTag != null)
+				return false;
+		} else if (!langTag.equals(other.langTag))
+			return false;
+		return true;
 	}
 
 	/*
@@ -132,5 +159,6 @@ public class SimpleTextTagMapper
 		}
 	}
 	 */
+	
 }
 

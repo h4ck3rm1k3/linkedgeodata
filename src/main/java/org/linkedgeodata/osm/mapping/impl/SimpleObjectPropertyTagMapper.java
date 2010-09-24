@@ -109,7 +109,7 @@ public class SimpleObjectPropertyTagMapper
 	}
 	
 	@Override
-	public <T> T accept(ISimpleOneOneTagMapperVisitor<T> visitor)
+	public <T> T accept(IOneOneTagMapperVisitor<T> visitor)
 	{
 		return visitor.accept(this);
 	}
@@ -150,6 +150,36 @@ public class SimpleObjectPropertyTagMapper
 		
 		return result;
 	}
+
+	@Override
+	public int hashCode()
+	{
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((object == null) ? 0 : object.hashCode());
+		result = prime * result + (objectAsPrefix ? 1231 : 1237);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (!(obj instanceof SimpleObjectPropertyTagMapper))
+			return false;
+		SimpleObjectPropertyTagMapper other = (SimpleObjectPropertyTagMapper) obj;
+		if (object == null) {
+			if (other.object != null)
+				return false;
+		} else if (!object.equals(other.object))
+			return false;
+		if (objectAsPrefix != other.objectAsPrefix)
+			return false;
+		return true;
+	}
 	
 	/*
 	@Override
@@ -163,4 +193,6 @@ public class SimpleObjectPropertyTagMapper
 		}
 	}
 	*/
+	
+	
 }

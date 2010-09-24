@@ -8,10 +8,12 @@ import java.io.PrintStream;
 import java.net.URLEncoder;
 import java.util.List;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.linkedgeodata.osm.mapping.IOneOneTagMapper;
 import org.linkedgeodata.osm.mapping.InMemoryTagMapper;
+import org.linkedgeodata.osm.mapping.impl.IOneOneTagMapperVisitor;
 import org.linkedgeodata.osm.mapping.impl.ISimpleOneOneTagMapper;
-import org.linkedgeodata.osm.mapping.impl.ISimpleOneOneTagMapperVisitor;
+import org.linkedgeodata.osm.mapping.impl.RegexTextTagMapper;
 import org.linkedgeodata.osm.mapping.impl.SimpleDataTypeTagMapper;
 import org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper;
 import org.linkedgeodata.osm.mapping.impl.SimpleTagPattern;
@@ -76,7 +78,7 @@ public class D2RConfigGenerator
 
 
 class D2RConfigGeneratorVisitor
-	implements ISimpleOneOneTagMapperVisitor<Void>
+	implements IOneOneTagMapperVisitor<Void>
 {
 	private PrintStream out;
 	private String relationName;
@@ -221,5 +223,11 @@ class D2RConfigGeneratorVisitor
 
 		out.println(result);
 		return null;
+	}
+
+	@Override
+	public Void accept(RegexTextTagMapper mapper)
+	{
+		throw new NotImplementedException();
 	}
 }

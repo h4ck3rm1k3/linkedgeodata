@@ -106,7 +106,7 @@ public class SimpleDataTypeTagMapper
 	}
 
 	@Override
-	public <T> T accept(ISimpleOneOneTagMapperVisitor<T> visitor)
+	public <T> T accept(IOneOneTagMapperVisitor<T> visitor)
 	{
 		return visitor.accept(this);
 	}
@@ -116,6 +116,34 @@ public class SimpleDataTypeTagMapper
 	{
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public int hashCode()
+	{
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result
+				+ ((dataType == null) ? 0 : dataType.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (!(obj instanceof SimpleDataTypeTagMapper))
+			return false;
+		SimpleDataTypeTagMapper other = (SimpleDataTypeTagMapper) obj;
+		if (dataType == null) {
+			if (other.dataType != null)
+				return false;
+		} else if (!dataType.equals(other.dataType))
+			return false;
+		return true;
 	}
 
 	/*
@@ -130,5 +158,6 @@ public class SimpleDataTypeTagMapper
 		}
 	}
 	*/
+	
 }
 

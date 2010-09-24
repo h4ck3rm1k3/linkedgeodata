@@ -25,4 +25,7 @@ public interface ILGDVocab
 	String getOntologyNS();
 
 	Resource getHasNodesResource(Long wayId);
+	
+	Resource wayToWayNode(Resource res);
+	Resource wayNodeToWay(Resource res);
 }

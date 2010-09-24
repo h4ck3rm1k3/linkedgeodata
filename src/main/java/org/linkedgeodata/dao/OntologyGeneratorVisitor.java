@@ -2,9 +2,11 @@ package org.linkedgeodata.dao;
 
 import java.util.Collection;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.linkedgeodata.osm.mapping.IOneOneTagMapper;
 import org.linkedgeodata.osm.mapping.ITagMapper;
-import org.linkedgeodata.osm.mapping.impl.ISimpleOneOneTagMapperVisitor;
+import org.linkedgeodata.osm.mapping.impl.IOneOneTagMapperVisitor;
+import org.linkedgeodata.osm.mapping.impl.RegexTextTagMapper;
 import org.linkedgeodata.osm.mapping.impl.SimpleDataTypeTagMapper;
 import org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper;
 import org.linkedgeodata.osm.mapping.impl.SimpleTextTagMapper;
@@ -17,7 +19,7 @@ import com.hp.hpl.jena.vocabulary.RDF;
 import com.hp.hpl.jena.vocabulary.RDFS;
 
 public class OntologyGeneratorVisitor
-	implements ISimpleOneOneTagMapperVisitor<Void>
+	implements IOneOneTagMapperVisitor<Void>
 {
 	private Model model;
 	private ITagMapper tagMapper;
@@ -148,6 +150,12 @@ public class OntologyGeneratorVisitor
 	public Model getModel()
 	{
 		return model;
+	}
+
+	@Override
+	public Void accept(RegexTextTagMapper mapper)
+	{
+		throw new NotImplementedException();
 	}
 }
 

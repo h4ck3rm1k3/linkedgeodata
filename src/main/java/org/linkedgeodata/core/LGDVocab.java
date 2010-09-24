@@ -123,4 +123,23 @@ public class LGDVocab
 		Resource result = ResourceFactory.createResource(res);
 		return result;
 	}	
+	
+	
+	public Resource wayNodeToWay(Resource res)
+	{
+		String str = res.getURI().toString();
+		String suffix = "/nodes";
+		if(!str.endsWith(suffix))
+			return null;
+		
+		str = str.substring(0, str.length() - suffix.length());
+		
+		return ResourceFactory.createResource(str);
+	}
+
+	// TODO: Validate whether this is a way node
+	public Resource wayToWayNode(Resource res)
+	{
+		return ResourceFactory.createResource(res.getURI().toString() + "/nodes");
+	}
 }

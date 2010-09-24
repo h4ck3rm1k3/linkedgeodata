@@ -89,5 +89,19 @@ public class DeprecatedLGDVocab
 	{
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public Resource wayToWayNode(Resource res)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Resource wayNodeToWay(Resource res)
+	{
+		// TODO Auto-generated method stub
+		return null;
 	}	
 }

@@ -7,11 +7,11 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.Options;
+import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.PropertyConfigurator;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.linkedgeodata.osm.mapping.impl.ISimpleOneOneTagMapper;
-import org.linkedgeodata.osm.mapping.impl.ISimpleOneOneTagMapperVisitor;
+import org.linkedgeodata.osm.mapping.impl.IOneOneTagMapperVisitor;
+import org.linkedgeodata.osm.mapping.impl.RegexTextTagMapper;
 import org.linkedgeodata.osm.mapping.impl.SimpleClassTagMapper;
 import org.linkedgeodata.osm.mapping.impl.SimpleDataTypeTagMapper;
 import org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper;
@@ -27,7 +27,7 @@ import com.hp.hpl.jena.vocabulary.RDF;
 
 
 public class ClassToPropertyMappingRulesConverter
-	implements ISimpleOneOneTagMapperVisitor<Void>
+	implements IOneOneTagMapperVisitor<Void>
 {
 	private Session session; 
 
@@ -115,5 +115,11 @@ public class ClassToPropertyMappingRulesConverter
 		session.persist(entity);
 
 		return null;
+	}
+
+	@Override
+	public Void accept(RegexTextTagMapper mapper)
+	{
+		throw new NotImplementedException();
 	}
 }

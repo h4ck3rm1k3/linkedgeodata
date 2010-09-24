@@ -90,7 +90,7 @@ public class SimpleClassTagMapper
 	}
 
 	@Override
-	public <T> T accept(ISimpleOneOneTagMapperVisitor<T> visitor)
+	public <T> T accept(IOneOneTagMapperVisitor<T> visitor)
 	{
 		// TODO Auto-generated method stub
 		return null;
@@ -142,5 +142,6 @@ public class SimpleClassTagMapper
 		}
 	}
 	*/
+	
 }
 
