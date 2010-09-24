@@ -538,7 +538,7 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 	 * @param n
 	 * @return
 	 */
-	private static IDiff<Model> diff(Model o, Model n)
+	public static IDiff<Model> diff(Model o, Model n)
 	{
 		Model added = ModelFactory.createDefaultModel();
 		added.add(n);
@@ -1029,6 +1029,12 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 			Resource wayNode = affectedWay.getKey();
 			Resource way = wayNodeToWay(wayNode);
 			
+			if(way == null) {
+				logger.error(wayNode + " is not a wayNode");
+				continue;
+			}
+			
+			
 			TreeMap<Integer, RDFNode> fixes = affectedWay.getValue();
 
 			if(way.getURI().toString().equals("http://linkedgeodata.org/triplify/way54871694")) {
@@ -1132,6 +1138,11 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		for(Map.Entry<Resource, TreeMap<Integer, RDFNode>> newWay : newWays.entrySet()) {
 			Resource wayNode = newWay.getKey();
 			Resource way = wayNodeToWay(wayNode);
+			
+			if(way == null) {
+				logger.error(way + " is not a way");
+				continue;
+			}
 			
 			TreeMap<Integer, RDFNode> fixes = newWay.getValue();
 			
