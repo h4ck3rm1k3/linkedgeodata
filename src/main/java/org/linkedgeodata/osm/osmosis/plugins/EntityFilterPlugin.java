@@ -23,9 +23,12 @@ public class EntityFilterPlugin
 	@Override
 	public void process(ChangeContainer c)
 	{
-		if(entityFilter.evaluate(c.getEntityContainer().getEntity())) {
-			sink.process(c);
+		if(!entityFilter.evaluate(c.getEntityContainer().getEntity())) {
+			// FIXME For now this filter simply removes all tags of entities
+			// that fail the filter
+			c.getEntityContainer().getEntity().getTags().clear();
 		}
+		sink.process(c);
 	}
 
 	@Override

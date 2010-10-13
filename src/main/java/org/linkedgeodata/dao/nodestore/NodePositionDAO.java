@@ -1,4 +1,4 @@
-package org.linkedgeodata.dao;
+package org.linkedgeodata.dao.nodestore;
 
 import java.awt.geom.Point2D;
 import java.sql.Connection;
@@ -11,8 +11,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import org.linkedgeodata.dao.AbstractDAO;
 import org.linkedgeodata.util.SQLUtil;
 import org.linkedgeodata.util.StringUtil;
+
+
 
 
 
@@ -42,7 +45,7 @@ public class NodePositionDAO
 	public static void main(String[] args)
 		throws Exception
 	{
-		Class c = org.apache.derby.jdbc.EmbeddedDriver.class;
+		//Class c = org.apache.derby.jdbc.EmbeddedDriver.class;
 		
 		String driver = "org.apache.derby.jdbc.EmbeddedDriver";
 		Class.forName(driver).newInstance();

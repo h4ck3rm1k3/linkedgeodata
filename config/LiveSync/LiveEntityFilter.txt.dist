@@ -1,4 +1,7 @@
-'highway'
-'barrier'
-'power'
-'railway' 'station'
+# Entities with one of the following tags will be ignored
+-'highway'
+-'traffic_calming'
+-'passing_places'
+-'barrier'
+-'power'
+-'railway' 'station' 'halt' 'tram_stop'

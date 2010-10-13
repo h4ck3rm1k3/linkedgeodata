@@ -45,27 +45,27 @@ public class LGDVocab
 	
 	// NIR = Non-Information-Resource
 	@Override
-	public String createNIRNodeURI(long id)
+	public Resource createNIRNodeURI(long id)
 	{
 		//return NODE + "/_" + id;
-		return NODE + id;
+		return ResourceFactory.createResource(NODE + id);
 	}
 	
 	@Override
-	public String createOSMNodeURI(long id)
+	public Resource createOSMNodeURI(long id)
 	{
 		return createNIRNodeURI(id);
 	}
 	
 	@Override
-	public String createNIRWayURI(long id)
+	public Resource createNIRWayURI(long id)
 	{
 		//return WAY + "/_" + id;
-		return WAY + id;
+		return ResourceFactory.createResource(WAY + id);
 	}	
 
 	@Override
-	public String createOSMWayURI(long id)
+	public Resource createOSMWayURI(long id)
 	{
 		return createNIRWayURI(id);
 	}
@@ -103,15 +103,15 @@ public class LGDVocab
 	@Override
 	public Resource createResource(Entity entity)
 	{
-		String uri = null;
+		Resource resource = null;
 		if(entity instanceof Node) {
-			uri = createNIRNodeURI(entity.getId());
+			resource = createNIRNodeURI(entity.getId());
 		}
 		else if(entity instanceof Way) {
-			uri = createNIRWayURI(entity.getId());
+			resource = createNIRWayURI(entity.getId());
 		}
 		
-		return uri == null ? null : ResourceFactory.createResource(uri);
+		return resource;
 	}
 
 	@Override

@@ -53,13 +53,13 @@ public class SimpleWayToRDFTransformer
 	public Model transform(Model model, Way way)
 	{
 
-		String subject = getSubject(way);
+		Resource subject = getSubject(way);
 		//Resource subjectRes = model.getResource(subject + "#id");
 		
 		//generateWGS84(model, subjectRes, node);
 		//generateGeoRSS(model, subjectRes, node);
 
-		SimpleNodeToRDFTransformer.generateTags(tagMapper, model, subject, way.getTags());
+		SimpleNodeToRDFTransformer.generateTags(tagMapper, model, subject.toString(), way.getTags());
 
 		generateWayNodes(model, vocab, way);
 		//model.createResource(subject).addProperty(RDF.type, model.createResource(WGS84_WAY));
@@ -75,12 +75,12 @@ public class SimpleWayToRDFTransformer
 		return transform(model, way);
 	}
 	
-	private String getSubject(long id)
+	private Resource getSubject(long id)
 	{
 		return vocab.createNIRWayURI(id);
 	}
 	
-	private String getSubject(Way way)
+	private Resource getSubject(Way way)
 	{
 		return getSubject(way.getId());
 	}
@@ -94,7 +94,7 @@ public class SimpleWayToRDFTransformer
 		Resource memberRes = vocab.getHasNodesResource(wayId);
 		
 		model.add(
-				model.createResource(vocab.createOSMWayURI(wayId)),
+				vocab.createOSMWayURI(wayId),
 				model.createProperty(vocab.getHasNodesPred()),
 				memberRes);
 
@@ -107,7 +107,7 @@ public class SimpleWayToRDFTransformer
 			model.add(
 					memberRes,
 					model.createProperty(RDF.getURI() + "_" + (++i)),
-					model.createResource(vocab.createOSMNodeURI(nodeId)));
+					vocab.createOSMNodeURI(nodeId));
 		}	
 	}
 	

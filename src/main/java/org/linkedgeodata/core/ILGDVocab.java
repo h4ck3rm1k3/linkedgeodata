@@ -15,10 +15,10 @@ public interface ILGDVocab
 	String getMemberOfWayPred();
 
 	// NIR = Non-Information-Resource
-	String createNIRNodeURI(long id);
-	String createOSMNodeURI(long id);	
-	String createNIRWayURI(long id);
-	String createOSMWayURI(long id);
+	Resource createNIRNodeURI(long id);
+	Resource createOSMNodeURI(long id);	
+	Resource createNIRWayURI(long id);
+	Resource createOSMWayURI(long id);
  
 	Resource createResource(Entity entity);
 	

@@ -4,6 +4,7 @@ import org.apache.commons.lang.NotImplementedException;
 import org.openstreetmap.osmosis.core.domain.v0_6.Entity;
 
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.ResourceFactory;
 
 public class DeprecatedLGDVocab
 	implements ILGDVocab
@@ -22,28 +23,28 @@ public class DeprecatedLGDVocab
 	
 	// NIR = Non-Information-Resource
 	@Override
-	public String createNIRNodeURI(long id)
+	public Resource createNIRNodeURI(long id)
 	{
 		//return NODE + "/_" + id;
-		return NODE + id;
+		return ResourceFactory.createResource(NODE + id);
 	}
 	
 	@Override
-	public String createOSMNodeURI(long id)
+	public Resource createOSMNodeURI(long id)
 	{
 		return createNIRNodeURI(id);
 	}
 	
 
 	@Override
-	public String createNIRWayURI(long id)
+	public Resource createNIRWayURI(long id)
 	{
 		//return WAY + "/_" + id;
-		return WAY + id;
+		return ResourceFactory.createResource(WAY + id);
 	}	
 
 	@Override
-	public String createOSMWayURI(long id)
+	public Resource createOSMWayURI(long id)
 	{
 		return createNIRWayURI(id);
 	}

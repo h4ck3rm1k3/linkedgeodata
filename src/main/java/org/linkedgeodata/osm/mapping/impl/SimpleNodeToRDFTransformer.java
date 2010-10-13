@@ -20,28 +20,25 @@
  */
 package org.linkedgeodata.osm.mapping.impl;
 
+import java.awt.geom.Point2D;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Map;
 
-import org.apache.commons.collections15.MultiMap;
 import org.apache.log4j.Logger;
 import org.linkedgeodata.core.ILGDVocab;
 import org.linkedgeodata.core.vocab.WGS84Pos;
 import org.linkedgeodata.osm.mapping.ITagMapper;
-import org.linkedgeodata.osm.mapping.InMemoryTagMapper;
 import org.linkedgeodata.util.ITransformer;
 import org.openstreetmap.osmosis.core.domain.v0_6.Node;
 import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 
 import com.hp.hpl.jena.datatypes.RDFDatatype;
 import com.hp.hpl.jena.datatypes.TypeMapper;
-import com.hp.hpl.jena.rdf.model.AnonId;
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.vocabulary.RDF;
+import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.vocabulary.XSD;
 
 
@@ -79,13 +76,12 @@ public class SimpleNodeToRDFTransformer
 		//model.setNsPrefix("lgdn", "http://linkedgeodata.org/node/");
 		//model.setNsPrefix("lgdw", "http://linkedgeodata.org/way/");
 		//model.setNsPrefix("lgdv", "http://linkedgeodata.org/vocabulary#");
-		
-		String subject = getSubject(node);
-		Resource subjectRes = model.getResource(subject);
+ 
+		Resource subjectRes = getSubject(node);
 		
 		generateWGS84(model, subjectRes, node);
 		generateGeoRSS(model, subjectRes, node);
-		generateTags(tagMapper, model, subject, node.getTags());
+		generateTags(tagMapper, model, subjectRes.toString(), node.getTags());
 		
 		return model;		
 	}
@@ -100,11 +96,16 @@ public class SimpleNodeToRDFTransformer
 	}
 
 	
+	public static Literal generateVirtuosoLiteral(Point2D point)
+	{
+		Literal result = ResourceFactory.createTypedLiteral("POINT(" + point.getX() + " " + point.getY() + ")", virtrdfGeometry);
+		return result;
+	}
+	
 	public static void generateVirtusoPosition(Model model, Resource subject, Node node)
 	{
-		Literal virtLit = model.createTypedLiteral("POINT(" + node.getLongitude() + " " + node.getLatitude() + ")", virtrdfGeometry);
-	
-		model.add(subject, WGS84Pos.geometry, virtLit);
+		Literal literal = generateVirtuosoLiteral(new Point2D.Double(node.getLongitude(), node.getLatitude()));
+		model.add(subject, WGS84Pos.geometry, literal);
 	}
 
 	
@@ -133,12 +134,12 @@ public class SimpleNodeToRDFTransformer
 	}
 
 
-	private String getSubject(long id)
+	private Resource getSubject(long id)
 	{
 		return vocab.createNIRNodeURI(id);
 	}
 	
-	private String getSubject(Node node)
+	private Resource getSubject(Node node)
 	{		
 		return getSubject(node.getId());
 	}

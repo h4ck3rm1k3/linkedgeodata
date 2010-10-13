@@ -12,6 +12,8 @@ rdfStore_userName="dba"
 rdfStore_passWord="dba"
 rdfStore_graphName="http://test.org"
 
+tagMappings="TagMappings.xml"
+
 entityFilter="LiveEntityFilter.txt.dist"
 tagFilter="LiveTagFilter.txt.dist"
 

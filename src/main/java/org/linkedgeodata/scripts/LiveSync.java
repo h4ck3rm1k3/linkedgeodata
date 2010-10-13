@@ -23,12 +23,14 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.Options;
-import org.apache.commons.collections15.Transformer;
 import org.apache.log4j.PropertyConfigurator;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.linkedgeodata.core.ILGDVocab;
 import org.linkedgeodata.core.LGDVocab;
+import org.linkedgeodata.dao.nodestore.GeoRSSNodeMapper;
+import org.linkedgeodata.dao.nodestore.NodePositionDAO;
+import org.linkedgeodata.dao.nodestore.RDFNodePositionDAO;
 import org.linkedgeodata.osm.mapping.IOneOneTagMapper;
 import org.linkedgeodata.osm.mapping.InMemoryTagMapper;
 import org.linkedgeodata.osm.mapping.TagMapperInstantiator;
@@ -184,16 +186,21 @@ public class LiveSync
 		
 		InMemoryTagMapper tagMapper = new InMemoryTagMapper();
 		
-		Session session = TagMappingDB.getSession();
-		Transaction tx = session.beginTransaction();
+		tagMapper.load(new File(config.get("tagMappings")));
 		
-		for(Object o : session.createCriteria(AbstractTagMapperState.class).list()) {
-			IOneOneTagMapper item = TagMapperInstantiator.getInstance().instantiate((IEntity)o);
+		boolean loadTagMappingsFromDb = false;
+		if(loadTagMappingsFromDb) {
+			Session session = TagMappingDB.getSession();
+			Transaction tx = session.beginTransaction();
 			
-			tagMapper.add(item);
+			for(Object o : session.createCriteria(AbstractTagMapperState.class).list()) {
+				IOneOneTagMapper item = TagMapperInstantiator.getInstance().instantiate((IEntity)o);
+				
+				tagMapper.add(item);
+			}
+			
+			tx.commit();
 		}
-		
-		tx.commit();
 		
 		//File diffRepo = new File("/tmp/lgddiff");
 		//diffRepo.mkdirs();
@@ -204,11 +211,14 @@ public class LiveSync
 		ITransformer<Entity, Model> entityTransformer =
 			new OSMEntityToRDFTransformer(tagMapper, vocab);
 		
-		
+		NodePositionDAO npd = new NodePositionDAO();
+
+		GeoRSSNodeMapper nodeMapper = new GeoRSSNodeMapper(vocab);
+		RDFNodePositionDAO nodePositionDAO = new RDFNodePositionDAO(npd, vocab, nodeMapper);
 		
 
 		diffStrategy = new IgnoreModifyDeleteDiffUpdateStrategy(
-				vocab, entityTransformer, graphDAO, graphName);
+				vocab, entityTransformer, graphDAO, graphName, nodePositionDAO);
 
 		// Load the entity tag filter
 		TagFilter entityTagFilter = new TagFilter();

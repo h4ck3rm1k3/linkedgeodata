@@ -15,6 +15,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.collections15.Predicate;
 import org.apache.commons.collections15.Transformer;
+import org.junit.Assert;
 import org.linkedgeodata.util.PostGISUtil;
 import org.linkedgeodata.util.SQLUtil;
 import org.linkedgeodata.util.StringUtil;
@@ -24,18 +25,20 @@ import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 
 class Rule
 {
-	private boolean keepMode;
+	// Either: Allow everything of that key except for the exception
+	// Or: Allow nothing from that key except for the exceptions (Allow only the given values for the key) 
+	private boolean blacklist = true;
 	private Set<String> exceptions;
 	
 	public Rule(boolean keepMode, Set<String> exceptions)
 	{
-		this.keepMode = keepMode;
+		this.blacklist = keepMode;
 		this.exceptions = exceptions;
 	}
 
 	public boolean isKeepMode()
 	{
-		return keepMode;
+		return blacklist;
 	}
 
 	public Set<String> getExceptions()
@@ -46,7 +49,7 @@ class Rule
 	@Override
 	public String toString()
 	{
-		return "Rule [keepMode=" + keepMode + ", exceptions=" + exceptions
+		return "Rule [keepMode=" + blacklist + ", exceptions=" + exceptions
 				+ "]";
 	}
 	
@@ -72,7 +75,9 @@ public class TagFilter
 	implements Predicate<Tag>
 {
 	private Map<String, Rule> keyToRule = new HashMap<String, Rule>();
-	private boolean inverted = false;
+	
+	// Whether the filter is to be interpreted as a white or blacklist
+	private boolean blacklist = false;
 	
 	public TagFilter()
 	{
@@ -80,7 +85,7 @@ public class TagFilter
 	
 	public TagFilter(boolean inverted)
 	{
-		this.inverted = inverted;
+		this.blacklist = inverted;
 	}
 	
 	
@@ -91,7 +96,7 @@ public class TagFilter
 	
 	public boolean isInverted()
 	{
-		return inverted;
+		return blacklist;
 	}
 	
 	/**
@@ -130,8 +135,11 @@ public class TagFilter
 		for(Map.Entry<String, Rule> entry : keyToRule.entrySet()) {
 			if(entry.getValue().getExceptions().isEmpty())
 				continue;
+
+			Rule rule = entry.getValue();
+			String valueNot = rule.isKeepMode() ? " NOT" : "";
 			
-			String part = "(" + kName + "='" + SQLUtil.escapePostgres(entry.getKey()) + "' AND NOT " + vName + " IN (";
+			String part = "(" + kName + "='" + SQLUtil.escapePostgres(entry.getKey()) + "' AND " + vName + valueNot + " IN (";
 
 			part += PostGISUtil.escapedList(entry.getValue().getExceptions());
 			
@@ -141,7 +149,7 @@ public class TagFilter
 		
 		String result = "(" + StringUtil.implode(" OR ", parts) + ")";
 		
-		if(!tagFilter.isInverted())
+		if(tagFilter.isInverted())
 			result = "NOT " + result;
 		
 		return result;
@@ -150,7 +158,7 @@ public class TagFilter
 	
 	//*
 	public static void main(String[] args) throws IOException {
-		File file = new File("/home/raven/Projects/Current/Eclipse/GoogleCodeLinkedGeoData/data/lgd/dump/ElementsEntityFilter.txt");
+		File file = new File("/home/raven/Projects/Current/Eclipse/GoogleCodeLinkedGeoData/config/LiveSync/LiveEntityFilter.txt.dist");
 		//File file = new File("/home/raven/Projects/Current/Eclipse/GoogleCodeLinkedGeoData/data/lgd/dump/ElementsTagFilter.txt");
 		BufferedReader reader = new BufferedReader(new FileReader(file));
 	
@@ -161,6 +169,13 @@ public class TagFilter
 		String sql = createFilterSQL(tf, "filter.k", "filter.v");
 		System.out.println(sql);
 		
+//		Assert.assertTrue(tf.evaluate(new Tag("foo", "bar")));
+//		Assert.assertTrue(tf.evaluate(new Tag("railway", "station")));
+
+		Assert.assertFalse(tf.evaluate(new Tag("power", "foo")));
+		Assert.assertFalse(tf.evaluate(new Tag("railway", "foo")));
+		Assert.assertFalse(tf.evaluate(new Tag("railway", "foo")));
+
 	}
 	//*/
 	
@@ -189,8 +204,19 @@ public class TagFilter
 		Pattern stringPattern = Pattern.compile("'((\\\\\\'|[^'])*)'");
 		
 		String line;
+		
+		boolean areKeysBlackListed = true;
+		
 		while(null != (line = reader.readLine())) {
 			line = line.trim();
+
+			if(line.equalsIgnoreCase("whitelist")) {
+				areKeysBlackListed = false;
+				continue;
+			}
+			
+			
+			boolean areValuesBlacklisted = line.startsWith("-");
 			
 			if(line.isEmpty())
 				continue;
@@ -198,7 +224,9 @@ public class TagFilter
 			
 			Matcher m = stringPattern.matcher(line);
 
-			m.find();
+			if(!m.find()) {
+				continue;
+			}
 			
 			String key = m.group(1);
 
@@ -207,25 +235,39 @@ public class TagFilter
 				String value = m.group(1);
 				values.add(value);
 			}
-			Rule rule = new Rule(false, values);
+			Rule rule = new Rule(areValuesBlacklisted, values);
 			
 			keyToRule.put(key, rule);
 		}
 		
+		
+		this.blacklist = areKeysBlackListed;
 		System.out.println(keyToRule);
 	}
 
-	
 	@Override
 	public boolean evaluate(Tag tag)
+	{
+		boolean result = evaluateAsWhiteList(tag);
+		
+		if(this.blacklist)
+			result = !result;
+			
+		return result;
+	}
+	
+	protected boolean evaluateAsWhiteList(Tag tag)
 	{
 		Rule rule = keyToRule.get(tag.getKey());
 		
 		if(rule == null)
-			return true;
+			return false;
 		
 		boolean result = rule.getExceptions().contains(tag.getValue());
-		
+
+		if(rule.isKeepMode())
+			result = !result;
+
 		return result;
 	}
 }

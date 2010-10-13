@@ -34,10 +34,10 @@ public class GraphDAORDFEntityDAO
 		Set<Resource> result = new HashSet<Resource>();
 		
 		for(Entity entity : entities) {
-			String[] resources = getInvolvedResources(entity, vocab);
+			Resource[] resources = getInvolvedResources(entity, vocab);
 			
-			for(String str : resources) {
-				Resource res = ResourceFactory.createResource(str);
+			for(Resource res : resources) {
+				//Resource res = ResourceFactory.createResource(str);
 				result.add(res);
 			}
 		}
@@ -49,8 +49,8 @@ public class GraphDAORDFEntityDAO
 		Set<Resource> result = new HashSet<Resource>();
 		
 		for(EntityContainer ec : ecs) {
-			for(String str : getInvolvedResources(ec.getEntity(), vocab)) {
-				Resource res = ResourceFactory.createResource(str);
+			for(Resource res : getInvolvedResources(ec.getEntity(), vocab)) {
+				//Resource res = ResourceFactory.createResource(str);
 				
 				result.add(res);
 			}
@@ -60,24 +60,24 @@ public class GraphDAORDFEntityDAO
 		return result;
 	}
 	
-	public static String[] getInvolvedResources(Entity entity, ILGDVocab vocab)
+	public static Resource[] getInvolvedResources(Entity entity, ILGDVocab vocab)
 	{
 		long entityId = entity.getId();
 		if(entity instanceof Node) {
-			return new String[]{vocab.createNIRNodeURI(entityId)};
+			return new Resource[]{vocab.createNIRNodeURI(entityId)};
 			
 		} else if(entity instanceof Way) {
-			return new String[]{
+			return new Resource[]{
 					vocab.createNIRWayURI(entityId),
-					vocab.getHasNodesResource(entityId).toString()};
+					vocab.getHasNodesResource(entityId)};
 		}
 		
-		return new String[]{};
+		return new Resource[]{};
 	}
 	
 	public static List<String> constructQuery(Iterable<Entity> entities, ILGDVocab vocab, String graphName, int batchSize)
 	{
-		Set<String> uris = new TreeSet<String>();
+		Set<Resource> uris = new TreeSet<Resource>();
 		
 		for(Entity entity : entities) {
 			uris.addAll(Arrays.asList(getInvolvedResources(entity, vocab)));
@@ -86,16 +86,16 @@ public class GraphDAORDFEntityDAO
 		return constructQuery(uris, graphName, batchSize);
 	}
 	
-	
-	public static List<String> constructQuery(Collection<String> subjects, String graphName, int batchSize)
+
+	public static List<String> constructQuery(Collection<Resource> subjects, String graphName, int batchSize)
 	{
 		List<String> result = new ArrayList<String>();
 		if(subjects.isEmpty())
 			return result;
 		
-		List<List<String>> chunks = CollectionUtils.chunk(subjects, batchSize);
+		List<List<Resource>> chunks = CollectionUtils.chunk(subjects, batchSize);
 		
-		for(List<String> chunk : chunks) {
+		for(List<Resource> chunk : chunks) {
 			String resources = "<" + StringUtil.implode(">,<", chunk) + ">";
 			
 			String fromPart = (graphName != null)
@@ -111,6 +111,19 @@ public class GraphDAORDFEntityDAO
 		return result;
 	}
 	
+	public static String constructBySubject(Collection<Resource> subjects, String graphName)
+	{
+		String resources = "<" + StringUtil.implode(">,<", subjects) + ">";
+			
+		String fromPart = (graphName != null)
+			? "From <" + graphName + "> "
+			: "";
+	
+		String result =
+			"Construct { ?s ?p ?o . } " + fromPart + "{ ?s ?p ?o . Filter(?s In (" + resources + ")) . }";
+			
+		return result;
+	}
 
 		
 	
