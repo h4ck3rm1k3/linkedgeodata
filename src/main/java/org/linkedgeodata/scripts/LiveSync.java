@@ -211,8 +211,10 @@ public class LiveSync
 		ITransformer<Entity, Model> entityTransformer =
 			new OSMEntityToRDFTransformer(tagMapper, vocab);
 		
-		NodePositionDAO npd = new NodePositionDAO();
-
+		NodePositionDAO npd = new NodePositionDAO("node_position");
+		npd.setConnection(conn);
+		
+		
 		GeoRSSNodeMapper nodeMapper = new GeoRSSNodeMapper(vocab);
 		RDFNodePositionDAO nodePositionDAO = new RDFNodePositionDAO(npd, vocab, nodeMapper);
 		
