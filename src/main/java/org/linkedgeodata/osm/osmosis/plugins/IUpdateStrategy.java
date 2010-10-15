@@ -22,6 +22,7 @@ package org.linkedgeodata.osm.osmosis.plugins;
 
 import org.linkedgeodata.util.IDiff;
 import org.openstreetmap.osmosis.core.container.v0_6.ChangeContainer;
+import org.openstreetmap.osmosis.core.domain.v0_6.Node;
 import org.openstreetmap.osmosis.core.task.v0_6.ChangeSink;
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -47,4 +48,6 @@ public interface IUpdateStrategy
 	
 	// This method may only be called after complete()
 	IDiff<Model> getMainGraphDiff();
+	
+	TreeSetDiff<Node> getNodeDiff();
 }

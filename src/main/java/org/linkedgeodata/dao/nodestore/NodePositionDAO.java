@@ -150,13 +150,17 @@ public class NodePositionDAO
 	
 	
 	
-	public void remove(Iterable<Long> ids)
+	public void remove(Collection<Long> ids)
 		throws SQLException
 	{
+		if(ids.isEmpty())
+			return;
+		
 		//String idStr = StringUtil.implode(",", SQLUtil.quotePostgres(ids));
 		String idStr = StringUtil.implode(",", ids);
 		
 		String sql = "DELETE FROM " + tableName + " WHERE node_id IN (" + idStr + ")"; 
+		logger.trace(sql);
 		SQLUtil.execute(conn, sql, Void.class);
 	}
 

@@ -1,5 +1,6 @@
 package org.linkedgeodata.scripts;
 
+import java.awt.geom.Point2D;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -8,10 +9,12 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -43,6 +46,7 @@ import org.linkedgeodata.osm.osmosis.plugins.IgnoreModifyDeleteDiffUpdateStrateg
 import org.linkedgeodata.osm.osmosis.plugins.RDFDiffWriter;
 import org.linkedgeodata.osm.osmosis.plugins.TagFilter;
 import org.linkedgeodata.osm.osmosis.plugins.TagFilterPlugin;
+import org.linkedgeodata.osm.osmosis.plugins.TreeSetDiff;
 import org.linkedgeodata.tagmapping.client.entity.AbstractTagMapperState;
 import org.linkedgeodata.tagmapping.client.entity.IEntity;
 import org.linkedgeodata.util.IDiff;
@@ -54,6 +58,7 @@ import org.linkedgeodata.util.sparql.ISparulExecutor;
 import org.linkedgeodata.util.sparql.VirtuosoJdbcSparulExecutor;
 import org.openstreetmap.osmosis.core.OsmosisRuntimeException;
 import org.openstreetmap.osmosis.core.domain.v0_6.Entity;
+import org.openstreetmap.osmosis.core.domain.v0_6.Node;
 import org.openstreetmap.osmosis.core.task.v0_6.ChangeSink;
 import org.openstreetmap.osmosis.core.xml.common.CompressionActivator;
 import org.openstreetmap.osmosis.core.xml.common.CompressionMethod;
@@ -81,6 +86,32 @@ class EntityClassifier
 */
 
 
+class DiffResult
+{
+	private IDiff<Model> mainDiff;
+	private TreeSetDiff<Node> nodeDiff;
+	
+	
+	
+	public DiffResult(IDiff<Model> mainDiff, TreeSetDiff<Node> nodeDiff)
+	{
+		super();
+		this.mainDiff = mainDiff;
+		this.nodeDiff = nodeDiff;
+	}
+	public IDiff<Model> getMainDiff()
+	{
+		return mainDiff;
+	}
+	public TreeSetDiff<Node> getNodeDiff()
+	{
+		return nodeDiff;
+	}
+	
+	
+}
+
+
 public class LiveSync
 {
 	private static final Logger logger = LoggerFactory.getLogger(LiveSync.class);
@@ -103,6 +134,8 @@ public class LiveSync
 	private ISparulExecutor graphDAO;
 	
 	private ChangeSink workFlow;
+	
+	private NodePositionDAO nodePositionDao;
 
 	//private RDFDiffWriter rdfDiffWriter;
 	
@@ -211,12 +244,12 @@ public class LiveSync
 		ITransformer<Entity, Model> entityTransformer =
 			new OSMEntityToRDFTransformer(tagMapper, vocab);
 		
-		NodePositionDAO npd = new NodePositionDAO("node_position");
-		npd.setConnection(conn);
+		nodePositionDao = new NodePositionDAO("node_position");
+		nodePositionDao.setConnection(conn);
 		
 		
 		GeoRSSNodeMapper nodeMapper = new GeoRSSNodeMapper(vocab);
-		RDFNodePositionDAO nodePositionDAO = new RDFNodePositionDAO(npd, vocab, nodeMapper);
+		RDFNodePositionDAO nodePositionDAO = new RDFNodePositionDAO(nodePositionDao, vocab, nodeMapper);
 		
 
 		diffStrategy = new IgnoreModifyDeleteDiffUpdateStrategy(
@@ -305,13 +338,19 @@ public class LiveSync
 		
 		//XmlChangeReader reader = new XmlChangeReader(changeFile, true, CompressionMethod.GZip);
 			
-		IDiff<Model> diff = computeDiff(sequenceNumber);
+		//IDiff<Model> diff = computeDiff(sequenceNumber);
+		DiffResult diff = computeDiff(sequenceNumber);
 		
-		logger.info("Applying diff (added/removed) = " + diff.getAdded().size() + "/" + diff.getRemoved().size());
-		applyDiff(diff);
+		
+		logger.info("Applying main diff (added/removed) = " + diff.getMainDiff().getAdded().size() + "/" + diff.getMainDiff().getRemoved().size());
+		applyDiff(diff.getMainDiff());
+		
+		logger.info("Applying node diff (added/removed) = " + diff.getNodeDiff().getAdded().size() + "/" + diff.getNodeDiff().getRemoved().size());
+		applyNodeDiff(diff.getNodeDiff());
+		
 		
 		logger.info("Publishing diff");
-		publishDiff(sequenceNumber, diff);
+		publishDiff(sequenceNumber, diff.getMainDiff());
 		
 		
 		logger.info("Downloading new state");
@@ -335,6 +374,23 @@ public class LiveSync
 	{
 		graphDAO.remove(diff.getRemoved(), graphName);
 		graphDAO.insert(diff.getAdded(), graphName);
+	}
+	
+	
+	Map<Long, Point2D> getNodeToPositionMap(Iterable<Node> nodes)
+	{
+		Map<Long, Point2D> result = new TreeMap<Long, Point2D>();
+		for(Node node : nodes) {
+			result.put(node.getId(), new Point2D.Double(node.getLongitude(), node.getLatitude()));
+		}
+		return result;
+	}
+	
+	private void applyNodeDiff(TreeSetDiff<Node> diff)
+		throws SQLException
+	{
+		nodePositionDao.remove(getNodeToPositionMap(diff.getRemoved()).keySet());
+		nodePositionDao.updateOrInsert(getNodeToPositionMap(diff.getAdded()));
 	}
 	
 	
@@ -425,7 +481,7 @@ public class LiveSync
 		//URIUtil.download(
 	}*/
 	
-	private IDiff<Model> computeDiff(long id)
+	private DiffResult computeDiff(long id)
 		throws SAXException, IOException
 	{
 		InputStream inputStream = getChangeSetStream(id);		
@@ -437,10 +493,12 @@ public class LiveSync
 		workFlow.complete();
 		
 		IDiff<Model> diff = diffStrategy.getMainGraphDiff();
+		TreeSetDiff<Node> nodeDiff = diffStrategy.getNodeDiff();
+		
 		//diffStrategy.release();
 		workFlow.release();
 		
-		return diff;
+		return new DiffResult(diff, nodeDiff);
 	}
 	
 	/*************************************************************************/

@@ -37,7 +37,10 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.aksw.commons.util.collections.TransformCollection;
+import org.aksw.commons.util.collections.TransformIterable;
 import org.apache.commons.collections15.MultiMap;
+import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.map.LRUMap;
 import org.apache.commons.collections15.multimap.MultiHashMap;
 import org.apache.log4j.Logger;
@@ -78,29 +81,24 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 import com.hp.hpl.jena.vocabulary.RDF;
 
-
 class SetMultiHashMap<K, V>
-	extends MultiHashMap<K, V>
+		extends MultiHashMap<K, V>
 {
 	@Override
-	protected Set<V> createCollection(Collection<? extends V> col) {
-		return (col == null)
-			? new HashSet<V>()
-			: new HashSet<V>(col);
+	protected Set<V> createCollection(Collection<? extends V> col)
+	{
+		return (col == null) ? new HashSet<V>() : new HashSet<V>(col);
 	}
 }
 
-
-
 /**
- * TODO Move elsewhere
- * Notes on the nodegraph:
+ * TODO Move elsewhere Notes on the nodegraph:
  * 
- * Tagless nodes are put into the NodeGraph,
- * all other nodes go into the MainGraph.
+ * Tagless nodes are put into the NodeGraph, all other nodes go into the
+ * MainGraph.
  * 
- * Whenever a node is removed, if a lookup on the main graph reveals no data,
- * a lookup on the node graph must be made.
+ * Whenever a node is removed, if a lookup on the main graph reveals no data, a
+ * lookup on the node graph must be made.
  * 
  * This lookup also returns triples, however, the problem is how to create the
  * diff.
@@ -108,17 +106,16 @@ class SetMultiHashMap<K, V>
  * 
  * So: How to work with the node-side graph:
  * 
- * .) Whenever a new tagless node is *created*, add it to the nodeGraph.
- * 	ok.
+ * .) Whenever a new tagless node is *created*, add it to the nodeGraph. ok.
  * 
- * .) Whenever a node is *modified* or *deleted*, what happens is, that
- * all data from the main graph is fetched. 
+ * .) Whenever a node is *modified* or *deleted*, what happens is, that all data
+ * from the main graph is fetched.
  * 
- * If that lookup reveals no data, we can either conclude that the node doesn't exist
- * in the store, or that it exists in the side graph.
- * As we are not publishing diffs from the side graph, we could simply state that
- * such nodes are deleted from the side graph, without checking whether they
- * actually exist there.
+ * If that lookup reveals no data, we can either conclude that the node doesn't
+ * exist in the store, or that it exists in the side graph. As we are not
+ * publishing diffs from the side graph, we could simply state that such nodes
+ * are deleted from the side graph, without checking whether they actually exist
+ * there.
  * 
  * 
  * 
@@ -134,22 +131,21 @@ class SetMultiHashMap<K, V>
  * 
  * 
  * @author raven
- *
+ * 
  */
 
 class NodeWayCache
 {
-	private SetMultiHashMap<Resource, Resource> nodeToWays = new SetMultiHashMap<Resource, Resource>();
-	private MultiHashMap<Resource, Resource> wayToNodes = new MultiHashMap<Resource, Resource>();
-	private Set<Resource> negCache;
-	
-	
-	/*
-	public Collection<Resource> lookupWaysByNode(Iterable<Resource> nodes) {
-		for(Resource node : nodes) {
+	private SetMultiHashMap<Resource, Resource>	nodeToWays	= new SetMultiHashMap<Resource, Resource>();
+	private MultiHashMap<Resource, Resource>	wayToNodes	= new MultiHashMap<Resource, Resource>();
+	private Set<Resource>						negCache;
 
-		}
-	}*/
+	/*
+	 * public Collection<Resource> lookupWaysByNode(Iterable<Resource> nodes) {
+	 * for(Resource node : nodes) {
+	 * 
+	 * } }
+	 */
 }
 
 class LGDCache
@@ -157,133 +153,122 @@ class LGDCache
 	enum State
 	{
 		Complete, // Every statement about a resource is in the cache
-		Partial,  // Not all statements about a resoruce are in the cache
-		None,     // The resource doesn't exist
-		Unknown   // Cache miss
+		Partial, // Not all statements about a resoruce are in the cache
+		None, // The resource doesn't exist
+		Unknown
+		// Cache miss
 	}
-	
-	private Model posCache = ModelFactory.createDefaultModel();
-	private LRUMap<Resource, State> resourceToState = new LRUMap<Resource, State>();
-	
-	private Set<Resource> negCache;
-	private String graphName;
-	private ISparulExecutor graphDAO;
 
-	
-	//private LRUMap<Long, Point2D> nodeToPosition = new LRUMap<Long, Point2D>();
-	
-	
-	//private LinkedList<Resource> lru = new LinkedList<Resource>();
+	private Model					posCache		= ModelFactory
+															.createDefaultModel();
+	private LRUMap<Resource, State>	resourceToState	= new LRUMap<Resource, State>();
 
-	private int maxSize = 1000000;
-	
+	private Set<Resource>			negCache;
+	private String					graphName;
+	private ISparulExecutor			graphDAO;
+
+	// private LRUMap<Long, Point2D> nodeToPosition = new LRUMap<Long,
+	// Point2D>();
+
+	// private LinkedList<Resource> lru = new LinkedList<Resource>();
+
+	private int						maxSize			= 1000000;
+
 	public LGDCache()
 	{
 	}
-	
+
 	public void insert(Model model)
 	{
-		while(Math.max(0, model.size() - (maxSize - posCache.size())) > 0) {
-			
-		
+		while (Math.max(0, model.size() - (maxSize - posCache.size())) > 0) {
+
 		}
 
-		//if(cache.size() + model.size() > maxSize) {
-			
-		//}
+		// if(cache.size() + model.size() > maxSize) {
+
+		// }
 		StmtIterator it = model.listStatements();
 		try {
-			while(it.hasNext()) {
-				
-				
+			while (it.hasNext()) {
+
 			}
-		}
-		finally {
+		} finally {
 			it.close();
 		}
 	}
-	
-	
+
 	public void remove(Model model)
 	{
 	}
-	
+
 	public String createSubjectQuery(Iterable<Resource> subjects)
 	{
-		//String resources = "<" + StringUtil.implode(">,<", uris) + ">";
+		// String resources = "<" + StringUtil.implode(">,<", uris) + ">";
 		String resources = StringUtil.implode(",", subjects);
-		
-		String fromPart = (graphName != null)
-			? "From <" + graphName + "> "
-			: "";
 
-		String result =
-			"Construct { ?s ?p ?o . } " + fromPart + "{ ?s ?p ?o . Filter(?s In (" + resources + ")) . }";
-	
-		//return Collections.singletonList(result);
+		String fromPart = (graphName != null) ? "From <" + graphName + "> "
+				: "";
+
+		String result = "Construct { ?s ?p ?o . } " + fromPart
+				+ "{ ?s ?p ?o . Filter(?s In (" + resources + ")) . }";
+
+		// return Collections.singletonList(result);
 		return result;
 	}
-	
-	
+
 	public void lookup(Model out, Iterable<Resource> subjects)
 	{
 		List<Resource> cacheMisses = coreLookup(out, subjects);
-		
+
 		String query = createSubjectQuery(cacheMisses);
-		//Model model = graphDAO.executeConstruct(query);
-		
-		//model.listSubjects().toSet()
-		
-		
-		
-		for(Resource miss : cacheMisses) {
-			
+		// Model model = graphDAO.executeConstruct(query);
+
+		// model.listSubjects().toSet()
+
+		for (Resource miss : cacheMisses) {
+
 		}
-		
+
 	}
-	
+
 	public List<Resource> coreLookup(Model out, Iterable<Resource> subjects)
 	{
 		List<Resource> cacheMisses = new ArrayList<Resource>();
-		
-		for(Resource subject : subjects) {
-			if(negCache.contains(subject))
+
+		for (Resource subject : subjects) {
+			if (negCache.contains(subject))
 				continue;
-			
-			StmtIterator it = posCache.listStatements(subject, null, (RDFNode)null);
-			
-			if(!it.hasNext()) {
+
+			StmtIterator it = posCache.listStatements(subject, null,
+					(RDFNode) null);
+
+			if (!it.hasNext()) {
 				cacheMisses.add(subject);
 			} else {
-				while(it.hasNext()) {
+				while (it.hasNext()) {
 					out.add(it.next());
 				}
 			}
 		}
-		
+
 		return cacheMisses;
 	}
 }
 
-
-
-
-
-
-
 /**
  * Some notes on the update process:
  * 
- * Entities are being passed to this Change sink.
- * Entities then have their tags filtered, and are then themselves classified as
- * either "accept", "reject", or "position accept".
- * 
- *
+ * Entities are being passed to this Change sink. Entities then have their tags
+ * filtered, and are then themselves classified as either "accept", "reject", or
+ * "position accept".
  * 
  * 
- * Each entity is transformed to RDF, however not all RDF data can be generated at once.
  * 
- *  
+ * 
+ * Each entity is transformed to RDF, however not all RDF data can be generated
+ * at once.
+ * 
+ * 
  * 
  * 
  * For each entity, all data from the main graph is collected.
@@ -299,329 +284,286 @@ class LGDCache
  * 
  * 
  * @author raven
- *
+ * 
  * @param <T>
  */
 
-
 /*
-class ChunkIterator<T>
-	implements Iterator<Collection<T>>
-{
-	private Collection<T> source;
-	private int batchSize;
+ * class ChunkIterator<T> implements Iterator<Collection<T>> { private
+ * Collection<T> source; private int batchSize;
+ * 
+ * public CollectionChunker(Collection<T> source, int batchSize) { this.source =
+ * source; this.batchSize = batchSize; }
+ * 
+ * @Override public boolean hasNext() { // TODO Auto-generated method stub
+ * return false; }
+ * 
+ * @Override public Collection<T> next() { // TODO Auto-generated method stub
+ * return null; }
+ * 
+ * @Override public void remove() { throw new UnsupportedOperationException(); }
+ * }
+ * 
+ * 
+ * class CollectionChunker<T> extends AbstractCollection<Collection<T>> {
+ * private Collection<T> source; private int batchSize;
+ * 
+ * public CollectionChunker(Collection<T> source, int batchSize) { this.source =
+ * source; this.batchSize = batchSize; }
+ * 
+ * @Override public Iterator<Collection<T>> iterator() { // TODO Auto-generated
+ * method stub return null; }
+ * 
+ * @Override public int size() { return source.size() / batchSize; } }
+ */
 
-	public CollectionChunker(Collection<T> source, int batchSize)
-	{
-		this.source = source;
-		this.batchSize = batchSize;
-	}
-
-	@Override
-	public boolean hasNext()
-	{
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public Collection<T> next()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void remove()
-	{
-		throw new UnsupportedOperationException();
-	}
-}
-
-
-class CollectionChunker<T>
-	extends AbstractCollection<Collection<T>>
-{
-	private Collection<T> source;
-	private int batchSize;
-	
-	public CollectionChunker(Collection<T> source, int batchSize)
-	{
-		this.source = source;
-		this.batchSize = batchSize;
-	}
-
-	@Override
-	public Iterator<Collection<T>> iterator()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public int size()
-	{
-		return source.size() / batchSize; 
-	}
-}
-*/
-
-
-class SetDiff<T>
+class HashSetDiff<T>
 	extends CollectionDiff<T, Set<T>>
 {
-	/*
-	public SetDiff(Comparator<T> comparator)
+	public HashSetDiff()
 	{
+		super(new HashSet<T>(), new HashSet<T>(), new HashSet<T>());
 	}
-	*/
-
-	public SetDiff(Comparator<T> comparator)
-	{
-		super(
-				new TreeSet<T>(comparator),
-				new TreeSet<T>(comparator),
-				new TreeSet<T>(comparator));
-	}	
 }
 
+
+
 abstract class CollectionDiff<T, C extends Collection<T>>
-	extends Diff<C>
-{	
+		extends Diff<C>
+{
 	public CollectionDiff(C added, C removed, C retained)
 	{
 		super(added, removed, retained);
 	}
 
-	public void add(T item) {
+	public void add(T item)
+	{
 		getRemoved().remove(item);
 		getAdded().add(item);
 	}
-	
-	public void remove(T item) {
+
+	public void remove(T item)
+	{
 		getAdded().remove(item);
 		getRemoved().add(item);
 	}
-	
-	public void clear() {
+
+	public void clear()
+	{
 		getAdded().clear();
 		getRemoved().clear();
 	}
-	
-	
+
 	public int size()
 	{
 		return getAdded().size() + getRemoved().size();
 	}
 }
 
-
-
 /**
- * FIXME Implement a class like this in a revised version of the LiveSync.
- * For now I leave it here as a stub in order that it reminds me of my
- * intentions.
+ * FIXME Implement a class like this in a revised version of the LiveSync. For
+ * now I leave it here as a stub in order that it reminds me of my intentions.
  * 
- * Eventually, this class should hold all information that is being gathered
- * in the LiveSync step.
+ * Eventually, this class should hold all information that is being gathered in
+ * the LiveSync step.
  * 
- * The information so for is:
- * . Created, Modified and Delted Nodes (as Entities)
- * . Created, Modified and Delted Ways (as Entities)
- * . The two above as resources, addtionally to ways also the corresponding way nodes
- *
- * . The new main model
- * . The old main model
- * . The diff between the two (maybe this can be implemented as a cached view (observer pattern), so no explicit materializiation would be required?!?!)
- *
- * . NodeResource - Position Mapping
- * . WayNode to Node Mapping
- * . Node to Way Mapping (in order to determine (un)referenced nodes)
- * . Dangling node (candidates) 
+ * The information so for is: . Created, Modified and Delted Nodes (as Entities)
+ * . Created, Modified and Delted Ways (as Entities) . The two above as
+ * resources, addtionally to ways also the corresponding way nodes
  * 
- * . Helper methods that e.g. compute sets of resources based on the state of this object
+ * . The new main model . The old main model . The diff between the two (maybe
+ * this can be implemented as a cached view (observer pattern), so no explicit
+ * materializiation would be required?!?!)
+ * 
+ * . NodeResource - Position Mapping . WayNode to Node Mapping . Node to Way
+ * Mapping (in order to determine (un)referenced nodes) . Dangling node
+ * (candidates)
+ * 
+ * . Helper methods that e.g. compute sets of resources based on the state of
+ * this object
  * 
  * @author raven
- *
+ * 
  */
 class LiveUpdateContext
 {
-	public Set<Node> createdNodes;
-	public Set<Node> modifiedNodes;
-	public Set<Node> removedNodes;
-	
-	public Set<Way> createdWays;
-	public Set<Way> modifiedWays;
-	public Set<Way> removedWays;
+	public Set<Node>	createdNodes;
+	public Set<Node>	modifiedNodes;
+	public Set<Node>	removedNodes;
 
-	public Model newModel;
-	public Model oldModel;
+	public Set<Way>		createdWays;
+	public Set<Way>		modifiedWays;
+	public Set<Way>		removedWays;
 
-	
-	
-	
+	public Model		newModel;
+	public Model		oldModel;
+
 }
 
 
+
+
+
 /**
- * Update Strategy which ignores the information of deleted tags - and in consequence triples -
- * from modified elements.
- * Therefore this strategy always performs a diff.
+ * Update Strategy which ignores the information of deleted tags - and in
+ * consequence triples - from modified elements. Therefore this strategy always
+ * performs a diff.
  * 
  * @author raven
- *
- * FIXME Somehow separate the store update code from the timely diff code
- *
+ * 
+ *         FIXME Somehow separate the store update code from the timely diff
+ *         code
+ * 
  */
 public class IgnoreModifyDeleteDiffUpdateStrategy
-	implements IUpdateStrategy
+		implements IUpdateStrategy
 {
-	private static final Logger logger = Logger.getLogger(IUpdateStrategy.class);
-	
-	private ILGDVocab vocab; 
-	private ITransformer<Entity, Model> entityTransformer;
-	private ISparqlExecutor graphDAO;	
-	private String mainGraphName;
-	//private String nodeGraphName;
+	private static final Logger			logger					= Logger.getLogger(IUpdateStrategy.class);
 
-	private RDFNodePositionDAO nodePositionDAO;
+	private ILGDVocab					vocab;
+	private ITransformer<Entity, Model>	entityTransformer;
+	private ISparqlExecutor				graphDAO;
+	private String						mainGraphName;
+	// private String nodeGraphName;
+
+	private RDFNodePositionDAO			nodePositionDAO;
+
+	private ITransformer<Model, Model>	postProcessTransformer	= new VirtuosoStatementNormalizer();
+
+	private RDFDiff						mainGraphDiff;
+
+	private TreeSetDiff<Node> nodeDiff = new TreeSetDiff<Node>();
+
 	
-	private ITransformer<Model, Model> postProcessTransformer = new VirtuosoStatementNormalizer();
-	
-	
-	private RDFDiff mainGraphDiff;
-	
-	//private Predicate<Entity> entityFilter;
-	//private Predicate<Tag> tagFilter;
-	
-	
-	
-	//private LRUMap<Long, Point2D> nodeToPosition = new LRUMap<Long, Point2D>();
-	//private LRUMap<Long, Long> nodeToWay = new LRUMap<Long, Long>();
-	
-	
+	// private Predicate<Entity> entityFilter;
+	// private Predicate<Tag> tagFilter;
+
+	// private LRUMap<Long, Point2D> nodeToPosition = new LRUMap<Long,
+	// Point2D>();
+	// private LRUMap<Long, Long> nodeToWay = new LRUMap<Long, Long>();
 
 	// The nodes which are removed/inserted into the NodeStore
-	// This graph only contains triples of the form <node> geo:geometry "value"^^virtrdf:geo
-	private RDFDiff nodeGraphDiff;
-	//private IDiff<Map<Long, Point2D>> nodeDiff = new Diff<Map<Long, Point2D>>(new HashMap<Long, Point2D>(), new HashMap<Long, Point2D>(), null);
-	
-	
+	// This graph only contains triples of the form <node> geo:geometry
+	// "value"^^virtrdf:geo
+	// private RDFDiff						nodeGraphDiff;
+	// private IDiff<Map<Long, Point2D>> nodeDiff = new Diff<Map<Long,
+	// Point2D>>(new HashMap<Long, Point2D>(), new HashMap<Long, Point2D>(),
+	// null);
+
 	// Unfortunately we need to make the entityFilter a property of this class.
 	// As nodes that will be filtered out need to be treated in a special way:
 	// Whenever nodes are filtered out, they are written to a separate graph
 	// (or table - doesn't matter). This way it is always possible to retrieve
 	// the positions of nodes. This is necessairy for computing the polygons
 	// of ways.
-	//private Predicate<Tag> tagFilter;
-	//private Predicate<Entity> entityFilter;
-	
-	
-	
-	//private Set<Entity> entities = new HashSet<Entity>();
-	
-	//SetDiff<EntityContainer> entityDiff = new SetDiff<EntityContainer>(new EntityByTypeThenIdComparator());
+	// private Predicate<Tag> tagFilter;
+	// private Predicate<Entity> entityFilter;
 
-	//Map<ChangeAction, Set<EntityContainer>> entityDiff = new HashMap<ChangeAction, Set<EntityContainer>>();
-	
-	///*
-	Set<EntityContainer> createdEntities = new TreeSet<EntityContainer>(new EntityByTypeThenIdComparator());
-	Set<EntityContainer> deletedEntities = new TreeSet<EntityContainer>(new EntityByTypeThenIdComparator());
-	Set<EntityContainer> modifiedEntities = new TreeSet<EntityContainer>(new EntityByTypeThenIdComparator());
-	
-	
-	
+	// private Set<Entity> entities = new HashSet<Entity>();
+
+	// SetDiff<EntityContainer> entityDiff = new SetDiff<EntityContainer>(new
+	// EntityByTypeThenIdComparator());
+
+	// Map<ChangeAction, Set<EntityContainer>> entityDiff = new
+	// HashMap<ChangeAction, Set<EntityContainer>>();
+
+	// /*
+	Set<EntityContainer>				createdEntities			= new TreeSet<EntityContainer>(
+																		new EntityByTypeThenIdComparator());
+	Set<EntityContainer>				deletedEntities			= new TreeSet<EntityContainer>(
+																		new EntityByTypeThenIdComparator());
+	Set<EntityContainer>				modifiedEntities		= new TreeSet<EntityContainer>(
+																		new EntityByTypeThenIdComparator());
+
 	public void clear()
 	{
 		createdEntities.clear();
 		modifiedEntities.clear();
 		deletedEntities.clear();
 	}
-	
+
 	public void addEntity(ChangeAction ca, EntityContainer ec)
 	{
-		// If an entity became deleted but the same becomes recreated (shouldn't happen?)
+		// If an entity became deleted but the same becomes recreated (shouldn't
+		// happen?)
 		// it must be treated as modified - on other words:
-		// Subsequent recreates must be treated as modified 
+		// Subsequent recreates must be treated as modified
 		createdEntities.remove(ec);
-		 
-		boolean didRemove =
-			modifiedEntities.remove(ec) || deletedEntities.remove(ec);
-		
-		switch(ca) {
-		case Create: if(didRemove) createdEntities.add(ec); else modifiedEntities.add(ec); break;
-		case Modify: modifiedEntities.add(ec); break;
-		case Delete: deletedEntities.add(ec); break;
-		}
-		
-		/*
-		if(ca.equals(ChangeAction.Modify)) {
-			
-			if(createdEntities.contains(ec)) {
-				// note the element in the set may be different from the one we insert, however the comparator returns the same result
-				createdEntities.remove(ec); 
-				createdEntities.add(ec);
-			} else {
-				modifiedEntities.add(ec);
-			}
-		
-		} else if(ca.equals(ChangeAction.Create)) {
 
-			if(modifiedEntities.contains(ec)) {
-				logger.warn("Adding " + ec + " for creation, however it is already being modified - leaving on modified");
-				//createdEntities.remove(ec); 
-				//createdEntities.add(ec);
-			} else if(deletedEntities.contains(ec)) {
-				deletedEntities.remove(ec);
-				modifiedEntities.add(ec);
-			} else {
+		boolean didRemove = modifiedEntities.remove(ec)
+				|| deletedEntities.remove(ec);
+
+		switch (ca) {
+		case Create:
+			if (didRemove)
 				createdEntities.add(ec);
-			}
-		} else if(ca.equals(ChangeAction.Delete)) {
-			createdEntities.remove(ec);
-			modifiedEntities.remove(ec);
+			else
+				modifiedEntities.add(ec);
+			break;
+		case Modify:
+			modifiedEntities.add(ec);
+			break;
+		case Delete:
 			deletedEntities.add(ec);
+			break;
 		}
-		*/
+
+		/*
+		 * if(ca.equals(ChangeAction.Modify)) {
+		 * 
+		 * if(createdEntities.contains(ec)) { // note the element in the set may
+		 * be different from the one we insert, however the comparator returns
+		 * the same result createdEntities.remove(ec); createdEntities.add(ec);
+		 * } else { modifiedEntities.add(ec); }
+		 * 
+		 * } else if(ca.equals(ChangeAction.Create)) {
+		 * 
+		 * if(modifiedEntities.contains(ec)) { logger.warn("Adding " + ec +
+		 * " for creation, however it is already being modified - leaving on modified"
+		 * ); //createdEntities.remove(ec); //createdEntities.add(ec); } else
+		 * if(deletedEntities.contains(ec)) { deletedEntities.remove(ec);
+		 * modifiedEntities.add(ec); } else { createdEntities.add(ec); } } else
+		 * if(ca.equals(ChangeAction.Delete)) { createdEntities.remove(ec);
+		 * modifiedEntities.remove(ec); deletedEntities.add(ec); }
+		 */
 	}
 
-
 	/*
-	public static void main(String[] args) {
-		//SetDiff<EntityContainer> entityDiff = new SetDiff<EntityContainer>(new EntityByTypeThenIdComparator());
-		Comparator<EntityContainer> c = new EntityByTypeThenIdComparator();
-		
-		CommonEntityData ced1 = new CommonEntityData(1l, 1, new Date(), new OsmUser(2, "blah"), 123l);
-		Node e1 = new Node(ced1, 1.0, 2.0);
+	 * public static void main(String[] args) { //SetDiff<EntityContainer>
+	 * entityDiff = new SetDiff<EntityContainer>(new
+	 * EntityByTypeThenIdComparator()); Comparator<EntityContainer> c = new
+	 * EntityByTypeThenIdComparator();
+	 * 
+	 * CommonEntityData ced1 = new CommonEntityData(1l, 1, new Date(), new
+	 * OsmUser(2, "blah"), 123l); Node e1 = new Node(ced1, 1.0, 2.0);
+	 * 
+	 * 
+	 * 
+	 * 
+	 * CommonEntityData ced2 = new CommonEntityData(0l, 1, new Date(), new
+	 * OsmUser(2, "blah"), 123l, Arrays.asList(new Tag("hi", "world"))); Node e2
+	 * = new Node(ced2, 2.0, 3.0f);
+	 * 
+	 * EntityContainer ec1 = new NodeContainer(e1); EntityContainer ec2 = new
+	 * NodeContainer(e2);
+	 * 
+	 * 
+	 * System.out.println("Comparator: " + c.compare(ec1, ec2));
+	 * System.out.println("Equals: " + ec1.equals(ec2));
+	 * 
+	 * }
+	 */
 
-		
-		
-		
-		CommonEntityData ced2 = new CommonEntityData(0l, 1, new Date(), new OsmUser(2, "blah"), 123l, Arrays.asList(new Tag("hi", "world")));
-		Node e2 = new Node(ced2, 2.0, 3.0f); 
-		
-		EntityContainer ec1 = new NodeContainer(e1);
-		EntityContainer ec2 = new NodeContainer(e2);
-		
-		
-		System.out.println("Comparator: " + c.compare(ec1, ec2));
-		System.out.println("Equals: " + ec1.equals(ec2));
-		
-	}*/
-	
 	// Number of entities that should be processed as a batch
-	private int maxEntityBatchSize = 500;
-	
+	private int	maxEntityBatchSize	= 500;
+
 	/*
-	long entityDiffTimeSpan = 60000;	
-	private Date timeStamp = null;
-	*/
-	
-	public IgnoreModifyDeleteDiffUpdateStrategy(
-			ILGDVocab vocab,
+	 * long entityDiffTimeSpan = 60000; private Date timeStamp = null;
+	 */
+
+	public IgnoreModifyDeleteDiffUpdateStrategy(ILGDVocab vocab,
 			ITransformer<Entity, Model> entityTransformer,
-			ISparqlExecutor graphDAO,
-			String mainGraphName,
+			ISparqlExecutor graphDAO, String mainGraphName,
 			RDFNodePositionDAO nodePositionDAO)
 	{
 		this.vocab = vocab;
@@ -629,9 +571,9 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		this.graphDAO = graphDAO;
 		this.mainGraphName = mainGraphName;
 		this.nodePositionDAO = nodePositionDAO;
-		//this.nodeGraphName = nodeGraphName;
+		// this.nodeGraphName = nodeGraphName;
 	}
-	
+
 	/**
 	 * NOTE Does not set retained triples
 	 * 
@@ -644,227 +586,218 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		Model added = ModelFactory.createDefaultModel();
 		added.add(n);
 		added.remove(o);
-		
+
 		Model removed = ModelFactory.createDefaultModel();
 		removed.add(o);
 		removed.remove(n);
-		
+
 		IDiff<Model> result = new Diff<Model>(added, removed, null);
-		
+
 		return result;
 	}
-	
-	
+
 	@Override
 	public void process(ChangeContainer c)
 	{
 		addEntity(c.getAction(), c.getEntityContainer());
-		
+
 		/*
-		if(c.getAction().equals(ChangeAction.Delete)) {
-			entityDiff.remove(c.getEntityContainer());
-		}		
-		else {
-			entityDiff.add(c.getEntityContainer());
-		}*/
+		 * if(c.getAction().equals(ChangeAction.Delete)) {
+		 * entityDiff.remove(c.getEntityContainer()); } else {
+		 * entityDiff.add(c.getEntityContainer()); }
+		 */
 	}
 
-	
-	private static Model executeConstruct(ISparqlExecutor graphDAO, Collection<String> queries)
-		throws Exception
+	private static Model executeConstruct(ISparqlExecutor graphDAO,
+			Collection<String> queries) throws Exception
 	{
 		Model result = ModelFactory.createDefaultModel();
 		int i = 1;
-		for(String query : queries) {
+		for (String query : queries) {
 			logger.info("Executing query " + (i++) + "/" + queries.size());
-			//logger.info("Query = " + query);
-			
+			// logger.info("Query = " + query);
+
 			Model tmp = graphDAO.executeConstruct(query);
-			
+
 			result.add(tmp);
 		}
-		
+
 		return result;
 	}
 
-	
 	public static Point2D tryParseGeoRSSPointValue(String value)
 	{
 		try {
 			String str = value.toString();
 			String[] ps = str.split("\\s+", 2);
-		
+
 			double lat = Double.parseDouble(ps[0]);
 			double lon = Double.parseDouble(ps[1]);
-		
+
 			return new Point2D.Double(lon, lat);
-		}
-		catch(Exception e1) {
+		} catch (Exception e1) {
 			return null;
 		}
 	}
-	
-	
-	private static Pattern rdfSeqPattern = Pattern.compile(RDF.getURI() + "_(\\d+)$");
-	
+
+	private static Pattern	rdfSeqPattern	= Pattern.compile(RDF.getURI()
+													+ "_(\\d+)$");
+
 	public static Integer tryParseSeqPredicate(Resource res)
 	{
 		String pred = res.toString();
 		Matcher m = rdfSeqPattern.matcher(pred);
-		if(m.find()) {
+		if (m.find()) {
 			String indexStr = m.group(1);
 			Integer index = Integer.parseInt(indexStr);
-			
+
 			return index;
 		}
-		
+
 		return null;
 	}
-	
-	
+
 	/**
-	 * Scans the given models for triples having a rdf:_n predicate and
-	 * returns a map of subject-> index -> object
+	 * Scans the given models for triples having a rdf:_n predicate and returns
+	 * a map of subject-> index -> object
 	 * 
 	 * @param model
 	 * @return
 	 */
 	/*
-	public Map<Resource, SortedMap<Integer, RDFNode>> processSeq(Model model) {
-		Map<Resource, SortedMap<Integer, RDFNode>> result = new HashMap<Resource, SortedMap<Integer, RDFNode>>();
-		
-		
-		for(Resource subject : model.listSubjects().toSet()) {
-			SortedMap<Integer, RDFNode> part = processSeq(subject, model);
-			result.put(subject, part);
-		}
-		
-		return result;
-	}*/
+	 * public Map<Resource, SortedMap<Integer, RDFNode>> processSeq(Model model)
+	 * { Map<Resource, SortedMap<Integer, RDFNode>> result = new
+	 * HashMap<Resource, SortedMap<Integer, RDFNode>>();
+	 * 
+	 * 
+	 * for(Resource subject : model.listSubjects().toSet()) { SortedMap<Integer,
+	 * RDFNode> part = processSeq(subject, model); result.put(subject, part); }
+	 * 
+	 * return result; }
+	 */
 	// FIXME: Clearify semantics: If a resource does not have a seq associated
 	// should it appear in the result?
 	// Currently the answer is "no" (therefore only resources with seqs are
 	// returned.
 	// However, actually all resources that are "a rdf:Seq" should be in the map
 	// (i guess)
-	public Map<Resource, TreeMap<Integer, RDFNode>> indexRdfMemberships(Model model)
+	public Map<Resource, TreeMap<Integer, RDFNode>> indexRdfMemberships(
+			Model model)
 	{
 		Map<Resource, TreeMap<Integer, RDFNode>> result = new HashMap<Resource, TreeMap<Integer, RDFNode>>();
-		
+
 		processSeq(result, model);
-		
-		
+
 		return result;
-	}
-	
-	
-	public Set<Resource> extractNodes(Map<Resource, TreeMap<Integer, RDFNode>> map)
-	{
-		Set<Resource> result = new HashSet<Resource>();		
-		for(TreeMap<Integer, RDFNode> tmpB : map.values()) {
-			for(RDFNode tmpC : tmpB.values()) {
-				result.add((Resource)tmpC);
-			}
-		}
-		
-		return result;
-	}
-	
-	
-	public void processSeq(Map<Resource, TreeMap<Integer, RDFNode>> result, Model model) {
-		//Map<Resource, SortedMap<Integer, RDFNode>> result = new HashMap<Resource, SortedMap<Integer, RDFNode>>();
-		
-		
-		for(Resource subject : model.listSubjects().toSet()) {
-			TreeMap<Integer, RDFNode> part = processSeq(subject, model);
-			if(!part.isEmpty())
-				result.put(subject, part);
-		}
-		
-		//return result;
 	}
 
-	
-	
+	public Set<Resource> extractNodes(
+			Map<Resource, TreeMap<Integer, RDFNode>> map)
+	{
+		Set<Resource> result = new HashSet<Resource>();
+		for (TreeMap<Integer, RDFNode> tmpB : map.values()) {
+			for (RDFNode tmpC : tmpB.values()) {
+				result.add((Resource) tmpC);
+			}
+		}
+
+		return result;
+	}
+
+	public void processSeq(Map<Resource, TreeMap<Integer, RDFNode>> result,
+			Model model)
+	{
+		// Map<Resource, SortedMap<Integer, RDFNode>> result = new
+		// HashMap<Resource, SortedMap<Integer, RDFNode>>();
+
+		for (Resource subject : model.listSubjects().toSet()) {
+			TreeMap<Integer, RDFNode> part = processSeq(subject, model);
+			if (!part.isEmpty())
+				result.put(subject, part);
+		}
+
+		// return result;
+	}
+
 	private TreeMap<Integer, RDFNode> processSeq(Resource res, Model model)
 	{
 		TreeMap<Integer, RDFNode> indexToObject = new TreeMap<Integer, RDFNode>();
-		StmtIterator it =  model.listStatements(res, null, (RDFNode)null);
+		StmtIterator it = model.listStatements(res, null, (RDFNode) null);
 		try {
-			while(it.hasNext()) {
+			while (it.hasNext()) {
 				Statement stmt = it.next();
-				
+
 				String pred = stmt.getPredicate().toString();
 				Matcher m = rdfSeqPattern.matcher(pred);
-				if(m.find()) {
+				if (m.find()) {
 					String indexStr = m.group(1);
 					int index = Integer.parseInt(indexStr);
-					
+
 					indexToObject.put(index, stmt.getObject());
 				}
 			}
-			
+
 		} finally {
 			it.close();
 		}
-		
+
 		return indexToObject;
 	}
-	
+
 	public static ArrayList<String> tryParseGeoRRSPointList(String value)
 	{
 		ArrayList<String> result = new ArrayList<String>();
-		
+
 		String parts[] = value.split("\\s+");
-		for(int i = 0; i < (parts.length / 2); ++i) {
+		for (int i = 0; i < (parts.length / 2); ++i) {
 			result.add(parts[2 * i] + " " + parts[2 * i + 1]);
 		}
 
 		return result;
 	}
 
-	
-	private static Pattern pointPattern = Pattern.compile("POINT\\s+\\(([^)]+)\\)", Pattern.CASE_INSENSITIVE);
-	
+	private static Pattern	pointPattern	= Pattern.compile(
+													"POINT\\s+\\(([^)]+)\\)",
+													Pattern.CASE_INSENSITIVE);
+
 	private static String tryParsePoint(String value)
 	{
 		Matcher m = pointPattern.matcher(value);
 
-		return m.find()
-			? m.group(1)
-			: null;
+		return m.find() ? m.group(1) : null;
 	}
-	
+
 	public static Point2D tryParseVirtuosoPointValue(String value)
 	{
 		String raw = tryParsePoint(value);
-		
+
 		String[] parts = raw.split("\\s+");
-		if(parts.length != 2)
+		if (parts.length != 2)
 			return null;
-		
+
 		try {
 			double x = Double.parseDouble(parts[0]);
 			double y = Double.parseDouble(parts[1]);
 			return new Point2D.Double(x, y);
-		} catch(Throwable t) {
+		} catch (Throwable t) {
 			return null;
-		}		
+		}
 	}
-	
-	private void populatePointPosMappingVirtuoso(Model model, Map<Resource, String> nodeToPos)
+
+	private void populatePointPosMappingVirtuoso(Model model,
+			Map<Resource, String> nodeToPos)
 	{
-		StmtIterator it = model.listStatements(null, GeoRSS.geo, (RDFNode)null);
+		StmtIterator it = model
+				.listStatements(null, GeoRSS.geo, (RDFNode) null);
 		try {
-			while(it.hasNext()) {
+			while (it.hasNext()) {
 				Statement stmt = it.next();
-				
+
 				String value = stmt.getLiteral().getValue().toString();
 				String pointStr = tryParsePoint(value);
-				if(pointStr == null)
+				if (pointStr == null)
 					continue;
-				
-				
+
 				nodeToPos.put(stmt.getSubject(), pointStr);
 			}
 		} finally {
@@ -873,35 +806,28 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 	}
 
 	/*
-	private void populatePointPosMappingGeoRSS(Model model, Map<Resource, String> nodeToPos)
-	{
-		StmtIterator it = model.listStatements(null, GeoRSS.point, (RDFNode)null);
-		try {
-			while(it.hasNext()) {
-				Statement stmt = it.next();
-				
-				String value = stmt.getLiteral().getValue().toString();
-				nodeToPos.put(stmt.getSubject(), value);
-			}
-		} finally {
-			it.close();
-		}
-	}*/
+	 * private void populatePointPosMappingGeoRSS(Model model, Map<Resource,
+	 * String> nodeToPos) { StmtIterator it = model.listStatements(null,
+	 * GeoRSS.point, (RDFNode)null); try { while(it.hasNext()) { Statement stmt
+	 * = it.next();
+	 * 
+	 * String value = stmt.getLiteral().getValue().toString();
+	 * nodeToPos.put(stmt.getSubject(), value); } } finally { it.close(); } }
+	 */
 
-	
 	public Map<Resource, String> createNodePosMapFromNodesGeoRSS(Model model)
 	{
-		Map<Resource, String> result = new HashMap<Resource, String>(); 
+		Map<Resource, String> result = new HashMap<Resource, String>();
 
-		for(Statement stmt : model.listStatements(null, GeoRSS.point, (RDFNode)null).toList()) {
+		for (Statement stmt : model.listStatements(null, GeoRSS.point,
+				(RDFNode) null).toList()) {
 			String value = stmt.getLiteral().getValue().toString();
 			result.put(stmt.getSubject(), value);
 		}
-		
+
 		return result;
 	}
 
-	
 	// Map<Resource, List<Resource>> wayToNodes
 	/**
 	 * Creates a Node-Pos Map by mapping a georss:node-string to triples of the
@@ -911,43 +837,50 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 	 */
 	public Map<Resource, String> createNodePosMapFromWays(Model model)
 	{
-		Map<Resource, String> result = new HashMap<Resource, String>(); 
-		
-		Set<Statement> ways =
-			model.listStatements(null, GeoRSS.line, (RDFNode)null).andThen(
-					model.listStatements(null, GeoRSS.polygon, (RDFNode)null)).toSet();
+		Map<Resource, String> result = new HashMap<Resource, String>();
 
-		for(Statement stmt : ways) {
+		Set<Statement> ways = model
+				.listStatements(null, GeoRSS.line, (RDFNode) null)
+				.andThen(
+						model.listStatements(null, GeoRSS.polygon,
+								(RDFNode) null)).toSet();
+
+		for (Statement stmt : ways) {
 			Resource wayNode = vocab.wayToWayNode(stmt.getSubject());
 			SortedMap<Integer, RDFNode> seq = processSeq(wayNode, model);
-			
-			String value = stmt.getObject().as(Literal.class).getValue().toString();
+
+			String value = stmt.getObject().as(Literal.class).getValue()
+					.toString();
 			List<String> positions = tryParseGeoRRSPointList(value);
 
-			if(positions == null) {
-				logger.warn("Error parsing a geoRSS point list from statement " + stmt);
+			if (positions == null) {
+				logger.warn("Error parsing a geoRSS point list from statement "
+						+ stmt);
 				continue;
 			}
-			
-			for(Map.Entry<Integer, RDFNode> entry : seq.entrySet()) {									
+
+			for (Map.Entry<Integer, RDFNode> entry : seq.entrySet()) {
 				Resource node = entry.getValue().as(Resource.class);
 				int index = entry.getKey() - 1;
 
 				// FIXME This sometime fails for some reason.
-				// Most likely the nodelist of a way is out of sync with its polygon
+				// Most likely the nodelist of a way is out of sync with its
+				// polygon
 				// Add error checking so its possible to investigate
-				if(index >= positions.size()) {
-					logger.warn("Out of sync: Georss of " + wayNode + " has " + positions.size() + " coordinates, node " + node + " has index " + index);
+				if (index >= positions.size()) {
+					logger.warn("Out of sync: Georss of " + wayNode + " has "
+							+ positions.size() + " coordinates, node " + node
+							+ " has index " + index);
 					continue;
 				}
-				
+
 				result.put(node, positions.get(index));
-			}			
+			}
 		}
 
 		return result;
 	}
-	
+
 	/**
 	 * transforms a waynode resource to the corresponding way resource
 	 * 
@@ -958,41 +891,39 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 
 	public boolean hasRelevantTag(Model model, Resource subject)
 	{
-		for(Statement stmt : model.listStatements(subject, null, (RDFNode)null).toSet()) {
-			if(!(stmt.getPredicate().equals(GeoRSS.point) ||
-				stmt.getPredicate().equals(GeoRSS.geo) ||
-				stmt.getPredicate().equals(WGS84Pos.xlat) ||
-				stmt.getPredicate().equals(WGS84Pos.xlong))) {
-					return true;
-			}	
+		for (Statement stmt : model.listStatements(subject, null,
+				(RDFNode) null).toSet()) {
+			if (!(stmt.getPredicate().equals(GeoRSS.point)
+					|| stmt.getPredicate().equals(GeoRSS.geo)
+					|| stmt.getPredicate().equals(WGS84Pos.xlat) || stmt
+					.getPredicate().equals(WGS84Pos.xlong))) {
+				return true;
+			}
 		}
-		
+
 		return false;
 	}
-		
-	
-	Model fetchStatementsBySubject(Iterable<Resource> subjects, String graphName, int chunkSize)
-		throws Exception
+
+	Model fetchStatementsBySubject(Iterable<Resource> subjects,
+			String graphName, int chunkSize) throws Exception
 	{
 		Model result = ModelFactory.createDefaultModel();
-		
-		for(List<Resource> item : Iterables.partition(subjects, chunkSize)) {
-			String query = GraphDAORDFEntityDAO.constructBySubject(item, graphName);
+
+		for (List<Resource> item : Iterables.partition(subjects, chunkSize)) {
+			String query = GraphDAORDFEntityDAO.constructBySubject(item,
+					graphName);
 			Model part = graphDAO.executeConstruct(query);
 			result.add(part);
 		}
-		
+
 		return result;
 	}
-	
-	
-	
+
 	/**
-	 * Returns mappings from ways to nodes and
-	 * relations to ways and nodes.
+	 * Returns mappings from ways to nodes and relations to ways and nodes.
 	 * 
-	 * Note: Each item is mapped to the entities it depends on.
-	 * For instance, nodes are mapped to the set of ways they depend on.
+	 * Note: Each item is mapped to the entities it depends on. For instance,
+	 * nodes are mapped to the set of ways they depend on.
 	 * 
 	 * 
 	 * TODO relations not implemented
@@ -1004,54 +935,53 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 	{
 		MultiMap<Resource, Resource> result = new SetMultiHashMap<Resource, Resource>();
 		Map<Resource, TreeMap<Integer, RDFNode>> index = indexRdfMemberships(model);
-		
-		for(Map.Entry<Resource, TreeMap<Integer, RDFNode>> entry : index.entrySet()) {
+
+		for (Map.Entry<Resource, TreeMap<Integer, RDFNode>> entry : index
+				.entrySet()) {
 			Resource wayNode = entry.getKey();
 			Resource way = vocab.wayNodeToWay(wayNode);
-			
-			if(way == null) {
+
+			if (way == null) {
 				continue;
 			}
-			
-			for(RDFNode node : entry.getValue().values()) {
-				result.put((Resource)node, way);
-			}			
+
+			for (RDFNode node : entry.getValue().values()) {
+				result.put((Resource) node, way);
+			}
 		}
-		
-		
+
 		return result;
 	}
-	
-	
-	private Map<Resource, String> createNodePosMapFromEntities(Iterable<EntityContainer> ecs)
+
+	private Map<Resource, String> createNodePosMapFromEntities(
+			Iterable<EntityContainer> ecs)
 	{
 		Map<Resource, String> result = new HashMap<Resource, String>();
-		
-		
-		for(EntityContainer ec : ecs) {
+
+		for (EntityContainer ec : ecs) {
 			Entity entity = ec.getEntity();
-			
-			if(entity instanceof Node) {
-				Node node = (Node)entity;
-				
+
+			if (entity instanceof Node) {
+				Node node = (Node) entity;
+
 				Resource resource = vocab.createResource(node);
 				String pos = node.getLongitude() + " " + node.getLatitude();
-				
+
 				result.put(resource, pos);
 			}
 		}
-		
+
 		return result;
 	}
-	
-	
-	private void createMinimalStatements(Iterable<EntityContainer> ecs, Model model)
+
+	private void createMinimalStatements(Iterable<EntityContainer> ecs,
+			Model model)
 	{
-		for(EntityContainer ec : ecs) {
+		for (EntityContainer ec : ecs) {
 			Entity entity = ec.getEntity();
-			
-			if(entity instanceof Node) {
-				Node node = (Node)entity;
+
+			if (entity instanceof Node) {
+				Node node = (Node) entity;
 				Resource subject = vocab.createResource(node);
 				SimpleNodeToRDFTransformer.generateGeoRSS(model, subject, node);
 			}
@@ -1059,17 +989,42 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 	}
 	
 	
-	/*
-	private void updatePredicate(Model model, Resource subject, Predicate predicate, RDFNode object)
+	
+	public static Collection<Entity> entityView(Collection<EntityContainer> src)
 	{
+		return new TransformCollection<EntityContainer, Entity>(src,
+				new Transformer<EntityContainer, Entity>() {
+					@Override
+					public Entity transform(EntityContainer input)
+					{
+						return input.getEntity();
+					}
+		});
 	}
-	*/
+	
+	public static Iterable<Entity> entityView(Iterable<EntityContainer> src)
+	{
+		return new TransformIterable<EntityContainer, Entity>(src,
+				new Transformer<EntityContainer, Entity>() {
+					@Override
+					public Entity transform(EntityContainer input)
+					{
+						return input.getEntity();
+					}
+		});
+	}
 	
 	
+
+	/*
+	 * private void updatePredicate(Model model, Resource subject, Predicate
+	 * predicate, RDFNode object) { }
+	 */
+
 	/**
-	 * Some issues i recently noticed (as of 20 sept 2010):
-	 * .) The nodeToPos map is only populated from the diff,
-	 *    However, all positions that are avaiable in the new set should be placed there.
+	 * Some issues i recently noticed (as of 20 sept 2010): .) The nodeToPos map
+	 * is only populated from the diff, However, all positions that are avaiable
+	 * in the new set should be placed there.
 	 * 
 	 * 
 	 * @param inDiff
@@ -1185,7 +1140,7 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		// and a dangling way must be referenced by a non-dangling relation.
 
 		
-		// TODO If there were relations:
+		// TODO ONLY IF THERE WERE RELATIONS:
 		// UWa) Undangle all currently dangling ways that are referenced by non-danling relations
 		// UWb) For the remaining ways, check whether they are referenced in the database
 		
@@ -1196,11 +1151,11 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		//Set<Resource> undangledResources = new HashSet<Resource>();
 		dependencies.putAll(extractDependencies(newMainModel));
 		
-		// FIXME: Do we have to remove dependencies based on the old model? I'd say no
+		// FIXME Do we have to remove dependencies based on the old model? I'd say no
 		
 		//undangledResources.addAll(dependencies.keySet());
 		danglingResources.removeAll(dependencies.keySet());
-		
+
 		
 		// UNb)
 		// Note: We are selecting node references from the database,
@@ -1215,14 +1170,25 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		
 		
 		// The remaining dangling items will not go into the main graph
-		
-
 		// Now we know which positions we need to retrieve
 		
 		
 
 		// TODO Separate the set into nodes and ways from the beginning
 		Set<Resource> danglingNodes = danglingResources;
+		// Set<Resource> danglingWays
+		
+		
+		
+		//nodeGraphDiff.getRemoved().addAll();
+		//nodeGraphDiff.
+		for(Node node : Iterables.filter(entityView(deletedEntities), Node.class))
+			nodeDiff.getRemoved().add(node);
+				
+
+		for(Node node : Iterables.filter(entityView(Iterables.concat(createdEntities, modifiedEntities)), Node.class)) {
+			nodeDiff.getAdded().add(node);
+		}
 		
 		
 		// Determine which node positions we yet have to retrieve
@@ -1479,184 +1445,191 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		logger.info("" + ((System.nanoTime() - start) / 1000000000.0) + " Completed processing of entities");
 	}
 
-	
 	/*
-	public static boolean isTaglessNode(Entity entity)
-	{
-		if(!(entity instanceof Node))
-			return false;
-		
-		return entity.getTags().isEmpty();
-	}
-	*/
-
-	
-	/**
-	 * Given a set of entities, generates RDF from them, and returns the set
-	 * of entities for which no RDF was generated.
+	 * public static boolean isTaglessNode(Entity entity) { if(!(entity
+	 * instanceof Node)) return false;
+	 * 
+	 * return entity.getTags().isEmpty(); }
 	 */
-	private Set<EntityContainer> transformToModel(Iterable<EntityContainer> ecs, Model mainModel)
-		throws Exception
+
+	/**
+	 * Given a set of entities, generates RDF from them, and returns the set of
+	 * entities for which no RDF was generated.
+	 */
+	private Set<EntityContainer> transformToModel(
+			Iterable<EntityContainer> ecs, Model mainModel) throws Exception
 	{
 		Set<EntityContainer> result = new HashSet<EntityContainer>();
-		
+
 		Model newModel = ModelFactory.createDefaultModel();
-		for(EntityContainer ec : ecs) {
+		for (EntityContainer ec : ecs) {
 			Entity entity = ec.getEntity();
 
 			// FIXME Doesn't work this way, as ways have at least two resources
 			// So the hack is to simple remove any tagless items
-			if(entity.getTags().isEmpty()) {
+			if (entity.getTags().isEmpty()) {
 				result.add(ec);
 				continue;
 			}
-			
-			//Resource subject = vocab.createResource(entity);
+
+			// Resource subject = vocab.createResource(entity);
 			entityTransformer.transform(newModel, entity);
-			
+
 			// Remove entities that do not have any relevant tags.
 			/*
-			if(!hasRelevantTag(newModel, subject)) {
-				newModel.remove(newModel.listStatements(subject, null, (RDFNode)null));
-				result.add(ec);
-			}*/
+			 * if(!hasRelevantTag(newModel, subject)) {
+			 * newModel.remove(newModel.listStatements(subject, null,
+			 * (RDFNode)null)); result.add(ec); }
+			 */
 		}
-		
-		
+
 		// Virtuoso-specific transforms for the triples that were added
 		postProcessTransformer.transform(mainModel, newModel);
-		//System.out.println(ModelUtil.toString(added));
-		
+		// System.out.println(ModelUtil.toString(added));
+
 		return result;
 	}
-		
-	
+
 	@Override
 	public void complete()
 	{
-		//logger.info(this.getClass() + " completed");
+		// logger.info(this.getClass() + " completed");
 		try {
 			mainGraphDiff = new RDFDiff();
-			
-			nodeGraphDiff = new RDFDiff();
-			
-			//process(entityDiff, mainGraphDiff, maxEntityBatchSize);
+
+			nodeDiff = new TreeSetDiff<Node>();
+			//nodeGraphDiff = new RDFDiff();
+
+			// process(entityDiff, mainGraphDiff, maxEntityBatchSize);
 			process(null, mainGraphDiff, maxEntityBatchSize);
-			//entityDiff.clear();
-		}
-		catch(Exception e) {
-			logger.error("An error occurred at the completion phase of a task", e);
+			// entityDiff.clear();
+		} catch (Exception e) {
+			logger.error("An error occurred at the completion phase of a task",
+					e);
 			throw new RuntimeException(e);
-		}
-		finally {
+		} finally {
 			clear();
 		}
 	}
-	
-	
+
 	public RDFDiff getMainGraphDiff()
 	{
 		return mainGraphDiff;
 	}
+
+	public TreeSetDiff<Node> getNodeDiff()
+	{
+		return nodeDiff;
+	}
 	
+	/*
 	public RDFDiff getNodeGraphDiff()
 	{
 		return nodeGraphDiff;
-	}
-	
+	}*/
 
 	@Override
 	public void release()
 	{
 		mainGraphDiff = null;
 	}
-	
-	
-	public static Map<Resource, RDFNode> fetchNodePositions(ISparqlExecutor graphDAO, String graphName, Set<Resource> nodes)
-		throws Exception
+
+	public static Map<Resource, RDFNode> fetchNodePositions(
+			ISparqlExecutor graphDAO, String graphName, Set<Resource> nodes)
+			throws Exception
 	{
 		Map<Resource, RDFNode> result = new HashMap<Resource, RDFNode>();
-		
-		if(nodes.isEmpty())
+
+		if (nodes.isEmpty())
 			return result;
-		
+
 		List<List<Resource>> chunks = CollectionUtils.chunk(nodes, 1024);
-		for(List<Resource> chunk : chunks) {
-			String query = "Select ?n ?o From <" + graphName + "> { ?n <" + GeoRSS.point + "> ?o . Filter(?n In (<" + StringUtil.implode(">,<", chunk) + ">)) . }";
-			
-			// FIXME Make executeConstruct accept the output model as an parameter 
-			//Model tmp = graphDAO.executeConstruct(query);
+		for (List<Resource> chunk : chunks) {
+			String query = "Select ?n ?o From <" + graphName + "> { ?n <"
+					+ GeoRSS.point + "> ?o . Filter(?n In (<"
+					+ StringUtil.implode(">,<", chunk) + ">)) . }";
+
+			// FIXME Make executeConstruct accept the output model as an
+			// parameter
+			// Model tmp = graphDAO.executeConstruct(query);
 			List<QuerySolution> qs = graphDAO.executeSelect(query);
-			for(QuerySolution q : qs) {
+			for (QuerySolution q : qs) {
 				result.put(q.getResource("n"), q.get("o"));
 			}
 		}
-		
-		return result;		
-	}
-	
-	
-	public static Model constructGeoRSSLinePolygon(ISparqlExecutor graphDAO, String graphName, Set<Resource> ways)
-		throws Exception
-	{
-		if(ways.isEmpty())
-			return ModelFactory.createDefaultModel();
-		
-		String query = "Construct {?s ?p ?o . } From <" + graphName + "> { ?s ?p ?o . Filter(?s In (<" + StringUtil.implode(">,<", ways) + ">) && ?p In (<" + GeoRSS.point.toString() + "> || <" + GeoRSS.polygon + ">)) . }";
-		Model result = graphDAO.executeConstruct(query);
-		
+
 		return result;
 	}
-	
-	public static Model selectWayNodesByNodes(ISparqlExecutor graphDAO, String graphName, Collection<Resource> nodes)
-		throws Exception
+
+	public static Model constructGeoRSSLinePolygon(ISparqlExecutor graphDAO,
+			String graphName, Set<Resource> ways) throws Exception
 	{
-		if(nodes.isEmpty())
+		if (ways.isEmpty())
 			return ModelFactory.createDefaultModel();
-		
+
+		String query = "Construct {?s ?p ?o . } From <" + graphName
+				+ "> { ?s ?p ?o . Filter(?s In (<"
+				+ StringUtil.implode(">,<", ways) + ">) && ?p In (<"
+				+ GeoRSS.point.toString() + "> || <" + GeoRSS.polygon
+				+ ">)) . }";
+		Model result = graphDAO.executeConstruct(query);
+
+		return result;
+	}
+
+	public static Model selectWayNodesByNodes(ISparqlExecutor graphDAO,
+			String graphName, Collection<Resource> nodes) throws Exception
+	{
+		if (nodes.isEmpty())
+			return ModelFactory.createDefaultModel();
+
 		List<List<Resource>> chunks = CollectionUtils.chunk(nodes, 1024);
 		Model result = ModelFactory.createDefaultModel();
-		for(List<Resource> chunk : chunks) {
-			String query = "Construct { ?wn ?p ?n } From <" + graphName + "> { ?wn ?p ?n . Filter(?n In (<" + StringUtil.implode(">,<", chunk) + ">)) . }";
-			
-			// FIXME Make executeConstruct accept the output model as an parameter 
+		for (List<Resource> chunk : chunks) {
+			String query = "Construct { ?wn ?p ?n } From <" + graphName
+					+ "> { ?wn ?p ?n . Filter(?n In (<"
+					+ StringUtil.implode(">,<", chunk) + ">)) . }";
+
+			// FIXME Make executeConstruct accept the output model as an
+			// parameter
 			Model tmp = graphDAO.executeConstruct(query);
 			result.add(tmp);
 		}
-		
+
 		return result;
 	}
 
 	/**
-	 * Note: This is just looking up triples by their certain objects.
-	 * So this method could be generalized
+	 * Note: This is just looking up triples by their certain objects. So this
+	 * method could be generalized
 	 */
-	public static Model selectNodesByWayNodes(ISparqlExecutor graphDAO, String graphName, Collection<Resource> wayNodes)
-		throws Exception
+	public static Model selectNodesByWayNodes(ISparqlExecutor graphDAO,
+			String graphName, Collection<Resource> wayNodes) throws Exception
 	{
-		if(wayNodes.isEmpty())
+		if (wayNodes.isEmpty())
 			return ModelFactory.createDefaultModel();
-		
+
 		List<List<Resource>> chunks = CollectionUtils.chunk(wayNodes, 1024);
 		Model result = ModelFactory.createDefaultModel();
-		for(List<Resource> chunk : chunks) {
-			String query = "Construct { ?wn ?p ?n } From <" + graphName + "> { ?wn ?p ?n . Filter(?wn In (<" + StringUtil.implode(">,<", chunk) + ">)) . }";
-			
-			// FIXME Make executeConstruct accept the output model as an parameter 
+		for (List<Resource> chunk : chunks) {
+			String query = "Construct { ?wn ?p ?n } From <" + graphName
+					+ "> { ?wn ?p ?n . Filter(?wn In (<"
+					+ StringUtil.implode(">,<", chunk) + ">)) . }";
+
+			// FIXME Make executeConstruct accept the output model as an
+			// parameter
 			Model tmp = graphDAO.executeConstruct(query);
 			result.add(tmp);
 		}
-		
+
 		return result;
 	}
 
-	
-	
 	/**
-	 * Select untagged nodes belonging to the given wayNodes.
-	 * Maybe a better solution would be to retrieve all wayNodes
-	 * that reference a given node using the 'selectWayNodesByNodes' method.
-	 * As the information may be more suitable for caching. 
+	 * Select untagged nodes belonging to the given wayNodes. Maybe a better
+	 * solution would be to retrieve all wayNodes that reference a given node
+	 * using the 'selectWayNodesByNodes' method. As the information may be more
+	 * suitable for caching.
 	 * 
 	 * 
 	 * @param graphDAO
@@ -1665,213 +1638,177 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 	 * @return
 	 * @throws Exception
 	 */
-	public static Model selectReferencedNodes(ISparqlExecutor graphDAO, String graphName, Collection<Resource> nodes)
-		throws Exception
+	public static Model selectReferencedNodes(ISparqlExecutor graphDAO,
+			String graphName, Collection<Resource> nodes) throws Exception
 	{
-		if(nodes.isEmpty())
+		if (nodes.isEmpty())
 			return ModelFactory.createDefaultModel();
-	
+
 		List<List<Resource>> chunks = CollectionUtils.chunk(nodes, 1024);
 		Model result = ModelFactory.createDefaultModel();
-		for(List<Resource> chunk : chunks) {
-			//String query = "Select ?n From <" + graphName + "> { ?n ?p1 ?o1 . Optional { ?n ?p2 ?o2 . Filter !(?p1 = ?p2 && ?o1 = ?o2)) . } . Filter(?n In (<" + StringUtil.implode(">,<", chunk) + ">) .  }";
-			String query = "Construct {?wn ?i ?n . } From <" + graphName + "> { ?wn ?i ?n . Filter(?n In (<" + StringUtil.implode(">,<", chunk) + ">)) . }";
-			
-			// FIXME Make executeConstruct accept the output model as an parameter 
+		for (List<Resource> chunk : chunks) {
+			// String query = "Select ?n From <" + graphName +
+			// "> { ?n ?p1 ?o1 . Optional { ?n ?p2 ?o2 . Filter !(?p1 = ?p2 && ?o1 = ?o2)) . } . Filter(?n In (<"
+			// + StringUtil.implode(">,<", chunk) + ">) .  }";
+			String query = "Construct {?wn ?i ?n . } From <" + graphName
+					+ "> { ?wn ?i ?n . Filter(?n In (<"
+					+ StringUtil.implode(">,<", chunk) + ">)) . }";
+
+			// FIXME Make executeConstruct accept the output model as an
+			// parameter
 			Model tmp = graphDAO.executeConstruct(query);
 			result.add(tmp);
 		}
-	
+
 		return result;
 	}
 }
 
-
-
-
+/*
+ * Following code can be removed as soon as the plugin is working - because then
+ * its definitely not needed anymore private static String
+ * constructBySubject(String iri, String graphName) { String fromPart =
+ * (graphName != null) ? "From <" + graphName + "> " : "";
+ * 
+ * String result = "Construct { ?s ?p ?o . } " + fromPart +
+ * "{ ?s ?p ?o . Filter(?s = <" + iri + ">) . }";
+ * 
+ * return result; }
+ * 
+ * List<QuerySolution> rs = graphDAO.executeSelect(query); for(QuerySolution q :
+ * rs) { Resource wayNode = q.getResource("wn");
+ * 
+ * String str = wayNode.getURI().toString(); if(!str.endsWith("\nodes")) { throw
+ * new RuntimeException("A way node did not end with /nodes; uri = " + str); }
+ * 
+ * str = str.substring(0, str.length() - 6);
+ * 
+ * 
+ * Resource way = ResourceFactory.createResource(str);
+ * 
+ * result.add(way); }
+ */
 
 /*
- * Following code can be removed as soon as the plugin is working - 
- * because then its definitely not needed anymore
-private static String constructBySubject(String iri, String graphName)
-{
-	String fromPart = (graphName != null)
-		? "From <" + graphName + "> "
-		: "";
-
-	String result =
-		"Construct { ?s ?p ?o . } " + fromPart + "{ ?s ?p ?o . Filter(?s = <" + iri + ">) . }";
-	
-	return result;
-}
-		
-		List<QuerySolution> rs = graphDAO.executeSelect(query);
-		for(QuerySolution q : rs) {
-			Resource wayNode = q.getResource("wn");
-		
-			String str = wayNode.getURI().toString();
-			if(!str.endsWith("\nodes")) {
-				throw new RuntimeException("A way node did not end with /nodes; uri = " + str);
-			}
-			
-			str = str.substring(0, str.length() - 6);
-			
-			
-			Resource way = ResourceFactory.createResource(str);
-			
-			result.add(way);
-		}
-
-*/
+ * private static String constructNodeModelQuery(ILGDVocab vocab, long nodeId,
+ * String graphName) { String nodeIRI = vocab.createNIRNodeURI(nodeId);
+ * 
+ * String fromPart = (graphName != null) ? "From <" + graphName + "> " : "";
+ * 
+ * String result = "Construct { ?s ?p ?o . } " + fromPart +
+ * "{ ?s ?p ?o . Filter(?s = <" + nodeIRI + ">) . }";
+ * 
+ * return result; }
+ */
 
 /*
-private static String constructNodeModelQuery(ILGDVocab vocab, long nodeId, String graphName)
-{
-	String nodeIRI = vocab.createNIRNodeURI(nodeId);
-	
-	String fromPart = (graphName != null)
-		? "From <" + graphName + "> "
-				: "";
-
-	String result =
-		"Construct { ?s ?p ?o . } " + fromPart + "{ ?s ?p ?o . Filter(?s = <" + nodeIRI + ">) . }";
-
-return result;
-}
-*/	
-
-/*
-private static String constructQuery(final ILGDVocab vocab, Iterable<Long> nodeIds, Iterable<Long> wayIds, String graphName)
-{
-	if(!wayIds.iterator().hasNext())
-		return "";
-
-	String resources = "";
-	
-	resources += StringUtil.implode(",",
-			new TransformIterable<Long, String>(
-					nodeIds,
-					new Transformer<Long, String>() {
-						@Override
-						public String transform(Long nodeId)
-						{
-							return vocab.createNIRNodeURI(nodeId);
-						}
-					}));
-
-	resources += StringUtil.implode(",",
-			new TransformIterable<Long, String>(
-					nodeIds,
-					new Transformer<Long, String>() {
-						@Override
-						public String transform(Long wayId)
-						{
-							return
-								"<" + vocab.createNIRWayURI(wayId) + ">,<" +
-								vocab.getHasNodesResource(wayId).toString() + ">";
-						}
-					}));
-	
-		
-	String fromPart = (graphName != null)
-		? "From <" + graphName + "> "
-		: "";
-
-	String result =
-		"Construct { ?s ?p ?o . } " + fromPart + "{ ?s ?p ?o . Filter(?s In (" + resources + ")) . }";
-
-	return result;
-}
-*/
+ * private static String constructQuery(final ILGDVocab vocab, Iterable<Long>
+ * nodeIds, Iterable<Long> wayIds, String graphName) {
+ * if(!wayIds.iterator().hasNext()) return "";
+ * 
+ * String resources = "";
+ * 
+ * resources += StringUtil.implode(",", new TransformIterable<Long, String>(
+ * nodeIds, new Transformer<Long, String>() {
+ * 
+ * @Override public String transform(Long nodeId) { return
+ * vocab.createNIRNodeURI(nodeId); } }));
+ * 
+ * resources += StringUtil.implode(",", new TransformIterable<Long, String>(
+ * nodeIds, new Transformer<Long, String>() {
+ * 
+ * @Override public String transform(Long wayId) { return "<" +
+ * vocab.createNIRWayURI(wayId) + ">,<" +
+ * vocab.getHasNodesResource(wayId).toString() + ">"; } }));
+ * 
+ * 
+ * String fromPart = (graphName != null) ? "From <" + graphName + "> " : "";
+ * 
+ * String result = "Construct { ?s ?p ?o . } " + fromPart +
+ * "{ ?s ?p ?o . Filter(?s In (" + resources + ")) . }";
+ * 
+ * return result; }
+ */
 
 /*
-private static Model getBySubject(ISparqlExecutor graphDAO, String iri, String graphName)
-	throws Exception
-{
-	String query = constructBySubject(iri, graphName);
-	
-	//logger.info("Created query: " + query);
-	
-	Model model = graphDAO.executeConstruct(query);
-	
-	return model;
-}*/
+ * private static Model getBySubject(ISparqlExecutor graphDAO, String iri,
+ * String graphName) throws Exception { String query = constructBySubject(iri,
+ * graphName);
+ * 
+ * //logger.info("Created query: " + query);
+ * 
+ * Model model = graphDAO.executeConstruct(query);
+ * 
+ * return model; }
+ */
 
 /*
-if(timeStamp == null)
-	timeStamp = new Date();
-
-Date now = new Date();
-*/
-
-/*
-if(timeStamp == null)
-	timeStamp = entity.getTimestamp(); 
-
-Date now = entity.getTimestamp();
-
-if(timeStamp.getTime() > now.getTime()) {
-	logger.warn("Warning: Entities arriving out of order: " + timeStamp + " > " + now);
-}*/
-
+ * if(timeStamp == null) timeStamp = new Date();
+ * 
+ * Date now = new Date();
+ */
 
 /*
-if(timeStamp == null)
-	timeStamp = new Date();
+ * if(timeStamp == null) timeStamp = entity.getTimestamp();
+ * 
+ * Date now = entity.getTimestamp();
+ * 
+ * if(timeStamp.getTime() > now.getTime()) {
+ * logger.warn("Warning: Entities arriving out of order: " + timeStamp + " > " +
+ * now); }
+ */
 
-Date now = new Date();
-
-if(now.getTime() - timeStamp.getTime() > entityDiffTimeSpan) {
-	process(timelyDiff);
-	
-	timeStamp = now;
-	
-	entities.clear();
-}
-
-*
-		
-		
-		// Process all affected ways in order to update their linestrings/polygons
-
-		// Process affected ways
-		// Whenever the shape of a way changes, it is very likely that all
-		// nodes are already in the same changeset. However, if the way
-		// is connected to already existing nodes, these nodes won't appear in
-		// the changeset.
-		String query = "Select ?w ?i ?p {:w ldo:hasNodes ?wn . ?wn ?i ?n . Optional { ?n georss:point ?p }. }";
-		
-		
-		Model newMainModel = ModelFactory.createDefaultModel();
-		List<Way> ways = CollectionUtils.filterByType(inDiff.getAdded(), Way.class);
-		for(Way way : ways) {
-			Resource res = vocab.getHasNodesResource(way.getId());
-			StmtIterator itWayNode = newMainModel.listStatements(res, vocab.getHasNodesPred(), (RDFNode)null);
-			try {
-				Statement stmt = itWayNode.next();			
-				
-				StmtIterator itNode = newMainModel.listLiteralStatements(stmt.getObject(), , object)
-				
-			} finally {
-				itWayNode.close();
-			}
-			
-			
-			//outDiff.getAdded()
-			
-		}
-		
-		
-		
-		// Each node may affect zero or more ways
-		// Retrieve the ids of those ways that have not already been updated.
-		List<Node> nodes = CollectionUtils.filterByType(inDiff.getAdded(), Node.class);
-		String query = "Select ?w ?i ?n {?w ldo:hasNodes ?wn . ?wn ?i ?n . ?n georss:point ?p . }";
-		
-		
-		
-		//for(Entity inDiff.getAdded()
-		
-		// Update the node-way and node-position map
-				
-*/
+/*
+ * if(timeStamp == null) timeStamp = new Date();
+ * 
+ * Date now = new Date();
+ * 
+ * if(now.getTime() - timeStamp.getTime() > entityDiffTimeSpan) {
+ * process(timelyDiff);
+ * 
+ * timeStamp = now;
+ * 
+ * entities.clear(); }
+ * 
+ * 
+ * 
+ * 
+ * // Process all affected ways in order to update their linestrings/polygons
+ * 
+ * // Process affected ways // Whenever the shape of a way changes, it is very
+ * likely that all // nodes are already in the same changeset. However, if the
+ * way // is connected to already existing nodes, these nodes won't appear in //
+ * the changeset. String query =
+ * "Select ?w ?i ?p {:w ldo:hasNodes ?wn . ?wn ?i ?n . Optional { ?n georss:point ?p }. }"
+ * ;
+ * 
+ * 
+ * Model newMainModel = ModelFactory.createDefaultModel(); List<Way> ways =
+ * CollectionUtils.filterByType(inDiff.getAdded(), Way.class); for(Way way :
+ * ways) { Resource res = vocab.getHasNodesResource(way.getId()); StmtIterator
+ * itWayNode = newMainModel.listStatements(res, vocab.getHasNodesPred(),
+ * (RDFNode)null); try { Statement stmt = itWayNode.next();
+ * 
+ * StmtIterator itNode = newMainModel.listLiteralStatements(stmt.getObject(), ,
+ * object)
+ * 
+ * } finally { itWayNode.close(); }
+ * 
+ * 
+ * //outDiff.getAdded()
+ * 
+ * }
+ * 
+ * 
+ * 
+ * // Each node may affect zero or more ways // Retrieve the ids of those ways
+ * that have not already been updated. List<Node> nodes =
+ * CollectionUtils.filterByType(inDiff.getAdded(), Node.class); String query =
+ * "Select ?w ?i ?n {?w ldo:hasNodes ?wn . ?wn ?i ?n . ?n georss:point ?p . }";
+ * 
+ * 
+ * 
+ * //for(Entity inDiff.getAdded()
+ * 
+ * // Update the node-way and node-position map
+ */
