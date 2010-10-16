@@ -51,6 +51,7 @@ import org.linkedgeodata.tagmapping.client.entity.AbstractTagMapperState;
 import org.linkedgeodata.tagmapping.client.entity.IEntity;
 import org.linkedgeodata.util.IDiff;
 import org.linkedgeodata.util.ITransformer;
+import org.linkedgeodata.util.PostGISUtil;
 import org.linkedgeodata.util.StringUtil;
 import org.linkedgeodata.util.URIUtil;
 import org.linkedgeodata.util.VirtuosoUtils;
@@ -213,6 +214,13 @@ public class LiveSync
 		
 		graphDAO =
 			new VirtuosoJdbcSparulExecutor(conn, graphName);
+
+		
+		Connection nodeConn = PostGISUtil.connectPostGIS(
+				"localhost",
+				"lgdnodes",
+				"postgres",
+				"postgres");
 		
 		//RDFDiffWriter rdfDiffWriter = new RDFDiffWriter(outputBaseName);
 		//rdfDiffWriter = new RDFDiffWriter();
@@ -245,7 +253,7 @@ public class LiveSync
 			new OSMEntityToRDFTransformer(tagMapper, vocab);
 		
 		nodePositionDao = new NodePositionDAO("node_position");
-		nodePositionDao.setConnection(conn);
+		nodePositionDao.setConnection(nodeConn);
 		
 		
 		GeoRSSNodeMapper nodeMapper = new GeoRSSNodeMapper(vocab);

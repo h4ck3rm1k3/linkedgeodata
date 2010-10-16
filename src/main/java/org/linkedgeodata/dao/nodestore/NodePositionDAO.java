@@ -115,7 +115,7 @@ public class NodePositionDAO
 				updates.put(entry.getKey(), entry.getValue());
 			}
 		}
-				
+		// NOTE: VIRTUOSO SUPPORTS "INSERT REPLACING..."		
 		if(!inserts.isEmpty()) {
 			String sql = "INSERT INTO " + tableName + "(node_id, latitude, longitude) VALUES " + mapToSQL(inserts);
 			//	System.out.println(sql);

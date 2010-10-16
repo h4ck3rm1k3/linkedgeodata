@@ -22,10 +22,8 @@ package org.linkedgeodata.osm.osmosis.plugins;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Comparator;
-import java.util.Date;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -37,6 +35,7 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.aksw.commons.jena.ModelSetView;
 import org.aksw.commons.util.collections.TransformCollection;
 import org.aksw.commons.util.collections.TransformIterable;
 import org.apache.commons.collections15.MultiMap;
@@ -58,17 +57,15 @@ import org.linkedgeodata.util.sparql.ISparqlExecutor;
 import org.linkedgeodata.util.sparql.ISparulExecutor;
 import org.openstreetmap.osmosis.core.container.v0_6.ChangeContainer;
 import org.openstreetmap.osmosis.core.container.v0_6.EntityContainer;
-import org.openstreetmap.osmosis.core.container.v0_6.NodeContainer;
-import org.openstreetmap.osmosis.core.domain.v0_6.CommonEntityData;
 import org.openstreetmap.osmosis.core.domain.v0_6.Entity;
 import org.openstreetmap.osmosis.core.domain.v0_6.Node;
-import org.openstreetmap.osmosis.core.domain.v0_6.OsmUser;
-import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 import org.openstreetmap.osmosis.core.domain.v0_6.Way;
 import org.openstreetmap.osmosis.core.sort.v0_6.EntityByTypeThenIdComparator;
 import org.openstreetmap.osmosis.core.task.common.ChangeAction;
 
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -317,6 +314,27 @@ class LGDCache
  * @Override public int size() { return source.size() / batchSize; } }
  */
 
+
+class SetDiff<T>
+	extends CollectionDiff<T, Set<T>>
+{
+	public SetDiff(Set<T> newItems, Set<T> oldItems)
+	{
+		super(
+				Sets.difference(newItems, oldItems),
+				Sets.difference(oldItems, newItems),
+				Sets.intersection(newItems, oldItems)
+		);
+	}
+	
+	public SetDiff(Set<T> added, Set<T> removed, Set<T> retained)
+	{
+		super(added, removed, retained);
+	}
+
+}
+
+
 class HashSetDiff<T>
 	extends CollectionDiff<T, Set<T>>
 {
@@ -430,6 +448,7 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 
 	private ITransformer<Model, Model>	postProcessTransformer	= new VirtuosoStatementNormalizer();
 
+	// This diff is a view with underlying models
 	private RDFDiff						mainGraphDiff;
 
 	private TreeSetDiff<Node> nodeDiff = new TreeSetDiff<Node>();
@@ -1014,7 +1033,17 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		});
 	}
 	
-	
+
+	Model createModelFromStatements(Iterable<Statement> statements)
+	{
+		Model result = ModelFactory.createDefaultModel();
+		
+		for(Statement stmt : statements) {
+			result.add(stmt);
+		}
+		
+		return result;
+	}
 
 	/*
 	 * private void updatePredicate(Model model, Resource subject, Predicate
@@ -1080,11 +1109,19 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		// have to create it anew
 		//populatePointPosMapping(oldModel.listStatements(null, GeoRSS.line, (RDFNode)null), oldModel, nodeToPos);
 		//populatePointPosMapping(oldModel.listStatements(null, GeoRSS.polygon, (RDFNode)null), oldModel, nodeToPos);
-				
-		IDiff<Model> diff = diff(oldMainModel, newMainModel);
+
+		Set<Statement> oldMainModelSetView = new ModelSetView(oldMainModel);
+		Set<Statement> newMainModelSetView = new ModelSetView(newMainModel);
 		
-		outDiff.remove(diff.getRemoved());
-		outDiff.add(diff.getAdded());
+		SetDiff<Statement> mainDiff = new SetDiff<Statement>(newMainModelSetView, oldMainModelSetView);
+		//IDiff<Model> diff = diff(oldMainModel, newMainModel);
+		
+		//outDiff.remove(diff.getRemoved());
+		//outDiff.add(diff.getAdded());
+		
+		
+		
+		
 
 		
 		//Map<Resource, Resource> wayNodeReferences
@@ -1092,7 +1129,7 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 
 		// Determine the set set of nodes that have been repositioned
 		// These are nodes that have a position-related triple in the diff
-		Map<Resource, String> repositionedNodes = createNodePosMapFromNodesGeoRSS(diff.getAdded());
+		Map<Resource, String> repositionedNodes = createNodePosMapFromNodesGeoRSS(createModelFromStatements(mainDiff.getAdded()));
 		logger.info("" + ((System.nanoTime() - start) / 1000000000.0) + " Completed populating " +  repositionedNodes.size() + " repositioned nodes");
 			
 		// FIXME: Add an option to exclude newly created nodes here - as they can't affect
@@ -1160,8 +1197,9 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		// UNb)
 		// Note: We are selecting node references from the database,
 		// however some of the references may just about to become deleted
+		// FIXME Replace dangling resources with dangling nodes - as We might undangle ways here, although only nodes are undangled here
 		Model resourceDependencyModel = selectReferencedNodes(graphDAO, mainGraphName, danglingResources);
-		resourceDependencyModel.remove(outDiff.getRemoved());
+		resourceDependencyModel.remove(Lists.newArrayList(mainDiff.getRemoved()));
 		
 		MultiMap<Resource, Resource> dependenciesTmp = extractDependencies(resourceDependencyModel); 
 		danglingResources.removeAll(dependenciesTmp.keySet());
@@ -1185,9 +1223,33 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		for(Node node : Iterables.filter(entityView(deletedEntities), Node.class))
 			nodeDiff.getRemoved().add(node);
 				
+		
+		// The positions of all undangled nodes need to go into the main graph
+		// FIXME The diff.getRemoved may contain statements that are already in
+		// diff.getAdded
+		Model minimalStatementModel = ModelFactory.createDefaultModel();
+		for(EntityContainer ecc : Iterables.concat(createdEntities, modifiedEntities)) {
+			Resource resource = vocab.createResource(ecc.getEntity());
+			if(dependencies.keySet().contains(resource) && !newMainSubjects.contains(resource)) {
+				
+				createMinimalStatements(Collections.singleton(ecc), minimalStatementModel);
+			}
+		}
+		// FIXME Statements that are already part of the old model must not appear in the diff!!!
+		//V mainGraphDiff.add(minimalStatementModel);
+		newMainModel.add(minimalStatementModel);
 
+
+		// FIXME whenever a modified node goes into the main graph, it should be removed from the NodePositionGraph
+		// However, actually this is only optional!
+
+		
+
+		// FIXME: Add all nodes to the node diff that did not go into the main graph
+		// (Hm, but these are exactly all the dangling nodes, aren't they?)
 		for(Node node : Iterables.filter(entityView(Iterables.concat(createdEntities, modifiedEntities)), Node.class)) {
-			nodeDiff.getAdded().add(node);
+			if(danglingResources.contains(vocab.createResource(node)))
+					nodeDiff.getAdded().add(node);
 		}
 		
 		
@@ -1320,7 +1382,7 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 			if(positions != null) {
 				// Check against diff.removed whether we need to remove some positions
 				
-				for(Statement check : diff.getRemoved().listStatements(wayNode, null, (RDFNode)null).toList()) {
+				for(Statement check : createModelFromStatements(mainDiff.getRemoved()).listStatements(wayNode, null, (RDFNode)null).toList()) {
 					Integer index = tryParseSeqPredicate(check.getPredicate());
 					if(index == null)
 						continue;
@@ -1351,9 +1413,11 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 				String newValue = StringUtil.implode(" ", positions);
 
 				//outDiff.remove(base); 
-				Statement stmt = newMainModel.createStatement(base.getSubject(), predicate, newValue);
-				newMainModel.add(stmt);
-				outDiff.add(stmt);
+				//Statement stmt = newMainModel.createStatement(base.getSubject(), predicate, newValue);
+				//newMainModel.add(stmt);
+				
+				newMainModel.add(base.getSubject(), predicate, newValue);
+				//V outDiff.add(stmt);
 			}
 			
 		}
@@ -1414,7 +1478,7 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 			
 			Statement stmt = newMainModel.createStatement(way, predicate, geoRSS);
 			newMainModel.add(stmt);
-			outDiff.add(stmt);
+			//V outDiff.add(stmt);
 		}
 				
 		
@@ -1422,6 +1486,21 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		// Finally: In the diff: Remove the georss:line/polygon triples
 		// from the "remove" set if the resource exists in the new set but
 		// doesn't have that triple
+		//V TODO Update description above: We add those tripes to the newMainGraph
+		// so that these triples disappear from the diff
+		for(Statement stmt : mainDiff.getRemoved()) {
+			if(stmt.getPredicate().equals(GeoRSS.line) || stmt.getPredicate().equals(GeoRSS.polygon)) {
+
+				if(newMainModel.contains(stmt.getSubject(), null) &&
+						!(	newMainModel.contains(stmt.getSubject(), GeoRSS.line)
+								|| newMainModel.contains(stmt.getSubject(), GeoRSS.polygon))) {
+					newMainModel.add(stmt);
+				}
+			}
+		}
+		logger.info("" + ((System.nanoTime() - start) / 1000000000.0) + " Completed processing of georss");
+		
+		/*
 		ExtendedIterator<Statement> x =
 			outDiff.getRemoved().listStatements(null, GeoRSS.line, (RDFNode)null).andThen(
 				outDiff.getRemoved().listStatements(null, GeoRSS.polygon, (RDFNode)null));
@@ -1432,15 +1511,15 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 			if(newMainModel.contains(stmt.getSubject(), null) &&
 					!(	newMainModel.contains(stmt.getSubject(), GeoRSS.line)
 							|| newMainModel.contains(stmt.getSubject(), GeoRSS.polygon))) {
-				x.remove();
+				//x.remove();
+				newMainModel.add(stmt);
 			}
 		}
-
-		logger.info("" + ((System.nanoTime() - start) / 1000000000.0) + " Completed processing of georss");
+*/
 		
 		
-		
-		
+		outDiff.getAdded().add(Lists.newArrayList(mainDiff.getAdded()));
+		outDiff.getRemoved().add(Lists.newArrayList(mainDiff.getRemoved()));
 		
 		logger.info("" + ((System.nanoTime() - start) / 1000000000.0) + " Completed processing of entities");
 	}
