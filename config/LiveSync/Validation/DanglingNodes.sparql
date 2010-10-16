@@ -1,0 +1,45 @@
+# Find entities with multiple line/polygon annotations
+Select * From <http://test.org> {
+    { 
+        Select ?s, Count(*) As ?c From <http://test.org> {
+            ?s ?p1 ?o1 .
+            ?s ?p2 ?o2 .
+            Filter(
+            	?p1 In (<http://www.georss.org/georss/line>, <http://www.georss.org/georss/polygon>) &&
+            	?p2 In (<http://www.georss.org/georss/line>, <http://www.georss.org/georss/polygon>) &&
+            	((?p1 != ?p2) || (?o1 != ?o2))
+            ) .
+        }
+    } . Filter(?c > 0) .
+}
+
+
+
+# Find dangling nodes
+# These are nodes without relevant tags that are not referenced by ways
+# Note: For now we are looking for ways with only a single tag
+Select ?s From <http://test.org> {
+    {
+    { 
+		Select ?s, Count(*) As ?c From <http://test.org> {
+			?s ?p ?o .
+		}
+    }
+	Filter(?c = 1) .
+	}
+    Optional {
+    	?wn ?i ?s .
+    }
+    Filter(!Bound(?wn)) .
+}
+
+# Retrieve a node and all its references
+Select ?s ?p ?o From<http://test.org> {
+  {
+    ?s ?p ?o .
+  }
+  Union {
+    ?o ?p ?s .
+  }
+  Filter(?s = <http://linkedgeodata.org/triplify/node922837330>) .
+}

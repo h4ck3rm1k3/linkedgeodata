@@ -1084,6 +1084,8 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 			danglingResources.add(vocab.createResource(ec.getEntity()));
 		}
 		
+		
+		// Hint: This set corresponds to all new, non-dangling items
 		Set<Resource> newMainSubjects = newMainModel.listSubjects().toSet();
 		logger.info("" + ((System.nanoTime() - start) / 1000000000.0) + " Completed RDF transformation of entities");
 		
@@ -1165,17 +1167,31 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		Map<Resource, String> nodeToPosTmp = createNodePosMapFromEntities(Iterables.concat(createdEntities, modifiedEntities));
 		nodeToPos.putAll(nodeToPosTmp);
 
+
+		
+		// Whenever a reference from a way to a node gets removed, the node
+		// may become dangling,
+		// unless it either
+		//   a) is already a subject in the newMain graph
+		//   b) is referenced by another way (this will be checked for in the dependencies section)
+		MultiMap<Resource, Resource> lostNodeLinks = extractDependencies(createModelFromStatements(mainDiff.getRemoved()));
+		danglingResources.addAll(Sets.difference(lostNodeLinks.keySet(), newMainSubjects));
+
 		
 		// A map for which resource depends on which
 		MultiMap<Resource, Resource> dependencies = new SetMultiHashMap<Resource, Resource>(); 
 		
 		
 		/****/
-		// FIXME For each dangling entity, determine whether it is referenced by a non-dangling
+		// For each dangling entity, determine whether it is referenced by a non-dangling
 		// entity
 		// In concrete this means: a dangling node must be referenced by a non-dangling way
 		// and a dangling way must be referenced by a non-dangling relation.
-
+		
+		
+		
+		
+		
 		
 		// TODO ONLY IF THERE WERE RELATIONS:
 		// UWa) Undangle all currently dangling ways that are referenced by non-danling relations
@@ -1201,6 +1217,7 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		Model resourceDependencyModel = selectReferencedNodes(graphDAO, mainGraphName, danglingResources);
 		resourceDependencyModel.remove(Lists.newArrayList(mainDiff.getRemoved()));
 		
+		
 		MultiMap<Resource, Resource> dependenciesTmp = extractDependencies(resourceDependencyModel); 
 		danglingResources.removeAll(dependenciesTmp.keySet());
 
@@ -1223,10 +1240,15 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		for(Node node : Iterables.filter(entityView(deletedEntities), Node.class))
 			nodeDiff.getRemoved().add(node);
 				
+		// We need to retrieve everything of all modified items that are
+		// dangling and add them to the old model, so that they get deleted
+		// properly
+		// FIXME can created resources be dangling here?
+		Model danglingModel = fetchStatementsBySubject(danglingResources, mainGraphName, 1024);
+		oldMainModel.add(danglingModel);
+		
 		
 		// The positions of all undangled nodes need to go into the main graph
-		// FIXME The diff.getRemoved may contain statements that are already in
-		// diff.getAdded
 		Model minimalStatementModel = ModelFactory.createDefaultModel();
 		for(EntityContainer ecc : Iterables.concat(createdEntities, modifiedEntities)) {
 			Resource resource = vocab.createResource(ecc.getEntity());
@@ -1235,8 +1257,6 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 				createMinimalStatements(Collections.singleton(ecc), minimalStatementModel);
 			}
 		}
-		// FIXME Statements that are already part of the old model must not appear in the diff!!!
-		//V mainGraphDiff.add(minimalStatementModel);
 		newMainModel.add(minimalStatementModel);
 
 

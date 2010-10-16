@@ -30,7 +30,7 @@ public class RDFDiffWriter
 	private String baseName;
 	
 	
-	private boolean zip = true;
+	private boolean zip = false;
 	
 	/*
 	public RDFDiffWriter(File basePath, long sequenceId)
