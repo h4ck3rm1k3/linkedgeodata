@@ -190,7 +190,7 @@ public class LiveDump
 				vocab, entityTransformer, graphDAO, graphName,
 				rdfNodePositionDAO);
 
-		LiveDumpChangeSink dumpSink = new LiveDumpChangeSink(diffStrategy, out);
+		LiveDumpChangeSink dumpSink = new LiveDumpChangeSink(diffStrategy, nodePositionDao, out);
 
 		// Load the entity tag filter
 		TagFilter entityTagFilter = new TagFilter();

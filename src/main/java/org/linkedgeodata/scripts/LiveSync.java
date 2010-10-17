@@ -385,7 +385,7 @@ public class LiveSync
 	}
 	
 	
-	Map<Long, Point2D> getNodeToPositionMap(Iterable<Node> nodes)
+	public static Map<Long, Point2D> getNodeToPositionMap(Iterable<Node> nodes)
 	{
 		Map<Long, Point2D> result = new TreeMap<Long, Point2D>();
 		for(Node node : nodes) {

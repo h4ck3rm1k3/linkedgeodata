@@ -1073,15 +1073,21 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		
 		logger.info("" + ((System.nanoTime() - start) / 1000000000.0) + " Completed converting entities to resources."); 
 		
-		Model oldMainModel = fetchStatementsBySubject(Iterables.concat(deletedResources, modifiedResources), mainGraphName, 512);				
-		logger.info("" + ((System.nanoTime() - start) / 1000000000.0) + " Completed fetching data for modified or deleted entities, " + oldMainModel.size() + " triples fetched");
+		Set<Resource> deletedOrModifiedResources = Sets.union(deletedResources, modifiedResources);
+		Set<EntityContainer> createdOrModifiedEntities = Sets.union(createdEntities, modifiedEntities);
+		
+		Model oldMainModel = fetchStatementsBySubject(deletedOrModifiedResources, mainGraphName, 512);				
+		logger.info("" + ((System.nanoTime() - start) / 1000000000.0) + " Completed fetching data for " + deletedOrModifiedResources.size() + " modified or deleted entities, " + oldMainModel.size() + " triples fetched");
 				
 		Model newMainModel = ModelFactory.createDefaultModel();
-		Set<EntityContainer> danglingEntities = transformToModel(Iterables.concat(createdEntities, modifiedEntities), newMainModel);
+		Set<EntityContainer> danglingEntities = transformToModel(createdOrModifiedEntities, newMainModel);
 		//Set<Resource> danglingResources = GraphDAORDFEntityDAO.getInvolvedResources(danglingEntities, vocab);
 		Set<Resource> danglingResources = new HashSet<Resource>();
 		for(EntityContainer ec : danglingEntities) {
-			danglingResources.add(vocab.createResource(ec.getEntity()));
+			Resource resource = vocab.createResource(ec.getEntity());
+			if(resource != null) {
+				danglingResources.add(resource);
+			}
 		}
 		
 		
@@ -1230,7 +1236,15 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		
 
 		// TODO Separate the set into nodes and ways from the beginning
-		Set<Resource> danglingNodes = danglingResources;
+		Set<Resource> danglingNodes = new HashSet<Resource>();
+		for(Resource resource : danglingResources) {
+			if(resource.toString().contains("/node"))
+				danglingNodes.add(resource);
+		}
+		
+		// TODO As long as there are no relations, only nodes can be danling
+		danglingResources = danglingNodes;
+		
 		// Set<Resource> danglingWays
 		
 		
@@ -1243,9 +1257,10 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		// We need to retrieve everything of all modified items that are
 		// dangling and add them to the old model, so that they get deleted
 		// properly
-		// FIXME can created resources be dangling here?
 		Model danglingModel = fetchStatementsBySubject(danglingResources, mainGraphName, 1024);
+		logger.info("" + ((System.nanoTime() - start) / 1000000000.0) + " Completed fetching data for " + danglingResources.size() + " dangling resources, " + oldMainModel.size() + " triples fetched");
 		oldMainModel.add(danglingModel);
+		
 		
 		
 		// The positions of all undangled nodes need to go into the main graph
