@@ -515,9 +515,9 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		switch (ca) {
 		case Create:
 			if (didRemove)
-				createdEntities.add(ec);
-			else
 				modifiedEntities.add(ec);
+			else
+				createdEntities.add(ec);
 			break;
 		case Modify:
 			modifiedEntities.add(ec);
@@ -1631,6 +1631,7 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 	public void release()
 	{
 		mainGraphDiff = null;
+		nodeDiff = null;
 	}
 
 	public static Map<Resource, RDFNode> fetchNodePositions(

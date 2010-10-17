@@ -257,11 +257,11 @@ public class LiveSync
 		
 		
 		GeoRSSNodeMapper nodeMapper = new GeoRSSNodeMapper(vocab);
-		RDFNodePositionDAO nodePositionDAO = new RDFNodePositionDAO(nodePositionDao, vocab, nodeMapper);
+		RDFNodePositionDAO rdfNodePositionDao = new RDFNodePositionDAO(nodePositionDao, vocab, nodeMapper);
 		
 
 		diffStrategy = new IgnoreModifyDeleteDiffUpdateStrategy(
-				vocab, entityTransformer, graphDAO, graphName, nodePositionDAO);
+				vocab, entityTransformer, graphDAO, graphName, rdfNodePositionDao);
 
 		// Load the entity tag filter
 		TagFilter entityTagFilter = new TagFilter();
