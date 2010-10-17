@@ -1216,12 +1216,17 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		danglingResources.removeAll(dependencies.keySet());
 
 		
+		
 		// UNb)
 		// Note: We are selecting node references from the database,
+		// Note: We do not have to lookup dangling resources that were created in this batch
 		// however some of the references may just about to become deleted
 		// FIXME Replace dangling resources with dangling nodes - as We might undangle ways here, although only nodes are undangled here
-		Model resourceDependencyModel = selectReferencedNodes(graphDAO, mainGraphName, danglingResources);
+		Set<Resource> danglingResourceReferenceLookup = Sets.difference(danglingResources, createdResources);
+		Model resourceDependencyModel = selectReferencedNodes(graphDAO, mainGraphName, danglingResourceReferenceLookup);
 		resourceDependencyModel.remove(Lists.newArrayList(mainDiff.getRemoved()));
+		logger.info("" + ((System.nanoTime() - start) / 1000000000.0) + " Completed fetching references for " + danglingResourceReferenceLookup.size() + " dangling resources");
+		
 		
 		
 		MultiMap<Resource, Resource> dependenciesTmp = extractDependencies(resourceDependencyModel); 
@@ -1257,8 +1262,9 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		// We need to retrieve everything of all modified items that are
 		// dangling and add them to the old model, so that they get deleted
 		// properly
-		Model danglingModel = fetchStatementsBySubject(danglingResources, mainGraphName, 1024);
-		logger.info("" + ((System.nanoTime() - start) / 1000000000.0) + " Completed fetching data for " + danglingResources.size() + " dangling resources, " + oldMainModel.size() + " triples fetched");
+		Set<Resource> danglingResourceDataLookup = Sets.intersection(danglingResources, modifiedResources);
+		Model danglingModel = fetchStatementsBySubject(danglingResourceDataLookup, mainGraphName, 1024);
+		logger.info("" + ((System.nanoTime() - start) / 1000000000.0) + " Completed fetching data for " + danglingResourceDataLookup.size() + " modified dangling resources, " + danglingModel.size() + " triples fetched");
 		oldMainModel.add(danglingModel);
 		
 		

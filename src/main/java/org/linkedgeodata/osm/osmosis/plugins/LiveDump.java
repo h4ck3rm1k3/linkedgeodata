@@ -110,14 +110,16 @@ public class LiveDump
 
 		System.out.println("Trying live dump");
 
+
+		
 		Process process = Runtime
 				.getRuntime()
 				.exec("bzcat /home/raven/Documents/Data/openstreetmap.org/planet-100224.osm.bz2");
 		InputStream inputStream = process.getInputStream();
 
 
-		File outFile = new File("/tmp/lgdump.nt");
-		OutputStream out = new FileOutputStream(outFile);
+		//File outFile = new File("/tmp/lgdump.nt");
+		//OutputStream out = new FileOutputStream(outFile);
 
 		File configFile = new File("config.ini");
 
@@ -129,13 +131,15 @@ public class LiveDump
 
 		String publishDiffBaseName = config.get("publishDiffRepoPath");
 
-		// LiveRDFDeltaPluginFactory factory.create();
+		
+		//LiveRDFDeltaPluginFactory factory.create();		
 		Connection conn = VirtuosoUtils.connect(
 				config.get("rdfStore_hostName"),
 				config.get("rdfStore_userName"),
 				config.get("rdfStore_passWord"));
 
 		String graphName = config.get("rdfStore_graphName");
+		
 
 		ISparulExecutor graphDAO = new VirtuosoJdbcSparulExecutor(conn,
 				graphName);
@@ -190,7 +194,7 @@ public class LiveDump
 				vocab, entityTransformer, graphDAO, graphName,
 				rdfNodePositionDAO);
 
-		LiveDumpChangeSink dumpSink = new LiveDumpChangeSink(diffStrategy, nodePositionDao, out);
+		LiveDumpChangeSink dumpSink = new LiveDumpChangeSink(diffStrategy, graphName, graphDAO, nodePositionDao);
 
 		// Load the entity tag filter
 		TagFilter entityTagFilter = new TagFilter();
@@ -210,7 +214,7 @@ public class LiveDump
 		Sink workFlow = new SinkToChangeSinkBridge(entityFilterPlugin);
 
 		parser.parse(inputStream, new OsmHandler(workFlow, true));
-		out.close();
+		//out.close();
 
 	}
 

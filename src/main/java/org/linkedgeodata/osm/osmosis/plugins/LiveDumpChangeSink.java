@@ -1,48 +1,57 @@
 package org.linkedgeodata.osm.osmosis.plugins;
 
-import java.io.IOException;
-import java.io.OutputStream;
 import java.sql.SQLException;
 
 import org.linkedgeodata.dao.nodestore.NodePositionDAO;
-import org.linkedgeodata.dao.nodestore.RDFNodePositionDAO;
 import org.linkedgeodata.scripts.LiveSync;
 import org.linkedgeodata.util.IDiff;
+import org.linkedgeodata.util.sparql.ISparulExecutor;
 import org.openstreetmap.osmosis.core.container.v0_6.ChangeContainer;
-import org.openstreetmap.osmosis.core.container.v0_6.EntityContainer;
 import org.openstreetmap.osmosis.core.domain.v0_6.Node;
 import org.openstreetmap.osmosis.core.task.v0_6.ChangeSink;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.hp.hpl.jena.rdf.model.Model;
 
 public class LiveDumpChangeSink
 	implements ChangeSink
 {
+	private static final Logger logger = LoggerFactory.getLogger(LiveDumpChangeSink.class);
+	
 	private IUpdateStrategy strategy;
 	private int entityCount = 0;
-	private OutputStream out;
 	
 	private int maxEntityCount = 1024;
 	
+	private String graphName;
 	private NodePositionDAO nodePositionDao;
+	private ISparulExecutor sparqlEndpoint;
 	
-	public LiveDumpChangeSink(IUpdateStrategy strategy, NodePositionDAO nodePositionDao, OutputStream out)
+	
+	private long totalEntityCount = 0;
+	
+	public LiveDumpChangeSink(IUpdateStrategy strategy, String graphName, ISparulExecutor sparqlEndpoint, NodePositionDAO nodePositionDao)
 	{
 		this.strategy = strategy;
+		this.graphName = graphName;
+		this.sparqlEndpoint = sparqlEndpoint;
 		this.nodePositionDao = nodePositionDao;
-		this.out = out;
 	}
 
-	public LiveDumpChangeSink(IUpdateStrategy strategy, NodePositionDAO nodePositionDao, OutputStream out, int maxEntityCount)
+	public LiveDumpChangeSink(IUpdateStrategy strategy, String graphName, ISparulExecutor sparqlEndpoint, NodePositionDAO nodePositionDao, int maxEntityCount)
 	{
 		this.strategy = strategy;
+		this.graphName = graphName;
+		this.sparqlEndpoint = sparqlEndpoint;
 		this.nodePositionDao = nodePositionDao;
-		this.out = out;
 		this.maxEntityCount = maxEntityCount;
 	}
 
 	private void processBatch()
 	{
+		long start = System.nanoTime();
+		
 		strategy.complete();
 		
 		
@@ -50,9 +59,9 @@ public class LiveDumpChangeSink
 		// Ideas for cleaner solutions might be: strategy factory, reset method,
 		// differnt interface for the strategy
 		IDiff<Model> mainDiff = strategy.getMainGraphDiff();
-		mainDiff.getAdded().write(out, "N-TRIPLE");
 		try {
-			out.flush();
+			//out.flush();
+			applyDiff(mainDiff);
 		
 			// Apply the node-diff
 			applyNodeDiff(strategy.getNodeDiff());
@@ -62,9 +71,19 @@ public class LiveDumpChangeSink
 		
 		strategy.release();
 		
+		totalEntityCount += entityCount;
 		entityCount = 0;
+		
+		logger.info("" + ((System.nanoTime() - start) / 1000000000.0) + "Completed processing batch of " + entityCount + " entities (total: " + totalEntityCount + ")");
 	}
 
+	private void applyDiff(IDiff<Model> diff)
+		throws Exception
+	{
+		sparqlEndpoint.remove(diff.getRemoved(), graphName);
+		sparqlEndpoint.insert(diff.getAdded(), graphName);
+	}
+	
 	private void applyNodeDiff(TreeSetDiff<Node> diff)
 		throws SQLException
 	{
