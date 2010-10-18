@@ -15,6 +15,10 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.GnuParser;
+import org.apache.commons.cli.Options;
 import org.apache.log4j.PropertyConfigurator;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -91,6 +95,27 @@ public class LiveDump
 {
 	private static SAXParser	parser	= createParser();
 
+	private static Options cliOptions = new Options()
+		.addOption("c", "config", true, "Config filename")
+		.addOption("f", "dump file", true, "Dump filename");
+
+	
+	public static InputStream openFile(File file)
+		throws IOException
+	{
+		String name = file.getName().toLowerCase();
+		
+		if(name.endsWith("bz2")) {
+			Process process = Runtime
+			.getRuntime()
+			.exec("bzcat " + file.getAbsolutePath());
+			return process.getInputStream();			
+		}
+		else {
+			return new FileInputStream(file);
+		}
+	}
+	
 	private static SAXParser createParser()
 	{
 		try {
@@ -108,28 +133,30 @@ public class LiveDump
 	{
 		PropertyConfigurator.configure("log4j.properties");
 
-		System.out.println("Trying live dump");
-
-
-		
-		Process process = Runtime
-				.getRuntime()
-				.exec("bzcat /home/raven/Documents/Data/openstreetmap.org/planet-100224.osm.bz2");
-		InputStream inputStream = process.getInputStream();
+		System.out.println("Starting live dump");
 
 
 		//File outFile = new File("/tmp/lgdump.nt");
 		//OutputStream out = new FileOutputStream(outFile);
 
-		File configFile = new File("config.ini");
-
+		CommandLineParser cliParser = new GnuParser();
+		CommandLine commandLine = cliParser.parse(cliOptions, args);
+	
+		String configFileName = commandLine.getOptionValue("c", "config.ini");
+		File configFile = new File(configFileName);
+		
+		String osmFileName = commandLine.getOptionValue("f");
+		File osmFile = new File(osmFileName);
+		
+		InputStream inputStream = openFile(osmFile);
+		
+		
+		
 		Map<String, String> config = LiveSync.loadIniFile(configFile);
 
 		File osmConfigFile = new File(config.get("osmReplicationConfigPath")
 				+ "/configuration.txt");
 		LiveSync.loadIniFile(osmConfigFile, config);
-
-		String publishDiffBaseName = config.get("publishDiffRepoPath");
 
 		
 		//LiveRDFDeltaPluginFactory factory.create();		
@@ -144,8 +171,11 @@ public class LiveDump
 		ISparulExecutor graphDAO = new VirtuosoJdbcSparulExecutor(conn,
 				graphName);
 
-		Connection nodeConn = PostGISUtil.connectPostGIS("localhost",
-				"lgdnodes", "postgres", "postgres");
+		Connection nodeConn = PostGISUtil.connectPostGIS(
+				config.get("osmDb_hostName"),
+				config.get("osmDb_dataBaseName"),
+				config.get("osmDb_userName"),
+				config.get("osmDb_passWord"));
 
 		// RDFDiffWriter rdfDiffWriter = new RDFDiffWriter(outputBaseName);
 		// rdfDiffWriter = new RDFDiffWriter();
