@@ -16,6 +16,8 @@ import org.linkedgeodata.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.Iterables;
+
 
 
 
@@ -83,16 +85,19 @@ public class NodePositionDAO
 		if(ids.isEmpty())
 			return result;
 		
-		String sql = "SELECT node_id, latitude, longitude FROM " + tableName + " WHERE node_id IN (" + StringUtil.implode(",", ids)+ ")"; 
-		logger.trace(sql);
+		Iterable<List<Long>> partitions = Iterables.partition(ids, 512);
+		for(List<Long> partition : partitions) {
+			String sql = "SELECT node_id, longitude, latitude FROM " + tableName + " WHERE node_id IN (" + StringUtil.implode(",", partition)+ ")"; 
+			logger.trace(sql);
 		
-		ResultSet rs = SQLUtil.executeCore(conn, sql);
-		try {
-			while(rs.next()) {
-				result.put(rs.getLong(1), new Point2D.Double(rs.getLong(3), rs.getLong(2)));
+			ResultSet rs = SQLUtil.executeCore(conn, sql);
+			try {
+				while(rs.next()) {
+					result.put(rs.getLong(1), new Point2D.Double(rs.getDouble(2), rs.getDouble(3)));
+				}
+			} finally {
+				rs.close();
 			}
-		} finally {
-			rs.close();
 		}
 		
 		return result;
@@ -116,9 +121,27 @@ public class NodePositionDAO
 			}
 		}
 		// NOTE: VIRTUOSO SUPPORTS "INSERT REPLACING..."		
-		if(!inserts.isEmpty()) {
-			String sql = "INSERT INTO " + tableName + "(node_id, latitude, longitude) VALUES " + mapToSQL(inserts);
+		Iterable<List<Map.Entry<Long, Point2D>>> insertPartitions = Iterables.partition(inserts.entrySet(), 512);
+
+		for(List<Map.Entry<Long, Point2D>> partition : insertPartitions) {
+			String sql = "INSERT INTO " + tableName + "(node_id, longitude, latitude) VALUES " + mapToSQL(partition);
+			logger.trace(sql);
 			//	System.out.println(sql);
+			SQLUtil.execute(conn, sql, Void.class);
+		}
+
+		/*
+		 * UPDATE tbl_1 SET col1 = t.col1 FROM (VALUES
+        (25, 3)
+        (26, 5)
+) AS t(id, col1)
+WHERE tbl_1.id = t.id; 
+		 */
+		
+		Iterable<List<Map.Entry<Long, Point2D>>> updatePartitions = Iterables.partition(updates.entrySet(), 512);
+		for(List<Map.Entry<Long, Point2D>> partition : updatePartitions) {
+			String sql = "UPDATE " + tableName + " SET longitude = t.longitude, latitude = t.latitude FROM (VALUES" + mapToSQL(partition) + ") AS t(node_id, longitude, latitude) WHERE " + tableName + ".node_id = t.node_id";    		
+			logger.trace(sql);
 			SQLUtil.execute(conn, sql, Void.class);
 		}
 		
@@ -128,18 +151,24 @@ public class NodePositionDAO
 		// TODO This loop does individual updates
 		// Maybe there is a way to optimize this
 		// (I am not sure whether derby supports selects in updates)
+		/*
 		for(Map.Entry<Long, Point2D> entry : updates.entrySet()) {
+			//Iterable<List<Map.Entry<Long, Point2D>>> partitions = Iterables.partition(inserts.entrySet(), 512);
+
 			String sql = "UPDATE " + tableName + " SET latitude = " + entry.getValue().getY() + ", longitude = " + entry.getValue().getX() + " WHERE node_id = " + entry.getKey();   
+			logger.trace(sql);
 			SQLUtil.execute(conn, sql, Void.class);
-		}
+		}*/
 		
 		
 	}
 	
-	private String mapToSQL(Map<Long, Point2D> map) {
+	//private String mapToSQL(Map<Long, Point2D> map) {
+	//}
+	private String mapToSQL(Collection<Map.Entry<Long, Point2D>> entries) {
 		List<String> parts = new ArrayList<String>();
-		for(Map.Entry<Long, Point2D> entry : map.entrySet()) {
-			parts.add("(" + entry.getKey() + "," + entry.getValue().getY() + "," + entry.getValue().getX() + ")");
+		for(Map.Entry<Long, Point2D> entry : entries) {
+			parts.add("(" + entry.getKey() + "," + entry.getValue().getX() + "," + entry.getValue().getY() + ")");
 			//parts.add("('" + entry.getKey() + "','" + entry.getValue().getY() + "','" + entry.getValue().getX() + "')");
 		}
 
