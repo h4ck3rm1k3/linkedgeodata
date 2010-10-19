@@ -139,7 +139,6 @@ public class LiveSync
 	private NodePositionDAO nodePositionDao;
 
 	
-	private long stepCount = 0;
 
 	//private RDFDiffWriter rdfDiffWriter;
 	
@@ -307,9 +306,22 @@ public class LiveSync
 		System.out.println(config);
 		
 		LiveSync liveSync = new LiveSync(config);
+		
+		long stepCount = 0;
+		long totalStartTime = System.nanoTime();
 		for(;;) {
 			try {
+				long stepStartTime = System.nanoTime();
+				
+				++stepCount;
 				liveSync.step();
+				
+				long now = System.nanoTime();
+				double stepDuration = (now - stepStartTime) / 1000000000.0;
+				double totalDuration = (now - totalStartTime) / 1000000000.0;
+				double stepRatio = stepCount / totalDuration;
+				logger.info("Step #" + stepCount + " took " + stepDuration + "sec; Average step duration is " + stepRatio + "sec.");
+				
 			} catch(Throwable t) {
 				logger.error("An exception was encountered in the LiveSync update loop", t);
 				throw t;
@@ -333,9 +345,6 @@ public class LiveSync
 	private void step()
 		throws Exception
 	{
-		long startTime = System.nanoTime();
-		++stepCount;
-
 		// Load the state config
 		File osmStateFile = new File(config.get("osmReplicationConfigPath") + "/state.txt");
 		loadIniFile(osmStateFile, config);
@@ -367,10 +376,6 @@ public class LiveSync
 		
 		logger.info("Downloading new state");
 		advance(sequenceNumber + 1);
-		
-		double stepDuration = (System.nanoTime() - startTime) / 1000000000.0;
-		double stepRatio = stepCount / stepDuration;
-		logger.info("Step #" + stepCount + " took " + stepDuration + "sec; Average step duration is " + stepRatio + "sec.");
 	}
 	
 	private void advance(long id)
