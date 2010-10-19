@@ -1,5 +1,5 @@
 # Find entities with multiple line/polygon annotations
-Select * From <http://test.org> {
+Select * From <http://linkedgeodata.org> {
     { 
         Select ?s, Count(*) As ?c From <http://test.org> {
             ?s ?p1 ?o1 .
@@ -13,6 +13,37 @@ Select * From <http://test.org> {
     } . Filter(?c > 0) .
 }
 
+# Find number of all annotated ways
+Select Count(*) From <http://linkedgeodata.org> {
+		?s ?p ?o .
+		Filter(?p In (<http://www.georss.org/georss/line>, <http://www.georss.org/georss/polygon>)) .
+}
+
+# Find number of nodes
+Select Count(Distinct ?s) From <http://linkedgeodata.org> {
+		?s ?p ?o .
+		Filter(?s Like "http://linkedgeodata.org/triplify/node%") .
+}
+
+# Find number of ways
+Select Count(Distinct ?s) From <http://linkedgeodata.org> {
+		?s ?p ?o .
+		Filter(?s Like "http://linkedgeodata.org/triplify/way%") .
+}
+
+
+
+# Find ways without georss polygon or way
+Select ?s From <http://linkedgeodata.org> {
+	?s ?p ?o .
+	Filter(?s Like "http://linkedgeodata.org/triplify/way%") .
+
+	Optional {
+		?s ?x ?y
+		Filter(?x In (<http://www.georss.org/georss/line>, <http://www.georss.org/georss/polygon>)) .
+	}
+	Filter(!Bound(?s)) .
+}
 
 
 # Find dangling nodes
@@ -34,7 +65,7 @@ Select ?s From <http://test.org> {
 }
 
 # Retrieve a node and all its references
-Select ?s ?p ?o From<http://test.org> {
+Select ?s ?p ?o From<http://linkedgeodata.org> {
   {
     ?s ?p ?o .
   }

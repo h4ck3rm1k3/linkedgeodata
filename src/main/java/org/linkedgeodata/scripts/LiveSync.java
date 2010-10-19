@@ -217,10 +217,10 @@ public class LiveSync
 
 		
 		Connection nodeConn = PostGISUtil.connectPostGIS(
-				"localhost",
-				"lgdnodes",
-				"postgres",
-				"postgres");
+				config.get("osmDb_hostName"),
+				config.get("osmDb_dataBaseName"),
+				config.get("osmDb_userName"),
+				config.get("osmDb_passWord"));
 		
 		//RDFDiffWriter rdfDiffWriter = new RDFDiffWriter(outputBaseName);
 		//rdfDiffWriter = new RDFDiffWriter();
