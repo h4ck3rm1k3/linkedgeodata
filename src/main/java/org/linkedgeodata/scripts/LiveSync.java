@@ -319,8 +319,8 @@ public class LiveSync
 				long now = System.nanoTime();
 				double stepDuration = (now - stepStartTime) / 1000000000.0;
 				double totalDuration = (now - totalStartTime) / 1000000000.0;
-				double stepRatio = stepCount / totalDuration;
-				logger.info("Step #" + stepCount + " took " + stepDuration + "sec; Average step duration is " + stepRatio + "sec.");
+				double avgStepDuration = totalDuration / stepCount;
+				logger.info("Step #" + stepCount + " took " + stepDuration + "sec; Average step duration is " + avgStepDuration + "sec.");
 				
 			} catch(Throwable t) {
 				logger.error("An exception was encountered in the LiveSync update loop", t);
