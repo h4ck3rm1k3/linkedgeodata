@@ -138,6 +138,9 @@ public class LiveSync
 	
 	private NodePositionDAO nodePositionDao;
 
+	
+	private long stepCount = 0;
+
 	//private RDFDiffWriter rdfDiffWriter;
 	
 	public static Map<String, String> loadIniFile(File file)
@@ -331,7 +334,8 @@ public class LiveSync
 		throws Exception
 	{
 		long startTime = System.nanoTime();
-		
+		++stepCount;
+
 		// Load the state config
 		File osmStateFile = new File(config.get("osmReplicationConfigPath") + "/state.txt");
 		loadIniFile(osmStateFile, config);
@@ -364,7 +368,9 @@ public class LiveSync
 		logger.info("Downloading new state");
 		advance(sequenceNumber + 1);
 		
-		logger.info("Step took " + ((System.nanoTime() - startTime) / 1000000000.0) + " sec");
+		double stepDuration = (System.nanoTime() - startTime) / 1000000000.0;
+		double stepRatio = stepCount / stepDuration;
+		logger.info("Step #" + stepCount + " took " + stepDuration + "sec; Average step duration is " + stepRatio + "sec.");
 	}
 	
 	private void advance(long id)
