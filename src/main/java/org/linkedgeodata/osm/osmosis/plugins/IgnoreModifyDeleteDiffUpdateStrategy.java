@@ -984,8 +984,9 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 				Node node = (Node) entity;
 
 				Resource resource = vocab.createResource(node);
-				String pos = node.getLongitude() + " " + node.getLatitude();
-
+				//String pos = node.getLongitude() + " " + node.getLatitude();
+				String pos = node.getLatitude() + " " + node.getLongitude();
+				
 				result.put(resource, pos);
 			}
 		}
