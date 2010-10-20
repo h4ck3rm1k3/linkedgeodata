@@ -13,23 +13,12 @@ Select * From <http://linkedgeodata.org> {
     } . Filter(?c > 0) .
 }
 
-# Find number of all annotated ways
+# Count annotated ways
 Select Count(*) From <http://linkedgeodata.org> {
 		?s ?p ?o .
 		Filter(?p In (<http://www.georss.org/georss/line>, <http://www.georss.org/georss/polygon>)) .
 }
 
-# Find number of nodes
-Select Count(Distinct ?s) From <http://linkedgeodata.org> {
-		?s ?p ?o .
-		Filter(?s Like "http://linkedgeodata.org/triplify/node%") .
-}
-
-# Find number of ways
-Select Count(Distinct ?s) From <http://linkedgeodata.org> {
-		?s ?p ?o .
-		Filter(?s Like "http://linkedgeodata.org/triplify/way%") .
-}
 
 
 
