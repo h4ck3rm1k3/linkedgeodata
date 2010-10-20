@@ -12,3 +12,18 @@ Sparql Select Count(Distinct ?s) From <http://linkedgeodata.org> {
 		?s ?p ?o .
 		Filter(?s Like "http://linkedgeodata.org/triplify/way%/nodes") .
 };
+
+Sparql Select Count(?s) From <http://linkedgeodata.org> {
+		?s ?p ?o .
+		Filter(?s Like "http://linkedgeodata.org/triplify/node%") .
+};
+
+Sparql Select Count(?s) From <http://linkedgeodata.org> {
+		?s ?p ?o .
+		Filter(?s Like "http://linkedgeodata.org/triplify/way%") .
+};
+
+Sparql Select Count(?s) From <http://linkedgeodata.org> {
+		?s ?p ?o .
+		Filter(?s Like "http://linkedgeodata.org/triplify/way%/nodes") .
+};
