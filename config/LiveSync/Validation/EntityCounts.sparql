@@ -1,17 +1,14 @@
-# Count nodes
 Sparql Select Count(Distinct ?s) From <http://linkedgeodata.org> {
 		?s ?p ?o .
 		Filter(?s Like "http://linkedgeodata.org/triplify/node%") .
-}
+};
 
-# Count ways
 Sparql Select Count(Distinct ?s) From <http://linkedgeodata.org> {
 		?s ?p ?o .
 		Filter(?s Like "http://linkedgeodata.org/triplify/way%") .
-}
+};
 
-# Count wayNodes [tested]
 Sparql Select Count(Distinct ?s) From <http://linkedgeodata.org> {
 		?s ?p ?o .
 		Filter(?s Like "http://linkedgeodata.org/triplify/way%/nodes") .
-}
+};
