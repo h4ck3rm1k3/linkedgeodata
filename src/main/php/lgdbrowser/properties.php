@@ -1,5 +1,9 @@
 <ul style="margin-left:-1em; list-style-type:none;">
 <?php
+//echo "Under maintainance - since Mon, May 3";
+//die; 
+
+
 include('inc.php');
 
 $showAll=false;
@@ -8,49 +12,116 @@ $showAll=false;
 $t=microtime(1);
 
 
-//$b=sql_for_area($_GET['bottom'],$_GET['left'],$_GET['top'],$_GET['right'],$zoom);
+$b=sql_for_area($_GET['bottom'],$_GET['left'],$_GET['top'],$_GET['right'],$zoom);
 
 //get the zoom
-$tileBox = sqlForArea($_GET['bottom'],$_GET['left'],$_GET['top'],$_GET['right'],$zoom);
+$latMin = $_GET['bottom'];
+$latMax = $_GET['top'];
+$lonMin  = $_GET['left'];
+$lonMax = $_GET['right'];
+
+// AutoZoom: Use the first zoomlevel that does not have more than n tiles
+//$viewportWidth = 640
+//$viewportHeight = 480
+
+$latDelta = $latMax - $latMin;
+$lonDelta = $lonMax - $lonMin;
+
+$tileSizeLat = 180 / 65536.0;
+$tileSizeLon = 360 / 65536.0;
+
+for($zoom = 16; $zoom >= 0; --$zoom) {
+	$numTilesLat = ceil($latDelta / $tileSizeLat);
+	$numTilesLon = ceil($lonDelta / $tileSizeLon);
+
+	$numTilesTotal = $numTilesLat * $numTilesLon;
+	if($numTilesTotal <= 64)
+		break;
+
+	// Try next zoom level with double size
+	$tileSizeLat *= 2;
+	$tileSizeLon *= 2;
+}
+
+// If there is no tile table/index for that zoom, use next greater zoom level
+if($zoom % 2 == 1)
+	--$zoom;
+
+//echo "Zoomlevel: $zoom\nx: $numTilesLat\ny: $numTilesLon\ntotal: $numTilesTotal\n";
+
+$tileBox = sqlForArea($latMin, $latMax, $lonMin, $lonMax, $zoom);
+
+
+
 
 $namePart = implode("', '", $properties);
 $filterPart = $showAll
 	? ""
-	: "AND label IN ('$namePart')";
+	: "AND t.k IN ('$namePart')";
 
 
 if($zoom >= 14) {
 	// If we are zoomed in close, use the finest grained tile box
-	$exactBox='latitude BETWEEN '.$db->escape_string(round($_GET['bottom']*10000000)).' AND '.$db->escape_string(round($_GET['top']*10000000)).
-		' AND longitude BETWEEN '.$db->escape_string(round($_GET['left']*10000000)).' AND '.$db->escape_string(round($_GET['right']*10000000));
+	//$exactBox='latitude BETWEEN '.$db->escape_string(round($_GET['bottom']*10000000)).' AND '.$db->escape_string(round($_GET['top']*10000000)).
+	//	' AND longitude BETWEEN '.$db->escape_string(round($_GET['left']*10000000)).' AND '.$db->escape_string(round($_GET['right']*10000000));
+	
+	$exactBox="ST_SetSRID(ST_MakeBox2D(ST_MakePoint($lonMin, $latMin), ST_MakePoint($lonMax, $latMax)), 4326)";
 	
 	$tmp = 16;
-	$tileBox = sqlForArea($_GET['bottom'],$_GET['left'],$_GET['top'],$_GET['right'], $tmp);
+	$tileBox = sqlForArea($latMin, $latMax, $lonMin, $lonMax, $tmp, "LGD_ToTile(t.geom, 16)");
 
 
 	$box = "$tileBox AND $exactBox";
 
 //			COUNT(DISTINCT v) v,
+//			p.ontology_entity_type = 'node' AND 
+		
 		
 	$sql =
 		"SELECT
-			r.label           property,
-			COUNT(*)          c,
-			p.type
+			t.k           property,
+			p.ontology_entity_type AS type,
+			COUNT(*)          c
 		FROM
-			elements n
-			INNER JOIN tags       t ON (t.id = n.id AND t.type = n.type)
-			INNER JOIN resources  r ON (r.id = t.k)
-			INNER JOIN properties p ON (p.id = t.k)
+			node_tags t
+			INNER JOIN lgd_properties p ON (p.k = t.k)
 		WHERE
-			$box
-			AND n.type = 'node'
+			t.geom && $exactBox
 			$filterPart
 		GROUP BY
-			t.k
+			t.k, p.ontology_entity_type
 		ORDER BY
-			p.type, r.label";
+			p.ontology_entity_type, t.k";
+
+// Ooops, the subselect belongs to the instance query
+/*
+	$sql =
+		"SELECT
+			t2.k           property,
+			p.ontology_entity_type AS type,
+			COUNT(*)          c
+		FROM
+			node_tags t2
+			INNER JOIN lgd_properties p ON (p.k = t2.k)
+		WHERE
+			t2.node_id IN (
+				SELECT
+					t.node_id
+				FROM
+					node_tags t
+				WHERE
+					t.geom && $exactBox
+					$filterPart
+			)
+		GROUP BY
+			t2.k, p.ontology_entity_type
+		ORDER BY
+			p.ontology_entity_type, t2.k";
+*/
+
+
 			
+//			AND p.ontology_entity_type != NULL
 
 			//INNER JOIN tags       t USING (type, id)
 			
@@ -59,43 +130,42 @@ if($zoom >= 14) {
 	#	WHERE '.$box.' AND '.($showAll?'':'k IN ('.join(',',array_keys($pids)).')').' GROUP BY k';
 }
 else {
+
 /*	$sql="SELECT label property, SUM(c) c FROM tiles$zoom INNER JOIN resources r ON(k=id) WHERE ".
 		(!$showAll?'label IN ("'.join('","',$properties).'") AND ':'').$b.
 		' GROUP BY k'; */	
-	$tileBox = sqlForArea($_GET['bottom'],$_GET['left'],$_GET['top'],$_GET['right'], $zoom);
+	$tileBox = sqlForArea($latMin, $latMax, $lonMin, $lonMax, $zoom, "t.tile_id");
 	
 	$sql =
 		"SELECT
-			r.label property,
-			SUM(c) c,
-			p.type
+			t.k property,
+			p.ontology_entity_type AS type,
+			SUM(t.usage_count) c
 		FROM
-			tiles$zoom t
-			INNER JOIN resources  r ON (r.id = t.k)
-			INNER JOIN properties p ON (p.id = t.k)
+			lgd_stats_node_tags_tilek_$zoom t
+			INNER JOIN lgd_properties p ON (p.k = t.k)
 		WHERE
 			$tileBox
 			$filterPart
 		GROUP BY
-			t.k
+			t.k, p.ontology_entity_type
 		ORDER BY
-			p.type, r.label";
+			p.ontology_entity_type, t.k";
 }
 //echo $sql;	
 //echo "Zoom level was $zoom <br />";
 #echo $sql;
 #echo microtime(1)-$t;
-$res=$db->query($sql);
-print_r($db->error);
 
 $totalPropertyCount = 0;
-
-
 $currentType = "";
 
 $selectedProperty = $_GET['property'];
 
-while($row=$res->fetch_assoc()) {
+//echo $zoom;
+//die;
+//echo $sql;
+foreach($db->query($sql) as $row) {
 	$count = $row['c'];
 	
 	$totalPropertyCount += $count;
@@ -106,6 +176,8 @@ while($row=$res->fetch_assoc()) {
 	//$v    = $row['v'];
 	$v = 10;
 	$type = $row['type'];
+	if(!isset($type))
+		$type = "datatype";
  
 	if($type != $currentType) {
 		if($currentType != "")

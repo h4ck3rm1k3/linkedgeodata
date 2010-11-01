@@ -2,7 +2,8 @@
 error_reporting(E_ALL ^ E_NOTICE);
 
 // TODO: read values from config.ini
-$db=new mysqli('..');
+//$db=new mysqli('..');
+$db=new PDO('pgsql:host=localhost;dbname=lgd', 'postgres', '8Dd7CLCWkA');
 
 $properties=array('place', 'aeroway','aerialway','amenity','cuisine','denomination','highway','historic','leisure','man_made','military','natural','power','railway','religion','shop','sport','tourism','waterway');
 
@@ -92,16 +93,16 @@ function xyToTile($x, $y, $zoom = 16) {
 	return bindec($r);
 }
 
-function tilesForArea($minLat, $minLon, $maxLat, $maxLon, $zoom = 16)
+function tilesForArea($latMin, $latMax, $lonMin, $lonMax, $zoom = 16)
 {
-	$f = pow(2, $zoom) - 1;
+	$f = pow(2, $zoom); // - 1; removed the -1 -- claus
 	
 	//echo "$f\n";
 	/**
 	 * Transform the given geo-coordinates into tile coordinates.
 	 */
-	$min = llToXY($minLon, $minLat, $zoom);
-	$max = llToXY($maxLon, $maxLat, $zoom);
+	$min = llToXY($lonMin, $latMin, $zoom);
+	$max = llToXY($lonMax, $latMax, $zoom);
 	
 	$minX = $min['x'];
 	$minY = $min['y'];
@@ -122,14 +123,14 @@ function tilesForArea($minLat, $minLon, $maxLat, $maxLon, $zoom = 16)
 	return $tiles;
 }
 
-function sqlForArea($minlat, $minlon, $maxlat, $maxlon,&$zoom) {
-
+function sqlForArea($latMin, $latMax, $lonMin, $lonMax, &$zoom, $colName = "tile") {
+	// changed to 65536 - claus
 	$zoom=$zoom?$zoom:2+max(
-		(16-max(0,min(2*round(0.5*log(($maxlat+90-($minlat+90))*65535/180,2)),16))),
-		(16-max(0,min(2*round(0.5*log(($maxlon+180-($minlon+180))*65535/360,2)),16)))
+		(16-max(0,min(2*round(0.5*log(($latMax+90-($latMin+90))*65536/180,2)),16))),
+		(16-max(0,min(2*round(0.5*log(($lonMax+180-($lonMin+180))*65536/360,2)),16)))
 	);
 
-	$tiles=tilesForArea($minlat, $minlon, $maxlat, $maxlon, $zoom);
+	$tiles=tilesForArea($latMin, $latMax, $lonMin, $lonMax, $zoom);
 	#return "tile IN(".join(',',$tiles).")";
 	sort($tiles);
 	foreach($tiles as $tile) {
@@ -144,13 +145,13 @@ function sqlForArea($minlat, $minlon, $maxlat, $maxlon,&$zoom) {
 			&& (substr($tile,0,-5)!=substr($last,0,-5) || substr($tile,-5)!=substr($last,-5)+1)
 			&& (substr($tile,0,-6)!=substr($last,0,-6) || substr($tile,-6)!=substr($last,-6)+1)
 		) {
-			$sql.=($start==$last?" OR tile=".$last:" OR tile BETWEEN $start AND $last");
+			$sql.=($start==$last?" OR $colName=".$last:" OR $colName BETWEEN $start AND $last");
 			$start=$tile;
 		}
 		$last=$tile;
 	}
-	$sql.=($start==$last?" OR tile=".$last:" OR tile BETWEEN $start AND $last");
-	return '(0'.$sql.')';
+	$sql.=($start==$last?" OR $colName=".$last:" OR $colName BETWEEN $start AND $last");
+	return '(FALSE'.$sql.')';
 }
 
 function llToXYother($lon, $lat, $zoom)
@@ -190,16 +191,16 @@ function tile_for_xy($x,$y,$zoom=16) {
 }
 
 function tile_for_point($lat,$lon,$zoom=16) {
-#	$f=pow(2,$zoom)-1;
-	return tile_for_xy(round(($lon+180)*65535/360),round(($lat+90)*65535/180),$zoom);
+	$f=pow(2,$zoom); //removed -1 --claus
+	return tile_for_xy(round(($lon+180)*$f/360.0),round(($lat+90)*$f/180.0),$zoom);
 }
 
 function tiles_for_area($minlat, $minlon, $maxlat, $maxlon, $zoom=16) {
-	$f=pow(2,$zoom)-1;
-	$minx=round(($minlon + 180) * $f / 360);
-	$maxx=round(($maxlon + 180) * $f / 360);
-	$miny=round(($minlat + 90 ) * $f / 180);
-	$maxy=round(($maxlat + 90 ) * $f / 180);
+	$f=pow(2,$zoom); //removed - 1
+	$minx=round(($minlon + 180) * $f / 360.0);
+	$maxx=round(($maxlon + 180) * $f / 360.0);
+	$miny=round(($minlat + 90 ) * $f / 180.0);
+	$maxy=round(($maxlat + 90 ) * $f / 180.0);
 #print "$minx $maxx $miny $maxy";
 	$tiles=Array();
 
@@ -223,11 +224,11 @@ function getDbZoom($zoom)
 	return $zoom;
 }*/
 
-function sql_for_area($minlat, $minlon, $maxlat, $maxlon,&$zoom) {
+function sql_for_area($latMin, $latMax, $lonMin, $lonMax, &$zoom) {
 
 	$zoom=$zoom?$zoom:2+max(
-		(16-max(0,min(2*round(0.5*log(($maxlat+90-($minlat+90))*65535/180,2)),16))),
-		(16-max(0,min(2*round(0.5*log(($maxlon+180-($minlon+180))*65535/360,2)),16)))
+		(16-max(0,min(2*round(0.5*log(($latMax+90-($latMin+90))*65536/180,2)),16))),
+		(16-max(0,min(2*round(0.5*log(($lonMax+180-($lonMin+180))*65536/360,2)),16)))
 	);
 
 	$tiles=tiles_for_area($minlat, $minlon, $maxlat, $maxlon,$zoom);

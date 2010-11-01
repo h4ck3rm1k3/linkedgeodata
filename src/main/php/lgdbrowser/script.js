@@ -15,6 +15,9 @@ function oldrenderNode(id, lon, lat, tags) {
 	ret += '<b>View '+(tags['name']||'')+"</b>";
 	
 	ret += "<br />";
+
+        ret += "<a href='http://linkedgeodata.org/triplify/node" + id + ".ttl'><img class='noborder' src='icon/rdf-export2.png'> <br />";
+
 	var depiction = tags['foaf:depiction'];
 	if(depiction != null)
 		ret += "<img style='float:left;' src = '" + depiction + "' />";

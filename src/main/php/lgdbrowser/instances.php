@@ -2,20 +2,29 @@
 var mk=new Array();
 </script>
 <?php
+
+// NOTE: BUG DETECTED: when searching for e.g. Leipzig, the form sets a parameter
+// and the query will contain a where v="Leipzig"
+
+//echo "Under maintainance - since Mon, May 3";
+//die; 
+
 include('inc.php');
 
 $t=microtime(1);
 
 
 
-function generateInstanceHTML($left, $top, $right, $bottom, $zoom, $property, $value)
+function generateInstanceHTML($latMin, $latMax, $lonMin, $lonMax, $zoom, $property, $value)
 {
+
 	global $db;
 	global $properties;
 
 	// Currently instances will not be shown if the zoom level is too low
 	$minRequiredZoom = 14;
 	
+
 	if($zoom < $minRequiredZoom) {
 		return
 			"Currently no instance information can be provided for zoom levels smaller than $minRequiredZoom.
@@ -36,10 +45,11 @@ function generateInstanceHTML($left, $top, $right, $bottom, $zoom, $property, $v
 		
 	/**
 	 * Build the SQL query
-	 */
+	 * /
 	$exactBox='latitude BETWEEN '.$db->escape_string(round($bottom*10000000)).' AND '.$db->escape_string(round($top*10000000)).
 		' AND longitude BETWEEN '.$db->escape_string(round($left*10000000)).' AND '.$db->escape_string(round($right*10000000));
-	
+	*/
+
 	$b="tile = (CONV(BIN(FLOOR(0.5 + 65535*($left+180)/360)), 4, 10)<<1)
 		| CONV(BIN(FLOOR(0.5 + 65535*($bottom+90)/180)), 4, 10)+4
 		OR tile = (CONV(BIN(FLOOR(0.5 + 65535*($right+180)/360)), 4, 10)<<1)
@@ -50,16 +60,18 @@ function generateInstanceHTML($left, $top, $right, $bottom, $zoom, $property, $v
 	
 	//$result .= "<br /> <br />";
 	$tmp = 16;
-	$tileBox = sqlForArea($bottom, $left, $top, $right, $tmp);	
+	$tileBox = sqlForArea($latMin, $latMax, $lonMin, $lonMax, $tmp, "LGD_ToTile(t.geom, 16)");	
 	$zoom = $tmp; // if tmp is not set, sqlForArea will set it
 	if($zoom > 16) {
 		$zoom = 16;
-		$tileBox = sqlForArea($bottom, $left, $top, $right, $zoom);
+		$tileBox = sqlForArea($latMin, $latMax, $lonMin, $lonMax, $zoom);
 	}
 	//$result .= $box;
 	
 	$box = "$tileBox AND $exactBox";
 	//$box = $exactBox; 
+	
+	$exactBox = "ST_SetSRID(ST_MakeBox2D(ST_MakePoint($lonMin, $latMin), ST_MakePoint($lonMax, $latMax)), 4326)::geography";
 	
 	// On close zooms, show everything.
 	$limitPart = "LIMIT 300";
@@ -68,34 +80,23 @@ function generateInstanceHTML($left, $top, $right, $bottom, $zoom, $property, $v
 	
 		
 	//$elements = "instance_tile_k_$zoom";
-	$elements = "elements";
+	$elements = "node_tags";
 	
 	$propertyPart = "";
 	$conditionPart = "";
-	//if($property) {
 	
-		$valuePart = "";
-		if($value) {
-			//$v = $db->escape_string(utf8_decode($_GET['value']));
-			$v = $db->escape_string($value);
-			$valuePart = "
-				INNER JOIN resources vr ON (vr.id = t.v)";
-	
-			$conditionPart .= " AND vr.label = '$v'";
-		}
-	
-		if($property)
-			$p = $db->escape_string($property);
-		else
-			$p = implode("', '", $properties);
-		
-		
-		$propertyPart = "
-			INNER JOIN tags t USING (type, id)
-			INNER JOIN resources kr ON (kr.id = t.k) 
-			$valuePart";
-		
-		$conditionPart .= " AND kr.label IN('$p')";
+	$valuePart = "";
+	if($value) {
+		$v = $db->quote($value);
+		$conditionPart .= " AND t.v IN($v) ";
+	}
+
+	if($property)
+		$p = $db->quote($property);
+	else
+		$p = "'" . implode("', '", $properties) . "'";
+			
+	$conditionPart .= " AND t.k IN($p)";
 	//}
 
 	// IMPORTANT: The USE INDEX(tile) is actually needed because otherwise
@@ -106,58 +107,120 @@ function generateInstanceHTML($left, $top, $right, $bottom, $zoom, $property, $v
 	
 	// The DISTINCT is needed because the same instance may appear in
 	// multiple classifications
+	// update - DISTINCT is no longer needed - we retrieve all nodes and tags at once.
+	// however we do a sorting
+	//	FROM	$propertyPart
+	//			LEFT JOIN `lgd-dbp` dbp ON ((dbp.type, dbp.id) = (e.type, e.id))
+//echo "$conditionPart\n";
 	$sql =
-		"SELECT DISTINCT
-			e.id,
-			e.longitude,
-			e.latitude,
-			e.type,
-			dbp.article
+		"SELECT
+			'node' AS type,
+			t.node_id AS id,
+			Y(t.geom::geometry) AS latitude,
+			X(t.geom::geometry) AS longitude,
+			t.k AS property,
+			t.v AS value,
+			NULL AS article
 		FROM
-			$elements e USE INDEX(tile)
-			$propertyPart
-			LEFT JOIN `lgd-dbp` dbp ON ((dbp.type, dbp.id) = (e.type, e.id))
+			$elements t
 		WHERE
-			$box
-			AND e.type = 'node'
-			$conditionPart
-		$limitPart";
+			$tileBox 
+		$limitPart
+		";
+
+	$sql =
+		"SELECT
+			'node' AS type,
+			t2.node_id AS id,
+			Y(t2.geom::geometry) AS latitude,
+			X(t2.geom::geometry) AS longitude,
+			t2.k AS property,
+			t2.v AS value,
+			NULL AS article
+		FROM
+			node_tags t2
+		WHERE
+			t2.node_id IN (
+				SELECT
+					t.node_id
+				FROM
+					node_tags t
+				WHERE
+					t.geom && $exactBox
+					$conditionPart
+				$limitPart
+			)
+		";
+
+//					$tileBox 
+
+
+
 			//dbp.article
 			//ON (e.id = dbp.id AND dbp.type = 'node')
 			//ON (dbp.id = e.id AND dbp.type = e.type)
 
+/*
+
+			t.geom && $box
+			$conditionPart
+*/
 //echo "$zoom <br />";
 		
 //echo "$sql <br />";
 //die;
-	$res=$db->query($sql);
-	print_r($db->error);
-	while($row=$res->fetch_assoc()) {
-		unset($pr,$desc,$popdesc,$popform,$name,$ta);
-		$p=$db->query('SELECT rk.label property, rv.label value FROM tags t INNER JOIN resources rk ON(k=rk.id) INNER JOIN resources rv ON(v=rv.id) WHERE t.type="'.$row['type'].'" AND t.id='.$row['id']);
-		print_r($db->error);
-		while($r=$p->fetch_assoc()) {
-			$pr[$r['property']]=utf8_encode($r['value']);
-			$ta.='"'.$r['property'].'":"'.htmlspecialchars(utf8_encode($r['value'])).'",';
+	//$res=$db->query($sql);
+	//print_r($db->error);
+	//while($row=$res->fetch_assoc()) {
+	//echo $sql;
+	//echo $box;
+	$idToTags = array();
+	foreach($db->query($sql) as $row) {
+		//$p=$db->query('SELECT rk.label property, rv.label value FROM tags t INNER JOIN resources rk ON(k=rk.id) INNER JOIN resources rv ON(v=rv.id) WHERE t.type="'.$row['type'].'" AND t.id='.$row['id']);
+		//print_r($db->error);
+		
+		$id = $row['id'];
+		
+		$idToPos[$id]['latitude'] = $row['latitude'];
+		$idToPos[$id]['longitude'] = $row['longitude'];
+		
+		$idToTags[$id][$row['property']] = $row['value'];
+	}
+
+	$markerId = 0;
+	foreach($idToTags as $nodeId => $pr) {		
+		unset($desc,$popdesc,$popform,$name,$ta);
+
+		foreach($pr as $p => $v) {
+			$ta.='"'.$p.'":"'.htmlspecialchars(utf8_encode($v)).'",';
 		}
-		if($pr['name'])
+	
+
+		if($pr['name']) {
 			$desc=$popdesc='<b>'.$pr['name'].'</b><br />';
-		if($pr)
-			foreach($pr as $p=>$v) if($p!='name') {
-				if($p!='description' && $p!='image' && $p!='source_ref') {
-					$autoc.='$(\'#'.$p.'\').autocomplete(\'autocomplete.php\',{extraParams:{p:\''.$p.'\'}});';
-				}
+		}
+
+		if($pr) {
+			foreach($pr as $p=>$v) {
+				if($p!='name') {
+					if($p!='description' && $p!='image' && $p!='source_ref') {
+						$autoc.='$(\'#'.$p.'\').autocomplete(\'autocomplete.php\',{extraParams:{p:\''.$p.'\'}});';
+					}
+				}	
+				
 				if(in_array($p,$properties))
 					$desc.=$p.': '.$v.'<br />';
 			}
-		
+		}
+
 		$dbpediaPrefix   = "http://dbpedia.org/resource/";
 		
-		$nodeId  = $row['id'];
-		$latD    = $row['longitude'] / 10000000;
-		$lonD    = $row['latitude']  / 10000000;
+		$lonD    = $idToPos[$nodeId]['longitude'];
+		$latD    = $idToPos[$nodeId]['latitude'];
 	
-		$article = $row['article'];
+	//echo "[$latD  $lonD]\n";
+	
+		$article = null; // TODO $row['article'];
 		
 		$logo = "";
 		
@@ -168,33 +231,34 @@ function generateInstanceHTML($left, $top, $right, $bottom, $zoom, $property, $v
 			$logo = "<img src='icon/dbpedia.png' />";
 		}	
 
-		$colorClass = $colorClasses[$id % 2];
+		$colorClass = $colorClasses[$markerId % 2];
 		//$result .= "<li style='background-color:$color;".'id="p'.(++$id).'" onmouseout="mk['.$id.'].events.triggerEvent(\'mouseout\'); $(this).removeClass(\'highlight\');" onmouseover="mk['.$id.'].events.triggerEvent(\'mouseover\'); $(this).addClass(\'highlight\');">'.$logo . " " .$desc.'</li>';
 
 		//style='background-color:$color;'
 		// style='background-color:$color;'
-		++$id;
+		++$markerId;
 		$result .=
 			"
-				<li id='p$id' class='$colorClass'
+				<li id='p$markerId' class='$colorClass'
 					onmouseout=\"
-						mk['$id'].events.triggerEvent('mouseout');
+						mk['$markerId'].events.triggerEvent('mouseout');
 						$(this).removeClass('highlight');
 					\"
 					onclick=\"
-						mk['$id'].events.triggerEvent('click');
+						mk['$markerId'].events.triggerEvent('click');
 					\"
 					onmouseover=\"
 						$(this).addClass('highlight');
 					\"
 				>$logo $desc</li>
 			";
+
 		
 		$fragment = 
 			"<script type = 'text/javascript'>
-				mk[$id] =
+				mk[$markerId] =
 					addMarker(
-						new OpenLayers.LonLat($latD, $lonD)
+						new OpenLayers.LonLat($lonD, $latD)
 							.transform(map.displayProjection, map.projection),
 						$nodeId,
 						{{$ta}}
@@ -206,15 +270,15 @@ function generateInstanceHTML($left, $top, $right, $bottom, $zoom, $property, $v
 	
 	$result .= "</ol>";
 	
-	if($id >= 300)
-		$result = "Currently at most $id instances will be shown. Some results have been omitted. <br />" . $result;
+	if($markerId >= 300)
+		$result = "Currently at most $markerId instances will be shown. Some results have been omitted. <br />" . $result;
 	
 	return $result;
 }
 
 
 echo generateInstanceHTML(
-	$_GET['left'], $_GET['top'], $_GET['right'], $_GET['bottom'],
+	$_GET['bottom'], $_GET['top'], $_GET['left'], $_GET['right'],
 	$_GET['zoom'], 
 	$_GET['property'], utf8_decode($_GET['value']));
 

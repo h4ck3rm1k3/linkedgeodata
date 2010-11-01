@@ -12,7 +12,7 @@ $nodeIds = split(",", $_REQUEST['nodeIds']);
 header("Content-type: text/rdf+n3");
 header("Content-Disposition: attachment; filename=\"export.n3\"");
 
-$result = fetchMultipleData($nodeIds, "http://linkedgeodata.org/triplify/node/");
+$result = fetchMultipleData($nodeIds, "http://linkedgeodata.org/data/node");
 if($result == false) {
 	echo "Export failed";
 	die;

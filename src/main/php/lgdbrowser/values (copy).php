@@ -4,59 +4,22 @@ include('inc.php');
 
 // $tmpZoom currently not used, as the zoom is calculated from left, top,
 // right and bottom
-function generateValuesHTML($lonMin, $latMax, $lonMax, $latMin, $tmpZoom, $property, $value)
+function generateValuesHTML($left, $top, $right, $bottom, $tmpZoom, $property, $value)
 {
 	global $db;
 	
 	$t=microtime(1);
-
-
-
-$latDelta = $latMax - $latMin;
-$lonDelta = $lonMax - $lonMin;
-
-$tileSizeLat = 180 / 65536.0;
-$tileSizeLon = 360 / 65536.0;
-
-for($zoom = 16; $zoom >= 0; --$zoom) {
-	$numTilesLat = ceil($latDelta / $tileSizeLat);
-	$numTilesLon = ceil($lonDelta / $tileSizeLon);
-
-	$numTilesTotal = $numTilesLat * $numTilesLon;
-	if($numTilesTotal <= 64)
-		break;
-
-	// Try next zoom level with double size
-	$tileSizeLat *= 2;
-	$tileSizeLon *= 2;
-}
-
-// If there is no tile table/index for that zoom, use next greater zoom level
-if($zoom % 2 == 1)
-	--$zoom;
-
-/*
-$latMin = $_GET['bottom'];
-$latMax = $_GET['top'];
-$lonMin  = $_GET['left'];
-$lonMax = $_GET['right'];
-*/
-
-	$exactBox="ST_SetSRID(ST_MakeBox2D(ST_MakePoint($lonMin, $latMin), ST_MakePoint($lonMax, $latMax)), 4326)";
 	
-/*
 	$exactBox='latitude BETWEEN '.$db->escape_string(round($bottom*10000000)).' AND '.$db->escape_string(round($top*10000000)).
 		' AND longitude BETWEEN '.$db->escape_string(round($left*10000000)).' AND '.$db->escape_string(round($right*10000000));
-*/	
+	
 
 	// Note: We let sqlForArea determine the zoom
-	//$tileBox = sqlForArea($bottom, $left, $top, $right, $zoom);
-	//$tileBox = sqlForArea($latMin, $latMax, $lonMin, $lonMax, $zoom);
-
+	$tileBox = sqlForArea($bottom, $left, $top, $right, $zoom);
 	
 	
-	//$propertyPart = $db->escape_string($property);
-	$propertyPart = $property;	
+	$propertyPart = $db->escape_string($property);
+		
 	 
 	if($zoom >= 14) {
 		$tmp = 16;
@@ -65,18 +28,21 @@ $lonMax = $_GET['right'];
 		
 		$s =
 			"SELECT
-				v AS value,
-				count(*) AS c
+				vl.label value,
+				count(*) c
 			FROM
-				node_tags nt JOIN
-				nodes n ON (n.id = nt.node_id)
+				elements n
+				INNER JOIN tags       t USING (id, type)
+				INNER JOIN resources vl ON (vl.id = t.v)
+				INNER JOIN resources  r ON (r.id = t.k)
 			WHERE
-				n.geom && $exactBox AND
-				nt.k = '$propertyPart'
+				$box AND
+				r.label = '$propertyPart' AND
+				n.type ='node'
 			GROUP BY
-				k, v
+				t.v
 			ORDER BY
-				k, v
+				vl.label
 			";
 			
 			/*
@@ -92,29 +58,31 @@ $lonMax = $_GET['right'];
 						v)";
 */
 	}
-	else {
-		$tileBox = sqlForArea($latMin, $latMax, $lonMin, $lonMax, $zoom, "tile_id");
-
+	else
 		$s =
 			"SELECT
-				v AS value,
-				SUM(usage_count) AS c
+				vl.label value,
+				SUM(c) c
 			FROM
-				lgd_stats_node_tags_tilekv_$zoom
+				tilesv$zoom
+				INNER JOIN resources kl ON (k = kl.id)
+				INNER JOIN resources vl ON (v = vl.id)
 			WHERE
-				k = '$propertyPart' AND $tileBox
+				c > 0 AND kl.label = '$propertyPart' AND $tileBox
 			GROUP BY
 				k, v
 			ORDER BY
-				v";
-	}
-	// SUM(c) > 0
+				vl.label";
+	
 	//echo $s;
+	//return "";
+
+	$p=$db->query($s);
+	print_r($db->error);
 	
 	$result = "";
-	foreach($db->query($s) as $r) {
+	while($r=$p->fetch_assoc())
 		$result .= '<a class="value" onclick="$(\'.value,.property\').removeClass(\'highlight\'); $(this).addClass(\'highlight\');" href="javascript:{property=\''.$_GET['property'].'\'; value=\''.htmlspecialchars(utf8_encode($r['value'])).'\'; mapEvent();}">'.utf8_encode($r['value']).'&nbsp;('.$r['c'].')</a>&nbsp;| ';
-	}
 
 	return $result;
 }
