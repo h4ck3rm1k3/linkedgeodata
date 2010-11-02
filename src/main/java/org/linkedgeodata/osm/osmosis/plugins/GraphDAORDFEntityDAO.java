@@ -29,7 +29,7 @@ public class GraphDAORDFEntityDAO
 	private ILGDVocab vocab;
 	private String graphName;
 	
-	public static Set<Resource> getInvolvedResources(Iterable<Entity> entities, ILGDVocab vocab)
+	public static Set<Resource> getInvolvedResources(Iterable<? extends Entity> entities, ILGDVocab vocab)
 	{
 		Set<Resource> result = new HashSet<Resource>();
 		
@@ -41,6 +41,7 @@ public class GraphDAORDFEntityDAO
 				result.add(res);
 			}
 		}
+		
 		
 		return result;
 	}

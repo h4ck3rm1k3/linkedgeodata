@@ -40,15 +40,15 @@
 	</build>
 	<repositories>
 		<repository>
-			<id>http://db0.aksw.org/archiva/repository/internal/</id>
+			<id>http://prod1.aksw.org/archiva/repository/internal/</id>
 			<name>University Leipzig, AKSW Maven2 Internal Repository</name>
-			<url>http://db0.aksw.org:8081/archiva/repository/internal/</url>
+			<url>http://prod1.aksw.org:8081/archiva/repository/internal/</url>
 		</repository>
 
 		<repository>
-			<id>http://db0.aksw.org/archiva/repository/snapshots/</id>
+			<id>http://prod1.aksw.org/archiva/repository/snapshots/</id>
 			<name>University Leipzig, AKSW Maven2 Snaphshot Repository</name>
-			<url>http://db0.aksw.org:8081/archiva/repository/snapshots/</url>
+			<url>http://prod1.aksw.org:8081/archiva/repository/snapshots/</url>
 		</repository>
 
 		<!-- Repository for hibernate -->

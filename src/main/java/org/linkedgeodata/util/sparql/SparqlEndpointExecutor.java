@@ -54,7 +54,8 @@ public class SparqlEndpointExecutor
 	@Override
 	public Model executeConstruct(String query) throws Exception
 	{
-		// TODO Auto-generated method stub
-		return null;
+		QueryEngineHTTP queryExecution = new QueryEngineHTTP(service, query);
+		queryExecution.addDefaultGraph(graph);
+		return queryExecution.execConstruct();
 	}
 }
