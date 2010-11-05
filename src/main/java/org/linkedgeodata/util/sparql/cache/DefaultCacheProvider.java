@@ -1,13 +1,11 @@
 package org.linkedgeodata.util.sparql.cache;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import com.google.common.collect.Multimap;
 import com.hp.hpl.jena.graph.Triple;
 
 public class DefaultCacheProvider
@@ -33,8 +31,9 @@ public class DefaultCacheProvider
 	private Set<ITripleCacheIndex>	tripleCacheIndexes	= new HashSet<ITripleCacheIndex>();
 
 	
+	// FIXME: Deal with cache misses
 	@Override
-	public Collection<Triple> bulkFind(Collection<List<Object>> keys, int[] indexColumns)
+	public Set<Triple> bulkFind(Set<List<Object>> keys, int[] indexColumns)
 	{
 		// Find the set of indexes that are fully compatbile with our columns
 		Set<ITripleCacheIndex> fullIndexes = new HashSet<ITripleCacheIndex>();

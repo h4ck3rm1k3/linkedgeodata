@@ -13,7 +13,7 @@ public interface ICacheProvider
 	
 	//Set<Triple> bulkFind(Collection<Triple> patterns);
 	//Multimap<List<Object>, List<Object>> bulkFind(Collection<List<Object>> keys, int[] indexColumns);
-	Collection<Triple> bulkFind(Collection<List<Object>> keys, int[] indexColumns);
+	Set<Triple> bulkFind(Set<List<Object>> keys, int[] indexColumns);
 	
 	Collection<ITripleCacheIndex> getIndexes();
 

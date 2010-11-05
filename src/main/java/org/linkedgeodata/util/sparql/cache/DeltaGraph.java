@@ -1,19 +1,37 @@
 package org.linkedgeodata.util.sparql.cache;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
 import com.hp.hpl.jena.graph.Triple;
 
+
+/**
+ * 
+ * A wrapper for an underlying graph, whereas the uncachedBulkFind
+ * method respects the added and removed triples.
+ * 
+ * @author raven
+ *
+ */
 public class DeltaGraph
 		extends BaseIndexedGraph
 {
 	private IGraph		baseGraph;
 
-	private Set<Triple>	additionTriples;
-	private Set<Triple>	removalTriples;
+	//private Set<Triple>	additionTriples;
+	//private Set<Triple>	removalTriples;
 
+	
+	private IGraph additionGraph = new MemoryGraph();
+	private IGraph removalGraph = new MemoryGraph();
+	
+	public DeltaGraph(IGraph baseGraph) {
+		this.baseGraph = baseGraph;
+	}
+	
 	/**
 	 * Performs the addition/removal on the base graph. Note that this does not
 	 * change the set of triples in the graph.
@@ -28,25 +46,35 @@ public class DeltaGraph
 	 */
 	public void applyDelta()
 	{
-		baseGraph.remove(removalTriples);
-		baseGraph.add(additionTriples);
+		baseGraph.remove(removalGraph.bulkFind(null, new int[]{}));
+		baseGraph.add(additionGraph.bulkFind(null, new int[]{}));
 
-		removalTriples.clear();
-		additionTriples.clear();
+		removalGraph.clear();
+		additionGraph.clear();
 	}
 
 	public void addTriple(Triple triple)
 	{
-		removalTriples.remove(triple);
-		additionTriples.add(triple);
+		removalGraph.remove(Collections.singleton(triple));
+		additionGraph.add(Collections.singleton(triple));
 	}
 
 	public void removeTriple(Triple triple)
 	{
-		additionTriples.remove(triple);
-		removalTriples.add(triple);
+		additionGraph.remove(Collections.singleton(triple));
+		removalGraph.add(Collections.singleton(triple));
 	}
 
+	
+	public IGraph getAdditionGraph()
+	{
+		return additionGraph;
+	}
+	
+	public IGraph getRemovalGraph()
+	{
+		return removalGraph;
+	}
 
 	@Override
 	public void add(Collection<Triple> triples)
@@ -64,19 +92,52 @@ public class DeltaGraph
 		}
 	}
 
+	/*
 	@Override
 	public Collection<Triple> bulkFind(Collection<List<Object>> keys,
 			int[] indexColumns)
 	{
+		
+		
 		// TODO Auto-generated method stub
 		return null;
+	}*/
+
+	
+	@Override
+	public Set<Triple> uncachedBulkFind(Set<List<Object>> keys,
+			int[] indexColumns)
+	{
+		
+		// Perform a lookup on the database and merge the result with
+		// the addition/removal graphs
+		
+		
+		// Note: The base graph may have indexes on it,
+		// but the addition/removal graphs need their own.
+		
+		// Ideally, the addition/removal graph would automatically
+		// receive the same indexes as the base graph.
+		
+		
+		// Ok, for now we ignore indexes completely
+		Set<Triple> addTriples = additionGraph.bulkFind(keys, indexColumns);
+		Set<Triple> removalTriples = removalGraph.bulkFind(keys, indexColumns); 
+		
+		Set<Triple> result = baseGraph.uncachedBulkFind(keys, indexColumns);
+		
+		result.removeAll(removalTriples);
+		result.addAll(addTriples);
+		
+		return result;
 	}
 
 	@Override
-	public Collection<Triple> uncachedBulkFind(Collection<List<Object>> keys,
-			int[] indexColumns)
+	public void clear()
 	{
 		// TODO Auto-generated method stub
-		return null;
+		additionGraph.clear();
+		removalGraph.clear();
+		baseGraph.clear();
 	}
 }

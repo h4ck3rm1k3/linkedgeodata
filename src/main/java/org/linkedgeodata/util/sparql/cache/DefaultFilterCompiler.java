@@ -24,8 +24,14 @@ public class DefaultFilterCompiler
 
 		List<String> result = new ArrayList<String>();
 
+		// Empty columnNames means that there is no constraint
+		if(columnNames.isEmpty())
+			return result;
+		
+		
 		// Special handling for a set of resources
-		if (columnNames.size() == 1000) {
+		// FIXME right now disabled
+		if (columnNames.size() == -1) {
 
 			String columnName = columnNames.get(0);
 			Set<Object> remaining = new HashSet<Object>(

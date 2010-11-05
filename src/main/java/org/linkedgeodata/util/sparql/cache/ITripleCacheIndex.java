@@ -21,7 +21,11 @@ interface ITripleCacheIndex
 	IGraph getGraph();
 
 
-	// I think index is always complete?
+	/**
+	 * Indexes the triples. Completeness of the partitions is assumed.
+	 * 
+	 * @param triples
+	 */
 	void index(Collection<Triple> triples);
 
 	

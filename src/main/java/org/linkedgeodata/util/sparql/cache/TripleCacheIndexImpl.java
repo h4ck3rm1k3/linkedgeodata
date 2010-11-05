@@ -19,6 +19,17 @@ import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Statement;
 
 
+
+/**
+ * FIXME The index could be used with either LRUMaps or Maps for keeping
+ * track of the data. So these indexes could be used both as cache or as
+ * full indexes.
+ *  
+ * 
+ * 
+ * @author raven
+ *
+ */
 class TripleCacheIndexImpl
 		implements ITripleCacheIndex
 {
@@ -39,7 +50,11 @@ class TripleCacheIndexImpl
 	 * Maps a pattern (e.g. s, null, null)
 	 * 
 	 */
-	private LRUMap<List<Object>, IndexTable>	keyToValues					= new LRUMap<List<Object>, IndexTable>();
+	private Map<List<Object>, Set<List<Object>>> full = new LRUMap<List<Object>,  Set<List<Object>>>();
+	private Map<List<Object>, Set<List<Object>>> partial = new LRUMap<List<Object>,  Set<List<Object>>>();
+	
+	
+	//private LRUMap<List<Object>, IndexTable>	keyToValues					= new LRUMap<List<Object>, IndexTable>();
 	private CacheSet<List<Object>>				noDataCache					= new CacheSet<List<Object>>();
 
 	private int[]								indexColumns;
@@ -71,25 +86,7 @@ class TripleCacheIndexImpl
 		this.graph = graph;
 		this.indexColumns = indexColumns;
 
-		valueColumns = new int[3 - indexColumns.length];
-
-
-		
-		Set<Integer> cs = new HashSet<Integer>();
-		for(int index : indexColumns)
-			cs.add(index);
-		
-		Arrays.asList(0, 1, 2).remove(cs);
-		
-		int j = 0;
-		for (int i = 0; i < 3; ++i) {
-			if (cs.contains(i)) {
-				continue;
-			}
-
-			valueColumns[j++] = i;
-		}
-
+		this.valueColumns = TripleIndexUtils.getValueColumns(indexColumns);
 		// Delta deltaGraph = new Delta(baseGraph);
 	}
 
@@ -204,7 +201,7 @@ class TripleCacheIndexImpl
 	public Collection<Triple> lookup(List<Object> key) {
 		
 		
-		IndexTable table = keyToValues.get(key);
+		Set<List<Object>> table = full.get(key);
 		if (table == null) {
 			// Potential cache miss
 			if (noDataCache.contains(key)) {
@@ -213,7 +210,7 @@ class TripleCacheIndexImpl
 		} else {
 			// Cache hit
 			Collection<Triple> result = new HashSet<Triple>();
-			for(List<Object> value : table.getRows()) {
+			for(List<Object> value : table) {
 				Object[] array = new Object[3];
 				
 				fill(array, key, indexColumns);
@@ -336,14 +333,15 @@ class TripleCacheIndexImpl
 	 */
 	private List<Object> tripleToKey(Triple triple)
 	{
-		return tripleToList(triple, indexColumns);
+		return TripleIndexUtils.tripleToList(triple, indexColumns);
 	}
 
 	private List<Object> tripleToValue(Triple triple)
 	{
-		return tripleToList(triple, valueColumns);
+		return TripleIndexUtils.tripleToList(triple, valueColumns);
 	}
 
+	/*
 	private List<Object> tripleToList(Triple triple, int[] indexes)
 	{
 		Object[] array = new Object[indexes.length];
@@ -354,7 +352,7 @@ class TripleCacheIndexImpl
 		List<Object> result = Arrays.asList(array);
 		return result;
 	}
-
+*/
 
 	/**
 	 * Note: When indexing too many triples, the LRU map might be full.
@@ -365,6 +363,7 @@ class TripleCacheIndexImpl
 	@Override
 	public void index(Collection<Triple> triples)
 	{
+		/*
 		Map<List<Object>, IndexTable> tmp = new HashMap<List<Object>, IndexTable>();
 		
 		for (Triple triple : triples) {
@@ -385,11 +384,14 @@ class TripleCacheIndexImpl
 			table.setComplete(true);
 
 			table.getRows().add(value);
-		}
+		}*/
+		Map<List<Object>, Set<List<Object>>> tmp = TripleIndexUtils.index2(triples, indexColumns);
 		
-		
-		for(Map.Entry<List<Object>, IndexTable> entry : tmp.entrySet()) {
-			keyToValues.put(entry.getKey(), entry.getValue());
+		for(Map.Entry<List<Object>, Set<List<Object>>> entry : tmp.entrySet()) {
+			partial.remove(entry.getKey());
+			noDataCache.remove(entry.getKey());
+			
+			full.put(entry.getKey(), entry.getValue());
 		}
 	}
 
@@ -400,13 +402,28 @@ class TripleCacheIndexImpl
 			List<Object> key = tripleToKey(triple);
 			List<Object> value = tripleToValue(triple);
 
-			IndexTable table = keyToValues.get(key);
-			if (table == null)
-				continue;
+			
+			Map<List<Object>, Set<List<Object>>> source = full;
+			
+			Set<List<Object>> table = source.get(key);
+			if (table == null) {
+				source = partial;
 
-			// TODO We assume that the rows in the table are unique
-			// but maybe this is the best way to do it in the first place
-			table.getRows().remove(value);
+				table = partial.get(key);
+				
+				if(table == null) {
+					continue;
+				}
+			}
+
+			table.remove(value);
+			if(table.isEmpty()) {
+				source.remove(key);
+				
+				if(source == full) {
+					noDataCache.add(key);
+				}
+			}
 		}
 	}
 
@@ -451,20 +468,28 @@ class TripleCacheIndexImpl
 			List<Object> key = tripleToKey(triple);
 			List<Object> value = tripleToValue(triple);
 
-			IndexTable table = keyToValues.get(key);
-			if (table == null)
-				continue;
+			Set<List<Object>> table = full.get(key);
+			if (table == null) {
+				table = partial.get(key);
+				
+				if(table == null) {
+					continue;
+				}
+			}
 
 			// TODO We assume that the rows in the table are unique
 			// but maybe this is the best way to do it in the first place
-			table.getRows().add(value);
+			table.add(value);
+			noDataCache.remove(key);
 		}
 	}
 
 	@Override
 	public void clear()
 	{
-		keyToValues.clear();
+		full.clear();
+		partial.clear();
+		noDataCache.clear();
 	}
 
 	/**

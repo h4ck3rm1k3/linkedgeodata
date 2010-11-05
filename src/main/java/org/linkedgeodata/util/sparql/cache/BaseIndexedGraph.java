@@ -3,6 +3,7 @@ package org.linkedgeodata.util.sparql.cache;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import com.hp.hpl.jena.graph.Triple;
 
@@ -38,7 +39,7 @@ public abstract class BaseIndexedGraph
 	}
 	
 	@Override
-	public Collection<Triple> bulkFind(Collection<List<Object>> keys, int[] indexColumns)
+	public Set<Triple> bulkFind(Set<List<Object>> keys, int[] indexColumns)
 	{
 		// Delegate the find to the cache provider
 		// Note: It the cacheProvider has to do uncached lookups as it sees fit.		

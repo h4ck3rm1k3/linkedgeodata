@@ -444,6 +444,10 @@ public class GraphBackedResourceCache
 
 	
 	
+	public static String myToString(Collection<?> collection)
+	{
+		return "(" + collection.size() + ")" + collection;		
+	}
 
 	public static void main(String[] args)
 		throws Exception
@@ -473,15 +477,35 @@ public class GraphBackedResourceCache
 		Node n = Node.createURI("http://nke/Exp3Random/Actors_from_Tennessee/fold/1/phase/1/5");
 		
 		
+		DeltaGraph deltaGraph = new DeltaGraph(graph);
+
+		Set<Triple> triples = new HashSet<Triple>();
+		
+		Triple myTriple = new Triple(n, Node.createURI("http://p"), Node.createURI("http://o")); 
+		triples.add(myTriple);
+		
+		deltaGraph.add(triples);
+		deltaGraph.remove(triples);
+		
+		
+		Set<Triple> qr = deltaGraph.bulkFind(
+				Collections.singleton(Collections.singletonList((Object)n)), 
+				new int[]{0});
+		
+		System.out.println(myToString(qr));
+
+		
+		
+		/*
 		Random random = new Random(0);
 		for(int i = 0; i < 10000; ++i) {
 			Node subject = RandomUtils.randomItem(subjects, random);
 			
 			List<Object> key = Collections.singletonList((Object)subject);
 			
-			Collection<List<Object>> keys = Collections.singleton(key);
-			Collection<Triple> triples = graph.bulkFind(keys, new int[]{0});
-		}
+			Set<List<Object>> keys = Collections.singleton(key);
+			Set<Triple> triples = graph.bulkFind(keys, new int[]{0});
+		}*/
 		
 		
 		

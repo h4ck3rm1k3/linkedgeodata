@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.linkedgeodata.osm.osmosis.plugins.LgdSparqlTasks;
 import org.linkedgeodata.util.sparql.ISparqlExecutor;
 import org.linkedgeodata.util.sparql.ISparulExecutor;
@@ -177,18 +178,15 @@ public class SparqlEndpointFilteredGraph
 	}
 
 	@Override
-	public Collection<Triple> bulkFind(Collection<List<Object>> keys, int[] indexColumns)
+	public Set<Triple> bulkFind(Set<List<Object>> keys, int[] indexColumns)
 	{
 		return cacheProvider.bulkFind(keys, indexColumns);
 	}
 
 
 	@Override
-	public Collection<Triple> uncachedBulkFind(Collection<List<Object>> keys, int[] indexColumns)
-	{
-		if(keys.isEmpty())
-			return Collections.emptySet();
-		
+	public Set<Triple> uncachedBulkFind(Set<List<Object>> keys, int[] indexColumns)
+	{		
 		String[] names = { "?s", "?p", "?o" };
 
 		List<String> columnNames = new ArrayList<String>();
@@ -203,7 +201,7 @@ public class SparqlEndpointFilteredGraph
 	//public static boolean matches(Triple triple, List<Object> keys, 
 	
 	//private Multimap<List<Object>, List<Object>> uncachedBulkFind(Collection<List<Object>> keys, List<String> columnNames)
-	private Collection<Triple> uncachedBulkFind(Collection<List<Object>> keys, List<String> columnNames)
+	private Set<Triple> uncachedBulkFind(Set<List<Object>> keys, List<String> columnNames)
 	{
 		List<String> filters = filterCompiler.compileFilter(keys, columnNames);
 
@@ -229,8 +227,8 @@ public class SparqlEndpointFilteredGraph
 			throw new RuntimeException("Implement proper exception handling");
 		}
 
-		Collection<Triple> triples = new GraphTripleCollectionView(
-				result.getGraph());
+		Set<Triple> triples = new HashSet<Triple>(new GraphTripleCollectionView(
+				result.getGraph()));
 
 
 		return triples;
@@ -285,5 +283,11 @@ public class SparqlEndpointFilteredGraph
 		if(g == parentGraph) {
 			getCacheProvider().removeSeen(doFiltering(triples));
 		}
+	}
+
+	@Override
+	public void clear()
+	{
+		throw new NotImplementedException();
 	}
 }
