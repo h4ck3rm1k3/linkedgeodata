@@ -7,6 +7,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
 import org.linkedgeodata.util.ModelUtil;
 import org.linkedgeodata.util.SQLUtil;
 import org.linkedgeodata.util.SinglePrefetchIterator;
+import org.linkedgeodata.util.sparql.cache.TripleUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,6 +23,7 @@ import virtuoso.jdbc4.VirtuosoExtendedString;
 import virtuoso.jdbc4.VirtuosoRdfBox;
 import virtuoso.jdbc4.VirtuosoResultSet;
 
+import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.QuerySolutionMap;
 import com.hp.hpl.jena.rdf.model.AnonId;
@@ -305,6 +308,23 @@ public class VirtuosoJdbcSparulExecutor
 		result.read(in, "", "N3");
 		
 		return result;
+	}
+
+
+	@Override
+	public boolean insert(Collection<Triple> triples, String graphName)
+			throws Exception
+	{
+		Model model = TripleUtils.toModel(triples);
+		return insert(model, graphName);
+	}
+
+	@Override
+	public boolean remove(Collection<Triple> triples, String graphName)
+			throws Exception
+	{
+		Model model = TripleUtils.toModel(triples);
+		return remove(model, graphName);
 	}
 }
 

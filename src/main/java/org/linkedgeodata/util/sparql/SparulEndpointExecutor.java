@@ -1,5 +1,8 @@
 package org.linkedgeodata.util.sparql;
 
+import java.util.Collection;
+
+import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.sparql.engine.http.QueryEngineHTTP;
 
@@ -34,6 +37,20 @@ public class SparulEndpointExecutor
 	@Override
 	public boolean remove(Model model, String graphName)
 		throws Exception
+	{
+		throw new RuntimeException("Not implemented yet");
+	}
+
+	@Override
+	public boolean insert(Collection<Triple> triples, String graphName)
+			throws Exception
+	{
+		throw new RuntimeException("Not implemented yet");
+	}
+
+	@Override
+	public boolean remove(Collection<Triple> triples, String graphName)
+			throws Exception
 	{
 		throw new RuntimeException("Not implemented yet");
 	}

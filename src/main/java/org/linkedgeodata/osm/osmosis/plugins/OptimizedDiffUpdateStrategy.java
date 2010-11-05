@@ -247,7 +247,7 @@ public class OptimizedDiffUpdateStrategy
 		Set<Entity> createdOrModifiedEntities = Sets.union(createdEntities, modifiedEntities);
 		
 		
-		
+		// new: Model oldMainModel = GraphUtils.findBySubject(mainGraph, deletedOrModifiedResources);		
 		Model oldMainModel = LgdSparqlTasks.fetchStatementsBySubject(sparqlEndpoint, mainDefaultGraphNames, deletedOrModifiedResources, 512);				
 		logger.info("" + ((System.nanoTime() - start) / 1000000000.0) + " Completed fetching data for " + deletedOrModifiedResources.size() + " modified or deleted entities, " + oldMainModel.size() + " triples fetched");
 
@@ -305,7 +305,7 @@ public class OptimizedDiffUpdateStrategy
 		Map<Resource, String> repositionedNodes = LgdRdfUtils.createNodePosMapFromNodesGeoRSS(LgdRdfUtils.createModelFromStatements(mainDiff.getAdded()));
 		logger.info("" + ((System.nanoTime() - start) / 1000000000.0) + " Completed populating " +  repositionedNodes.size() + " repositioned nodes");
 			
-		// FIXME: Add an option to exclude newly created nodes here - as they can't affect
+		// NOTE: Add an option to exclude newly created nodes here - as they can't affect
 		// any previously existing ways anyway (however, this may cause problems:
 		// if the store is initialized from a dump, and then change sets are applied starting from before the dump,
 		// then a create wouldn't cause the store to be checked for existing data.

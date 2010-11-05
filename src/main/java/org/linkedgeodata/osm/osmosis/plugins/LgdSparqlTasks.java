@@ -90,6 +90,8 @@ public class LgdSparqlTasks
 
 		return result;
 	}
+	
+
 	public static Map<Resource, RDFNode> fetchNodePositions(
 			ISparqlExecutor graphDAO, Set<String> graphNames, Set<Resource> nodes)
 			throws Exception
