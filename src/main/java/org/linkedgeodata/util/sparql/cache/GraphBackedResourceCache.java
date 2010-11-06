@@ -535,7 +535,15 @@ public class GraphBackedResourceCache
 			Set<List<Object>> keys = toKeys(resources);
 			
 			logger.trace("Finding " + keys.size() + " keys");
-			Set<Triple> xxx = deltaGraph.bulkFind(keys, new int[]{0});
+			Set<Triple> cache = deltaGraph.bulkFind(keys, new int[]{0});
+			
+			
+			/*
+			Set<Triple> store = deltaGraph.getBaseGraph().uncachedBulkFind(keys, new int[]{0});
+			
+			if(!cache.equals(store))
+				throw new RuntimeException("DAMMIT");
+			*/
 			
 			//System.out.println(i + ": "+ deltaGraph.getBaseGraph());
 			

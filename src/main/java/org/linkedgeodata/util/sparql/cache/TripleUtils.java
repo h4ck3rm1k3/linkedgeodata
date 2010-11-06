@@ -16,7 +16,15 @@ public class TripleUtils
 		}
 		return ModelFactory.createModelForGraph(graph);
 	}
-	
+
+	public static Model toModel(Iterable<Triple> triples, Model model) {
+		
+		Model part = toModel(triples);
+		model.add(part);
+		
+		return model;
+	}
+
 	public static Node get(Triple triple, int index)
 	{
 		switch(index) {

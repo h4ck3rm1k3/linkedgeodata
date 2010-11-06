@@ -8,20 +8,23 @@ import java.util.Set;
 
 import org.linkedgeodata.core.vocab.GeoRSS;
 import org.linkedgeodata.util.CollectionUtils;
-import org.linkedgeodata.util.StringUtil;
 import org.linkedgeodata.util.sparql.ISparqlExecutor;
-import org.linkedgeodata.util.sparql.ISparulExecutor;
-import org.openstreetmap.osmosis.core.domain.v0_6.Entity;
+import org.linkedgeodata.util.sparql.cache.IGraph;
+import org.linkedgeodata.util.sparql.cache.TripleIndexUtils;
+import org.linkedgeodata.util.sparql.cache.TripleUtils;
 
 import scala.actors.threadpool.Arrays;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Iterables;
+import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.rdf.model.StmtIterator;
 
 public class LgdSparqlTasks
 {
@@ -131,7 +134,7 @@ public class LgdSparqlTasks
 			"Construct {?s ?p ?o . } " + createFromClause(graphNames) + "{" +
 				"\t?s ?p ?o . " +
 				"\tFilter(?s In (" + toString(ways) + ") && " +
-				"?p In (" + toString(GeoRSS.point,  GeoRSS.polygon) + ")) .\n" +
+				"?p In (" + toString(GeoRSS.line,  GeoRSS.polygon) + ")) .\n" +
 			"}";
 		Model result = graphDAO.executeConstruct(query);
 
@@ -205,6 +208,56 @@ public class LgdSparqlTasks
 			
 			Model part = sparqlEndpoint.executeConstruct(query);
 			result.add(part);
+		}
+
+		return result;
+	}
+
+	
+	public static Model fetchStatementsBySubject(IGraph graph,
+			Iterable<Resource> resources, int chunkSize) throws Exception
+	{
+		return fetchStatements(graph, resources, 0, chunkSize);
+	}
+	
+	public static Model fetchStatementsByObject(IGraph graph,
+			Iterable<Resource> resources, int chunkSize) throws Exception
+	{
+		return fetchStatements(graph, resources, 0, chunkSize);
+	}
+	
+	public static Model fetchStatements(IGraph graph,
+			Iterable<Resource> resources, int keyColumn, int chunkSize) throws Exception
+	{
+		Model result = ModelFactory.createDefaultModel();
+		
+		for (List<Resource> item : Iterables.partition(resources, chunkSize)) {
+
+			Set<List<Object>> keys = TripleIndexUtils.toKeys(item);
+			
+			Set<Triple> triples = graph.bulkFind(keys, new int[]{keyColumn});
+			
+			TripleUtils.toModel(triples, result);
+		}
+
+		return result;
+	}
+	
+	public static Map<Resource, RDFNode> fetchNodePositions(
+			IGraph graph, Set<Resource> nodes, int chunkSize)
+			throws Exception
+	{
+		Map<Resource, RDFNode> result = new HashMap<Resource, RDFNode>();
+
+		if (nodes.isEmpty())
+			return result;
+		
+		Model model = fetchStatementsBySubject(graph, nodes, chunkSize);
+		
+		StmtIterator it = model.listStatements();
+		while(it.hasNext()) {
+			Statement stmt = it.next();
+			result.put(stmt.getSubject(), stmt.getObject());
 		}
 
 		return result;

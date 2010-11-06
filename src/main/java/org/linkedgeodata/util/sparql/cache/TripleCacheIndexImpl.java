@@ -32,7 +32,7 @@ import com.hp.hpl.jena.rdf.model.Statement;
  * @author raven
  *
  */
-class TripleCacheIndexImpl
+public class TripleCacheIndexImpl
 		implements ITripleCacheIndex
 {
 	private IGraph								graph;

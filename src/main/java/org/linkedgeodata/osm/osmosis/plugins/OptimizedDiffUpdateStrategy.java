@@ -40,7 +40,10 @@ import org.linkedgeodata.dao.nodestore.RDFNodePositionDAO;
 import org.linkedgeodata.osm.mapping.impl.SimpleNodeToRDFTransformer;
 import org.linkedgeodata.util.ITransformer;
 import org.linkedgeodata.util.StringUtil;
-import org.linkedgeodata.util.sparql.ISparqlExecutor;
+import org.linkedgeodata.util.sparql.cache.DeltaGraph;
+import org.linkedgeodata.util.sparql.cache.IGraph;
+import org.linkedgeodata.util.sparql.cache.SparqlEndpointFilteredGraph;
+import org.linkedgeodata.util.sparql.cache.TripleCacheIndexImpl;
 import org.openstreetmap.osmosis.core.container.v0_6.ChangeContainer;
 import org.openstreetmap.osmosis.core.domain.v0_6.Entity;
 import org.openstreetmap.osmosis.core.domain.v0_6.Node;
@@ -66,9 +69,15 @@ public class OptimizedDiffUpdateStrategy
 
 	private ILGDVocab					vocab;
 	private ITransformer<Entity, Model>	entityTransformer;
-	private ISparqlExecutor				sparqlEndpoint;
-	private Set<String>					mainDefaultGraphNames;
-
+	//private ISparqlExecutor				sparqlEndpoint;
+	
+	private DeltaGraph deltaGraph;
+	
+	
+	private IGraph linePolygonGraph;
+	private IGraph pointGraph;
+	
+	
 
 	private RDFNodePositionDAO			nodePositionDAO;
 	private ITransformer<Model, Model>	postProcessTransformer	= new VirtuosoStatementNormalizer();
@@ -111,29 +120,46 @@ public class OptimizedDiffUpdateStrategy
 
 	/**
 	 * Constructor
+	 * @throws Exception 
 	 * 
 	 */
 	public OptimizedDiffUpdateStrategy(
 			ILGDVocab vocab,
 			ITransformer<Entity, Model> entityTransformer,
-			ISparqlExecutor sparqlEndpoint,
-			Set<String> mainGraphNames,
-			RDFNodePositionDAO nodePositionDAO)
+			DeltaGraph deltaGraph,
+			RDFNodePositionDAO nodePositionDAO) throws Exception
 	{
 		this.vocab = vocab;
 		this.entityTransformer = entityTransformer;
-		this.sparqlEndpoint = sparqlEndpoint;
-		this.mainDefaultGraphNames = mainGraphNames;
+		this.deltaGraph = deltaGraph;
+		//this.sparqlEndpoint = sparqlEndpoint;
 		this.nodePositionDAO = nodePositionDAO;
 		// this.nodeGraphName = nodeGraphName;
+		
+		
+		this.linePolygonGraph = ((SparqlEndpointFilteredGraph)deltaGraph.getBaseGraph()).createSubGraph(LgdSparqlTasks.toString(GeoRSS.line,  GeoRSS.polygon));
+		this.pointGraph = ((SparqlEndpointFilteredGraph)deltaGraph.getBaseGraph()).createSubGraph(LgdSparqlTasks.toString(GeoRSS.point));
+
+		TripleCacheIndexImpl.create(linePolygonGraph, 100000, 10000, 10000, new int[]{0}); 
+		TripleCacheIndexImpl.create(pointGraph, 100000, 10000, 10000, new int[]{0}); 
+	
 	}
 
 
 	public void clear()
 	{
+		createdNodes.clear();
+		modifiedNodes.clear();
+		deletedNodes.clear();
+		
+		createdWays.clear();
+		modifiedWays.clear();
+		deletedWays.clear();
+		/*
 		createdEntities.clear();
 		modifiedEntities.clear();
 		deletedEntities.clear();
+		*/
 	}
 
 	
@@ -248,7 +274,7 @@ public class OptimizedDiffUpdateStrategy
 		
 		
 		// new: Model oldMainModel = GraphUtils.findBySubject(mainGraph, deletedOrModifiedResources);		
-		Model oldMainModel = LgdSparqlTasks.fetchStatementsBySubject(sparqlEndpoint, mainDefaultGraphNames, deletedOrModifiedResources, 512);				
+		Model oldMainModel = LgdSparqlTasks.fetchStatementsBySubject(deltaGraph, deletedOrModifiedResources, 512);				
 		logger.info("" + ((System.nanoTime() - start) / 1000000000.0) + " Completed fetching data for " + deletedOrModifiedResources.size() + " modified or deleted entities, " + oldMainModel.size() + " triples fetched");
 
 		Model newMainModel = ModelFactory.createDefaultModel();
@@ -319,7 +345,8 @@ public class OptimizedDiffUpdateStrategy
 			repositionedNodes.remove(res);		
 		
 		
-		Model wayPatchSet = LgdSparqlTasks.selectWayNodesByNodes(sparqlEndpoint, mainDefaultGraphNames, repositionedNodes.keySet());
+		//Model wayPatchSet = LgdSparqlTasks.selectWayNodesByNodes(sparqlEndpoint, mainDefaultGraphNames, repositionedNodes.keySet());
+		Model wayPatchSet = LgdSparqlTasks.fetchStatementsByObject(deltaGraph, repositionedNodes.keySet(), 1024);
 		logger.info("" + ((System.nanoTime() - start) / 1000000000.0) + " Completed fetching ways for " + repositionedNodes.keySet().size() + " repositioned nodes, " + wayPatchSet.size() + " waynodes affected");
 
 		Map<Resource, TreeMap<Integer, RDFNode>> affectedWays = LgdRdfUtils.indexRdfMemberships(wayPatchSet);
@@ -389,7 +416,8 @@ public class OptimizedDiffUpdateStrategy
 		// however some of the references may just about to become deleted
 		// FIXME Replace dangling resources with dangling nodes - as We might undangle ways here, although only nodes are undangled here
 		Set<Resource> danglingResourceReferenceLookup = Sets.difference(danglingResources, createdResources);
-		Model resourceDependencyModel = LgdSparqlTasks.selectReferencedNodes(sparqlEndpoint, mainDefaultGraphNames, danglingResourceReferenceLookup);
+		//Model resourceDependencyModel = LgdSparqlTasks.selectReferencedNodes(sparqlEndpoint, mainDefaultGraphNames, danglingResourceReferenceLookup);
+		Model resourceDependencyModel = LgdSparqlTasks.fetchStatementsByObject(deltaGraph, danglingResourceReferenceLookup, 1024);
 		resourceDependencyModel.remove(Lists.newArrayList(mainDiff.getRemoved()));
 		logger.info("" + ((System.nanoTime() - start) / 1000000000.0) + " Completed fetching references for " + danglingResourceReferenceLookup.size() + " dangling resources");
 		
@@ -429,7 +457,8 @@ public class OptimizedDiffUpdateStrategy
 		// dangling and add them to the old model, so that they get deleted
 		// properly
 		Set<Resource> danglingResourceDataLookup = Sets.intersection(danglingResources, modifiedResources);
-		Model danglingModel = LgdSparqlTasks.fetchStatementsBySubject(sparqlEndpoint, mainDefaultGraphNames, danglingResourceDataLookup, 1024);
+		//Model danglingModel = LgdSparqlTasks.fetchStatementsBySubject(sparqlEndpoint, mainDefaultGraphNames, danglingResourceDataLookup, 1024);
+		Model danglingModel = LgdSparqlTasks.fetchStatementsBySubject(deltaGraph, danglingResourceDataLookup, 1024);
 		logger.info("" + ((System.nanoTime() - start) / 1000000000.0) + " Completed fetching data for " + danglingResourceDataLookup.size() + " modified dangling resources, " + danglingModel.size() + " triples fetched");
 		oldMainModel.add(danglingModel);
 		
@@ -476,8 +505,9 @@ public class OptimizedDiffUpdateStrategy
 					unindexedNodes.add((Resource)node);
 			}
 		}
-		Map<Resource, RDFNode> mappings = LgdSparqlTasks.fetchNodePositions(sparqlEndpoint, mainDefaultGraphNames, unindexedNodes);
-		
+		//Map<Resource, RDFNode> mappings = LgdSparqlTasks.fetchNodePositions(sparqlEndpoint, mainDefaultGraphNames, unindexedNodes);
+		//TODO Analyse: Actually we could always fetch node positions from nodeDao - can't we?
+		Map<Resource, RDFNode> mappings = LgdSparqlTasks.fetchNodePositions(pointGraph, unindexedNodes, 1024);
 		
 		for(Map.Entry<Resource, RDFNode> mapping : mappings.entrySet()) {
 			nodeToPos.put(mapping.getKey(), mapping.getValue().toString());
@@ -514,8 +544,9 @@ public class OptimizedDiffUpdateStrategy
 		// there is no need to fetch its georss, as it can be computed
 		// directly. (However this is only the case for ways that were edited, where
 		// all nodes are in the same changeset)
-		Model georssOfAffectedWays = LgdSparqlTasks.constructGeoRSSLinePolygon(sparqlEndpoint, mainDefaultGraphNames, affectedWays.keySet());
-		
+		//Model georssOfAffectedWays = LgdSparqlTasks.constructGeoRSSLinePolygon(sparqlEndpoint, mainDefaultGraphNames, affectedWays.keySet());
+		Model georssOfAffectedWays = LgdSparqlTasks.fetchStatementsBySubject(linePolygonGraph, affectedWays.keySet(), 1024);
+			
 		
 		
 		// Now patch the georss

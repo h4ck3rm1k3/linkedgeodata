@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.hp.hpl.jena.graph.Triple;
+import com.hp.hpl.jena.rdf.model.Resource;
 
 public class TripleIndexUtils
 {
@@ -135,5 +136,17 @@ public class TripleIndexUtils
 		}
 		
 		return valueColumns;
+	}
+
+
+	public static Set<List<Object>> toKeys(List<Resource> resources)
+	{
+		Set<List<Object>> result = new HashSet<List<Object>>();
+
+		for(Resource resource : resources) {
+			result.add(Collections.singletonList((Object)resource.asNode()));
+		}
+
+		return result;
 	}
 }

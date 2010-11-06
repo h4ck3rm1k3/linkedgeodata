@@ -42,7 +42,7 @@ import org.linkedgeodata.osm.mapping.impl.OSMEntityToRDFTransformer;
 import org.linkedgeodata.osm.osmosis.plugins.EntityFilter;
 import org.linkedgeodata.osm.osmosis.plugins.EntityFilterPlugin;
 import org.linkedgeodata.osm.osmosis.plugins.IUpdateStrategy;
-import org.linkedgeodata.osm.osmosis.plugins.IgnoreModifyDeleteDiffUpdateStrategy;
+import org.linkedgeodata.osm.osmosis.plugins.OptimizedDiffUpdateStrategy;
 import org.linkedgeodata.osm.osmosis.plugins.RDFDiffWriter;
 import org.linkedgeodata.osm.osmosis.plugins.TagFilter;
 import org.linkedgeodata.osm.osmosis.plugins.TagFilterPlugin;
@@ -57,6 +57,11 @@ import org.linkedgeodata.util.URIUtil;
 import org.linkedgeodata.util.VirtuosoUtils;
 import org.linkedgeodata.util.sparql.ISparulExecutor;
 import org.linkedgeodata.util.sparql.VirtuosoJdbcSparulExecutor;
+import org.linkedgeodata.util.sparql.cache.DeltaGraph;
+import org.linkedgeodata.util.sparql.cache.IGraph;
+import org.linkedgeodata.util.sparql.cache.SparqlEndpointFilteredGraph;
+import org.linkedgeodata.util.sparql.cache.TripleCacheIndexImpl;
+import org.linkedgeodata.util.sparql.cache.TripleIndexUtils;
 import org.openstreetmap.osmosis.core.OsmosisRuntimeException;
 import org.openstreetmap.osmosis.core.domain.v0_6.Entity;
 import org.openstreetmap.osmosis.core.domain.v0_6.Node;
@@ -68,6 +73,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
+import com.hp.hpl.jena.graph.TripleCache;
+import com.hp.hpl.jena.graph.compose.Delta;
 import com.hp.hpl.jena.rdf.model.Model;
 
 /*
@@ -261,9 +268,20 @@ public class LiveSync
 		GeoRSSNodeMapper nodeMapper = new GeoRSSNodeMapper(vocab);
 		RDFNodePositionDAO rdfNodePositionDao = new RDFNodePositionDAO(nodePositionDao, vocab, nodeMapper);
 		
+		
+		IGraph baseGraph = new SparqlEndpointFilteredGraph(graphDAO);
+		DeltaGraph deltaGraph = new DeltaGraph(baseGraph);
+		
+		// Create an index by s and o
+		TripleCacheIndexImpl.create(baseGraph, 100000, 10000, 10000, new int[]{0}); 
+		TripleCacheIndexImpl.create(baseGraph, 100000, 10000, 10000, new int[]{2}); 
 
+		/*
 		diffStrategy = new IgnoreModifyDeleteDiffUpdateStrategy(
 				vocab, entityTransformer, graphDAO, graphName, rdfNodePositionDao);
+				*/
+		diffStrategy = new OptimizedDiffUpdateStrategy(vocab, entityTransformer, deltaGraph, rdfNodePositionDao);
+		
 
 		// Load the entity tag filter
 		TagFilter entityTagFilter = new TagFilter();
