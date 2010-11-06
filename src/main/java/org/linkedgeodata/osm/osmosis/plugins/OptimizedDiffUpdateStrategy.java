@@ -32,6 +32,7 @@ import java.util.TreeMap;
 
 import org.aksw.commons.jena.ModelSetView;
 import org.apache.commons.collections15.MultiMap;
+import org.apache.commons.collections15.Predicate;
 import org.apache.log4j.Logger;
 import org.linkedgeodata.core.ILGDVocab;
 import org.linkedgeodata.core.vocab.GeoRSS;
@@ -47,6 +48,7 @@ import org.linkedgeodata.util.sparql.cache.TripleCacheIndexImpl;
 import org.openstreetmap.osmosis.core.container.v0_6.ChangeContainer;
 import org.openstreetmap.osmosis.core.domain.v0_6.Entity;
 import org.openstreetmap.osmosis.core.domain.v0_6.Node;
+import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 import org.openstreetmap.osmosis.core.domain.v0_6.Way;
 import org.openstreetmap.osmosis.core.task.common.ChangeAction;
 
@@ -86,6 +88,8 @@ public class OptimizedDiffUpdateStrategy
 	private RDFDiff						mainGraphDiff;
 	private TreeSetDiff<Node> nodeDiff = new TreeSetDiff<Node>();
 	
+	
+	private Predicate<Tag> tagRelevanceFilter;
 	
 	// Number of entities that should be processed as a batch
 	//private int	maxEntityBatchSize	= 500;
@@ -127,7 +131,8 @@ public class OptimizedDiffUpdateStrategy
 			ILGDVocab vocab,
 			ITransformer<Entity, Model> entityTransformer,
 			DeltaGraph deltaGraph,
-			RDFNodePositionDAO nodePositionDAO) throws Exception
+			RDFNodePositionDAO nodePositionDAO,
+			Predicate<Tag> tagRelevanceFilter) throws Exception
 	{
 		this.vocab = vocab;
 		this.entityTransformer = entityTransformer;
@@ -278,7 +283,7 @@ public class OptimizedDiffUpdateStrategy
 		logger.info("" + ((System.nanoTime() - start) / 1000000000.0) + " Completed fetching data for " + deletedOrModifiedResources.size() + " modified or deleted entities, " + oldMainModel.size() + " triples fetched");
 
 		Model newMainModel = ModelFactory.createDefaultModel();
-		Set<Entity> danglingEntities = transformToModel(createdOrModifiedEntities, newMainModel);
+		Set<Entity> danglingEntities = transformToModel(createdOrModifiedEntities, newMainModel, tagRelevanceFilter);
 		//Set<Resource> danglingResources = GraphDAORDFEntityDAO.getInvolvedResources(danglingEntities, vocab);
 		Set<Resource> danglingResources = new HashSet<Resource>();
 		for(Entity entity : danglingEntities) {
@@ -773,9 +778,11 @@ public class OptimizedDiffUpdateStrategy
 	/**
 	 * Given a set of entities, generates RDF from them, and returns the set of
 	 * entities for which no RDF was generated.
+	 * 
+	 * Entities without any relevant tag are ignored.
 	 */
 	private Set<Entity> transformToModel(
-			Iterable<? extends Entity> entities, Model mainModel) throws Exception
+			Iterable<? extends Entity> entities, Model mainModel, Predicate<Tag> relevanceFilter) throws Exception
 	{
 		Set<Entity> result = new HashSet<Entity>();
 
@@ -785,6 +792,28 @@ public class OptimizedDiffUpdateStrategy
 			// FIXME Doesn't work this way, as ways have at least two resources
 			// So the hack is to simple remove any tagless items
 			if (entity.getTags().isEmpty()) {
+				result.add(entity);
+				continue;
+			}
+			
+			// Skip ways with too many nodes
+			if(entity instanceof Way) {
+				Way way = (Way)entity;
+				if(way.getWayNodes().size() > 20) {
+					result.add(entity);
+					continue;
+				}
+			}
+			
+			
+			boolean isRelevant = false;
+			for(Tag tag : entity.getTags()) {
+				if(relevanceFilter.evaluate(tag)) {
+					isRelevant = true;
+				}
+			}
+
+			if(isRelevant == false) {
 				result.add(entity);
 				continue;
 			}

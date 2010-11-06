@@ -280,7 +280,6 @@ public class LiveSync
 		diffStrategy = new IgnoreModifyDeleteDiffUpdateStrategy(
 				vocab, entityTransformer, graphDAO, graphName, rdfNodePositionDao);
 				*/
-		diffStrategy = new OptimizedDiffUpdateStrategy(vocab, entityTransformer, deltaGraph, rdfNodePositionDao);
 		
 
 		// Load the entity tag filter
@@ -289,6 +288,9 @@ public class LiveSync
 
 		EntityFilterPlugin entityFilterPlugin = new EntityFilterPlugin(new EntityFilter(entityTagFilter));
 		
+		diffStrategy = new OptimizedDiffUpdateStrategy(vocab, entityTransformer, deltaGraph, rdfNodePositionDao, entityTagFilter);
+		
+		
 		TagFilter tagFilter = new TagFilter();
 		tagFilter.load(new File(config.get("tagFilter")));
 		
@@ -296,6 +298,7 @@ public class LiveSync
 		
 		tagFilterPlugin.setChangeSink(diffStrategy);
 		entityFilterPlugin.setChangeSink(tagFilterPlugin);
+
 		
 		workFlow = entityFilterPlugin;
 	}
