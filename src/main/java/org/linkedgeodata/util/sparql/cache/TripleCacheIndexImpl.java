@@ -12,7 +12,9 @@ import java.util.Set;
 
 import org.apache.commons.collections15.map.LRUMap;
 import org.linkedgeodata.util.collections.CacheSet;
+import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Joiner;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.RDFNode;
@@ -50,12 +52,12 @@ class TripleCacheIndexImpl
 	 * Maps a pattern (e.g. s, null, null)
 	 * 
 	 */
-	private Map<List<Object>, Set<List<Object>>> full = new LRUMap<List<Object>,  Set<List<Object>>>();
-	private Map<List<Object>, Set<List<Object>>> partial = new LRUMap<List<Object>,  Set<List<Object>>>();
+	private Map<List<Object>, Set<List<Object>>> full;
+	private Map<List<Object>, Set<List<Object>>> partial;// = new LRUMap<List<Object>,  Set<List<Object>>>();
 	
 	
 	//private LRUMap<List<Object>, IndexTable>	keyToValues					= new LRUMap<List<Object>, IndexTable>();
-	private CacheSet<List<Object>>				noDataCache					= new CacheSet<List<Object>>();
+	private Set<List<Object>>				noDataCache;//					= new CacheSet<List<Object>>();
 
 	private int[]								indexColumns;
 	private int[]								valueColumns;
@@ -66,8 +68,48 @@ class TripleCacheIndexImpl
 	}
 
 	
-	public static void create(IGraph graph, int...indexColumns) throws Exception {
-		TripleCacheIndexImpl index = new TripleCacheIndexImpl(graph, indexColumns);
+	/*
+	public static Map<List<Object>, Set<List<Object>>> createMap(Integer maxSize)
+	{		
+		return (maxSize == null)
+			? new HashMap<List<Object>, Set<List<Object>>>()
+			: new LRUMap<List<Object>, Set<List<Object>>>(maxSize);
+	}
+	*/
+	
+	public static <K, V> Map<K, V> createMap(Integer maxSize)
+	{		
+		return (maxSize == null)
+			? new HashMap<K, V>()
+			: new LRUMap<K, V>(maxSize);
+	}
+	
+	public static <T> Set<T> createSet(Integer maxSize) {
+		return (maxSize == null)
+			? new HashSet<T>()
+			: new CacheSet<T>();
+	}
+	
+	
+	public static void create(IGraph graph,
+			Integer fullMaxSize,
+			Integer partialMaxSize,
+			Integer emptyMaxSize,
+			int...indexColumns
+	) throws Exception {
+		
+		
+		Map<List<Object>, Set<List<Object>>> full = createMap(fullMaxSize);
+		Map<List<Object>, Set<List<Object>>> partial = createMap(partialMaxSize);
+		Set<List<Object>> set = createSet(emptyMaxSize);
+		
+		TripleCacheIndexImpl index =
+			new TripleCacheIndexImpl(
+					graph,
+					indexColumns,
+					full,
+					partial,
+					set);
 
 		graph.getCacheProvider().getIndexes().add(index);
 	}
@@ -80,7 +122,12 @@ class TripleCacheIndexImpl
 	 * @param indexColumns
 	 * @throws Exception
 	 */
-	private TripleCacheIndexImpl(IGraph graph, int[] indexColumns)
+	private TripleCacheIndexImpl(
+			IGraph graph,
+			int[] indexColumns,
+			Map<List<Object>, Set<List<Object>>> full,
+			Map<List<Object>, Set<List<Object>>> partial,
+			Set<List<Object>>				noDataCache)
 			throws Exception
 	{
 		this.graph = graph;
@@ -88,6 +135,12 @@ class TripleCacheIndexImpl
 
 		this.valueColumns = TripleIndexUtils.getValueColumns(indexColumns);
 		// Delta deltaGraph = new Delta(baseGraph);
+		
+		this.full = full;
+		this.partial = partial;
+		this.noDataCache = noDataCache;
+
+		//new LRUMap<List<Object>,  Set<List<Object>>>();
 	}
 
 	public static RDFNode getItemAt(Statement stmt, int index)
@@ -187,6 +240,49 @@ class TripleCacheIndexImpl
 	public static Triple toTriple(Object[] array) {
 		return new Triple((Node)array[0], (Node)array[1], (Node)array[2]);
 	}
+
+	
+	void validate(List<Object> key)
+	{
+		boolean match = false;
+		if(key.get(0).toString().contains("Literary_collaborations/fold/3/phase/1/144")) {
+			match = true;
+			System.out.println("HERE");
+		}
+			
+		
+		Set<List<Object>> table = full.get(key);
+		if(table == null) {
+			
+			for(Map.Entry<List<Object>, Set<List<Object>>> entry : full.entrySet()) {
+				
+				for(int i = 0; i < entry.getKey().size(); ++i) {
+					
+					if(match && entry.getKey().get(i).toString().contains("Literary_collaborations/fold/3/phase/1/144")) {
+
+						System.out.println("DAMMIT");
+						System.out.println(key);
+						System.out.println(entry.getKey());
+						
+					}
+					/*
+					if(!key.get(i).toString().equals(entry.getKey().get(i).toString())) {
+						match = false;
+						break;
+					}*/
+				}
+
+				/*
+				if(match == true) {
+					System.out.println("DAMMIT");
+					System.out.println(key);
+					System.out.println(entry.getKey());
+				}*/
+			}
+			
+		}
+		
+	}
 	
 	/**
 	 * lookup: returns a possible empty set of triples
@@ -199,7 +295,6 @@ class TripleCacheIndexImpl
 	 */
 	@Override
 	public Collection<Triple> lookup(List<Object> key) {
-		
 		
 		Set<List<Object>> table = full.get(key);
 		if (table == null) {
@@ -492,6 +587,14 @@ class TripleCacheIndexImpl
 		noDataCache.clear();
 	}
 
+	
+	@Override
+	public String toString()
+	{
+		return
+			"Full/Partial/None: " + Joiner.on("/").join(full.size(), partial.size(), noDataCache.size());
+	}
+	
 	/**
 	 * Using ask it is possible to check for the existence of entries In this
 	 * case incomplete cache entries do not matter

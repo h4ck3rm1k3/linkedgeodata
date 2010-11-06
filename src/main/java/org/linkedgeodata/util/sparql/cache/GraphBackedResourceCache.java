@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -449,19 +450,49 @@ public class GraphBackedResourceCache
 		return "(" + collection.size() + ")" + collection;		
 	}
 
+	
+	public static Set<List<Object>> toKeys(Collection<Resource> resources) {
+		Set<List<Object>> result = new HashSet<List<Object>>();
+		
+		for(Resource item : resources) {
+			result.add(Collections.singletonList((Object)item.asNode()));
+		}
+		
+		return result;
+	}
+	
+	
 	public static void main(String[] args)
 		throws Exception
 	{
-		//TripleFilter filter = new TripleFilter("?s = <http://test.org>");
+		PropertyConfigurator.configure("log4j.properties");
 		
+		List<String> a = Arrays.asList("a");
+		List<String> b = new ArrayList<String>(a); 
+		List<String> c = new LinkedList<String>(a); 
+		List<String> d = Collections.singletonList("a");
+		
+		System.out.println(a.hashCode());
+		System.out.println(b.hashCode());
+		System.out.println(c.hashCode());
+		System.out.println(d.hashCode());
+		
+		//if(true)
+			//return;
+		
+		//TripleFilter filter = new TripleFilter("?s = <http://test.org>");
+		Random random = new Random(0);
+	
 		ISparqlExecutor tmpSparqlEndpoint = new SparqlEndpointExecutor("http://localhost:8890/sparql", "http://test.org");
 		
 		List<QuerySolution> qss = tmpSparqlEndpoint.executeSelect("Select Distinct ?s From <http://Exp3Random.log> {?s ?p ?o. }");
-		Set<Node> subjects = new HashSet<Node>(); 
+		Set<Resource> subjects = new HashSet<Resource>(); 
 		for(QuerySolution qs : qss) {
-			subjects.add(qs.get("s").asNode());
+			subjects.add(qs.getResource("s"));
 		}
 		
+		
+		//subjects = RandomUtils.randomSampleSet(subjects, 1000, random);
 		
 		
 		Model tmpModel = tmpSparqlEndpoint.executeConstruct("Construct {?s ?p ?o. } From <http://Exp3Random.log> {?s ?p ?o. }");
@@ -471,7 +502,7 @@ public class GraphBackedResourceCache
 		
 		SparqlEndpointFilteredGraph graph = new SparqlEndpointFilteredGraph(sparqlEndpoint);
 		
-		TripleCacheIndexImpl.create(graph, 0);
+		TripleCacheIndexImpl.create(graph, 100000, 100000, 100000, 0);
 		
 		
 		Node n = Node.createURI("http://nke/Exp3Random/Actors_from_Tennessee/fold/1/phase/1/5");
@@ -494,19 +525,26 @@ public class GraphBackedResourceCache
 		
 		System.out.println(myToString(qr));
 
-		
-		
-		/*
-		Random random = new Random(0);
-		for(int i = 0; i < 10000; ++i) {
-			Node subject = RandomUtils.randomItem(subjects, random);
+		System.out.println(deltaGraph.getBaseGraph());
+
+				///*
+		for(int i = 0; i < 100000; ++i) {
+			Set<Resource> resources = RandomUtils.randomSampleSet(subjects, 1000, random);
 			
-			List<Object> key = Collections.singletonList((Object)subject);
 			
-			Set<List<Object>> keys = Collections.singleton(key);
-			Set<Triple> triples = graph.bulkFind(keys, new int[]{0});
-		}*/
-		
+			Set<List<Object>> keys = toKeys(resources);
+			
+			logger.trace("Finding " + keys.size() + " keys");
+			Set<Triple> xxx = deltaGraph.bulkFind(keys, new int[]{0});
+			
+			//System.out.println(i + ": "+ deltaGraph.getBaseGraph());
+			
+			if(i % 1000 == 0) {
+				System.out.println(i + ": "+ deltaGraph.getBaseGraph());
+
+				//System.out.println("HERE");
+			}
+		}//*/
 		
 		
 		

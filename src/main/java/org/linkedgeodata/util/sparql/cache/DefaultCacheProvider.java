@@ -6,11 +6,17 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.hp.hpl.jena.graph.Triple;
 
 public class DefaultCacheProvider
 		implements ICacheProvider
 {
+	private static final Logger logger = LoggerFactory.getLogger(DefaultCacheProvider.class);
+	
+
 	private IGraph	graph;
 
 	public DefaultCacheProvider(IGraph graph)
@@ -34,7 +40,7 @@ public class DefaultCacheProvider
 	// FIXME: Deal with cache misses
 	@Override
 	public Set<Triple> bulkFind(Set<List<Object>> keys, int[] indexColumns)
-	{
+	{		
 		// Find the set of indexes that are fully compatbile with our columns
 		Set<ITripleCacheIndex> fullIndexes = new HashSet<ITripleCacheIndex>();
 		Set<ITripleCacheIndex> partialIndexes = new HashSet<ITripleCacheIndex>();
@@ -73,6 +79,8 @@ public class DefaultCacheProvider
 			}
 		}
 
+		
+		logger.trace("Cache hits: " + (keys.size() - remaining.size()));
 		
 		
 		Collection<Triple> furtherTriples = graph.uncachedBulkFind(remaining, indexColumns);
@@ -118,5 +126,16 @@ public class DefaultCacheProvider
 	public Collection<ITripleCacheIndex> getIndexes()
 	{
 		return tripleCacheIndexes;
+	}
+	
+	@Override
+	public String toString() {
+		String result = "";
+		
+		for(ITripleCacheIndex index : tripleCacheIndexes) {
+			result += index.toString() + "\n";
+		}
+		
+		return result;
 	}
 }

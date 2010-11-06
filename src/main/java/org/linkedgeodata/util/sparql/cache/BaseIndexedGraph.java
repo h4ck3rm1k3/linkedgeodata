@@ -63,4 +63,9 @@ public abstract class BaseIndexedGraph
 			listener.onRemove(this, triples);
 		}		
 	}
+	
+	@Override
+	public String toString() {
+		return "Index Status:\n" + getCacheProvider().toString();
+	}
 }

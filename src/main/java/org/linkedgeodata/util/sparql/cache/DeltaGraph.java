@@ -65,6 +65,10 @@ public class DeltaGraph
 		removalGraph.add(Collections.singleton(triple));
 	}
 
+	public IGraph getBaseGraph()
+	{
+		return baseGraph;
+	}
 	
 	public IGraph getAdditionGraph()
 	{
@@ -104,6 +108,12 @@ public class DeltaGraph
 	}*/
 
 	
+	/**
+	 * FIXME: Uncached bulkFind does NOT mean, that no caches will be used.
+	 * It only means that the caches of the called graph object will not be
+	 * used.
+	 * 
+	 */
 	@Override
 	public Set<Triple> uncachedBulkFind(Set<List<Object>> keys,
 			int[] indexColumns)
@@ -124,7 +134,7 @@ public class DeltaGraph
 		Set<Triple> addTriples = additionGraph.bulkFind(keys, indexColumns);
 		Set<Triple> removalTriples = removalGraph.bulkFind(keys, indexColumns); 
 		
-		Set<Triple> result = baseGraph.uncachedBulkFind(keys, indexColumns);
+		Set<Triple> result = baseGraph.bulkFind(keys, indexColumns);
 		
 		result.removeAll(removalTriples);
 		result.addAll(addTriples);

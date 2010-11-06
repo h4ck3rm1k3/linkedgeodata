@@ -1,7 +1,9 @@
 package org.linkedgeodata.util.sparql.cache;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -49,8 +51,16 @@ public class TripleIndexUtils
 			array[i] = TripleUtils.get(triple, indexes[i]);
 		}
 
-		List<Object> result = Arrays.asList(array);
-		return result;
+		if(array.length == 1) {
+			return Collections.singletonList(array[0]);
+		} else {
+			List<Object> result = new ArrayList<Object>();
+			for(Object item : array) {
+				result.add(item);
+			}
+			
+			return result;
+		}
 	}
 	
 	

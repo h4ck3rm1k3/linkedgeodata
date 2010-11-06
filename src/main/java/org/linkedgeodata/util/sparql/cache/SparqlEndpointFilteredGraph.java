@@ -2,15 +2,15 @@ package org.linkedgeodata.util.sparql.cache;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.NotImplementedException;
 import org.linkedgeodata.osm.osmosis.plugins.LgdSparqlTasks;
-import org.linkedgeodata.util.sparql.ISparqlExecutor;
 import org.linkedgeodata.util.sparql.ISparulExecutor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Multimap;
@@ -46,6 +46,8 @@ public class SparqlEndpointFilteredGraph
 		extends BaseIndexedGraph
 		implements IGraphListener
 {
+	private static final Logger logger = LoggerFactory.getLogger(SparqlEndpointFilteredGraph.class);
+	
 	private Query			filterQuery;
 	private String			filter;
 
@@ -186,7 +188,12 @@ public class SparqlEndpointFilteredGraph
 
 	@Override
 	public Set<Triple> uncachedBulkFind(Set<List<Object>> keys, int[] indexColumns)
-	{		
+	{
+		if(keys.isEmpty()) {
+			return new HashSet<Triple>();
+		}
+		
+		
 		String[] names = { "?s", "?p", "?o" };
 
 		List<String> columnNames = new ArrayList<String>();
@@ -203,12 +210,14 @@ public class SparqlEndpointFilteredGraph
 	//private Multimap<List<Object>, List<Object>> uncachedBulkFind(Collection<List<Object>> keys, List<String> columnNames)
 	private Set<Triple> uncachedBulkFind(Set<List<Object>> keys, List<String> columnNames)
 	{
+		logger.trace("Fetching triples for " + keys.size() + " keys");
+		
 		List<String> filters = filterCompiler.compileFilter(keys, columnNames);
 
-		String partitionFilter = Joiner.on("),(").join(filters);
+		String partitionFilter = Joiner.on(") || (").join(filters);
 
 		if (!partitionFilter.isEmpty()) {
-			partitionFilter = "\tFilter(" + partitionFilter + ") .\n";
+			partitionFilter = "\tFilter((" + partitionFilter + ")) .\n";
 		}
 
 		String masterFilter = (filter == null) ? "" : "Filter(" + filter
