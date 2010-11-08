@@ -10,6 +10,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.collections15.map.LRUMap;
+import org.linkedgeodata.util.collections.CacheSet;
+
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Resource;
 
@@ -148,5 +151,18 @@ public class TripleIndexUtils
 		}
 
 		return result;
+	}
+	
+	public static <K, V> Map<K, V> createMap(Integer maxSize)
+	{		
+		return (maxSize == null)
+			? new HashMap<K, V>()
+			: new LRUMap<K, V>(maxSize);
+	}
+	
+	public static <T> Set<T> createSet(Integer maxSize) {
+		return (maxSize == null)
+			? new HashSet<T>()
+			: new CacheSet<T>();
 	}
 }

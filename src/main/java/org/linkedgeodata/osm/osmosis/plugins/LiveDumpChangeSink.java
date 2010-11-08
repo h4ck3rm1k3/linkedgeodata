@@ -2,7 +2,7 @@ package org.linkedgeodata.osm.osmosis.plugins;
 
 import java.sql.SQLException;
 
-import org.linkedgeodata.dao.nodestore.NodePositionDAO;
+import org.linkedgeodata.dao.nodestore.INodePositionDao;
 import org.linkedgeodata.scripts.LiveSync;
 import org.linkedgeodata.util.IDiff;
 import org.linkedgeodata.util.sparql.ISparulExecutor;
@@ -25,13 +25,13 @@ public class LiveDumpChangeSink
 	private int maxEntityCount = 1024;
 	
 	private String graphName;
-	private NodePositionDAO nodePositionDao;
+	private INodePositionDao nodePositionDao;
 	private ISparulExecutor sparqlEndpoint;
 	
 	
 	private long totalEntityCount = 0;
 	
-	public LiveDumpChangeSink(IUpdateStrategy strategy, String graphName, ISparulExecutor sparqlEndpoint, NodePositionDAO nodePositionDao)
+	public LiveDumpChangeSink(IUpdateStrategy strategy, String graphName, ISparulExecutor sparqlEndpoint, INodePositionDao nodePositionDao)
 	{
 		this.strategy = strategy;
 		this.graphName = graphName;
@@ -39,7 +39,7 @@ public class LiveDumpChangeSink
 		this.nodePositionDao = nodePositionDao;
 	}
 
-	public LiveDumpChangeSink(IUpdateStrategy strategy, String graphName, ISparulExecutor sparqlEndpoint, NodePositionDAO nodePositionDao, int maxEntityCount)
+	public LiveDumpChangeSink(IUpdateStrategy strategy, String graphName, ISparulExecutor sparqlEndpoint, INodePositionDao nodePositionDao, int maxEntityCount)
 	{
 		this.strategy = strategy;
 		this.graphName = graphName;

@@ -1,5 +1,13 @@
 package org.linkedgeodata.util.sparql.cache;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+import org.apache.commons.collections15.map.LRUMap;
+import org.linkedgeodata.util.collections.CacheSet;
+
 import com.hp.hpl.jena.graph.Graph;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;

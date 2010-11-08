@@ -17,7 +17,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
 
 public class RDFNodePositionDAO
 {
-	private NodePositionDAO delegate;
+	private INodePositionDao delegate;
 	private INodeMapper nodeMapper;
 	private ILGDVocab vocab;
 	
@@ -32,7 +32,7 @@ public class RDFNodePositionDAO
 		return Long.parseLong(matcher.group(1));
 	}
 
-	public RDFNodePositionDAO(NodePositionDAO delegate, ILGDVocab vocab, INodeMapper nodeMapper)
+	public RDFNodePositionDAO(INodePositionDao delegate, ILGDVocab vocab, INodeMapper nodeMapper)
 	{
 		this.delegate = delegate;
 		this.vocab = vocab;

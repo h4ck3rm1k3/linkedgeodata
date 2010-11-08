@@ -7,19 +7,87 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
-import org.linkedgeodata.dao.AbstractDAO;
+import org.jboss.cache.util.AbstractBulkMap;
+import org.jboss.cache.util.IBulkMap;
+import org.linkedgeodata.dao.ISQLDAO;
 import org.linkedgeodata.util.SQLUtil;
 import org.linkedgeodata.util.StringUtil;
+import org.linkedgeodata.util.sparql.cache.TripleIndexUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 
 
+class CacheBulkMap<K, V>
+	extends AbstractBulkMap<K, V> 
+{
+	private IBulkMap<K, V> baseMap;
+	private Map<K, V> cachedValues;
+	private Set<Object> exclude;
+	
+	
+	public CacheBulkMap(IBulkMap<K, V> baseMap, Map<K, V> cachedValues, Set<Object> exclude)
+	{
+		this.baseMap = baseMap;
+		this.cachedValues = cachedValues;
+		this.exclude = exclude;
+	}
+
+	public static <K, V> CacheBulkMap<K, V> create(IBulkMap<K, V> baseMap, Integer maxCacheSize, Integer maxExcludeSize)
+	{
+		return new CacheBulkMap<K, V>(
+				baseMap,
+				TripleIndexUtils.<K, V>createMap(maxCacheSize),
+				TripleIndexUtils.<Object>createSet(maxExcludeSize));
+	}
+	
+	public void putAll(Map<? extends K, ? extends V> map)
+	{
+		baseMap.putAll(map);
+		exclude.removeAll(map.keySet());
+		cachedValues.putAll(map);
+	}
+	
+	public void removeAll(Collection<?> keys) {
+		for(Object key : keys) {
+			cachedValues.remove(key);
+			exclude.add(key);
+		}
+	}
+	
+	public Map<K, V> getAll(Collection<?> keys)
+	{
+		Map<K, V> result = new HashMap<K, V>();
+		
+		Set<K> remainingKeys = new HashSet<K>();
+
+		// Perform a lookup on the cache
+		for(Object key : keys) {
+			if(exclude.contains(key)) {
+				continue;
+			} else if(cachedValues.containsKey(key)) {
+				result.put((K)key, cachedValues.get(key));
+			} else {
+				remainingKeys.add((K)key);
+			}
+		}
+		
+		Map<K, V> tmp = baseMap.getAll(remainingKeys);
+		
+		cachedValues.putAll(tmp);
+		result.putAll(tmp);
+		
+		return result;
+	}
+}
 
 
 /**
@@ -35,15 +103,17 @@ import com.google.common.collect.Iterables;
  * Fortunately, this data can be queried from the triple store.
  * 
  * 
- * 
- * 
- * 
  * @author raven
  *
  */
 public class NodePositionDAO
-	extends AbstractDAO
+	extends AbstractBulkMap<Long, Point2D>
+	implements ISQLDAO
+	//extends AbstractDAO
+	//implements IBulkMap<Long, Point2D>
 {
+	private Connection conn;
+	
 	private static final Logger logger = LoggerFactory.getLogger(NodePositionDAO.class);
 	
 	private String tableName;
@@ -66,7 +136,7 @@ public class NodePositionDAO
 	public void setConnection(Connection conn)
 		throws SQLException
 	{
-		super.setConnection(conn);
+		this.conn = conn;
 		
 		try {
 			createTable();
@@ -78,40 +148,56 @@ public class NodePositionDAO
 	
 	
 	
-	public Map<Long, Point2D> lookup(Collection<Long> ids)
-		throws SQLException
+	/* (non-Javadoc)
+	 * @see org.linkedgeodata.dao.nodestore.INodePositionDao#lookup(java.util.Collection)
+	 */
+	@Override
+	public Map<Long, Point2D> getAll(Collection<?> ids)
 	{
 		Map<Long, Point2D> result = new HashMap<Long, Point2D>();
 		if(ids.isEmpty())
 			return result;
 		
-		Iterable<List<Long>> partitions = Iterables.partition(ids, 512);
-		for(List<Long> partition : partitions) {
+		List<Object> lids = new ArrayList<Object>(ids);
+		
+		Iterable<List<Object>> partitions = Lists.partition(lids, 512);
+		for(List<Object> partition : partitions) {
 			String sql = "SELECT node_id, longitude, latitude FROM " + tableName + " WHERE node_id IN (" + StringUtil.implode(",", partition)+ ")"; 
 			logger.trace(sql);
 		
-			ResultSet rs = SQLUtil.executeCore(conn, sql);
+			ResultSet rs = null;
 			try {
+				rs = SQLUtil.executeCore(conn, sql);
 				while(rs.next()) {
 					result.put(rs.getLong(1), new Point2D.Double(rs.getDouble(2), rs.getDouble(3)));
 				}
-			} finally {
-				rs.close();
+			} catch(Exception e) {
+				throw new RuntimeException(e);
+			}
+			finally {
+				try {
+					rs.close();
+				}
+				catch(Exception e1){
+				}
 			}
 		}
 		
 		return result;
 	}
 	
-	public void updateOrInsert(Map<Long, Point2D> idToPosition)
-		throws SQLException
+	/* (non-Javadoc)
+	 * @see org.linkedgeodata.dao.nodestore.INodePositionDao#updateOrInsert(java.util.Map)
+	 */
+	@Override
+	public void putAll(Map<? extends Long, ? extends Point2D> idToPosition)
 	{
-		Map<Long, Point2D> lookups = lookup(idToPosition.keySet());
+		Map<Long, Point2D> lookups = getAll(idToPosition.keySet());
 		
 		Map<Long, Point2D> inserts = new HashMap<Long, Point2D>();
 		Map<Long, Point2D> updates = new HashMap<Long, Point2D>();
 		
-		for(Map.Entry<Long, Point2D> entry : idToPosition.entrySet()) {
+		for(Map.Entry<? extends Long, ? extends Point2D> entry : idToPosition.entrySet()) {
 			Point2D p = lookups.get(entry.getKey());
 			
 			if(p == null) {
@@ -127,7 +213,11 @@ public class NodePositionDAO
 			String sql = "INSERT INTO " + tableName + "(node_id, longitude, latitude) VALUES " + mapToSQL(partition);
 			logger.trace(sql);
 			//	System.out.println(sql);
-			SQLUtil.execute(conn, sql, Void.class);
+			try {
+				SQLUtil.execute(conn, sql, Void.class);
+			} catch(Exception e) {
+				logger.error("Error during insert", e);
+			}
 		}
 
 		/*
@@ -142,7 +232,11 @@ WHERE tbl_1.id = t.id;
 		for(List<Map.Entry<Long, Point2D>> partition : updatePartitions) {
 			String sql = "UPDATE " + tableName + " SET longitude = t.longitude, latitude = t.latitude FROM (VALUES" + mapToSQL(partition) + ") AS t(node_id, longitude, latitude) WHERE " + tableName + ".node_id = t.node_id";    		
 			logger.trace(sql);
-			SQLUtil.execute(conn, sql, Void.class);
+			try {
+				SQLUtil.execute(conn, sql, Void.class);
+			} catch(Exception e) {
+				logger.error("Error during update", e);
+			}
 		}
 		
 		//String sql = "INSERT INTO node_position_tmp(node_id, latitude, longitude) VALUES (" + mapToSQL(idToPosition) + ")";
@@ -179,8 +273,11 @@ WHERE tbl_1.id = t.id;
 	
 	
 	
-	public void remove(Collection<Long> ids)
-		throws SQLException
+	/* (non-Javadoc)
+	 * @see org.linkedgeodata.dao.nodestore.INodePositionDao#remove(java.util.Collection)
+	 */
+	@Override
+	public void removeAll(Collection<?> ids)
 	{
 		if(ids.isEmpty())
 			return;
@@ -190,7 +287,18 @@ WHERE tbl_1.id = t.id;
 		
 		String sql = "DELETE FROM " + tableName + " WHERE node_id IN (" + idStr + ")"; 
 		logger.trace(sql);
-		SQLUtil.execute(conn, sql, Void.class);
+		try {
+			SQLUtil.execute(conn, sql, Void.class);
+		} catch(Exception e) {
+			logger.error("Error during removal", e);
+		}
+	}
+
+
+	@Override
+	public Connection getConnection()
+	{
+		return conn;
 	}
 
 	/*

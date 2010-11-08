@@ -24,6 +24,7 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -140,7 +141,7 @@ public class OptimizedDiffUpdateStrategy
 		//this.sparqlEndpoint = sparqlEndpoint;
 		this.nodePositionDAO = nodePositionDAO;
 		// this.nodeGraphName = nodeGraphName;
-		
+		this.tagRelevanceFilter = tagRelevanceFilter;
 		
 		this.linePolygonGraph = ((SparqlEndpointFilteredGraph)deltaGraph.getBaseGraph()).createSubGraph(LgdSparqlTasks.toString(GeoRSS.line,  GeoRSS.polygon));
 		this.pointGraph = ((SparqlEndpointFilteredGraph)deltaGraph.getBaseGraph()).createSubGraph(LgdSparqlTasks.toString(GeoRSS.point));
@@ -265,6 +266,31 @@ public class OptimizedDiffUpdateStrategy
 		long start = System.nanoTime();
 
 		//Set<Resource> createdNodesResources = GraphDAORDFEntityDAO.getInvolvedResources(createdNodes, vocab);
+		
+		// Clean up entities
+		// Entities that were created but are irrelevant are simply ignored
+		Iterator<Way> wayIt = createdWays.iterator();
+		while(wayIt.hasNext()) {
+			Way e = wayIt.next();
+			
+			if(reject(e, tagRelevanceFilter)) {
+				wayIt.remove();
+			}
+		}
+		
+		// Ways that are modified but irrelevant become deleted
+		wayIt = modifiedWays.iterator();
+		while(wayIt.hasNext()) {
+			Way e = wayIt.next();
+			
+			if(reject(e, tagRelevanceFilter)) {
+				wayIt.remove();
+				deletedWays.add((Way)e);
+			}
+		}
+		
+		logger.info("" + ((System.nanoTime() - start) / 1000000000.0) + " Completed cleaning entities. Created/Modified/Deleted = " + createdEntities.size() + "/" + modifiedEntities.size() + "/" + deletedEntities.size()); 
+		
 		
 		
 		Set<Resource> createdResources = GraphDAORDFEntityDAO.getInvolvedResources(createdEntities, vocab);
@@ -768,6 +794,38 @@ public class OptimizedDiffUpdateStrategy
 		logger.info("" + ((System.nanoTime() - start) / 1000000000.0) + " Completed processing of entities");
 	}
 
+	public DeltaGraph getDeltaGraph()
+	{
+		return deltaGraph;
+	}
+	
+	
+	
+	public boolean reject(Entity entity, Predicate<Tag> relevanceFilter)
+	{		
+		// Skip irrelevant ways or ways with too many nodes 
+		if(entity instanceof Way) {
+			Way way = (Way)entity;
+
+			return
+				(way.getWayNodes().size() > 20) ||
+				(!isRelevant(way, relevanceFilter));
+		}
+		
+		return false;
+	}
+	
+	public static boolean isRelevant(Entity entity, Predicate<Tag> relevanceFilter)
+	{
+		for(Tag tag : entity.getTags()) {
+			if(relevanceFilter.evaluate(tag)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
 	/*
 	 * public static boolean isTaglessNode(Entity entity) { if(!(entity
 	 * instanceof Node)) return false;
@@ -800,21 +858,16 @@ public class OptimizedDiffUpdateStrategy
 			if(entity instanceof Way) {
 				Way way = (Way)entity;
 				if(way.getWayNodes().size() > 20) {
-					result.add(entity);
+					//result.add(entity);
 					continue;
 				}
 			}
 			
-			
-			boolean isRelevant = false;
-			for(Tag tag : entity.getTags()) {
-				if(relevanceFilter.evaluate(tag)) {
-					isRelevant = true;
-				}
-			}
 
-			if(isRelevant == false) {
-				result.add(entity);
+			if(!isRelevant(entity, relevanceFilter)) {
+				if(entity instanceof Node) {
+					result.add(entity);
+				}
 				continue;
 			}
 

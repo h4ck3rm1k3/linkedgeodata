@@ -77,18 +77,6 @@ public class TripleCacheIndexImpl
 	}
 	*/
 	
-	public static <K, V> Map<K, V> createMap(Integer maxSize)
-	{		
-		return (maxSize == null)
-			? new HashMap<K, V>()
-			: new LRUMap<K, V>(maxSize);
-	}
-	
-	public static <T> Set<T> createSet(Integer maxSize) {
-		return (maxSize == null)
-			? new HashSet<T>()
-			: new CacheSet<T>();
-	}
 	
 	
 	public static void create(IGraph graph,
@@ -99,9 +87,9 @@ public class TripleCacheIndexImpl
 	) throws Exception {
 		
 		
-		Map<List<Object>, Set<List<Object>>> full = createMap(fullMaxSize);
-		Map<List<Object>, Set<List<Object>>> partial = createMap(partialMaxSize);
-		Set<List<Object>> set = createSet(emptyMaxSize);
+		Map<List<Object>, Set<List<Object>>> full = TripleIndexUtils.createMap(fullMaxSize);
+		Map<List<Object>, Set<List<Object>>> partial = TripleIndexUtils.createMap(partialMaxSize);
+		Set<List<Object>> set = TripleIndexUtils.createSet(emptyMaxSize);
 		
 		TripleCacheIndexImpl index =
 			new TripleCacheIndexImpl(
