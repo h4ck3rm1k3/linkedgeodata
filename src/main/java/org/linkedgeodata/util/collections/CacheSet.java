@@ -235,9 +235,15 @@ public class CacheSet<K>
 	}
 
 	@Override
-	public boolean removeAll(Collection<?> arg0)
+	public boolean removeAll(Collection<?> items)
 	{
-		throw new RuntimeException("Not implemented yet.");
+		boolean result = false;
+		for(Object item : items) {
+			result = result || remove(item);
+		}
+		
+		return result;
+		//throw new RuntimeException("Not implemented yet.");
 	}
 
 	@Override

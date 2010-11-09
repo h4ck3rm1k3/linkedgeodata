@@ -10,17 +10,17 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.jboss.cache.util.AbstractBulkMap;
+import org.jboss.cache.util.IBulkMap;
 import org.linkedgeodata.core.ILGDVocab;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
 
+
 public class RDFNodePositionDAO
+	extends AbstractBulkMap<Resource, Point2D>
 {
-	private INodePositionDao delegate;
-	private INodeMapper nodeMapper;
-	private ILGDVocab vocab;
-	
 	private static Pattern pattern = Pattern.compile("node[^0-9]*(\\d+)");
 
 	public static Long resourceToId(Resource res)
@@ -32,15 +32,7 @@ public class RDFNodePositionDAO
 		return Long.parseLong(matcher.group(1));
 	}
 
-	public RDFNodePositionDAO(INodePositionDao delegate, ILGDVocab vocab, INodeMapper nodeMapper)
-	{
-		this.delegate = delegate;
-		this.vocab = vocab;
-		this.nodeMapper = nodeMapper;
-	}
-
-	
-	private Collection<Long> getIds(Collection<Resource> resources)
+	private static Collection<Long> getIds(Collection<Resource> resources)
 	{
 		Set<Long> result = new HashSet<Long>();
 		for(Resource resource : resources) {
@@ -53,6 +45,38 @@ public class RDFNodePositionDAO
 		return result;
 	}
 	
+
+	
+	public static Map<Resource, Point2D> getAll(IBulkMap<Long, Point2D> map, ILGDVocab vocab, Collection<Resource> resources)
+	{
+		Collection<Long> ids = getIds(resources);
+
+		Map<Long, Point2D> tmp = map.getAll(ids);
+		
+		
+		Map<Resource, Point2D> result = new HashMap<Resource, Point2D>();
+		for(Map.Entry<Long, Point2D> entry : tmp.entrySet()) {
+			result.put(vocab.createNIRNodeURI(entry.getKey()), entry.getValue()); 
+		}
+		
+		
+		return result;
+	}	
+	
+	
+	/*
+	private INodePositionDao delegate;
+	private IBulkMap<Long, Point2D> nodeMapper;
+	private ILGDVocab vocab;
+	
+
+	public RDFNodePositionDAO(INodePositionDao delegate, ILGDVocab vocab, IBulkMap<Long, Point2D> nodeMapper)
+	{
+		this.delegate = delegate;
+		this.vocab = vocab;
+		this.nodeMapper = nodeMapper;
+	}
+
 	
 	public void insert(Model model)
 		throws SQLException
@@ -86,8 +110,8 @@ public class RDFNodePositionDAO
 		nodeMapper.transform(tmp, out);
 	}
 
-	public Map<Resource, Point2D> lookup(Collection<Resource> resources)
-		throws SQLException
+	@Override
+	public Map<Resource, Point2D> getAll(Collection<?> resources)
 	{
 		Collection<Long> ids = getIds(resources);
 
@@ -102,5 +126,7 @@ public class RDFNodePositionDAO
 		
 		return result;
 	}
+	*/
+	
 }
 

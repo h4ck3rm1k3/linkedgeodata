@@ -87,8 +87,8 @@ public class LiveRDFDeltaPlugin
 		ITransformer<Entity, Model> entityTransformer =
 			new OSMEntityToRDFTransformer(tagMapper, vocab);
 		
-		IUpdateStrategy updateStrategy = new IgnoreModifyDeleteDiffUpdateStrategy(
-				vocab, entityTransformer, graphDAO, graphName, null);
+		//IUpdateStrategy updateStrategy = new IgnoreModifyDeleteDiffUpdateStrategy(
+		//		vocab, entityTransformer, graphDAO, graphName, null);
 		
 		this.updateStrategy = updateStrategy;		
 	}

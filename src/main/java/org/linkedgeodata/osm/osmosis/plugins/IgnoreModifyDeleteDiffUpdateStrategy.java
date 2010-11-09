@@ -78,15 +78,6 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 import com.hp.hpl.jena.vocabulary.RDF;
 
-class SetMultiHashMap<K, V>
-		extends MultiHashMap<K, V>
-{
-	@Override
-	protected Set<V> createCollection(Collection<? extends V> col)
-	{
-		return (col == null) ? new HashSet<V>() : new HashSet<V>(col);
-	}
-}
 
 /**
  * TODO Move elsewhere Notes on the nodegraph:
@@ -315,68 +306,8 @@ class LGDCache
  */
 
 
-class SetDiff<T>
-	extends CollectionDiff<T, Set<T>>
-{
-	public SetDiff(Set<T> newItems, Set<T> oldItems)
-	{
-		super(
-				Sets.difference(newItems, oldItems),
-				Sets.difference(oldItems, newItems),
-				Sets.intersection(newItems, oldItems)
-		);
-	}
-	
-	public SetDiff(Set<T> added, Set<T> removed, Set<T> retained)
-	{
-		super(added, removed, retained);
-	}
-
-}
 
 
-class HashSetDiff<T>
-	extends CollectionDiff<T, Set<T>>
-{
-	public HashSetDiff()
-	{
-		super(new HashSet<T>(), new HashSet<T>(), new HashSet<T>());
-	}
-}
-
-
-
-abstract class CollectionDiff<T, C extends Collection<T>>
-		extends Diff<C>
-{
-	public CollectionDiff(C added, C removed, C retained)
-	{
-		super(added, removed, retained);
-	}
-
-	public void add(T item)
-	{
-		getRemoved().remove(item);
-		getAdded().add(item);
-	}
-
-	public void remove(T item)
-	{
-		getAdded().remove(item);
-		getRemoved().add(item);
-	}
-
-	public void clear()
-	{
-		getAdded().clear();
-		getRemoved().clear();
-	}
-
-	public int size()
-	{
-		return getAdded().size() + getRemoved().size();
-	}
-}
 
 /**
  * FIXME Implement a class like this in a revised version of the LiveSync. For

@@ -4,7 +4,7 @@ import java.awt.geom.Point2D;
 
 import org.linkedgeodata.core.ILGDVocab;
 import org.linkedgeodata.core.vocab.GeoRSS;
-import org.linkedgeodata.osm.osmosis.plugins.IgnoreModifyDeleteDiffUpdateStrategy;
+import org.linkedgeodata.osm.osmosis.plugins.LgdRdfUtils;
 
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
@@ -25,7 +25,8 @@ public class GeoRSSNodeMapper
 
 	protected Point2D toPoint(RDFNode node)
 	{
-		return IgnoreModifyDeleteDiffUpdateStrategy
+		
+		return LgdRdfUtils
 				.tryParseGeoRSSPointValue(node.asNode().getLiteralLexicalForm());
 	}
 

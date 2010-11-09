@@ -35,6 +35,9 @@ import org.aksw.commons.jena.ModelSetView;
 import org.apache.commons.collections15.MultiMap;
 import org.apache.commons.collections15.Predicate;
 import org.apache.log4j.Logger;
+import org.jboss.cache.util.DeltaBulkMap;
+import org.jboss.cache.util.SetDiff;
+import org.jboss.cache.util.SetMultiHashMap;
 import org.linkedgeodata.core.ILGDVocab;
 import org.linkedgeodata.core.vocab.GeoRSS;
 import org.linkedgeodata.core.vocab.WGS84Pos;
@@ -82,7 +85,7 @@ public class OptimizedDiffUpdateStrategy
 	
 	
 
-	private RDFNodePositionDAO			nodePositionDAO;
+	private DeltaBulkMap<Long, Point2D>			nodePositionDAO;
 	private ITransformer<Model, Model>	postProcessTransformer	= new VirtuosoStatementNormalizer();
 
 	// The purpose of the following two attributes is to hold the step-result
@@ -132,7 +135,7 @@ public class OptimizedDiffUpdateStrategy
 			ILGDVocab vocab,
 			ITransformer<Entity, Model> entityTransformer,
 			DeltaGraph deltaGraph,
-			RDFNodePositionDAO nodePositionDAO,
+			DeltaBulkMap<Long, Point2D> nodePositionDAO,
 			Predicate<Tag> tagRelevanceFilter) throws Exception
 	{
 		this.vocab = vocab;
@@ -555,7 +558,7 @@ public class OptimizedDiffUpdateStrategy
 		// Check the node store for additional node positions
 		// For all unindexed nodes that do not have a position yet, try
 		// to retrieve them from the nodePositionDAO
-		Map<Resource, Point2D> nodePositionDAOLookups = nodePositionDAO.lookup(unindexedNodes);
+		Map<Resource, Point2D> nodePositionDAOLookups = RDFNodePositionDAO.getAll(nodePositionDAO, vocab, unindexedNodes);
 		for(Map.Entry<Resource, Point2D> entry : nodePositionDAOLookups.entrySet()) {
 			Resource resource = entry.getKey();
 			Point2D point = entry.getValue();

@@ -12,8 +12,8 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 
 /**
- * This is a slightly modified version of the DeltaMap found in
- * org.jboss.cache.util.DeltaMap.
+ * This is a slightly modified version of the DeltaBulkMap found in
+ * org.jboss.cache.util.DeltaBulkMap.
  * 
  * This difference is, that there is a bulkGet method.
  * (So that multiple lookups could be packed into one query in the case of
@@ -33,7 +33,7 @@ import java.util.Set;
  * <pre>
  * HashMap&lt;String, String&gt; hm = new HashMap&lt;String, String&gt;();
  * hm.put(&quot;a&quot;, &quot;apple&quot;);
- * DeltaMap&lt;String, String&gt; dm = DeltaMap.create(hm);
+ * DeltaBulkMap&lt;String, String&gt; dm = DeltaBulkMap.create(hm);
  * dm.remove(&quot;a&quot;);
  * assert hm.containsKey(&quot;a&quot;);
  * assert !dm.containsKey(&quot;a&quot;);
@@ -47,7 +47,7 @@ import java.util.Set;
  * @param <V>
  *            value type
  */
-public class DeltaMap<K, V>
+public class DeltaBulkMap<K, V>
 		extends AbstractMap<K, V>
 		implements IBulkMap<K, V>
 {
@@ -68,9 +68,9 @@ public class DeltaMap<K, V>
 	private Map<K, V>	changed	= new HashMap<K, V>();
 
 	/**
-	 * Constructs a new DeltaMap.
+	 * Constructs a new DeltaBulkMap.
 	 */
-	private DeltaMap(IBulkMap<K, V> original, Set<K> exclude)
+	private DeltaBulkMap(IBulkMap<K, V> original, Set<K> exclude)
 	{
 		if (original == null)
 			throw new NullPointerException("original");
@@ -81,29 +81,29 @@ public class DeltaMap<K, V>
 	}
 
 	/**
-	 * Creates and returns a DeltaMap for an original map.
+	 * Creates and returns a DeltaBulkMap for an original map.
 	 * 
 	 * @param original
 	 *            will not be modified, except by {@link #commit()}
 	 * @return a new instance
 	 */
-	public static <K, V> DeltaMap<K, V> create(IBulkMap<K, V> original)
+	public static <K, V> DeltaBulkMap<K, V> create(IBulkMap<K, V> original)
 	{
-		return new DeltaMap<K, V>(original, new HashSet<K>());
+		return new DeltaBulkMap<K, V>(original, new HashSet<K>());
 	}
 
 	/**
-	 * Creates and returns a DeltaMap for an empty map.
+	 * Creates and returns a DeltaBulkMap for an empty map.
 	 * 
 	 * @return a new instance
 	 */
-	public static <K, V> DeltaMap<K, V> create()
+	public static <K, V> DeltaBulkMap<K, V> create()
 	{
 		return create(new BulkMapWrapper<K, V>(new HashMap<K, V>(0)));
 	}
 
 	/**
-	 * Creates and returns a DeltaMap for an original map, excluding some key
+	 * Creates and returns a DeltaBulkMap for an original map, excluding some key
 	 * mappings.
 	 * 
 	 * @param original
@@ -112,17 +112,17 @@ public class DeltaMap<K, V>
 	 *            entries not to include
 	 * @return a new instance
 	 */
-	public static <K, V> DeltaMap<K, V> excludeKeys(IBulkMap<K, V> original,
+	public static <K, V> DeltaBulkMap<K, V> excludeKeys(IBulkMap<K, V> original,
 			Set<K> exclude)
 	{
-		return new DeltaMap<K, V>(original, exclude);
+		return new DeltaBulkMap<K, V>(original, exclude);
 	}
 
 	/**
-	 * Creates and returns a DeltaMap for an original map, excluding some key
+	 * Creates and returns a DeltaBulkMap for an original map, excluding some key
 	 * mappings.
 	 */
-	public static <K, V> DeltaMap<K, V> excludeKeys(IBulkMap<K, V> original,
+	public static <K, V> DeltaBulkMap<K, V> excludeKeys(IBulkMap<K, V> original,
 			K... exclude)
 	{
 		return excludeKeys(original, new HashSet<K>(Arrays.asList(exclude)));
@@ -142,7 +142,7 @@ public class DeltaMap<K, V>
 			@Override
 			public int size()
 			{
-				return DeltaMap.this.size();
+				return DeltaBulkMap.this.size();
 			}
 
 		};
@@ -223,7 +223,8 @@ public class DeltaMap<K, V>
 	 */
 	public void commit()
 	{
-		original.keySet().removeAll(exclude);
+		//original.keySet().removeAll(exclude);
+		original.removeAll(exclude);
 		original.putAll(changed);
 		exclude.clear();
 		changed.clear();
@@ -296,7 +297,7 @@ public class DeltaMap<K, V>
 
 		public void remove()
 		{
-			DeltaMap.this.remove(next.getKey());
+			DeltaBulkMap.this.remove(next.getKey());
 		}
 
 	}
@@ -306,7 +307,7 @@ public class DeltaMap<K, V>
 	 */
 	public String toDebugString()
 	{
-		return "DeltaMap original=" + original + " exclude=" + exclude
+		return "DeltaBulkMap original=" + original + " exclude=" + exclude
 				+ " changed=" + changed;
 	}
 

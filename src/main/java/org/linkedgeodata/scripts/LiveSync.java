@@ -29,11 +29,12 @@ import org.apache.commons.cli.Options;
 import org.apache.log4j.PropertyConfigurator;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.jboss.cache.util.CacheBulkMap;
+import org.jboss.cache.util.DeltaBulkMap;
 import org.linkedgeodata.core.ILGDVocab;
 import org.linkedgeodata.core.LGDVocab;
 import org.linkedgeodata.dao.nodestore.GeoRSSNodeMapper;
 import org.linkedgeodata.dao.nodestore.NodePositionDAO;
-import org.linkedgeodata.dao.nodestore.RDFNodePositionDAO;
 import org.linkedgeodata.osm.mapping.IOneOneTagMapper;
 import org.linkedgeodata.osm.mapping.InMemoryTagMapper;
 import org.linkedgeodata.osm.mapping.TagMapperInstantiator;
@@ -61,7 +62,6 @@ import org.linkedgeodata.util.sparql.cache.DeltaGraph;
 import org.linkedgeodata.util.sparql.cache.IGraph;
 import org.linkedgeodata.util.sparql.cache.SparqlEndpointFilteredGraph;
 import org.linkedgeodata.util.sparql.cache.TripleCacheIndexImpl;
-import org.linkedgeodata.util.sparql.cache.TripleIndexUtils;
 import org.openstreetmap.osmosis.core.OsmosisRuntimeException;
 import org.openstreetmap.osmosis.core.domain.v0_6.Entity;
 import org.openstreetmap.osmosis.core.domain.v0_6.Node;
@@ -73,8 +73,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
-import com.hp.hpl.jena.graph.TripleCache;
-import com.hp.hpl.jena.graph.compose.Delta;
 import com.hp.hpl.jena.rdf.model.Model;
 
 /*
@@ -140,7 +138,8 @@ public class LiveSync
 
 	private ChangeSink			workFlow;
 
-	private NodePositionDAO		nodePositionDao;
+	//private NodePositionDAO		nodePositionDao;
+	private DeltaBulkMap<Long, Point2D> nodePositionDao;
 
 	// private RDFDiffWriter rdfDiffWriter;
 
@@ -251,12 +250,20 @@ public class LiveSync
 		ITransformer<Entity, Model> entityTransformer = new OSMEntityToRDFTransformer(
 				tagMapper, vocab);
 
-		nodePositionDao = new NodePositionDAO("node_position");
-		nodePositionDao.setConnection(nodeConn);
+		
+		
+		
+		
+		NodePositionDAO nodePositionDaoCore = new NodePositionDAO("node_position");
+		nodePositionDaoCore.setConnection(nodeConn);
+
+		CacheBulkMap<Long, Point2D> nodePositionDaoCache = CacheBulkMap.create(nodePositionDaoCore, 1000000, 1000000);
+		nodePositionDao = DeltaBulkMap.create(nodePositionDaoCache); 
+
 
 		GeoRSSNodeMapper nodeMapper = new GeoRSSNodeMapper(vocab);
-		RDFNodePositionDAO rdfNodePositionDao = new RDFNodePositionDAO(
-				nodePositionDao, vocab, nodeMapper);
+		//RDFNodePositionDAO rdfNodePositionDao = new RDFNodePositionDAO(
+				//nodePositionDao, vocab, nodeMapper);
 
 		IGraph baseGraph = new SparqlEndpointFilteredGraph(graphDAO);
 		DeltaGraph deltaGraph = new DeltaGraph(baseGraph);
@@ -283,7 +290,7 @@ public class LiveSync
 		tagFilter.load(new File(config.get("tagFilter")));
 
 		diffStrategy = new OptimizedDiffUpdateStrategy(vocab,
-				entityTransformer, deltaGraph, rdfNodePositionDao, tagFilter);
+				entityTransformer, deltaGraph, nodePositionDao, tagFilter);
 
 		TagFilterPlugin tagFilterPlugin = new TagFilterPlugin(tagFilter);
 
@@ -422,9 +429,12 @@ public class LiveSync
 
 	private void applyNodeDiff(TreeSetDiff<Node> diff) throws SQLException
 	{
+		nodePositionDao.commit();
+		/*
 		nodePositionDao
-				.remove(getNodeToPositionMap(diff.getRemoved()).keySet());
-		nodePositionDao.updateOrInsert(getNodeToPositionMap(diff.getAdded()));
+				.removeAll(getNodeToPositionMap(diff.getRemoved()).keySet());
+		nodePositionDao.putAll(getNodeToPositionMap(diff.getAdded()));
+		*/
 	}
 
 	private void publishDiff(long id, IDiff<Model> diff) throws IOException

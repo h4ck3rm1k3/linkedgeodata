@@ -4,10 +4,12 @@ import java.awt.geom.Point2D;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.AbstractSet;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -26,69 +28,30 @@ import com.google.common.collect.Lists;
 
 
 
-class CacheBulkMap<K, V>
-	extends AbstractBulkMap<K, V> 
+
+
+
+/*
+class KeySetView
+	extends AbstractSet<T>
 {
-	private IBulkMap<K, V> baseMap;
-	private Map<K, V> cachedValues;
-	private Set<Object> exclude;
-	
-	
-	public CacheBulkMap(IBulkMap<K, V> baseMap, Map<K, V> cachedValues, Set<Object> exclude)
+
+	@Override
+	public Iterator<T> iterator()
 	{
-		this.baseMap = baseMap;
-		this.cachedValues = cachedValues;
-		this.exclude = exclude;
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	public static <K, V> CacheBulkMap<K, V> create(IBulkMap<K, V> baseMap, Integer maxCacheSize, Integer maxExcludeSize)
+	@Override
+	public int size()
 	{
-		return new CacheBulkMap<K, V>(
-				baseMap,
-				TripleIndexUtils.<K, V>createMap(maxCacheSize),
-				TripleIndexUtils.<Object>createSet(maxExcludeSize));
+		// TODO Auto-generated method stub
+		return 0;
 	}
 	
-	public void putAll(Map<? extends K, ? extends V> map)
-	{
-		baseMap.putAll(map);
-		exclude.removeAll(map.keySet());
-		cachedValues.putAll(map);
-	}
-	
-	public void removeAll(Collection<?> keys) {
-		for(Object key : keys) {
-			cachedValues.remove(key);
-			exclude.add(key);
-		}
-	}
-	
-	public Map<K, V> getAll(Collection<?> keys)
-	{
-		Map<K, V> result = new HashMap<K, V>();
-		
-		Set<K> remainingKeys = new HashSet<K>();
-
-		// Perform a lookup on the cache
-		for(Object key : keys) {
-			if(exclude.contains(key)) {
-				continue;
-			} else if(cachedValues.containsKey(key)) {
-				result.put((K)key, cachedValues.get(key));
-			} else {
-				remainingKeys.add((K)key);
-			}
-		}
-		
-		Map<K, V> tmp = baseMap.getAll(remainingKeys);
-		
-		cachedValues.putAll(tmp);
-		result.putAll(tmp);
-		
-		return result;
-	}
 }
-
+*/
 
 /**
  * A Simple DAO for associating an id with latitude/longitude

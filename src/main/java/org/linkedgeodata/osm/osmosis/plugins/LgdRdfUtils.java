@@ -13,9 +13,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.collections15.MultiMap;
+import org.jboss.cache.util.SetMultiHashMap;
 import org.linkedgeodata.core.ILGDVocab;
 import org.linkedgeodata.core.vocab.GeoRSS;
-import org.openstreetmap.osmosis.core.container.v0_6.EntityContainer;
 import org.openstreetmap.osmosis.core.domain.v0_6.Entity;
 import org.openstreetmap.osmosis.core.domain.v0_6.Node;
 import org.slf4j.Logger;

@@ -4,6 +4,8 @@ import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.jboss.cache.util.CollectionDiff;
+
 
 public class TreeSetDiff<T>
 		extends CollectionDiff<T, Set<T>>

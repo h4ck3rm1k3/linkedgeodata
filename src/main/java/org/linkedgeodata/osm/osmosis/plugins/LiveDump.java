@@ -213,8 +213,8 @@ public class LiveDump
 		nodePositionDao.setConnection(nodeConn);
 
 		GeoRSSNodeMapper nodeMapper = new GeoRSSNodeMapper(vocab);
-		RDFNodePositionDAO rdfNodePositionDAO = new RDFNodePositionDAO(
-				nodePositionDao, vocab, nodeMapper);
+		//NodePositionDAO rdfNodePositionDAO = new RDFNodePositionDAO(
+		//		nodePositionDao, vocab, nodeMapper);
 
 		// InputStream inputStream = new FileInputStream(new File(""));
 		// inputStream = new
@@ -222,7 +222,7 @@ public class LiveDump
 
 		IgnoreModifyDeleteDiffUpdateStrategy diffStrategy = new IgnoreModifyDeleteDiffUpdateStrategy(
 				vocab, entityTransformer, graphDAO, graphName,
-				rdfNodePositionDAO);
+				nodePositionDao);
 
 		LiveDumpChangeSink dumpSink = new LiveDumpChangeSink(diffStrategy, graphName, graphDAO, nodePositionDao);
 
