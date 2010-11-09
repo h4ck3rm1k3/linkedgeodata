@@ -3,7 +3,7 @@ osmReplicationConfigPath="./"
 tmpPath="/tmp/lgd"
 
 osmDb_hostName="localhost"
-osmDb_dataBaseName="lgd_test"
+osmDb_dataBaseName="lgdnodes"
 osmDb_userName="postgres"
 osmDb_passWord="postgres"
 
@@ -16,6 +16,7 @@ tagMappings="TagMappings.xml"
 
 entityFilter="LiveEntityFilter.txt.dist"
 tagFilter="LiveTagFilter.txt.dist"
+relevanceFilter="LiveRelevanceFilter.txt.dist"
 
 publishDiffRepoPath="/var/www/downloads.linkedgeodata.org/changesets/minutely"
 

@@ -905,6 +905,13 @@ public class OptimizedDiffUpdateStrategy
 			// process(entityDiff, mainGraphDiff, maxEntityBatchSize);
 			//process(null, mainGraphDiff, maxEntityBatchSize);
 			step();
+			
+			System.out.println("LinePolygonGraph:");
+			System.out.println(linePolygonGraph);
+			System.out.println("PointGraph:");
+			System.out.println(pointGraph);
+			
+			
 			// entityDiff.clear();
 		} catch (Exception e) {
 			logger.error("An error occurred at the completion phase of a task",

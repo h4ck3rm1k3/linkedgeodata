@@ -85,6 +85,9 @@ public class DefaultCacheProvider
 		
 		Collection<Triple> furtherTriples = graph.uncachedBulkFind(remaining, indexColumns);
 		
+		// FIXME Register cache misses
+		
+		
 		// Register the triples at the caches
 		for(ITripleCacheIndex index : fullIndexes) {
 			index.index(furtherTriples);

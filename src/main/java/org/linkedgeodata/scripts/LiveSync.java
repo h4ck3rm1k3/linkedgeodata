@@ -289,8 +289,12 @@ public class LiveSync
 		TagFilter tagFilter = new TagFilter();
 		tagFilter.load(new File(config.get("tagFilter")));
 
+		
+		TagFilter relevanceFilter = new TagFilter();
+		relevanceFilter.load(new File(config.get("relevanceFilter")));
+		
 		diffStrategy = new OptimizedDiffUpdateStrategy(vocab,
-				entityTransformer, deltaGraph, nodePositionDao, tagFilter);
+				entityTransformer, deltaGraph, nodePositionDao, relevanceFilter);
 
 		TagFilterPlugin tagFilterPlugin = new TagFilterPlugin(tagFilter);
 
