@@ -500,7 +500,7 @@ public class GraphBackedResourceCache
 		
 		JenaSparulExecutor sparqlEndpoint = new JenaSparulExecutor(tmpModel);
 		
-		SparqlEndpointFilteredGraph graph = new SparqlEndpointFilteredGraph(sparqlEndpoint);
+		SparqlEndpointFilteredGraph graph = new SparqlEndpointFilteredGraph(sparqlEndpoint, "http://test.org");
 		
 		TripleCacheIndexImpl.create(graph, 100000, 100000, 100000, 0);
 		

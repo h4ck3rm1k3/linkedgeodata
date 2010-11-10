@@ -2,6 +2,7 @@ package org.linkedgeodata.util.sparql.cache;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -88,13 +89,13 @@ public class SparqlEndpointFilteredGraph
 	}
 	*/
 
-	public SparqlEndpointFilteredGraph(ISparulExecutor sparqlEndpoint)
+	public SparqlEndpointFilteredGraph(ISparulExecutor sparqlEndpoint, String graphName)
 	{
 		this.sparqlEndpoint = sparqlEndpoint;
 		this.filter = null;
 		this.filterCompiler = new DefaultFilterCompiler();
-		this.graphNames = new HashSet<String>();
-		this.updateGraphName = null;
+		this.graphNames = new HashSet<String>(Collections.singleton(graphName));
+		this.updateGraphName = graphName;
 
 		this.filterQuery = QueryFactory
 		.create("Construct {?s ?p ?o .} {?s ?p ?o .}");
@@ -129,6 +130,17 @@ public class SparqlEndpointFilteredGraph
 		this.filter = filter;
 		
 
+		List<String> filters = collectFilters();
+
+		String filterStr = "";
+		for(String item : filters) {
+			filterStr += "Filter(" + item + ") .\n";
+		}
+		
+		this.filterQuery = QueryFactory
+		.create("Construct {?s ?p ?o .} {?s ?p ?o .\n" + filterStr
+				+ "}");
+		
 		/*
 		this.filterQuery = QueryFactory
 				.create("Construct {?s ?p ?o .} {?s ?p ?o . Filter(" + filter

@@ -11,6 +11,9 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * This is a slightly modified version of the DeltaBulkMap found in
  * org.jboss.cache.util.DeltaBulkMap.
@@ -51,6 +54,7 @@ public class DeltaBulkMap<K, V>
 		extends AbstractMap<K, V>
 		implements IBulkMap<K, V>
 {
+	private static final Logger logger = LoggerFactory.getLogger(DeltaBulkMap.class);
 
 	/**
 	 * Wrapped instance.
@@ -183,14 +187,20 @@ public class DeltaBulkMap<K, V>
 		return original.get(key);
 	}
 
+	/**
+	 * Here we break the contract of put: The return value
+	 * may be null if the value would have to be retrieved from the original
+	 * map
+	 * 
+	 */
 	@Override
 	public V put(K key, V value)
 	{
-		V old;
+		V old = null;
 		if (changed.containsKey(key))
 			old = changed.get(key);
-		else
-			old = original.get(key);
+		//else
+			//old = original.get(key);
 		changed.put(key, value);
 		if (exclude.contains(key)) {
 			exclude.remove(key);
@@ -199,22 +209,34 @@ public class DeltaBulkMap<K, V>
 		return old;
 	}
 
+	
+	/**
+	 * TODO This method does not touch the original map
+	 * 
+	 * So insertions and removals from this map can be done without having
+	 * to access the underlying map.
+	 * 
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public V remove(Object key)
 	{
 		if (changed.containsKey(key)) {
-			if (original.containsKey(key))
-				exclude.add((K) key);
+			//if (original.containsKey(key))
+			exclude.add((K) key);
 			return changed.remove(key);
 		}
 		if (exclude.contains(key)) {
 			return null;
 		}
+
+		exclude.add((K) key);
+		/*
 		if (original.containsKey(key)) {
 			exclude.add((K) key);
 			return original.get(key);
 		}
+		*/
 		return null;
 	}
 
@@ -223,10 +245,12 @@ public class DeltaBulkMap<K, V>
 	 */
 	public void commit()
 	{
+		logger.info("Committing " + changed.size() + "/" + exclude.size() + " additions/removals");
+		
 		//original.keySet().removeAll(exclude);
 		original.removeAll(exclude);
-		original.putAll(changed);
 		exclude.clear();
+		original.putAll(changed);
 		changed.clear();
 	}
 

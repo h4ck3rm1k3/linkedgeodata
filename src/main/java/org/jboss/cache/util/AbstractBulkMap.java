@@ -17,7 +17,7 @@ public class AbstractBulkMap<K, V>
 	{
 		throw new NotImplementedException();
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public Map<K, V> getAll(Collection<?> keys)

@@ -134,7 +134,8 @@ public class LiveSync
 
 	private SAXParser			parser	= createParser();
 
-	private ISparulExecutor		graphDAO;
+	//private ISparulExecutor		graphDAO;
+	private DeltaGraph deltaGraph; 
 
 	private ChangeSink			workFlow;
 
@@ -212,7 +213,7 @@ public class LiveSync
 
 		graphName = config.get("rdfStore_graphName");
 
-		graphDAO = new VirtuosoJdbcSparulExecutor(conn, graphName);
+		ISparulExecutor graphDAO = new VirtuosoJdbcSparulExecutor(conn, graphName);
 
 		Connection nodeConn = PostGISUtil.connectPostGIS(
 				config.get("osmDb_hostName"), config.get("osmDb_dataBaseName"),
@@ -265,8 +266,8 @@ public class LiveSync
 		//RDFNodePositionDAO rdfNodePositionDao = new RDFNodePositionDAO(
 				//nodePositionDao, vocab, nodeMapper);
 
-		IGraph baseGraph = new SparqlEndpointFilteredGraph(graphDAO);
-		DeltaGraph deltaGraph = new DeltaGraph(baseGraph);
+		IGraph baseGraph = new SparqlEndpointFilteredGraph(graphDAO, graphName);
+		deltaGraph = new DeltaGraph(baseGraph);
 
 		// Create an index by s and o
 		TripleCacheIndexImpl.create(baseGraph, 100000, 10000, 10000,
@@ -417,8 +418,9 @@ public class LiveSync
 
 	private void applyDiff(IDiff<Model> diff) throws Exception
 	{
-		graphDAO.remove(diff.getRemoved(), graphName);
-		graphDAO.insert(diff.getAdded(), graphName);
+		deltaGraph.commit();
+		//graphDAO.remove(diff.getRemoved(), graphName);
+		//graphDAO.insert(diff.getAdded(), graphName);
 	}
 
 	public static Map<Long, Point2D> getNodeToPositionMap(Iterable<Node> nodes)

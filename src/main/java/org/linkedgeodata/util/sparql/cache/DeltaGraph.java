@@ -5,6 +5,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.hp.hpl.jena.graph.Triple;
 
 
@@ -19,6 +22,9 @@ import com.hp.hpl.jena.graph.Triple;
 public class DeltaGraph
 		extends BaseIndexedGraph
 {
+	private static final Logger logger = LoggerFactory.getLogger(DeltaGraph.class);
+	
+	
 	private IGraph		baseGraph;
 
 	//private Set<Triple>	additionTriples;
@@ -44,10 +50,15 @@ public class DeltaGraph
 	 * to transform critical triples to safe ones beforehand.
 	 * 
 	 */
-	public void applyDelta()
+	public void commit()
 	{
-		baseGraph.remove(removalGraph.bulkFind(null, new int[]{}));
-		baseGraph.add(additionGraph.bulkFind(null, new int[]{}));
+		Set<Triple> r = removalGraph.bulkFind(null, new int[]{}); 
+		Set<Triple> a = additionGraph.bulkFind(null, new int[]{}); 
+		
+		logger.info("Committing " + a.size() + "/" + r.size() + " added/removed triples");
+		
+		baseGraph.remove(r);
+		baseGraph.add(a);
 
 		removalGraph.clear();
 		additionGraph.clear();

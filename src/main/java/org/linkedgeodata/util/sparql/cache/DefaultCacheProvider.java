@@ -41,6 +41,12 @@ public class DefaultCacheProvider
 	@Override
 	public Set<Triple> bulkFind(Set<List<Object>> keys, int[] indexColumns)
 	{		
+		/*
+		if(keys == null) {
+			System.out.println("Test");
+		}
+		*/
+		
 		// Find the set of indexes that are fully compatbile with our columns
 		Set<ITripleCacheIndex> fullIndexes = new HashSet<ITripleCacheIndex>();
 		Set<ITripleCacheIndex> partialIndexes = new HashSet<ITripleCacheIndex>();
@@ -62,25 +68,28 @@ public class DefaultCacheProvider
 		
 		
 		Set<Triple> result = new HashSet<Triple>();
-		Set<List<Object>> remaining = new HashSet<List<Object>>(keys);
 
-		
-		Iterator<List<Object>> it = remaining.iterator();
-		while (it.hasNext()) {
-			List<Object> key = it.next();
-
-			for (ITripleCacheIndex index : fullIndexes) {
-				Collection<Triple> triples = index.lookup(key);
-				if(triples != null) { // cache hit
-					result.addAll(triples);
-					it.remove();
-					break;
+		Set<List<Object>> remaining = null;
+		if(keys != null) {
+			remaining = new HashSet<List<Object>>(keys);
+	
+			
+			Iterator<List<Object>> it = remaining.iterator();
+			while (it.hasNext()) {
+				List<Object> key = it.next();
+	
+				for (ITripleCacheIndex index : fullIndexes) {
+					Collection<Triple> triples = index.lookup(key);
+					if(triples != null) { // cache hit
+						result.addAll(triples);
+						it.remove();
+						break;
+					}
 				}
 			}
+			logger.trace("Cache hits: " + (keys.size() - remaining.size()));
 		}
 
-		
-		logger.trace("Cache hits: " + (keys.size() - remaining.size()));
 		
 		
 		Collection<Triple> furtherTriples = graph.uncachedBulkFind(remaining, indexColumns);

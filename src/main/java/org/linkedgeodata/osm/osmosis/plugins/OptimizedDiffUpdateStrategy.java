@@ -49,6 +49,7 @@ import org.linkedgeodata.util.sparql.cache.DeltaGraph;
 import org.linkedgeodata.util.sparql.cache.IGraph;
 import org.linkedgeodata.util.sparql.cache.SparqlEndpointFilteredGraph;
 import org.linkedgeodata.util.sparql.cache.TripleCacheIndexImpl;
+import org.linkedgeodata.util.sparql.cache.TripleUtils;
 import org.openstreetmap.osmosis.core.container.v0_6.ChangeContainer;
 import org.openstreetmap.osmosis.core.domain.v0_6.Entity;
 import org.openstreetmap.osmosis.core.domain.v0_6.Node;
@@ -59,6 +60,7 @@ import org.openstreetmap.osmosis.core.task.common.ChangeAction;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Property;
@@ -146,8 +148,8 @@ public class OptimizedDiffUpdateStrategy
 		// this.nodeGraphName = nodeGraphName;
 		this.tagRelevanceFilter = tagRelevanceFilter;
 		
-		this.linePolygonGraph = ((SparqlEndpointFilteredGraph)deltaGraph.getBaseGraph()).createSubGraph(LgdSparqlTasks.toString(GeoRSS.line,  GeoRSS.polygon));
-		this.pointGraph = ((SparqlEndpointFilteredGraph)deltaGraph.getBaseGraph()).createSubGraph(LgdSparqlTasks.toString(GeoRSS.point));
+		this.linePolygonGraph = ((SparqlEndpointFilteredGraph)deltaGraph.getBaseGraph()).createSubGraph("?p = <" + GeoRSS.line + "> || ?p = <" + GeoRSS.polygon + ">");
+		this.pointGraph = ((SparqlEndpointFilteredGraph)deltaGraph.getBaseGraph()).createSubGraph("?p = <" + GeoRSS.point + ">");
 
 		TripleCacheIndexImpl.create(linePolygonGraph, 100000, 10000, 10000, new int[]{0}); 
 		TripleCacheIndexImpl.create(pointGraph, 100000, 10000, 10000, new int[]{0}); 
@@ -261,6 +263,7 @@ public class OptimizedDiffUpdateStrategy
 	 * @param outDiff
 	 * @param batchSize
 	 * @throws Exception
+	 * 
 	 */
 	private void step()
 		throws Exception
@@ -793,6 +796,27 @@ public class OptimizedDiffUpdateStrategy
 		
 		//outDiff.getAdded().add(Lists.newArrayList(mainDiff.getAdded()));
 		//outDiff.getRemoved().add(Lists.newArrayList(mainDiff.getRemoved()));
+		
+		
+		for(Node node : nodeDiff.getAdded()) {
+			nodePositionDAO.put(node.getId(), new Point2D.Double(node.getLongitude(), node.getLatitude()));
+		}
+		
+		for(Node node : nodeDiff.getRemoved()) {
+			nodePositionDAO.remove(node.getId());
+		}
+		
+		Set<Triple> a = TripleUtils.toTriples(mainDiff.getAdded());
+		Set<Triple> r = TripleUtils.toTriples(mainDiff.getRemoved());
+		
+		deltaGraph.add(a);
+		deltaGraph.remove(r);
+		
+		//mainGraphDiff.getAdded().add(mainDiff.getAdded());
+		//mainGraphDiff.getAdded().add(mainDiff.getAdded());
+		//mainGraphDiff.getAdded();
+		//mainGraphDiff.getRemoved();
+		//mainGraphDiff = mainDiff;
 		
 		logger.info("" + ((System.nanoTime() - start) / 1000000000.0) + " Completed processing of entities");
 	}
