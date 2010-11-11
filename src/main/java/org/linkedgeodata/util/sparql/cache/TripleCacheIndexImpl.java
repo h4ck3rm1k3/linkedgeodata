@@ -3,7 +3,6 @@ package org.linkedgeodata.util.sparql.cache;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -11,8 +10,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections15.map.LRUMap;
-import org.linkedgeodata.util.collections.CacheSet;
-import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Joiner;
 import com.hp.hpl.jena.graph.Node;
@@ -581,6 +578,13 @@ public class TripleCacheIndexImpl
 	{
 		return
 			"Full/Partial/None: " + Joiner.on("/").join(full.size(), partial.size(), noDataCache.size());
+	}
+
+
+	@Override
+	public void registerMisses(Set<List<Object>> keys)
+	{
+		noDataCache.addAll(keys);
 	}
 	
 	/**

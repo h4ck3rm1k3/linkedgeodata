@@ -1,13 +1,10 @@
-package org.linkedgeodata.osm.osmosis.plugins;
+package org.linkedgeodata.scripts;
 
-import java.io.BufferedReader;
+import java.awt.geom.Point2D;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.sql.Connection;
 import java.util.Map;
 
@@ -22,17 +19,23 @@ import org.apache.commons.cli.Options;
 import org.apache.log4j.PropertyConfigurator;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.jboss.cache.util.CacheBulkMap;
+import org.jboss.cache.util.DeltaBulkMap;
 import org.linkedgeodata.core.ILGDVocab;
 import org.linkedgeodata.core.LGDVocab;
 import org.linkedgeodata.dao.nodestore.GeoRSSNodeMapper;
 import org.linkedgeodata.dao.nodestore.NodePositionDAO;
-import org.linkedgeodata.dao.nodestore.RDFNodePositionDAO;
 import org.linkedgeodata.osm.mapping.IOneOneTagMapper;
 import org.linkedgeodata.osm.mapping.InMemoryTagMapper;
 import org.linkedgeodata.osm.mapping.TagMapperInstantiator;
 import org.linkedgeodata.osm.mapping.TagMappingDB;
 import org.linkedgeodata.osm.mapping.impl.OSMEntityToRDFTransformer;
-import org.linkedgeodata.scripts.LiveSync;
+import org.linkedgeodata.osm.osmosis.plugins.EntityFilter;
+import org.linkedgeodata.osm.osmosis.plugins.EntityFilterPlugin;
+import org.linkedgeodata.osm.osmosis.plugins.LiveDumpChangeSink;
+import org.linkedgeodata.osm.osmosis.plugins.OptimizedDiffUpdateStrategy;
+import org.linkedgeodata.osm.osmosis.plugins.TagFilter;
+import org.linkedgeodata.osm.osmosis.plugins.TagFilterPlugin;
 import org.linkedgeodata.tagmapping.client.entity.AbstractTagMapperState;
 import org.linkedgeodata.tagmapping.client.entity.IEntity;
 import org.linkedgeodata.util.ITransformer;
@@ -40,6 +43,10 @@ import org.linkedgeodata.util.PostGISUtil;
 import org.linkedgeodata.util.VirtuosoUtils;
 import org.linkedgeodata.util.sparql.ISparulExecutor;
 import org.linkedgeodata.util.sparql.VirtuosoJdbcSparulExecutor;
+import org.linkedgeodata.util.sparql.cache.DeltaGraph;
+import org.linkedgeodata.util.sparql.cache.IGraph;
+import org.linkedgeodata.util.sparql.cache.SparqlEndpointFilteredGraph;
+import org.linkedgeodata.util.sparql.cache.TripleCacheIndexImpl;
 import org.openstreetmap.osmosis.core.OsmosisRuntimeException;
 import org.openstreetmap.osmosis.core.container.v0_6.ChangeContainer;
 import org.openstreetmap.osmosis.core.container.v0_6.EntityContainer;
@@ -47,8 +54,6 @@ import org.openstreetmap.osmosis.core.domain.v0_6.Entity;
 import org.openstreetmap.osmosis.core.task.common.ChangeAction;
 import org.openstreetmap.osmosis.core.task.v0_6.ChangeSink;
 import org.openstreetmap.osmosis.core.task.v0_6.Sink;
-import org.openstreetmap.osmosis.core.xml.common.CompressionActivator;
-import org.openstreetmap.osmosis.core.xml.common.CompressionMethod;
 import org.openstreetmap.osmosis.core.xml.v0_6.impl.OsmHandler;
 import org.xml.sax.SAXException;
 
@@ -209,8 +214,11 @@ public class LiveDump
 		ITransformer<Entity, Model> entityTransformer = new OSMEntityToRDFTransformer(
 				tagMapper, vocab);
 
-		NodePositionDAO nodePositionDao = new NodePositionDAO("node_position");
-		nodePositionDao.setConnection(nodeConn);
+		NodePositionDAO nodePositionDaoCore = new NodePositionDAO("node_position");
+		nodePositionDaoCore.setConnection(nodeConn);
+
+		CacheBulkMap<Long, Point2D> nodePositionDaoCache = CacheBulkMap.create(nodePositionDaoCore, 1000000, 1000000);
+		DeltaBulkMap<Long, Point2D> nodePositionDao = DeltaBulkMap.create(nodePositionDaoCache);
 
 		GeoRSSNodeMapper nodeMapper = new GeoRSSNodeMapper(vocab);
 		//NodePositionDAO rdfNodePositionDAO = new RDFNodePositionDAO(
@@ -220,11 +228,6 @@ public class LiveDump
 		// inputStream = new
 		// CompressionActivator(CompressionMethod.GZip).createCompressionInputStream(inputStream);
 
-		IgnoreModifyDeleteDiffUpdateStrategy diffStrategy = new IgnoreModifyDeleteDiffUpdateStrategy(
-				vocab, entityTransformer, graphDAO, graphName,
-				nodePositionDao);
-
-		LiveDumpChangeSink dumpSink = new LiveDumpChangeSink(diffStrategy, graphName, graphDAO, nodePositionDao);
 
 		// Load the entity tag filter
 		TagFilter entityTagFilter = new TagFilter();
@@ -236,8 +239,25 @@ public class LiveDump
 		TagFilter tagFilter = new TagFilter();
 		tagFilter.load(new File(config.get("tagFilter")));
 
-		TagFilterPlugin tagFilterPlugin = new TagFilterPlugin(tagFilter);
+		
+		TagFilter relevanceFilter = new TagFilter();
+		relevanceFilter.load(new File(config.get("relevanceFilter")));
+		
+		
+		IGraph baseGraph = new SparqlEndpointFilteredGraph(graphDAO, graphName);
+		DeltaGraph deltaGraph = new DeltaGraph(baseGraph);
 
+		// Create an index by s and o
+		TripleCacheIndexImpl.create(baseGraph, 1000000, 100000, 100000,
+				new int[] { 0 });
+		
+		OptimizedDiffUpdateStrategy diffStrategy = new OptimizedDiffUpdateStrategy(vocab,
+				entityTransformer, deltaGraph, nodePositionDao, relevanceFilter);
+
+		LiveDumpChangeSink dumpSink = new LiveDumpChangeSink(diffStrategy, deltaGraph, nodePositionDao);
+
+		TagFilterPlugin tagFilterPlugin = new TagFilterPlugin(tagFilter);
+		
 		tagFilterPlugin.setChangeSink(dumpSink);
 		entityFilterPlugin.setChangeSink(tagFilterPlugin);
 

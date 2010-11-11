@@ -163,6 +163,6 @@ public class TripleIndexUtils
 	public static <T> Set<T> createSet(Integer maxSize) {
 		return (maxSize == null)
 			? new HashSet<T>()
-			: new CacheSet<T>();
+			: new CacheSet<T>(maxSize, true);
 	}
 }

@@ -1,11 +1,14 @@
 package org.linkedgeodata.osm.osmosis.plugins;
 
+import java.awt.geom.Point2D;
 import java.sql.SQLException;
 
+import org.jboss.cache.util.DeltaBulkMap;
 import org.linkedgeodata.dao.nodestore.INodePositionDao;
 import org.linkedgeodata.scripts.LiveSync;
 import org.linkedgeodata.util.IDiff;
 import org.linkedgeodata.util.sparql.ISparulExecutor;
+import org.linkedgeodata.util.sparql.cache.DeltaGraph;
 import org.openstreetmap.osmosis.core.container.v0_6.ChangeContainer;
 import org.openstreetmap.osmosis.core.domain.v0_6.Node;
 import org.openstreetmap.osmosis.core.task.v0_6.ChangeSink;
@@ -24,27 +27,31 @@ public class LiveDumpChangeSink
 	
 	private int maxEntityCount = 1024;
 	
-	private String graphName;
-	private INodePositionDao nodePositionDao;
-	private ISparulExecutor sparqlEndpoint;
+	//private String graphName;
+	//private INodePositionDao nodePositionDao;
+	//private ISparulExecutor sparqlEndpoint;
+	private DeltaBulkMap<Long, Point2D> nodePositionDao;
+	private DeltaGraph deltaGraph;
 	
 	
 	private long totalEntityCount = 0;
 	
-	public LiveDumpChangeSink(IUpdateStrategy strategy, String graphName, ISparulExecutor sparqlEndpoint, INodePositionDao nodePositionDao)
+	public LiveDumpChangeSink(IUpdateStrategy strategy, DeltaGraph deltaGraph, DeltaBulkMap<Long, Point2D> nodePositionDao)
 	{
 		this.strategy = strategy;
-		this.graphName = graphName;
-		this.sparqlEndpoint = sparqlEndpoint;
+		//this.graphName = graphName;
+		this.deltaGraph = deltaGraph;
 		this.nodePositionDao = nodePositionDao;
 	}
 
-	public LiveDumpChangeSink(IUpdateStrategy strategy, String graphName, ISparulExecutor sparqlEndpoint, INodePositionDao nodePositionDao, int maxEntityCount)
+	public LiveDumpChangeSink(IUpdateStrategy strategy, DeltaGraph deltaGraph, DeltaBulkMap<Long, Point2D> nodePositionDao, int maxEntityCount)
 	{
 		this.strategy = strategy;
-		this.graphName = graphName;
-		this.sparqlEndpoint = sparqlEndpoint;
+		this.deltaGraph = deltaGraph;
 		this.nodePositionDao = nodePositionDao;
+		//this.graphName = graphName;
+		//this.sparqlEndpoint = sparqlEndpoint;
+		//his.nodePositionDao = nodePositionDao;
 		this.maxEntityCount = maxEntityCount;
 	}
 
@@ -80,15 +87,18 @@ public class LiveDumpChangeSink
 	private void applyDiff(IDiff<Model> diff)
 		throws Exception
 	{
-		sparqlEndpoint.remove(diff.getRemoved(), graphName);
-		sparqlEndpoint.insert(diff.getAdded(), graphName);
+		deltaGraph.commit();
+		//sparqlEndpoint.remove(diff.getRemoved(), graphName);
+		//sparqlEndpoint.insert(diff.getAdded(), graphName);
 	}
 	
 	private void applyNodeDiff(TreeSetDiff<Node> diff)
 		throws SQLException
 	{
-		nodePositionDao.remove(LiveSync.getNodeToPositionMap(diff.getRemoved()).keySet());
-		nodePositionDao.updateOrInsert(LiveSync.getNodeToPositionMap(diff.getAdded()));
+		nodePositionDao.commit();
+		
+		//nodePositionDao.remove(LiveSync.getNodeToPositionMap(diff.getRemoved()).keySet());
+		//nodePositionDao.updateOrInsert(LiveSync.getNodeToPositionMap(diff.getAdded()));
 	}
 	
 	

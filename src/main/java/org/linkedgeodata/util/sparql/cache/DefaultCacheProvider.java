@@ -1,6 +1,7 @@
 package org.linkedgeodata.util.sparql.cache;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -41,6 +42,8 @@ public class DefaultCacheProvider
 	@Override
 	public Set<Triple> bulkFind(Set<List<Object>> keys, int[] indexColumns)
 	{		
+		if(keys == null)
+			keys = Collections.emptySet();
 		/*
 		if(keys == null) {
 			System.out.println("Test");
@@ -69,40 +72,48 @@ public class DefaultCacheProvider
 		
 		Set<Triple> result = new HashSet<Triple>();
 
-		Set<List<Object>> remaining = null;
-		if(keys != null) {
-			remaining = new HashSet<List<Object>>(keys);
-	
-			
-			Iterator<List<Object>> it = remaining.iterator();
-			while (it.hasNext()) {
-				List<Object> key = it.next();
-	
-				for (ITripleCacheIndex index : fullIndexes) {
-					Collection<Triple> triples = index.lookup(key);
-					if(triples != null) { // cache hit
-						result.addAll(triples);
-						it.remove();
-						break;
-					}
+		Set<List<Object>> remaining = new HashSet<List<Object>>(keys);		
+		Iterator<List<Object>> it = remaining.iterator();
+		while (it.hasNext()) {
+			List<Object> key = it.next();
+
+			for (ITripleCacheIndex index : fullIndexes) {
+				Collection<Triple> triples = index.lookup(key);
+				if(triples != null) { // cache hit
+					result.addAll(triples);
+					it.remove();
+					break;
 				}
 			}
-			logger.trace("Cache hits: " + (keys.size() - remaining.size()));
 		}
+		//logger.info("Cache hits: " + (keys.size() - remaining.size()));
 
-		
 		
 		Collection<Triple> furtherTriples = graph.uncachedBulkFind(remaining, indexColumns);
 		
-		// FIXME Register cache misses
 		
+		// Register cache misses
+		for(Triple triple : furtherTriples) {
+			List<Object> l = TripleIndexUtils.tripleToList(triple, indexColumns);
+			if(remaining.contains(l)) {
+				remaining.remove(l);
+			}
+		}
+		
+		/*
+		if(!remaining.isEmpty()) {
+			System.out.println("Here");
+		}
+		*/
 		
 		// Register the triples at the caches
 		for(ITripleCacheIndex index : fullIndexes) {
+			index.registerMisses(remaining);
 			index.index(furtherTriples);
 		}
 		
 		for(ITripleCacheIndex index : partialIndexes) {
+			index.registerMisses(remaining);
 			index.addSeen(furtherTriples);
 		}
 

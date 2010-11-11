@@ -199,6 +199,11 @@ public class LiveSync
 		}
 	}
 
+	public static void configure(Map<String, String> config)
+	{
+	}
+	
+	
 	public LiveSync(Map<String, String> config) throws Exception
 	{
 		this.config = config;
@@ -259,7 +264,7 @@ public class LiveSync
 		nodePositionDaoCore.setConnection(nodeConn);
 
 		CacheBulkMap<Long, Point2D> nodePositionDaoCache = CacheBulkMap.create(nodePositionDaoCore, 1000000, 1000000);
-		nodePositionDao = DeltaBulkMap.create(nodePositionDaoCache); 
+		nodePositionDao = DeltaBulkMap.create(nodePositionDaoCache);
 
 
 		GeoRSSNodeMapper nodeMapper = new GeoRSSNodeMapper(vocab);
@@ -270,9 +275,9 @@ public class LiveSync
 		deltaGraph = new DeltaGraph(baseGraph);
 
 		// Create an index by s and o
-		TripleCacheIndexImpl.create(baseGraph, 100000, 10000, 10000,
+		TripleCacheIndexImpl.create(baseGraph, 1000000, 100000, 100000,
 				new int[] { 0 });
-		TripleCacheIndexImpl.create(baseGraph, 100000, 10000, 10000,
+		TripleCacheIndexImpl.create(baseGraph, 1000000, 100000, 100000,
 				new int[] { 2 });
 
 		/*

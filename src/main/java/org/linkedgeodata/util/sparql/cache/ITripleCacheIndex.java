@@ -2,8 +2,8 @@ package org.linkedgeodata.util.sparql.cache;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
-import com.google.common.collect.Multimap;
 import com.hp.hpl.jena.graph.Triple;
 
 public /**
@@ -28,6 +28,7 @@ interface ITripleCacheIndex
 	 */
 	void index(Collection<Triple> triples);
 
+	void registerMisses(Set<List<Object>> keys);
 	
 	
 	/**
