@@ -43,6 +43,8 @@ import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.map.LRUMap;
 import org.apache.commons.collections15.multimap.MultiHashMap;
 import org.apache.log4j.Logger;
+import org.jboss.cache.util.SetDiff;
+import org.jboss.cache.util.SetMultiHashMap;
 import org.linkedgeodata.core.ILGDVocab;
 import org.linkedgeodata.core.vocab.GeoRSS;
 import org.linkedgeodata.core.vocab.WGS84Pos;
@@ -75,7 +77,6 @@ import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
-import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 import com.hp.hpl.jena.vocabulary.RDF;
 
 
@@ -1260,7 +1261,12 @@ public class IgnoreModifyDeleteDiffUpdateStrategy
 		// Check the node store for additional node positions
 		// For all unindexed nodes that do not have a position yet, try
 		// to retrieve them from the nodePositionDAO
-		Map<Resource, Point2D> nodePositionDAOLookups = nodePositionDAO.lookup(unindexedNodes);
+		
+		
+
+		Map<Resource, Point2D> nodePositionDAOLookups = null;
+		// FIXME nodePositionDAOLookups = nodePositionDAO.lookup(unindexedNodes);
+		
 		for(Map.Entry<Resource, Point2D> entry : nodePositionDAOLookups.entrySet()) {
 			Resource resource = entry.getKey();
 			Point2D point = entry.getValue();
