@@ -32,10 +32,12 @@ import org.linkedgeodata.osm.mapping.TagMappingDB;
 import org.linkedgeodata.osm.mapping.impl.OSMEntityToRDFTransformer;
 import org.linkedgeodata.osm.osmosis.plugins.EntityFilter;
 import org.linkedgeodata.osm.osmosis.plugins.EntityFilterPlugin;
+import org.linkedgeodata.osm.osmosis.plugins.INodeSerializer;
 import org.linkedgeodata.osm.osmosis.plugins.LiveDumpChangeSink;
 import org.linkedgeodata.osm.osmosis.plugins.OptimizedDiffUpdateStrategy;
 import org.linkedgeodata.osm.osmosis.plugins.TagFilter;
 import org.linkedgeodata.osm.osmosis.plugins.TagFilterPlugin;
+import org.linkedgeodata.osm.osmosis.plugins.VirtuosoOseNodeSerializer;
 import org.linkedgeodata.tagmapping.client.entity.AbstractTagMapperState;
 import org.linkedgeodata.tagmapping.client.entity.IEntity;
 import org.linkedgeodata.util.ITransformer;
@@ -58,6 +60,7 @@ import org.openstreetmap.osmosis.core.xml.v0_6.impl.OsmHandler;
 import org.xml.sax.SAXException;
 
 import com.hp.hpl.jena.rdf.model.Model;
+
 
 class SinkToChangeSinkBridge
 		implements Sink
@@ -251,8 +254,10 @@ public class LiveDump
 		TripleCacheIndexImpl.create(baseGraph, 1000000, 100000, 100000,
 				new int[] { 0 });
 		
+		INodeSerializer nodeSerializer = new VirtuosoOseNodeSerializer();
+		
 		OptimizedDiffUpdateStrategy diffStrategy = new OptimizedDiffUpdateStrategy(vocab,
-				entityTransformer, deltaGraph, nodePositionDao, relevanceFilter);
+				entityTransformer, nodeSerializer, deltaGraph, nodePositionDao, relevanceFilter);
 
 		LiveDumpChangeSink dumpSink = new LiveDumpChangeSink(diffStrategy, deltaGraph, nodePositionDao);
 

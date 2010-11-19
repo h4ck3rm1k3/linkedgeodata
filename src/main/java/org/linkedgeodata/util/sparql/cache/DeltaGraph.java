@@ -57,6 +57,9 @@ public class DeltaGraph
 		
 		logger.info("Committing " + a.size() + "/" + r.size() + " added/removed triples");
 		
+		System.out.println("Removed: " + r);
+		System.out.println("Added: " + a);
+		
 		baseGraph.remove(r);
 		baseGraph.add(a);
 

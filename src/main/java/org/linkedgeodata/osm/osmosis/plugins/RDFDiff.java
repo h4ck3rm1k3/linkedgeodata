@@ -17,6 +17,9 @@ public class RDFDiff
 				ModelFactory.createDefaultModel());
 	}
 	
+	public RDFDiff(Model added, Model removed, Model retained) {
+		super(added, removed,retained);
+	}
 	
 	/**
 	 * Basically adds a statement to the set of added items.

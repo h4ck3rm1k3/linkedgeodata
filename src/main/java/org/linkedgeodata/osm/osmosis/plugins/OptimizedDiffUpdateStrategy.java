@@ -21,6 +21,7 @@
 package org.linkedgeodata.osm.osmosis.plugins;
 
 import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -66,9 +67,8 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.rdf.model.Statement;
-
-
 
 public class OptimizedDiffUpdateStrategy
 		implements IUpdateStrategy
@@ -77,107 +77,110 @@ public class OptimizedDiffUpdateStrategy
 
 	private ILGDVocab					vocab;
 	private ITransformer<Entity, Model>	entityTransformer;
-	//private ISparqlExecutor				sparqlEndpoint;
-	
-	private DeltaGraph deltaGraph;
-	
-	
-	private IGraph linePolygonGraph;
-	private IGraph pointGraph;
-	
-	
+	// private ISparqlExecutor sparqlEndpoint;
 
-	private DeltaBulkMap<Long, Point2D>			nodePositionDAO;
+	private DeltaGraph					deltaGraph;
+
+	private IGraph						linePolygonGraph;
+	private IGraph						pointGraph;
+
+	private INodeSerializer				nodeSerializer;
+
+	private DeltaBulkMap<Long, Point2D>	nodePositionDAO;
 	private ITransformer<Model, Model>	postProcessTransformer	= new VirtuosoStatementNormalizer();
 
 	// The purpose of the following two attributes is to hold the step-result
 	private RDFDiff						mainGraphDiff;
-	private TreeSetDiff<Node> nodeDiff = new TreeSetDiff<Node>();
-	
-	
-	private Predicate<Tag> tagRelevanceFilter;
-	
-	// Number of entities that should be processed as a batch
-	//private int	maxEntityBatchSize	= 500;
+	private TreeSetDiff<Node>			nodeDiff				= new TreeSetDiff<Node>();
 
-	
+	private Predicate<Tag>				tagRelevanceFilter;
+
+	// Number of entities that should be processed as a batch
+	// private int maxEntityBatchSize = 500;
+
 	/**
 	 * Entities pending for becoming processed
 	 * 
 	 */
-	private Set<Node> createdNodes = new HashSet<Node>();
-	private Set<Node> modifiedNodes = new HashSet<Node>();
-	private Set<Node> deletedNodes = new HashSet<Node>();
-	
-	private Set<Way> createdWays = new HashSet<Way>();
-	private Set<Way> modifiedWays = new HashSet<Way>();
-	private Set<Way> deletedWays = new HashSet<Way>();
-	
-	Set<? extends Entity> createdEntities = Sets.union(createdNodes, createdWays);
-	Set<? extends Entity> modifiedEntities = Sets.union(modifiedNodes, modifiedWays);
-	Set<? extends Entity> deletedEntities = Sets.union(deletedNodes, deletedWays);
-	
+	private Set<Node>					createdNodes			= new HashSet<Node>();
+	private Set<Node>					modifiedNodes			= new HashSet<Node>();
+	private Set<Node>					deletedNodes			= new HashSet<Node>();
+
+	private Set<Way>					createdWays				= new HashSet<Way>();
+	private Set<Way>					modifiedWays			= new HashSet<Way>();
+	private Set<Way>					deletedWays				= new HashSet<Way>();
+
+	Set<? extends Entity>				createdEntities			= Sets.union(
+																		createdNodes,
+																		createdWays);
+	Set<? extends Entity>				modifiedEntities		= Sets.union(
+																		modifiedNodes,
+																		modifiedWays);
+	Set<? extends Entity>				deletedEntities			= Sets.union(
+																		deletedNodes,
+																		deletedWays);
+
 	/**
 	 * Caches
 	 * 
-	 * We keep track of:
-	 * .) dependencies      Multimap<Node, Way>
-	 * .) nodePositions     Map<Node, Point2D>
+	 * We keep track of: .) dependencies Multimap<Node, Way> .) nodePositions
+	 * Map<Node, Point2D>
 	 * 
 	 */
-	
-	
 
 	/**
 	 * Constructor
-	 * @throws Exception 
+	 * 
+	 * @throws Exception
 	 * 
 	 */
-	public OptimizedDiffUpdateStrategy(
-			ILGDVocab vocab,
+	public OptimizedDiffUpdateStrategy(ILGDVocab vocab,
 			ITransformer<Entity, Model> entityTransformer,
-			DeltaGraph deltaGraph,
+			INodeSerializer nodeSerializer, DeltaGraph deltaGraph,
 			DeltaBulkMap<Long, Point2D> nodePositionDAO,
 			Predicate<Tag> tagRelevanceFilter) throws Exception
 	{
 		this.vocab = vocab;
 		this.entityTransformer = entityTransformer;
 		this.deltaGraph = deltaGraph;
-		//this.sparqlEndpoint = sparqlEndpoint;
+		this.nodeSerializer = nodeSerializer;
+		// this.sparqlEndpoint = sparqlEndpoint;
 		this.nodePositionDAO = nodePositionDAO;
 		// this.nodeGraphName = nodeGraphName;
 		this.tagRelevanceFilter = tagRelevanceFilter;
-		
-		this.linePolygonGraph = ((SparqlEndpointFilteredGraph)deltaGraph.getBaseGraph()).createSubGraph("?p = <" + GeoRSS.line + "> || ?p = <" + GeoRSS.polygon + ">");
-		this.pointGraph = ((SparqlEndpointFilteredGraph)deltaGraph.getBaseGraph()).createSubGraph("?p = <" + GeoRSS.point + ">");
 
-		TripleCacheIndexImpl.create(linePolygonGraph, 100000, 10000, 10000, new int[]{0}); 
-		TripleCacheIndexImpl.create(pointGraph, 100000, 10000, 10000, new int[]{0}); 
-	
+		this.linePolygonGraph = ((SparqlEndpointFilteredGraph) deltaGraph
+				.getBaseGraph()).createSubGraph("?p = <" + GeoRSS.line
+				+ "> || ?p = <" + GeoRSS.polygon + ">");
+		this.pointGraph = ((SparqlEndpointFilteredGraph) deltaGraph
+				.getBaseGraph()).createSubGraph("?p = <" + GeoRSS.point + ">");
+
+		TripleCacheIndexImpl.create(linePolygonGraph, 100000, 10000, 10000,
+				new int[] { 0 });
+		TripleCacheIndexImpl.create(pointGraph, 100000, 10000, 10000,
+				new int[] { 0 });
+
 	}
-
 
 	public void clear()
 	{
 		createdNodes.clear();
 		modifiedNodes.clear();
 		deletedNodes.clear();
-		
+
 		createdWays.clear();
 		modifiedWays.clear();
 		deletedWays.clear();
 		/*
-		createdEntities.clear();
-		modifiedEntities.clear();
-		deletedEntities.clear();
-		*/
+		 * createdEntities.clear(); modifiedEntities.clear();
+		 * deletedEntities.clear();
+		 */
 	}
 
-	
-	public static <T extends Entity> void addEntity(ChangeAction ca, T entity, 
+	public static <T extends Entity> void addEntity(ChangeAction ca, T entity,
 			Set<T> created, Set<T> modified, Set<T> deleted)
 	{
-		// If an equal entity was already created, we can treat it as non 
+		// If an equal entity was already created, we can treat it as non
 		// existent (as nothing was persisted yet)
 		created.remove(entity);
 
@@ -185,8 +188,7 @@ public class OptimizedDiffUpdateStrategy
 		// happen?)
 		// it must be treated as modified - on other words:
 		// Subsequent recreates must be treated as modified
-		boolean didRemove = modified.remove(entity)
-				|| deleted.remove(entity);
+		boolean didRemove = modified.remove(entity) || deleted.remove(entity);
 
 		switch (ca) {
 		case Create:
@@ -208,15 +210,15 @@ public class OptimizedDiffUpdateStrategy
 	public void process(ChangeContainer c)
 	{
 		Entity entity = c.getEntityContainer().getEntity();
-		
-		if(entity instanceof Node) {
-			addEntity(c.getAction(), (Node)entity, createdNodes, modifiedNodes, deletedNodes);
-		}
-		else if(entity instanceof Way) {
-			addEntity(c.getAction(), (Way)entity, createdWays, modifiedWays, deletedWays);
-		}		
-	}
 
+		if (entity instanceof Node) {
+			addEntity(c.getAction(), (Node) entity, createdNodes,
+					modifiedNodes, deletedNodes);
+		} else if (entity instanceof Way) {
+			addEntity(c.getAction(), (Way) entity, createdWays, modifiedWays,
+					deletedWays);
+		}
+	}
 
 	/**
 	 * transforms a waynode resource to the corresponding way resource
@@ -241,22 +243,33 @@ public class OptimizedDiffUpdateStrategy
 		return false;
 	}
 
-
-	private static void createMinimalStatements(Iterable<? extends Entity> entities,
-			Model model, ILGDVocab vocab)
-	{		
+	
+	private static void createMinimalNodeStatements(Model model, INodeSerializer nodeSerializer, Resource subject, Point2D position)
+	{
+		nodeSerializer.write(model, subject, position);
+	}
+	
+	private static void createMinimalStatements(
+			Iterable<? extends Entity> entities, Model model, ILGDVocab vocab,
+			INodeSerializer nodeSerializer)
+	{
 		for (Entity entity : entities) {
 			if (entity instanceof Node) {
 				Node node = (Node) entity;
 				Resource subject = vocab.createResource(node);
-				SimpleNodeToRDFTransformer.generateGeoRSS(model, subject, node);
+				// SimpleNodeToRDFTransformer.generateGeoRSS(model, subject,
+				// node);
+				nodeSerializer.write(
+						model,
+						subject,
+						new Point2D.Double(node.getLongitude(), node
+								.getLatitude()));
 			}
 		}
 	}
 
-
 	/**
-	 * Advances the state of this object; ie processes all pending entities.  
+	 * Advances the state of this object; ie processes all pending entities.
 	 * Afterwards, the diffs can be taken using getMainDiff() and getNodeDiff().
 	 * 
 	 * @param inDiff
@@ -365,7 +378,13 @@ public class OptimizedDiffUpdateStrategy
 
 		// Determine the set set of nodes that have been repositioned
 		// These are nodes that have a position-related triple in the diff
-		Map<Resource, String> repositionedNodes = LgdRdfUtils.createNodePosMapFromNodesGeoRSS(LgdRdfUtils.createModelFromStatements(mainDiff.getAdded()));
+		
+		//Map<Resource, String> repositionedNodes = LgdRdfUtils.createNodePosMapFromNodesGeoRSS(LgdRdfUtils.createModelFromStatements(mainDiff.getAdded()));
+		
+		
+		
+		
+		Map<Resource, Point2D> repositionedNodes = nodeSerializer.createNodePosMap(LgdRdfUtils.createModelFromStatements(mainDiff.getAdded()));
 		logger.info("" + ((System.nanoTime() - start) / 1000000000.0) + " Completed populating " +  repositionedNodes.size() + " repositioned nodes");
 			
 		// NOTE: Add an option to exclude newly created nodes here - as they can't affect
@@ -395,12 +414,12 @@ public class OptimizedDiffUpdateStrategy
 			affectedWays.remove(newWay);
 		
 		// Create inferred node-pos mappings based on georss data in the old model
-		Map<Resource, String> nodeToPos = LgdRdfUtils.createNodePosMapFromWays(oldMainModel, vocab);
+		Map<Resource, Point2D> nodeToPos = LgdRdfUtils.createNodePosMapFromWays(oldMainModel, vocab);
 		
 		
 		// Index the positions of all newly created/modified nodes
 		// Note that we overwrite the inferred data with data from the new model
-		Map<Resource, String> nodeToPosTmp = LgdRdfUtils.createNodePosMapFromEntities(createdOrModifiedEntities, vocab);
+		Map<Resource, Point2D> nodeToPosTmp = LgdRdfUtils.createNodePosMapFromEntities(createdOrModifiedEntities, vocab);
 		nodeToPos.putAll(nodeToPosTmp);
 
 
@@ -465,6 +484,12 @@ public class OptimizedDiffUpdateStrategy
 
 		dependencies.putAll(dependenciesTmp);
 		
+		if(createdResources.contains(ResourceFactory.createResource("http://linkedgeodata.org/triplify/way4742651"))) {
+			System.out.println("ASD");
+			System.out.println(dependencies.toString());
+			//System.out.println(nodeToPos.get(ResourceFactory.createResource("http://linkedgeodata.org/triplify/way4742651")));
+		}
+		
 		
 		// The remaining dangling items will not go into the main graph
 		// Now we know which positions we need to retrieve
@@ -493,7 +518,11 @@ public class OptimizedDiffUpdateStrategy
 		// We need to retrieve everything of all modified items that are
 		// dangling and add them to the old model, so that they get deleted
 		// properly
-		Set<Resource> danglingResourceDataLookup = Sets.intersection(danglingResources, modifiedResources);
+		// FIXME The dangling resource lookup must be based on modified resources
+		// or resources that depend on modified ones (e.g. nodes that belong to a modified way)
+		//Set<Resource> danglingResourceDataLookup = Sets.intersection(danglingResources, modifiedResources);
+		Set<Resource> danglingResourceDataLookup = Sets.difference(danglingResources, createdResources);
+		
 		//Model danglingModel = LgdSparqlTasks.fetchStatementsBySubject(sparqlEndpoint, mainDefaultGraphNames, danglingResourceDataLookup, 1024);
 		Model danglingModel = LgdSparqlTasks.fetchStatementsBySubject(deltaGraph, danglingResourceDataLookup, 1024);
 		logger.info("" + ((System.nanoTime() - start) / 1000000000.0) + " Completed fetching data for " + danglingResourceDataLookup.size() + " modified dangling resources, " + danglingModel.size() + " triples fetched");
@@ -503,11 +532,16 @@ public class OptimizedDiffUpdateStrategy
 		
 		// The positions of all undangled nodes need to go into the main graph
 		Model minimalStatementModel = ModelFactory.createDefaultModel();
-		for(Entity entity : createdOrModifiedEntities) {
+		//for(Entity entity : createdOrModifiedEntities) 
+		for(Entity entity : danglingEntities) {
 			Resource resource = vocab.createResource(entity);
+
+			boolean a = dependencies.keySet().contains(resource);
+			boolean b = !newMainSubjects.contains(resource);
+			
 			if(dependencies.keySet().contains(resource) && !newMainSubjects.contains(resource)) {
 				
-				createMinimalStatements(Collections.singleton(entity), minimalStatementModel, vocab);
+				createMinimalStatements(Collections.singleton(entity), minimalStatementModel, vocab, nodeSerializer);
 			}
 		}
 		newMainModel.add(minimalStatementModel);
@@ -544,11 +578,23 @@ public class OptimizedDiffUpdateStrategy
 		}
 		//Map<Resource, RDFNode> mappings = LgdSparqlTasks.fetchNodePositions(sparqlEndpoint, mainDefaultGraphNames, unindexedNodes);
 		//TODO Analyse: Actually we could always fetch node positions from nodeDao - can't we?
-		Map<Resource, RDFNode> mappings = LgdSparqlTasks.fetchNodePositions(pointGraph, unindexedNodes, 1024);
 		
-		for(Map.Entry<Resource, RDFNode> mapping : mappings.entrySet()) {
-			nodeToPos.put(mapping.getKey(), mapping.getValue().toString());
-		}
+		//Map<Resource, RDFNode> mappings = LgdSparqlTasks.fetchNodePositions(pointGraph, unindexedNodes, 1024);
+
+		
+		/*
+
+		WE ARE NOT USING THE GRAPH FOR FETCHING NODE POSITIONS BUT RATHER THE
+		NODE DAO
+		
+		Model mappingsModel = LgdSparqlTasks.fetchStatementsBySubject(pointGraph, unindexedNodes, 1024);
+		Map<Resource, Point2D> mappings = nodeSerializer.createNodePosMap(mappingsModel);
+		
+		
+		nodeToPos.putAll(mappings);
+		//for(Map.Entry<Resource, RDFNode> mapping : mappings.entrySet()) {
+		//	nodeToPos.put(mapping.getKey(), mapping.getValue().toString());
+		//}
 		
 		
 		
@@ -556,20 +602,33 @@ public class OptimizedDiffUpdateStrategy
 
 
 		unindexedNodes.remove(mappings.keySet());
-		
+		*/
 		
 		// Check the node store for additional node positions
 		// For all unindexed nodes that do not have a position yet, try
 		// to retrieve them from the nodePositionDAO
 		Map<Resource, Point2D> nodePositionDAOLookups = RDFNodePositionDAO.getAll(nodePositionDAO, vocab, unindexedNodes);
+		logger.info("" + ((System.nanoTime() - start) / 1000000000.0) + " Completed fetching positions for " + nodePositionDAOLookups.size() + " additional nodes");
+
+		// for these nodes create the minimal statements
+		for(Map.Entry<Resource, Point2D> item : nodePositionDAOLookups.entrySet()) {
+			createMinimalNodeStatements(newMainModel, nodeSerializer, item.getKey(), item.getValue());
+			//createMinimalStatements(entities, model, vocab, nodeSerializer)
+		}
+		
+		
+		nodeToPos.putAll(nodePositionDAOLookups);
+		/*
 		for(Map.Entry<Resource, Point2D> entry : nodePositionDAOLookups.entrySet()) {
 			Resource resource = entry.getKey();
 			Point2D point = entry.getValue();
 
 			nodeToPos.put(resource, point.getX() + " " + point.getY());
-		}		
+		}
+		*/		
 		unindexedNodes.remove(nodePositionDAOLookups.keySet());
 		
+		System.out.println(nodePositionDAOLookups);
 		
 		// Retrieve georss of affected ways
 		// Note: There is no point in attempting to reuse georrs from the old model,
@@ -583,7 +642,7 @@ public class OptimizedDiffUpdateStrategy
 		// all nodes are in the same changeset)
 		//Model georssOfAffectedWays = LgdSparqlTasks.constructGeoRSSLinePolygon(sparqlEndpoint, mainDefaultGraphNames, affectedWays.keySet());
 		Model georssOfAffectedWays = LgdSparqlTasks.fetchStatementsBySubject(linePolygonGraph, affectedWays.keySet(), 1024);
-			
+
 		
 		
 		// Now patch the georss
@@ -631,12 +690,13 @@ public class OptimizedDiffUpdateStrategy
 			for(Map.Entry<Integer, RDFNode> fix : fixes.entrySet()) {
 				int index = fix.getKey() - 1;
 				
-				String value = nodeToPos.get(fix.getValue());
-				if(value == null) {
+				Point2D pt = nodeToPos.get(fix.getValue());
+				if(pt == null) {
 					logger.warn("Cannot patch way " + way + " because its point list references node " + fix.getValue() + " for which no position was found");
 					positions = null;
 					break;
 				}
+				String value = pt.getY() + " " + pt.getX();
 				
 				if(index >= positions.size()) {
 					while(index > positions.size()) {							
@@ -731,13 +791,15 @@ public class OptimizedDiffUpdateStrategy
 					logger.warn("Index out of sync: " + fix);
 				}
 				
-				String value = nodeToPos.get(fix.getValue());
-				if(value == null) {
+				Point2D pt = nodeToPos.get(fix.getValue());
+				if(pt == null) {
 					++lookupErrors;
 				}
 				
-				if(lookupErrors == 0)
+				if(lookupErrors == 0) {
+					String value = pt.getY() + " " + pt.getX();
 					geoRSSParts.add(value);
+				}
 			}
 			
 			if(lookupErrors > 0) {
@@ -825,34 +887,32 @@ public class OptimizedDiffUpdateStrategy
 	{
 		return deltaGraph;
 	}
-	
-	
-	
-	public boolean reject(Entity entity, Predicate<Tag> relevanceFilter)
-	{		
-		// Skip irrelevant ways or ways with too many nodes 
-		if(entity instanceof Way) {
-			Way way = (Way)entity;
 
-			return
-				(way.getWayNodes().size() > 20) ||
-				(!isRelevant(way, relevanceFilter));
+	public boolean reject(Entity entity, Predicate<Tag> relevanceFilter)
+	{
+		// Skip irrelevant ways or ways with too many nodes
+		if (entity instanceof Way) {
+			Way way = (Way) entity;
+
+			return (way.getWayNodes().size() > 20)
+					|| (!isRelevant(way, relevanceFilter));
 		}
-		
+
 		return false;
 	}
-	
-	public static boolean isRelevant(Entity entity, Predicate<Tag> relevanceFilter)
+
+	public static boolean isRelevant(Entity entity,
+			Predicate<Tag> relevanceFilter)
 	{
-		for(Tag tag : entity.getTags()) {
-			if(relevanceFilter.evaluate(tag)) {
+		for (Tag tag : entity.getTags()) {
+			if (relevanceFilter.evaluate(tag)) {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 	/*
 	 * public static boolean isTaglessNode(Entity entity) { if(!(entity
 	 * instanceof Node)) return false;
@@ -866,8 +926,8 @@ public class OptimizedDiffUpdateStrategy
 	 * 
 	 * Entities without any relevant tag are ignored.
 	 */
-	private Set<Entity> transformToModel(
-			Iterable<? extends Entity> entities, Model mainModel, Predicate<Tag> relevanceFilter) throws Exception
+	private Set<Entity> transformToModel(Iterable<? extends Entity> entities,
+			Model mainModel, Predicate<Tag> relevanceFilter) throws Exception
 	{
 		Set<Entity> result = new HashSet<Entity>();
 
@@ -880,19 +940,18 @@ public class OptimizedDiffUpdateStrategy
 				result.add(entity);
 				continue;
 			}
-			
+
 			// Skip ways with too many nodes
-			if(entity instanceof Way) {
-				Way way = (Way)entity;
-				if(way.getWayNodes().size() > 20) {
-					//result.add(entity);
+			if (entity instanceof Way) {
+				Way way = (Way) entity;
+				if (way.getWayNodes().size() > 20) {
+					// result.add(entity);
 					continue;
 				}
 			}
-			
 
-			if(!isRelevant(entity, relevanceFilter)) {
-				if(entity instanceof Node) {
+			if (!isRelevant(entity, relevanceFilter)) {
+				if (entity instanceof Node) {
 					result.add(entity);
 				}
 				continue;
@@ -924,18 +983,17 @@ public class OptimizedDiffUpdateStrategy
 			mainGraphDiff = new RDFDiff();
 
 			nodeDiff = new TreeSetDiff<Node>();
-			//nodeGraphDiff = new RDFDiff();
+			// nodeGraphDiff = new RDFDiff();
 
 			// process(entityDiff, mainGraphDiff, maxEntityBatchSize);
-			//process(null, mainGraphDiff, maxEntityBatchSize);
+			// process(null, mainGraphDiff, maxEntityBatchSize);
 			step();
-			
+
 			System.out.println("LinePolygonGraph:");
 			System.out.println(linePolygonGraph);
 			System.out.println("PointGraph:");
 			System.out.println(pointGraph);
-			
-			
+
 			// entityDiff.clear();
 		} catch (Exception e) {
 			logger.error("An error occurred at the completion phase of a task",
@@ -963,4 +1021,3 @@ public class OptimizedDiffUpdateStrategy
 		nodeDiff = null;
 	}
 }
-

@@ -102,9 +102,9 @@ public class SimpleNodeToRDFTransformer
 		return result;
 	}
 	
-	public static void generateVirtusoPosition(Model model, Resource subject, Node node)
+	public static void generateVirtusoPosition(Model model, Resource subject, Point2D point)
 	{
-		Literal literal = generateVirtuosoLiteral(new Point2D.Double(node.getLongitude(), node.getLatitude()));
+		Literal literal = generateVirtuosoLiteral(point);
 		model.add(subject, WGS84Pos.geometry, literal);
 	}
 
@@ -153,6 +153,11 @@ public class SimpleNodeToRDFTransformer
 		model.add(subject, model.getProperty(geoRSSPoint), str);
 	}
 	
+	public static void generateGeoRSS(Model model, Resource subject, Point2D point)
+	{
+		String str = point.getY() + " " + point.getX();		
+		model.add(subject, model.getProperty(geoRSSPoint), str);
+	}
 	
 	/*
 	private static final String wgs84NS = "http://www.w3.org/2003/01/geo/wgs84_pos#";

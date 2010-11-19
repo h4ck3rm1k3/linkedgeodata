@@ -198,6 +198,26 @@ public class LgdRdfUtils
 		}
 	}
 
+	
+	public static Map<Resource, Point2D> createNodePosMapFromNodesVirtuoso(Model model)
+	{
+		Map<Resource, Point2D> result = new HashMap<Resource, Point2D>();
+
+		for (Statement stmt : model.listStatements(null, GeoRSS.geo,
+				(RDFNode) null).toList()) {
+			String value = stmt.getLiteral().getValue().toString();
+			
+			Point2D point = tryParseVirtuosoPointValue(value);
+			if(point != null) {
+				result.put(stmt.getSubject(), point);
+			}
+		}
+
+		return result;
+	}
+
+	
+	/*
 	public static Map<Resource, String> createNodePosMapFromNodesGeoRSS(Model model)
 	{
 		Map<Resource, String> result = new HashMap<Resource, String>();
@@ -210,6 +230,25 @@ public class LgdRdfUtils
 
 		return result;
 	}
+	*/
+	public static Map<Resource, Point2D> createNodePosMapFromNodesGeoRSS(Model model)
+	{
+		Map<Resource, Point2D> result = new HashMap<Resource, Point2D>();
+
+		for (Statement stmt : model.listStatements(null, GeoRSS.point,
+				(RDFNode) null).toList()) {
+			String value = stmt.getLiteral().getValue().toString();
+			
+			Point2D point = tryParseGeoRSSPointValue(value);
+			
+			result.put(stmt.getSubject(), point);
+		}
+
+		return result;
+	}
+	
+	
+	
 
 	/**
 	 * Creates a Node-Pos Map by mapping a georss:node-string to triples of the
@@ -217,9 +256,9 @@ public class LgdRdfUtils
 	 * 
 	 * 
 	 */
-	public static Map<Resource, String> createNodePosMapFromWays(Model model, ILGDVocab vocab)
+	public static Map<Resource, Point2D> createNodePosMapFromWays(Model model, ILGDVocab vocab)
 	{
-		Map<Resource, String> result = new HashMap<Resource, String>();
+		Map<Resource, Point2D> result = new HashMap<Resource, Point2D>();
 
 		Set<Statement> ways = model
 				.listStatements(null, GeoRSS.line, (RDFNode) null)
@@ -256,17 +295,20 @@ public class LgdRdfUtils
 					continue;
 				}
 
-				result.put(node, positions.get(index));
+				String str = positions.get(index);
+				Point2D val = tryParseGeoRSSPointValue(str);
+
+				result.put(node, val);
 			}
 		}
 
 		return result;
 	}
 
-	public static Map<Resource, String> createNodePosMapFromEntities(
+	public static Map<Resource, Point2D> createNodePosMapFromEntities(
 			Iterable<? extends Entity> entities, ILGDVocab vocab)
 	{
-		Map<Resource, String> result = new HashMap<Resource, String>();
+		Map<Resource, Point2D> result = new HashMap<Resource, Point2D>();
 
 		for (Entity entity : entities) {
 			if (entity instanceof Node) {
@@ -276,7 +318,9 @@ public class LgdRdfUtils
 				//String pos = node.getLongitude() + " " + node.getLatitude();
 				String pos = node.getLatitude() + " " + node.getLongitude();
 				
-				result.put(resource, pos);
+				Point2D val = tryParseGeoRSSPointValue(pos);
+				
+				result.put(resource, val);
 			}
 		}
 

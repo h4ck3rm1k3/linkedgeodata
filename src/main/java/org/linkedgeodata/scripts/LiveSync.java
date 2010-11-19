@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -42,12 +43,15 @@ import org.linkedgeodata.osm.mapping.TagMappingDB;
 import org.linkedgeodata.osm.mapping.impl.OSMEntityToRDFTransformer;
 import org.linkedgeodata.osm.osmosis.plugins.EntityFilter;
 import org.linkedgeodata.osm.osmosis.plugins.EntityFilterPlugin;
+import org.linkedgeodata.osm.osmosis.plugins.INodeSerializer;
 import org.linkedgeodata.osm.osmosis.plugins.IUpdateStrategy;
 import org.linkedgeodata.osm.osmosis.plugins.OptimizedDiffUpdateStrategy;
+import org.linkedgeodata.osm.osmosis.plugins.RDFDiff;
 import org.linkedgeodata.osm.osmosis.plugins.RDFDiffWriter;
 import org.linkedgeodata.osm.osmosis.plugins.TagFilter;
 import org.linkedgeodata.osm.osmosis.plugins.TagFilterPlugin;
 import org.linkedgeodata.osm.osmosis.plugins.TreeSetDiff;
+import org.linkedgeodata.osm.osmosis.plugins.VirtuosoOseNodeSerializer;
 import org.linkedgeodata.tagmapping.client.entity.AbstractTagMapperState;
 import org.linkedgeodata.tagmapping.client.entity.IEntity;
 import org.linkedgeodata.util.IDiff;
@@ -62,6 +66,7 @@ import org.linkedgeodata.util.sparql.cache.DeltaGraph;
 import org.linkedgeodata.util.sparql.cache.IGraph;
 import org.linkedgeodata.util.sparql.cache.SparqlEndpointFilteredGraph;
 import org.linkedgeodata.util.sparql.cache.TripleCacheIndexImpl;
+import org.linkedgeodata.util.sparql.cache.TripleUtils;
 import org.openstreetmap.osmosis.core.OsmosisRuntimeException;
 import org.openstreetmap.osmosis.core.domain.v0_6.Entity;
 import org.openstreetmap.osmosis.core.domain.v0_6.Node;
@@ -73,7 +78,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
+import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.sparql.util.graph.GraphFactory;
 
 /*
  class EntityClassifier
@@ -299,8 +307,11 @@ public class LiveSync
 		TagFilter relevanceFilter = new TagFilter();
 		relevanceFilter.load(new File(config.get("relevanceFilter")));
 		
+		INodeSerializer nodeSerializer = new VirtuosoOseNodeSerializer();
+		
+		
 		diffStrategy = new OptimizedDiffUpdateStrategy(vocab,
-				entityTransformer, deltaGraph, nodePositionDao, relevanceFilter);
+				entityTransformer, nodeSerializer, deltaGraph, nodePositionDao, relevanceFilter);
 
 		TagFilterPlugin tagFilterPlugin = new TagFilterPlugin(tagFilter);
 
@@ -392,6 +403,8 @@ public class LiveSync
 		// IDiff<Model> diff = computeDiff(sequenceNumber);
 		DiffResult diff = computeDiff(sequenceNumber);
 
+		logger.info("Publishing diff");
+		publishDiff(sequenceNumber);
 	
 		
 		logger.info("Applying main diff (added/removed) = "
@@ -404,8 +417,6 @@ public class LiveSync
 				+ diff.getNodeDiff().getRemoved().size());
 		applyNodeDiff(diff.getNodeDiff());
 
-		logger.info("Publishing diff");
-		publishDiff(sequenceNumber, diff.getMainDiff());
 
 		logger.info("Downloading new state");
 		advance(sequenceNumber + 1);
@@ -448,15 +459,28 @@ public class LiveSync
 		*/
 	}
 
-	private void publishDiff(long id, IDiff<Model> diff) throws IOException
+	private void publishDiff(long id) throws IOException
 	{
 		String fileName = publishDiffBaseName + "/" + getFragment(id);
 		File parent = new File(fileName).getParentFile();
 		if (parent != null)
 			parent.mkdirs();
 
+
+		Set<Triple> added = deltaGraph.getAdditionGraph().bulkFind(null, new int[]{});
+		Set<Triple> removed = deltaGraph.getRemovalGraph().bulkFind(null, new int[]{});
+
+		IDiff<Model> diff = new RDFDiff(
+				TripleUtils.toModel(added),
+				TripleUtils.toModel(removed),
+				null);
+		
 		RDFDiffWriter rdfDiffWriter = new RDFDiffWriter(fileName);
 		rdfDiffWriter.write(diff);
+
+		
+		
+		
 		// RDFDiffWriter.writ
 	}
 
