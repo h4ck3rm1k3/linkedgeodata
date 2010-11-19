@@ -74,8 +74,8 @@
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.wcohen.ss</groupId>
-			<artifactId>secondstring-20060615</artifactId>
+			<groupId>net.sourceforge.secondstring</groupId>
+			<artifactId>secondstring</artifactId>
 			<version>20060615</version>
 		</dependency>
 		<dependency>
