@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osmChange version="0.6" generator="Osmosis 0.31.1">
+  <delete>
+ <way id="4742644" version="3" timestamp="2008-04-21T21:34:42Z" uid="18483" user="toralf" changeset="216259">
+    <nd ref="30221339"/>
+    <nd ref="30221340"/>
+    <nd ref="259089385"/>
+    <nd ref="259089386"/>
+    <nd ref="30221339"/>
+    <tag k="leisure" v="pitch"/>
+    <tag k="source" v="yahoo"/>
+    <tag k="sport" v="soccer"/>
+  </way>
+  </delete>
+</osmChange>

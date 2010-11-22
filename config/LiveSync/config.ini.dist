@@ -19,6 +19,9 @@ tagFilter="LiveTagFilter.txt.dist"
 relevanceFilter="LiveRelevanceFilter.txt.dist"
 
 publishDiffRepoPath="/var/www/downloads.linkedgeodata.org/changesets/minutely"
+# nodeSerializer can be either georss or virtuoso
+nodeSerializer=georss
+
 
 sleepInterval=60
 

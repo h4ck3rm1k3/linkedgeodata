@@ -159,7 +159,6 @@ public class DeltaGraph
 	@Override
 	public void clear()
 	{
-		// TODO Auto-generated method stub
 		additionGraph.clear();
 		removalGraph.clear();
 		baseGraph.clear();

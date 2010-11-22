@@ -37,6 +37,7 @@ import org.linkedgeodata.osm.osmosis.plugins.LiveDumpChangeSink;
 import org.linkedgeodata.osm.osmosis.plugins.OptimizedDiffUpdateStrategy;
 import org.linkedgeodata.osm.osmosis.plugins.TagFilter;
 import org.linkedgeodata.osm.osmosis.plugins.TagFilterPlugin;
+import org.linkedgeodata.osm.osmosis.plugins.VirtuosoCommercialNodeSerializer;
 import org.linkedgeodata.osm.osmosis.plugins.VirtuosoOseNodeSerializer;
 import org.linkedgeodata.tagmapping.client.entity.AbstractTagMapperState;
 import org.linkedgeodata.tagmapping.client.entity.IEntity;
@@ -223,7 +224,6 @@ public class LiveDump
 		CacheBulkMap<Long, Point2D> nodePositionDaoCache = CacheBulkMap.create(nodePositionDaoCore, 1000000, 1000000);
 		DeltaBulkMap<Long, Point2D> nodePositionDao = DeltaBulkMap.create(nodePositionDaoCache);
 
-		GeoRSSNodeMapper nodeMapper = new GeoRSSNodeMapper(vocab);
 		//NodePositionDAO rdfNodePositionDAO = new RDFNodePositionDAO(
 		//		nodePositionDao, vocab, nodeMapper);
 
@@ -251,10 +251,15 @@ public class LiveDump
 		DeltaGraph deltaGraph = new DeltaGraph(baseGraph);
 
 		// Create an index by s and o
-		TripleCacheIndexImpl.create(baseGraph, 1000000, 100000, 100000,
+		TripleCacheIndexImpl.create(baseGraph, 1000000, 1000, 1000000,
 				new int[] { 0 });
 		
-		INodeSerializer nodeSerializer = new VirtuosoOseNodeSerializer();
+		INodeSerializer nodeSerializer = null;
+		if(config.get("nodeSerializer").equalsIgnoreCase("georss")) {
+			nodeSerializer = new VirtuosoOseNodeSerializer();
+		} else if(config.get("nodeSerializer").equalsIgnoreCase("virtuoso")) {
+			nodeSerializer = new VirtuosoCommercialNodeSerializer();
+		}
 		
 		OptimizedDiffUpdateStrategy diffStrategy = new OptimizedDiffUpdateStrategy(vocab,
 				entityTransformer, nodeSerializer, deltaGraph, nodePositionDao, relevanceFilter);

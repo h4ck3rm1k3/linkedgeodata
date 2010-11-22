@@ -82,7 +82,7 @@ public class OptimizedDiffUpdateStrategy
 	private DeltaGraph					deltaGraph;
 
 	private IGraph						linePolygonGraph;
-	private IGraph						pointGraph;
+	//private IGraph						pointGraph;
 
 	private INodeSerializer				nodeSerializer;
 
@@ -152,13 +152,13 @@ public class OptimizedDiffUpdateStrategy
 		this.linePolygonGraph = ((SparqlEndpointFilteredGraph) deltaGraph
 				.getBaseGraph()).createSubGraph("?p = <" + GeoRSS.line
 				+ "> || ?p = <" + GeoRSS.polygon + ">");
-		this.pointGraph = ((SparqlEndpointFilteredGraph) deltaGraph
-				.getBaseGraph()).createSubGraph("?p = <" + GeoRSS.point + ">");
+		//this.pointGraph = ((SparqlEndpointFilteredGraph) deltaGraph
+				//.getBaseGraph()).createSubGraph("?p = <" + GeoRSS.point + ">");
 
 		TripleCacheIndexImpl.create(linePolygonGraph, 100000, 10000, 10000,
 				new int[] { 0 });
-		TripleCacheIndexImpl.create(pointGraph, 100000, 10000, 10000,
-				new int[] { 0 });
+		//TripleCacheIndexImpl.create(pointGraph, 100000, 10000, 10000,
+				//new int[] { 0 });
 
 	}
 
@@ -455,7 +455,7 @@ public class OptimizedDiffUpdateStrategy
 		
 		// Undangle all currently danling nodes that are referenced by ways of this changeset
 		
-		// UNa) Undangle all currently danling nodes that are referenced by relations or ways of this changeset
+		// UNa) Undangle all currently dangling nodes that are referenced by relations or ways of this changeset
 		//Set<Resource> undangledResources = new HashSet<Resource>();
 		dependencies.putAll(LgdRdfUtils.extractDependencies(newMainModel, vocab));
 		
@@ -483,12 +483,13 @@ public class OptimizedDiffUpdateStrategy
 		danglingResources.removeAll(dependenciesTmp.keySet());
 
 		dependencies.putAll(dependenciesTmp);
-		
+
+		/*
 		if(createdResources.contains(ResourceFactory.createResource("http://linkedgeodata.org/triplify/way4742651"))) {
 			System.out.println("ASD");
 			System.out.println(dependencies.toString());
 			//System.out.println(nodeToPos.get(ResourceFactory.createResource("http://linkedgeodata.org/triplify/way4742651")));
-		}
+		}*/
 		
 		
 		// The remaining dangling items will not go into the main graph
@@ -503,7 +504,7 @@ public class OptimizedDiffUpdateStrategy
 				danglingNodes.add(resource);
 		}
 		
-		// TODO As long as there are no relations, only nodes can be danling
+		// TODO As long as there are no relations, only nodes can be dangling
 		danglingResources = danglingNodes;
 		
 		// Set<Resource> danglingWays
@@ -536,8 +537,8 @@ public class OptimizedDiffUpdateStrategy
 		for(Entity entity : danglingEntities) {
 			Resource resource = vocab.createResource(entity);
 
-			boolean a = dependencies.keySet().contains(resource);
-			boolean b = !newMainSubjects.contains(resource);
+			//boolean a = dependencies.keySet().contains(resource);
+			//boolean b = !newMainSubjects.contains(resource);
 			
 			if(dependencies.keySet().contains(resource) && !newMainSubjects.contains(resource)) {
 				
@@ -555,8 +556,9 @@ public class OptimizedDiffUpdateStrategy
 		// FIXME: Add all nodes to the node diff that did not go into the main graph
 		// (Hm, but these are exactly all the dangling nodes, aren't they?)
 		for(Node node : createdOrModifiedNodes) {
-			if(danglingResources.contains(vocab.createResource(node)))
-					nodeDiff.getAdded().add(node);
+			if(danglingResources.contains(vocab.createResource(node))) {
+				nodeDiff.getAdded().add(node);
+			}
 		}
 		
 		
@@ -992,7 +994,7 @@ public class OptimizedDiffUpdateStrategy
 			System.out.println("LinePolygonGraph:");
 			System.out.println(linePolygonGraph);
 			System.out.println("PointGraph:");
-			System.out.println(pointGraph);
+			//System.out.println(pointGraph);
 
 			// entityDiff.clear();
 		} catch (Exception e) {

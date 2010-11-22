@@ -51,6 +51,7 @@ import org.linkedgeodata.osm.osmosis.plugins.RDFDiffWriter;
 import org.linkedgeodata.osm.osmosis.plugins.TagFilter;
 import org.linkedgeodata.osm.osmosis.plugins.TagFilterPlugin;
 import org.linkedgeodata.osm.osmosis.plugins.TreeSetDiff;
+import org.linkedgeodata.osm.osmosis.plugins.VirtuosoCommercialNodeSerializer;
 import org.linkedgeodata.osm.osmosis.plugins.VirtuosoOseNodeSerializer;
 import org.linkedgeodata.tagmapping.client.entity.AbstractTagMapperState;
 import org.linkedgeodata.tagmapping.client.entity.IEntity;
@@ -275,7 +276,7 @@ public class LiveSync
 		nodePositionDao = DeltaBulkMap.create(nodePositionDaoCache);
 
 
-		GeoRSSNodeMapper nodeMapper = new GeoRSSNodeMapper(vocab);
+		//GeoRSSNodeMapper nodeMapper = new GeoRSSNodeMapper(vocab);
 		//RDFNodePositionDAO rdfNodePositionDao = new RDFNodePositionDAO(
 				//nodePositionDao, vocab, nodeMapper);
 
@@ -283,9 +284,9 @@ public class LiveSync
 		deltaGraph = new DeltaGraph(baseGraph);
 
 		// Create an index by s and o
-		TripleCacheIndexImpl.create(baseGraph, 1000000, 100000, 100000,
+		TripleCacheIndexImpl.create(baseGraph, 1000000, 1000, 1000000,
 				new int[] { 0 });
-		TripleCacheIndexImpl.create(baseGraph, 1000000, 100000, 100000,
+		TripleCacheIndexImpl.create(baseGraph, 1000000, 1000, 1000000,
 				new int[] { 2 });
 
 		/*
@@ -307,7 +308,13 @@ public class LiveSync
 		TagFilter relevanceFilter = new TagFilter();
 		relevanceFilter.load(new File(config.get("relevanceFilter")));
 		
-		INodeSerializer nodeSerializer = new VirtuosoOseNodeSerializer();
+		
+		INodeSerializer nodeSerializer = null;
+		if(config.get("nodeSerializer").equalsIgnoreCase("georss")) {
+			nodeSerializer = new VirtuosoOseNodeSerializer();
+		} else if(config.get("nodeSerializer").equalsIgnoreCase("virtuoso")) {
+			nodeSerializer = new VirtuosoCommercialNodeSerializer();
+		}
 		
 		
 		diffStrategy = new OptimizedDiffUpdateStrategy(vocab,

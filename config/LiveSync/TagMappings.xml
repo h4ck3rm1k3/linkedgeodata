@@ -1149,7 +1149,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/LeisureFitness</object>
+    <object>http://linkedgeodata.org/ontology/Fitness</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -1209,7 +1209,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/LeisureBeach</object>
+    <object>http://linkedgeodata.org/ontology/Beach</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -1239,7 +1239,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/LeisureSwimmingPool</object>
+    <object>http://linkedgeodata.org/ontology/SwimmingPool</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -1259,7 +1259,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/LeisureBandstand</object>
+    <object>http://linkedgeodata.org/ontology/Bandstand</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -1289,7 +1289,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/LeisureGym</object>
+    <object>http://linkedgeodata.org/ontology/Gym</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -1309,7 +1309,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/LeisureMusicVenue</object>
+    <object>http://linkedgeodata.org/ontology/MusicVenue</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -1329,7 +1329,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/LeisurePlayground</object>
+    <object>http://linkedgeodata.org/ontology/Playground</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -1339,7 +1339,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/LeisurePark</object>
+    <object>http://linkedgeodata.org/ontology/Park</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -1349,7 +1349,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/LeisureSocialClub</object>
+    <object>http://linkedgeodata.org/ontology/SocialClub</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -1359,7 +1359,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/LeisureSportsCentre</object>
+    <object>http://linkedgeodata.org/ontology/SportsCentre</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -1369,7 +1369,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/LeisureTrack</object>
+    <object>http://linkedgeodata.org/ontology/Track</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -1379,7 +1379,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/LeisureSport</object>
+    <object>http://linkedgeodata.org/ontology/Sport</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -1389,7 +1389,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/LeisureSauna</object>
+    <object>http://linkedgeodata.org/ontology/Sauna</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -1449,7 +1449,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/LeisureClub</object>
+    <object>http://linkedgeodata.org/ontology/Club</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -1469,7 +1469,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/LeisureCasino</object>
+    <object>http://linkedgeodata.org/ontology/Casino</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -1489,7 +1489,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/LeisureFishing</object>
+    <object>http://linkedgeodata.org/ontology/Fishing</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -1499,7 +1499,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/LeisureGarden</object>
+    <object>http://linkedgeodata.org/ontology/Garden</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -9852,7 +9852,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityBench</object>
+    <object>http://linkedgeodata.org/ontology/Bench</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -9872,7 +9872,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityResidential</object>
+    <object>http://linkedgeodata.org/ontology/Residential</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -9972,7 +9972,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityArtGallery</object>
+    <object>http://linkedgeodata.org/ontology/ArtGallery</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -9982,7 +9982,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenitySalon</object>
+    <object>http://linkedgeodata.org/ontology/Salon</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -10002,7 +10002,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityShelter</object>
+    <object>http://linkedgeodata.org/ontology/Shelter</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -10152,7 +10152,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenitySportsCentre</object>
+    <object>http://linkedgeodata.org/ontology/SportsCentre</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -10172,7 +10172,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityFlorist</object>
+    <object>http://linkedgeodata.org/ontology/Florist</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -10182,7 +10182,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityVideoRental</object>
+    <object>http://linkedgeodata.org/ontology/VideoRental</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -10232,7 +10232,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityHospital</object>
+    <object>http://linkedgeodata.org/ontology/Hospital</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -10242,7 +10242,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityRetail</object>
+    <object>http://linkedgeodata.org/ontology/Retail</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -10322,7 +10322,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityEntrance</object>
+    <object>http://linkedgeodata.org/ontology/Entrance</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -10342,7 +10342,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityLampPost</object>
+    <object>http://linkedgeodata.org/ontology/LampPost</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -10472,7 +10472,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityPark</object>
+    <object>http://linkedgeodata.org/ontology/Park</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -10632,7 +10632,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityDrivingSchool</object>
+    <object>http://linkedgeodata.org/ontology/DrivingSchool</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -10652,7 +10652,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityHall</object>
+    <object>http://linkedgeodata.org/ontology/Hall</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -10692,7 +10692,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityCemetery</object>
+    <object>http://linkedgeodata.org/ontology/Cemetery</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -10762,7 +10762,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityArtwork</object>
+    <object>http://linkedgeodata.org/ontology/Artwork</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -10782,7 +10782,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityBorderControl</object>
+    <object>http://linkedgeodata.org/ontology/BorderControl</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -10802,7 +10802,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityBakery</object>
+    <object>http://linkedgeodata.org/ontology/Bakery</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -10872,7 +10872,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityIceCream</object>
+    <object>http://linkedgeodata.org/ontology/IceCream</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -10932,7 +10932,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenitySocialClub</object>
+    <object>http://linkedgeodata.org/ontology/SocialClub</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -10952,7 +10952,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/Leisure</object>
+    <object>http://linkedgeodata.org/ontology/Amenity</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -11002,7 +11002,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityTourist</object>
+    <object>http://linkedgeodata.org/ontology/Tourist</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -11042,7 +11042,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityBillboard</object>
+    <object>http://linkedgeodata.org/ontology/Billboard</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -11052,7 +11052,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityPlumber</object>
+    <object>http://linkedgeodata.org/ontology/Plumber</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -11132,7 +11132,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityInsurance</object>
+    <object>http://linkedgeodata.org/ontology/Insurance</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -11172,7 +11172,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityGarage</object>
+    <object>http://linkedgeodata.org/ontology/Garage</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -11182,7 +11182,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityWell</object>
+    <object>http://linkedgeodata.org/ontology/Well</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -11192,7 +11192,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityMilestone</object>
+    <object>http://linkedgeodata.org/ontology/Milestone</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -11212,7 +11212,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityFarm</object>
+    <object>http://linkedgeodata.org/ontology/Farm</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -11222,7 +11222,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityBandstand</object>
+    <object>http://linkedgeodata.org/ontology/Bandstand</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -11262,7 +11262,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityFuel</object>
+    <object>http://linkedgeodata.org/ontology/Fuel</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -11352,7 +11352,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityCamera</object>
+    <object>http://linkedgeodata.org/ontology/Camera</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -11472,7 +11472,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityService</object>
+    <object>http://linkedgeodata.org/ontology/Service</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -11482,7 +11482,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityLamp</object>
+    <object>http://linkedgeodata.org/ontology/Lamp</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -11512,7 +11512,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityParking</object>
+    <object>http://linkedgeodata.org/ontology/Parking</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -11542,7 +11542,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityCarWash</object>
+    <object>http://linkedgeodata.org/ontology/CarWash</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -11602,7 +11602,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityHairdresser</object>
+    <object>http://linkedgeodata.org/ontology/Hairdresser</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -11642,7 +11642,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityCommercial</object>
+    <object>http://linkedgeodata.org/ontology/Commercial</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -11672,7 +11672,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityInformation</object>
+    <object>http://linkedgeodata.org/ontology/Information</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -11682,7 +11682,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityBusStop</object>
+    <object>http://linkedgeodata.org/ontology/BusStop</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -11692,7 +11692,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityServices</object>
+    <object>http://linkedgeodata.org/ontology/Services</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -11702,7 +11702,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityChurch</object>
+    <object>http://linkedgeodata.org/ontology/Church</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -11782,7 +11782,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityBar</object>
+    <object>http://linkedgeodata.org/ontology/Bar</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -11802,7 +11802,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityCross</object>
+    <object>http://linkedgeodata.org/ontology/Cross</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -11812,7 +11812,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/LeisureCentre</object>
+    <object>http://linkedgeodata.org/ontology/Centre</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -11822,7 +11822,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenitySupermarket</object>
+    <object>http://linkedgeodata.org/ontology/Supermarket</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -11832,7 +11832,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityDormitory</object>
+    <object>http://linkedgeodata.org/ontology/Dormitory</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -11842,7 +11842,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityObservatory</object>
+    <object>http://linkedgeodata.org/ontology/Observatory</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -11852,7 +11852,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityChapel</object>
+    <object>http://linkedgeodata.org/ontology/Chapel</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -11862,7 +11862,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityMassage</object>
+    <object>http://linkedgeodata.org/ontology/Massage</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -11882,7 +11882,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityMine</object>
+    <object>http://linkedgeodata.org/ontology/Mine</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -11892,7 +11892,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityLayby</object>
+    <object>http://linkedgeodata.org/ontology/Layby</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -11922,7 +11922,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityConstruction</object>
+    <object>http://linkedgeodata.org/ontology/Construction</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -11942,7 +11942,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityWater</object>
+    <object>http://linkedgeodata.org/ontology/Water</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -11962,7 +11962,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityHut</object>
+    <object>http://linkedgeodata.org/ontology/Hut</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -11982,7 +11982,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityGallery</object>
+    <object>http://linkedgeodata.org/ontology/Gallery</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -12042,7 +12042,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityTakeAway</object>
+    <object>http://linkedgeodata.org/ontology/TakeAway</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -12062,7 +12062,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityClub</object>
+    <object>http://linkedgeodata.org/ontology/Club</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -12072,7 +12072,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityTelephone</object>
+    <object>http://linkedgeodata.org/ontology/Telephone</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -12102,7 +12102,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityShop</object>
+    <object>http://linkedgeodata.org/ontology/Shop</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -12112,7 +12112,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityPhone</object>
+    <object>http://linkedgeodata.org/ontology/Phone</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -12122,7 +12122,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityStreetLamp</object>
+    <object>http://linkedgeodata.org/ontology/StreetLamp</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -12162,7 +12162,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityCharity</object>
+    <object>http://linkedgeodata.org/ontology/Charity</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -12252,7 +12252,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityGym</object>
+    <object>http://linkedgeodata.org/ontology/Gym</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -12272,7 +12272,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityMusicVenue</object>
+    <object>http://linkedgeodata.org/ontology/MusicVenue</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -12282,7 +12282,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityWinery</object>
+    <object>http://linkedgeodata.org/ontology/Winery</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -12342,7 +12342,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenitySolarium</object>
+    <object>http://linkedgeodata.org/ontology/Solarium</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -12352,7 +12352,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenitySauna</object>
+    <object>http://linkedgeodata.org/ontology/Sauna</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -12412,7 +12412,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityStatue</object>
+    <object>http://linkedgeodata.org/ontology/Statue</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -12442,7 +12442,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityMarket</object>
+    <object>http://linkedgeodata.org/ontology/Market</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -12462,7 +12462,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityFountain</object>
+    <object>http://linkedgeodata.org/ontology/Fountain</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -12472,7 +12472,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityMonastery</object>
+    <object>http://linkedgeodata.org/ontology/Monastery</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -12562,7 +12562,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityOther</object>
+    <object>http://linkedgeodata.org/ontology/Other</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -12602,7 +12602,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenitySwimmingPool</object>
+    <object>http://linkedgeodata.org/ontology/SwimmingPool</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -12622,7 +12622,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityFireHydrant</object>
+    <object>http://linkedgeodata.org/ontology/FireHydrant</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -12662,7 +12662,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityOffice</object>
+    <object>http://linkedgeodata.org/ontology/Office</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -12672,7 +12672,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityPlayground</object>
+    <object>http://linkedgeodata.org/ontology/Playground</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -12712,7 +12712,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityBuilding</object>
+    <object>http://linkedgeodata.org/ontology/Building</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -12732,7 +12732,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenitySport</object>
+    <object>http://linkedgeodata.org/ontology/Sport</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -12782,7 +12782,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityWaterWell</object>
+    <object>http://linkedgeodata.org/ontology/WaterWell</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -12792,7 +12792,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityBusStation</object>
+    <object>http://linkedgeodata.org/ontology/BusStation</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -12802,7 +12802,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityGambling</object>
+    <object>http://linkedgeodata.org/ontology/Gambling</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -12892,7 +12892,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenitySignpost</object>
+    <object>http://linkedgeodata.org/ontology/Signpost</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -12902,7 +12902,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityHotel</object>
+    <object>http://linkedgeodata.org/ontology/Hotel</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -12912,7 +12912,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityCarRepair</object>
+    <object>http://linkedgeodata.org/ontology/CarRepair</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -12922,7 +12922,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/AmenityStorage</object>
+    <object>http://linkedgeodata.org/ontology/Storage</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleDataTypeTagMapper>
     <property>http://linkedgeodata.org/ontology/inmate_count</property>
@@ -23665,7 +23665,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/ShopInternetCafe</object>
+    <object>http://linkedgeodata.org/ontology/InternetCafe</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -23684,7 +23684,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/ShopPharmacy</object>
+    <object>http://linkedgeodata.org/ontology/Pharmacy</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -23694,7 +23694,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/ShopWood</object>
+    <object>http://linkedgeodata.org/ontology/WoodShop</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -23744,7 +23744,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/ShopSalon</object>
+    <object>http://linkedgeodata.org/ontology/Salon</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -23754,7 +23754,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/ShopArtGallery</object>
+    <object>http://linkedgeodata.org/ontology/ArtGalleryShop</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -23914,7 +23914,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/ShopFlorist</object>
+    <object>http://linkedgeodata.org/ontology/FloristShop</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -23924,7 +23924,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/ShopVideoRental</object>
+    <object>http://linkedgeodata.org/ontology/VideoRental</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -24244,7 +24244,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/ShopGarden</object>
+    <object>http://linkedgeodata.org/ontology/GardenShop</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -24264,7 +24264,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/ShopDrivingSchool</object>
+    <object>http://linkedgeodata.org/ontology/DrivingSchoolShop</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -24364,7 +24364,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/ShopBakery</object>
+    <object>http://linkedgeodata.org/ontology/Bakery</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -24414,7 +24414,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/ShopIceCream</object>
+    <object>http://linkedgeodata.org/ontology/IceCreamShop</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -24504,7 +24504,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/ShopTourist</object>
+    <object>http://linkedgeodata.org/ontology/TouristShop</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -24524,7 +24524,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/ShopPlumber</object>
+    <object>http://linkedgeodata.org/ontology/Plumber</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -24564,7 +24564,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/ShopKiosk</object>
+    <object>http://linkedgeodata.org/ontology/Kiosk</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -24604,7 +24604,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/ShopInsurance</object>
+    <object>http://linkedgeodata.org/ontology/Insurance</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -24654,7 +24654,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/ShopGarage</object>
+    <object>http://linkedgeodata.org/ontology/GarageShop</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -24704,7 +24704,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/ShopFarm</object>
+    <object>http://linkedgeodata.org/ontology/FarmShop</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -24744,7 +24744,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/ShopUndefined</object>
+    <object>http://linkedgeodata.org/ontology/UndefinedShop</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -24864,7 +24864,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/ShopCamera</object>
+    <object>http://linkedgeodata.org/ontology/CameraShop</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -25054,7 +25054,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/ShopNo</object>
+    <object>http://linkedgeodata.org/ontology/NotAShop</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -25064,7 +25064,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/ShopCarWash</object>
+    <object>http://linkedgeodata.org/ontology/CarWash</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -25154,7 +25154,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/ShopZoo</object>
+    <object>http://linkedgeodata.org/ontology/ZooShop</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -25204,7 +25204,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/ShopHairdresser</object>
+    <object>http://linkedgeodata.org/ontology/HairdresserShop</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -25524,7 +25524,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/ShopSupermarket</object>
+    <object>http://linkedgeodata.org/ontology/Supermarket</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -25564,7 +25564,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/ShopMassage</object>
+    <object>http://linkedgeodata.org/ontology/MassageShop</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -25644,7 +25644,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/ShopConstruction</object>
+    <object>http://linkedgeodata.org/ontology/ConstructionShop</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -25654,7 +25654,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/ShopScubaDiving</object>
+    <object>http://linkedgeodata.org/ontology/ScubaDivingShop</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -25694,7 +25694,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/ShopGallery</object>
+    <object>http://linkedgeodata.org/ontology/GalleryShop</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -25704,7 +25704,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/ShopUnknown</object>
+    <object>http://linkedgeodata.org/ontology/UnknownShop</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -25744,7 +25744,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/ShopTakeAway</object>
+    <object>http://linkedgeodata.org/ontology/TakeAway</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -25774,7 +25774,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/ShopFishing</object>
+    <object>http://linkedgeodata.org/ontology/FishingShop</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -25804,7 +25804,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/ShopTelephone</object>
+    <object>http://linkedgeodata.org/ontology/TelephoneShop</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -25834,7 +25834,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/ShopShop</object>
+    <object>http://linkedgeodata.org/ontology/Shop</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -25844,7 +25844,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/ShopPhone</object>
+    <object>http://linkedgeodata.org/ontology/PhoneShop</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -25924,7 +25924,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/ShopCharity</object>
+    <object>http://linkedgeodata.org/ontology/CharityShop</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -25934,7 +25934,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/ShopBicycle</object>
+    <object>http://linkedgeodata.org/ontology/BicycleShop</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -26004,7 +26004,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/ShopGym</object>
+    <object>http://linkedgeodata.org/ontology/GymShop</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -26024,7 +26024,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/ShopWinery</object>
+    <object>http://linkedgeodata.org/ontology/WineryShop</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -26084,7 +26084,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/ShopSolarium</object>
+    <object>http://linkedgeodata.org/ontology/Solarium</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -26154,7 +26154,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/ShopMarket</object>
+    <object>http://linkedgeodata.org/ontology/Market</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -26214,7 +26214,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/ShopOther</object>
+    <object>http://linkedgeodata.org/ontology/OtherShop</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -26224,7 +26224,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/ShopFitness</object>
+    <object>http://linkedgeodata.org/ontology/FitnessShop</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -26354,7 +26354,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/ShopOffice</object>
+    <object>http://linkedgeodata.org/ontology/OfficeShop</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -26374,7 +26374,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/ShopSport</object>
+    <object>http://linkedgeodata.org/ontology/SportShop</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -26394,7 +26394,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/ShopGambling</object>
+    <object>http://linkedgeodata.org/ontology/GamblingShop</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -26494,7 +26494,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/ShopCarRepair</object>
+    <object>http://linkedgeodata.org/ontology/CarRepairShop</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleDataTypeTagMapper>
     <property>http://linkedgeodata.org/ontology/recycling%3Awaste</property>
