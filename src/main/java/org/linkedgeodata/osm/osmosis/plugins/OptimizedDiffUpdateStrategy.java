@@ -242,6 +242,28 @@ public class OptimizedDiffUpdateStrategy
 
 		return false;
 	}
+	
+	/**
+	 * Removes all nodes (TODO and later ways) from the model that
+	 * contain relevant tags
+	 * 
+	 * @param model
+	 * @return
+	 */
+	public int relevanceFilterModel(Model model) {		
+		int result = 0;
+		
+		for(Resource subject : model.listSubjects().toSet()) {
+			if(hasRelevantTag(model, subject)) {
+				model.removeAll(subject, null, null);
+				++result;
+			}
+		}
+		
+		return result;
+	}
+	
+	
 
 	
 	private static void createMinimalNodeStatements(Model model, INodeSerializer nodeSerializer, Resource subject, Point2D position)
@@ -519,16 +541,26 @@ public class OptimizedDiffUpdateStrategy
 		// We need to retrieve everything of all modified items that are
 		// dangling and add them to the old model, so that they get deleted
 		// properly
-		// FIXME The dangling resource lookup must be based on modified resources
+		// The dangling resource lookup must be based on modified resources
 		// or resources that depend on modified ones (e.g. nodes that belong to a modified way)
+		// In other words: resources that were just created can be excluded from the data lookup
 		//Set<Resource> danglingResourceDataLookup = Sets.intersection(danglingResources, modifiedResources);
 		Set<Resource> danglingResourceDataLookup = Sets.difference(danglingResources, createdResources);
 		
 		//Model danglingModel = LgdSparqlTasks.fetchStatementsBySubject(sparqlEndpoint, mainDefaultGraphNames, danglingResourceDataLookup, 1024);
 		Model danglingModel = LgdSparqlTasks.fetchStatementsBySubject(deltaGraph, danglingResourceDataLookup, 1024);
 		logger.info("" + ((System.nanoTime() - start) / 1000000000.0) + " Completed fetching data for " + danglingResourceDataLookup.size() + " modified dangling resources, " + danglingModel.size() + " triples fetched");
+
+		int undeleteCount = relevanceFilterModel(danglingModel);
+		logger.info("" + ((System.nanoTime() - start) / 1000000000.0) + " Excluded " + undeleteCount + " resources with relevant tags from deletion; " + danglingModel.size() + " remaining");
+		
 		oldMainModel.add(danglingModel);
 		
+		
+		
+		
+		// FIXME: We need to scan the dangling model whether any of the items
+		// has relevant "tags"
 		
 		
 		// The positions of all undangled nodes need to go into the main graph
