@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import com.hp.hpl.jena.graph.Triple;
 
 public class DefaultCacheProvider
-		implements ICacheProvider
+		implements ICacheProvider, IGraphListener
 {
 	private static final Logger logger = LoggerFactory.getLogger(DefaultCacheProvider.class);
 	
@@ -23,6 +23,8 @@ public class DefaultCacheProvider
 	public DefaultCacheProvider(IGraph graph)
 	{
 		this.graph = graph;
+		
+		graph.getGraphListeners().add(this);
 	}
 
 	@Override
@@ -160,5 +162,17 @@ public class DefaultCacheProvider
 		}
 		
 		return result;
+	}
+
+	@Override
+	public void onAdd(IGraph g, Collection<Triple> triples)
+	{
+		addSeen(triples);
+	}
+
+	@Override
+	public void onRemove(IGraph g, Collection<Triple> triples)
+	{
+		removeSeen(triples);
 	}
 }

@@ -1,5 +1,9 @@
 package org.linkedgeodata.util.sparql.cache;
 
+import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -50,6 +54,62 @@ public class CacheTest
 		
 	}
 	
+	
+	/**
+	 * Tests the insertion of a triple after a previous lookup for the same
+	 * subject yeld no results.
+	 * 
+	 * The expectation is, that this triple will go into the "full" index.
+	 * 
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void testInsertAfterCacheMiss()
+		throws Exception
+	{
+		System.out.println("testInsertAfterCacheMiss");
+		Set<Triple> baseTriples = new HashSet<Triple>();		
+		Node subject = Node.createURI("http://s.org");
+		baseTriples.add(new Triple(subject, Node.createURI("http://p.org"), Node.createURI("http://o.org")));
+
+		
+		MemoryGraph base = new MemoryGraph();
+		TripleCacheIndexImpl.create(base, 1000, 1000, 100, 0); 
+
+		
+		// Assumed: partial.
+		base.add(baseTriples);
+		System.out.println("Status: " + base);
+		
+		
+		base.remove(baseTriples);
+		System.out.println("Status: " + base);
+		//assertTrue(base..isEmpty());
+		
+		
+		Set<Triple> triples = base.bulkFind(Collections.singleton(Collections.singletonList((Object)subject)), new int[]{0});
+		
+		System.out.println("Status: " + base);
+		assertTrue(triples.isEmpty());
+		
+		
+		
+		base.add(baseTriples);
+		
+		
+		triples = base.bulkFind(Collections.singleton(Collections.singletonList((Object)subject)), new int[]{0});
+		System.out.println(base);
+		
+		System.out.println("Status: " + base);
+		assertFalse(triples.isEmpty());
+
+		
+		base.remove(triples);
+
+		System.out.println("Status: " + base);
+		assertTrue(triples.isEmpty());
+	}
 	
 	
 }

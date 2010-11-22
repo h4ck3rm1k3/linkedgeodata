@@ -541,6 +541,7 @@ public class TripleCacheIndexImpl
 
 	}
 
+/*
 	@Override
 	public void addSeen(Collection<Triple> triples)
 	{
@@ -563,7 +564,41 @@ public class TripleCacheIndexImpl
 			noDataCache.remove(key);
 		}
 	}
+*/
+	
+	@Override
+	public void addSeen(Collection<Triple> triples)
+	{
+		for (Triple triple : triples) {
+			List<Object> key = tripleToKey(triple);
+			List<Object> value = tripleToValue(triple);
 
+			Set<List<Object>> table = full.get(key);
+			if (table == null) {
+
+				if(noDataCache.contains(key)) {
+					table = new HashSet<List<Object>>();
+					full.put(key, table);
+					noDataCache.remove(key);
+				}
+				else {
+					table = partial.get(key);
+				
+					// FIXME Shouldn't we create a partial table here?
+					if(table == null) {
+						table = new HashSet<List<Object>>();
+						partial.put(key, table);
+					}
+				}
+			}
+
+			// TODO We assume that the rows in the table are unique
+			// but maybe this is the best way to do it in the first place
+			table.add(value);
+		}
+	}
+	
+	
 	@Override
 	public void clear()
 	{

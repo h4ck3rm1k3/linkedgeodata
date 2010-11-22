@@ -28,10 +28,13 @@ public class MemoryGraph
 	@Override
 	public void remove(Collection<Triple> ts)
 	{
+		//Set<Triple> actuallyRemoved = new HashSet<Triple>(ts);
 		triples.removeAll(ts);
 		
+		//actuallyRemoved.
+		
 		for(IGraphListener listener : listeners) {
-			listener.onRemove(this, triples);
+			listener.onRemove(this, ts);
 		}		
 	}
 
