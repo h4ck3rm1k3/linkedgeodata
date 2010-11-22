@@ -40,7 +40,7 @@ public class DefaultCacheProvider
 	private Set<ITripleCacheIndex>	tripleCacheIndexes	= new HashSet<ITripleCacheIndex>();
 
 	
-	// FIXME: Deal with cache misses
+	// FIXED? TODO: Deal with cache misses
 	@Override
 	public Set<Triple> bulkFind(Set<List<Object>> keys, int[] indexColumns)
 	{		
