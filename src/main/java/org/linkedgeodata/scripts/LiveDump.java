@@ -213,10 +213,17 @@ public class LiveDump
 		// diffRepo.mkdirs();
 
 		// RDFDiffWriter rdfDiffWriter = new RDFDiffWriter(diffRepo, 0);
+		INodeSerializer nodeSerializer = null;
+		if(config.get("nodeSerializer").equalsIgnoreCase("georss")) {
+			nodeSerializer = new VirtuosoOseNodeSerializer();
+		} else if(config.get("nodeSerializer").equalsIgnoreCase("virtuoso")) {
+			nodeSerializer = new VirtuosoCommercialNodeSerializer();
+		}
 
+		
 		ILGDVocab vocab = new LGDVocab();
 		ITransformer<Entity, Model> entityTransformer = new OSMEntityToRDFTransformer(
-				tagMapper, vocab);
+				tagMapper, vocab, nodeSerializer);
 
 		NodePositionDAO nodePositionDaoCore = new NodePositionDAO("node_position");
 		nodePositionDaoCore.setConnection(nodeConn);
@@ -254,12 +261,6 @@ public class LiveDump
 		TripleCacheIndexImpl.create(baseGraph, 1000000, 1000, 1000000,
 				new int[] { 0 });
 		
-		INodeSerializer nodeSerializer = null;
-		if(config.get("nodeSerializer").equalsIgnoreCase("georss")) {
-			nodeSerializer = new VirtuosoOseNodeSerializer();
-		} else if(config.get("nodeSerializer").equalsIgnoreCase("virtuoso")) {
-			nodeSerializer = new VirtuosoCommercialNodeSerializer();
-		}
 		
 		OptimizedDiffUpdateStrategy diffStrategy = new OptimizedDiffUpdateStrategy(vocab,
 				entityTransformer, nodeSerializer, deltaGraph, nodePositionDao, relevanceFilter);

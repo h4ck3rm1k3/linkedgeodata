@@ -2,6 +2,8 @@ package org.linkedgeodata.osm.mapping.impl;
 
 import org.linkedgeodata.core.ILGDVocab;
 import org.linkedgeodata.osm.mapping.ITagMapper;
+import org.linkedgeodata.osm.osmosis.plugins.INodeSerializer;
+import org.linkedgeodata.osm.osmosis.plugins.VirtuosoOseNodeSerializer;
 import org.linkedgeodata.util.ITransformer;
 import org.openstreetmap.osmosis.core.domain.v0_6.Entity;
 import org.openstreetmap.osmosis.core.domain.v0_6.Node;
@@ -31,16 +33,23 @@ public class OSMEntityToRDFTransformer
 		this.wayTransformer = wayTransformer; 
 	}
 	
-	
+
+	public OSMEntityToRDFTransformer(ITagMapper tagMapper, ILGDVocab vocab)
+	{
+		INodeSerializer nodeSerializer = new VirtuosoOseNodeSerializer();
+		this.nodeTransformer = new SimpleNodeToRDFTransformer(tagMapper, vocab, nodeSerializer);
+		this.wayTransformer = new SimpleWayToRDFTransformer(tagMapper, vocab);
+	}
+
 	/**
 	 * Convenience constructor
 	 * 
 	 * @param tagMapper
 	 * @param vocab
 	 */
-	public OSMEntityToRDFTransformer(ITagMapper tagMapper, ILGDVocab vocab)
+	public OSMEntityToRDFTransformer(ITagMapper tagMapper, ILGDVocab vocab, INodeSerializer nodeSerializer)
 	{
-		this.nodeTransformer = new SimpleNodeToRDFTransformer(tagMapper, vocab);
+		this.nodeTransformer = new SimpleNodeToRDFTransformer(tagMapper, vocab, nodeSerializer);
 		this.wayTransformer = new SimpleWayToRDFTransformer(tagMapper, vocab);
 	}
 

@@ -260,10 +260,16 @@ public class LiveSync
 		// diffRepo.mkdirs();
 
 		// RDFDiffWriter rdfDiffWriter = new RDFDiffWriter(diffRepo, 0);
+		INodeSerializer nodeSerializer = null;
+		if(config.get("nodeSerializer").equalsIgnoreCase("georss")) {
+			nodeSerializer = new VirtuosoOseNodeSerializer();
+		} else if(config.get("nodeSerializer").equalsIgnoreCase("virtuoso")) {
+			nodeSerializer = new VirtuosoCommercialNodeSerializer();
+		}
 
 		ILGDVocab vocab = new LGDVocab();
 		ITransformer<Entity, Model> entityTransformer = new OSMEntityToRDFTransformer(
-				tagMapper, vocab);
+				tagMapper, vocab, nodeSerializer);
 
 		
 		
@@ -307,14 +313,6 @@ public class LiveSync
 		
 		TagFilter relevanceFilter = new TagFilter();
 		relevanceFilter.load(new File(config.get("relevanceFilter")));
-		
-		
-		INodeSerializer nodeSerializer = null;
-		if(config.get("nodeSerializer").equalsIgnoreCase("georss")) {
-			nodeSerializer = new VirtuosoOseNodeSerializer();
-		} else if(config.get("nodeSerializer").equalsIgnoreCase("virtuoso")) {
-			nodeSerializer = new VirtuosoCommercialNodeSerializer();
-		}
 		
 		
 		diffStrategy = new OptimizedDiffUpdateStrategy(vocab,

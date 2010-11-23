@@ -28,6 +28,8 @@ import org.apache.log4j.Logger;
 import org.linkedgeodata.core.ILGDVocab;
 import org.linkedgeodata.core.vocab.WGS84Pos;
 import org.linkedgeodata.osm.mapping.ITagMapper;
+import org.linkedgeodata.osm.osmosis.plugins.INodeSerializer;
+import org.linkedgeodata.osm.osmosis.plugins.VirtuosoOseNodeSerializer;
 import org.linkedgeodata.util.ITransformer;
 import org.openstreetmap.osmosis.core.domain.v0_6.Node;
 import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
@@ -60,13 +62,22 @@ public class SimpleNodeToRDFTransformer
 	private static final Logger logger = Logger.getLogger(SimpleNodeToRDFTransformer.class);
 	private ITagMapper tagMapper;
 	private ILGDVocab vocab;
+	private INodeSerializer nodeSerializer;
 	
 	private static int parseErrorCount = 0;
-	
+
 	public SimpleNodeToRDFTransformer(ITagMapper tagMapper, ILGDVocab vocab)
 	{
 		this.tagMapper = tagMapper;
 		this.vocab = vocab;
+		this.nodeSerializer = new VirtuosoOseNodeSerializer();
+	}
+	
+	public SimpleNodeToRDFTransformer(ITagMapper tagMapper, ILGDVocab vocab, INodeSerializer nodeSerializer)
+	{
+		this.tagMapper = tagMapper;
+		this.vocab = vocab;
+		this.nodeSerializer = nodeSerializer;
 	}
 	
 	@Override
@@ -80,7 +91,11 @@ public class SimpleNodeToRDFTransformer
 		Resource subjectRes = getSubject(node);
 		
 		generateWGS84(model, subjectRes, node);
-		generateGeoRSS(model, subjectRes, node);
+		
+		//generateGeoRSS(model, subjectRes, node);
+		Point2D point = new Point2D.Double(node.getLongitude(), node.getLatitude());
+		nodeSerializer.write(model, subjectRes, point);
+		
 		generateTags(tagMapper, model, subjectRes.toString(), node.getTags());
 		
 		return model;		
