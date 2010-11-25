@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.compress.compressors.bzip2.BZip2CompressorOutputStream;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream;
 import org.linkedgeodata.util.IDiff;
 import org.linkedgeodata.util.StringUtil;
@@ -30,7 +31,7 @@ public class RDFDiffWriter
 	private String baseName;
 	
 	
-	private boolean zip = false;
+	private boolean zip = true;
 	
 	/*
 	public RDFDiffWriter(File basePath, long sequenceId)
@@ -137,6 +138,7 @@ public class RDFDiffWriter
 		OutputStream out;
 		if(zip) {
 			out = new GzipCompressorOutputStream(tmp);
+			//out = new BZip2CompressorOutputStream(tmp);
 		}
 		else {
 			out = tmp;
