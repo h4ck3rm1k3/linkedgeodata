@@ -1,18 +1,19 @@
 package org.linkedgeodata.osm.osmosis.plugins;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+import java.util.zip.GZIPInputStream;
 
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorOutputStream;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream;
 import org.linkedgeodata.util.IDiff;
-import org.linkedgeodata.util.StringUtil;
+import org.linkedgeodata.util.ModelUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,6 +45,12 @@ public class RDFDiffWriter
 	public RDFDiffWriter(String baseName)
 	{
 		this.baseName = baseName;
+	}
+	
+	public RDFDiff read()
+		throws IOException
+	{
+		return read(baseName, zip);
 	}
 	
 	public void write(IDiff<Model> diff)
@@ -102,6 +109,23 @@ public class RDFDiffWriter
 	}
 	*/
 	
+	public static File createFile(String baseName, boolean zip, boolean added)
+	{
+		String fileNameExtension = "nt";
+
+		if(zip == true)
+			fileNameExtension += ".gz";
+		
+		String type = (added == true) ? "added" : "removed";
+		
+		
+		String fileName = baseName + "." + type + "." + fileNameExtension;
+					
+		return new File(fileName);	
+	}
+
+	private static String jenaFormat = "N-TRIPLE";
+	
 	public static void write(String baseName, IDiff<Model> diff, boolean zip)
 		throws IOException
 	{
@@ -110,29 +134,48 @@ public class RDFDiffWriter
 		if(parentDir != null)
 			parentDir.mkdir();
 			
-		String fileNameExtension = "nt";
-		String jenaFormat = "N-TRIPLE";
 
-		if(zip == true)
-			fileNameExtension += ".gz";
-		
 		
 		RDFWriter rdfWriter = ModelFactory.createDefaultModel().getWriter(jenaFormat);
 
-		String addedFileName = baseName + ".added." + fileNameExtension;		
-		write(diff.getAdded(), rdfWriter, addedFileName, zip);
+		File addedFile = createFile(baseName, zip, true);		
+		write(diff.getAdded(), rdfWriter, addedFile, zip);
 		
-		String removedFileName = baseName + ".removed." + fileNameExtension;
-		write(diff.getRemoved(), rdfWriter, removedFileName, zip);
+		File removedFile = createFile(baseName, zip, false);
+		write(diff.getRemoved(), rdfWriter, removedFile, zip);
 	}	
 
-	public static void write(Model model, RDFWriter rdfWriter, String fileName, boolean zip)
+	public static InputStream getInputStream(File file, boolean zip)
 		throws IOException
 	{
-		logger.info("Attempting to write diff-file: " + fileName);
+		InputStream result = new FileInputStream(file);
 		
-		File file = new File(fileName);
+		if(zip) {
+			result = new GZIPInputStream(result);
+		}
 		
+		return result;
+	}
+	
+	public static RDFDiff read(String baseName, boolean zip)
+		throws IOException
+	{
+		File addedFile = createFile(baseName, zip, true);
+		Model addedModel = ModelUtil.read(getInputStream(addedFile, zip), jenaFormat);
+
+		File removedFile = createFile(baseName, zip, false);
+		Model removedModel = ModelUtil.read(getInputStream(removedFile, zip), jenaFormat);
+
+		RDFDiff result = new RDFDiff(addedModel, removedModel, null);
+		
+		return result;
+	}
+	
+	public static void write(Model model, RDFWriter rdfWriter, File file, boolean zip)
+		throws IOException
+	{
+		logger.info("Attempting to write diff-file: " + file.getAbsolutePath());
+				
 		OutputStream tmp = new FileOutputStream(file);
 		
 		OutputStream out;

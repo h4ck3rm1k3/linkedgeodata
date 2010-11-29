@@ -263,7 +263,8 @@ public class SparqlEndpointFilteredGraph
 			try {
 				sparqlEndpoint.insert(triples, updateGraphName);
 			} catch (Exception e) {
-				e.printStackTrace();
+				//e.printStackTrace();
+				throw new RuntimeException(e);
 			}
 			
 			super.add(triples); // Notify listeners
@@ -280,7 +281,7 @@ public class SparqlEndpointFilteredGraph
 			try {
 				sparqlEndpoint.remove(triples, updateGraphName);
 			} catch (Exception e) {
-				e.printStackTrace();
+				throw new RuntimeException(e);
 			}
 			
 			super.remove(triples); // Notify listeners

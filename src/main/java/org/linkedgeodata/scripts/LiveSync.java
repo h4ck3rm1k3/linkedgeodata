@@ -3,6 +3,7 @@ package org.linkedgeodata.scripts;
 import java.awt.geom.Point2D;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,6 +24,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.aksw.commons.util.SerializationUtils;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
@@ -34,7 +36,6 @@ import org.jboss.cache.util.CacheBulkMap;
 import org.jboss.cache.util.DeltaBulkMap;
 import org.linkedgeodata.core.ILGDVocab;
 import org.linkedgeodata.core.LGDVocab;
-import org.linkedgeodata.dao.nodestore.GeoRSSNodeMapper;
 import org.linkedgeodata.dao.nodestore.NodePositionDAO;
 import org.linkedgeodata.osm.mapping.IOneOneTagMapper;
 import org.linkedgeodata.osm.mapping.InMemoryTagMapper;
@@ -57,6 +58,7 @@ import org.linkedgeodata.tagmapping.client.entity.AbstractTagMapperState;
 import org.linkedgeodata.tagmapping.client.entity.IEntity;
 import org.linkedgeodata.util.IDiff;
 import org.linkedgeodata.util.ITransformer;
+import org.linkedgeodata.util.ModelUtil;
 import org.linkedgeodata.util.PostGISUtil;
 import org.linkedgeodata.util.StringUtil;
 import org.linkedgeodata.util.URIUtil;
@@ -81,8 +83,14 @@ import org.xml.sax.SAXException;
 
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.sparql.util.graph.GraphFactory;
+
+enum LiveSyncState
+{
+	PROCESSING, // This state is assumed if the state is not explicitely available
+	PRE_COMMIT,
+	POST_COMMIT,
+}
+
 
 /*
  class EntityClassifier
@@ -151,8 +159,11 @@ public class LiveSync
 	//private NodePositionDAO		nodePositionDao;
 	private DeltaBulkMap<Long, Point2D> nodePositionDao;
 
+	private File subStateFile;
+	private LiveSyncState subState = null;
 	// private RDFDiffWriter rdfDiffWriter;
 
+	
 	public static Map<String, String> loadIniFile(File file) throws IOException
 	{
 		Map<String, String> config = new HashMap<String, String>();
@@ -213,12 +224,36 @@ public class LiveSync
 	}
 	
 	
+	public LiveSyncState getState() throws IOException
+	{
+		if(subState != null)
+			return subState;
+		
+		if(subStateFile.exists()) {
+			Object tmp = SerializationUtils.deserializeXml(subStateFile);
+			return (LiveSyncState)tmp;
+		}
+	
+		return LiveSyncState.PROCESSING;
+	}
+	
+	public void setState(LiveSyncState state) throws IOException
+	{
+		SerializationUtils.serializeXml(state, subStateFile, true);
+		subState = state;
+	}
+	
+	
 	public LiveSync(Map<String, String> config) throws Exception
 	{
 		this.config = config;
 
 		publishDiffBaseName = config.get("publishDiffRepoPath");
 
+		subStateFile = new File(config.get("osmReplicationConfigPath")
+				+ "/subState.txt");
+		
+		
 		// LiveRDFDeltaPluginFactory factory.create();
 		Connection conn = VirtuosoUtils.connect(
 				config.get("rdfStore_hostName"),
@@ -346,33 +381,25 @@ public class LiveSync
 		loadIniFile(osmConfigFile, config);
 
 		System.out.println(config);
-
+		
+		
 		LiveSync liveSync = new LiveSync(config);
 
 		long stepCount = 0;
 		long totalStartTime = System.nanoTime();
 		for (;;) {
-			try {
-				long stepStartTime = System.nanoTime();
+			long stepStartTime = System.nanoTime();
 
-				++stepCount;
-				liveSync.step();
+			++stepCount;
+			liveSync.step();
 
-				long now = System.nanoTime();
-				double stepDuration = (now - stepStartTime) / 1000000000.0;
-				double totalDuration = (now - totalStartTime) / 1000000000.0;
-				double avgStepDuration = totalDuration / stepCount;
-				logger.info("Step #" + stepCount + " took " + stepDuration
-						+ "sec; Average step duration is " + avgStepDuration
-						+ "sec.");
-
-			} catch (Throwable t) {
-				logger.error(
-						"An exception was encountered in the LiveSync update loop",
-						t);
-				throw t;
-			}
-
+			long now = System.nanoTime();
+			double stepDuration = (now - stepStartTime) / 1000000000.0;
+			double totalDuration = (now - totalStartTime) / 1000000000.0;
+			double avgStepDuration = totalDuration / stepCount;
+			logger.info("Step #" + stepCount + " took " + stepDuration
+					+ "sec; Average step duration is " + avgStepDuration
+					+ "sec.");
 		}
 	}
 
@@ -388,6 +415,7 @@ public class LiveSync
 		}
 	}
 
+			
 	private void step() throws Exception
 	{
 		// Load the state config
@@ -398,6 +426,35 @@ public class LiveSync
 
 		logger.info("Processing: " + sequenceNumber);
 
+		LiveSyncState state = getState();
+		switch(state) {
+		case PRE_COMMIT: { // Applying the last diff did not complete - undo the diff
+			logger.warn("Diff was not cleanly committed, recommitting...");
+			
+			RDFDiff diff = readDiff(sequenceNumber);			
+			deltaGraph.remove(diff.getRemoved().getGraph().find(null, null, null).toSet());
+			deltaGraph.add(diff.getAdded().getGraph().find(null, null, null).toSet());
+			deltaGraph.commit();
+			
+			return;
+		}
+		case POST_COMMIT: { // Diff was applied, however the new state file has not yet been loaded
+			
+			// FIXME There is an extremely small chance, that the process is interrupted
+			// after a successfull download but before marking the download as
+			// successfull (by setting the state to processing).
+			// This would lead to skipping a osc file upon restart.
+			// The solution is to introduce PRE_DOWNLOAD and POST_DOWNLOAD states
+			//
+			advance(sequenceNumber + 1);
+			return;
+		}
+		}
+		
+		setState(LiveSyncState.PROCESSING);			
+		
+		
+		
 		// Get the stream to the OSC file
 		// InputStream in = getChangeSetStream(sequenceNumber);
 		// File changeFile = getChangeFile(sequenceNumber);
@@ -409,8 +466,9 @@ public class LiveSync
 		DiffResult diff = computeDiff(sequenceNumber);
 
 		logger.info("Publishing diff");
+
 		publishDiff(sequenceNumber);
-	
+		setState(LiveSyncState.PRE_COMMIT);
 		
 		logger.info("Applying main diff (added/removed) = "
 				+ diff.getMainDiff().getAdded().size() + "/"
@@ -424,7 +482,12 @@ public class LiveSync
 
 
 		logger.info("Downloading new state");
+
+		setState(LiveSyncState.POST_COMMIT);
+		
 		advance(sequenceNumber + 1);
+
+		setState(LiveSyncState.PROCESSING);
 	}
 
 	private void advance(long id) throws IOException
@@ -434,7 +497,20 @@ public class LiveSync
 		File targetFile = new File(config.get("osmReplicationConfigPath")
 				+ "/state.txt");
 
-		URIUtil.download(sourceURL, targetFile);
+		while(true) {
+			try {
+				URIUtil.download(sourceURL, targetFile);
+				break;
+			} catch(FileNotFoundException e) {
+				logger.info("Statefile " + sourceURL + " not found. Retrying in 60 seconds.");
+				
+				try {
+					Thread.sleep(60 * 1000);
+				} catch(InterruptedException f) {
+					logger.warn("Sleep interrupted", f);
+				}
+			}
+		}
 	}
 
 	private void applyDiff(IDiff<Model> diff) throws Exception
@@ -464,9 +540,22 @@ public class LiveSync
 		*/
 	}
 
+	
+	private String getBaseName(long id) {
+		return publishDiffBaseName + "/" + getFragment(id);
+	}
+	
+	private RDFDiff readDiff(long id) throws IOException
+	{
+		String fileName = getBaseName(id);
+		
+		RDFDiffWriter rdfDiffWriter = new RDFDiffWriter(fileName);
+		return rdfDiffWriter.read();
+	}
+	
 	private void publishDiff(long id) throws IOException
 	{
-		String fileName = publishDiffBaseName + "/" + getFragment(id);
+		String fileName = getBaseName(id);
 		File parent = new File(fileName).getParentFile();
 		if (parent != null)
 			parent.mkdirs();

@@ -50,14 +50,24 @@ public class ModelUtil
 		
 		return result;
 	}
-	
-	
-	// FIXME: Automatically detect file type from extension
-	// On failure retry different parser
-	public static Model read(Model model, File file, String lang)
-	throws IOException
+
+	public static Model read(InputStream in, String lang)
+		throws IOException
 	{
-		InputStream in = new FileInputStream(file);
+		return read(ModelFactory.createDefaultModel(), in, lang);
+	}
+
+	
+	public static Model read(File file, String lang)
+		throws IOException
+	{
+		return read(new FileInputStream(file), lang);
+	}
+	
+	
+	public static Model read(Model model, InputStream in, String lang)
+		throws IOException
+	{
 		try {
 			model.read(in, null, lang);
 		}
@@ -66,6 +76,14 @@ public class ModelUtil
 		}
 		
 		return model;
+	}
+
+	// FIXME: Automatically detect file type from extension
+	// On failure retry different parser
+	public static Model read(Model model, File file, String lang)
+		throws IOException
+	{
+		return read(model, new FileInputStream(file), lang);
 	}
 	
 	public static String toString(Model model)
