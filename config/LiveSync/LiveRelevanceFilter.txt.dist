@@ -4,7 +4,6 @@ whitelist
 -'amenity'
 -'cuisine'
 -'denomination'
--'highway'
 -'historic'
 -'leisure'
 -'man_made'
@@ -17,3 +16,4 @@ whitelist
 -'shop'
 -'tourism'
 -'waterway'
+-'place'

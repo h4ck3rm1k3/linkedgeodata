@@ -4,6 +4,178 @@
     <tagPattern/>
     <describesOSMEntity>false</describesOSMEntity>
   </org.linkedgeodata.osm.mapping.impl.SimpleTextTagMapper>
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
+    <tagPattern>
+      <key>place</key>
+      <value>village</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Village</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
+    <tagPattern>
+      <key>place</key>
+      <value>hamlet</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Hamlet</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
+    <tagPattern>
+      <key>place</key>
+      <value>Locality</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Locality</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
+    <tagPattern>
+      <key>place</key>
+      <value>town</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Town</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
+    <tagPattern>
+      <key>place</key>
+      <value>suburb</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Suburb</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
+    <tagPattern>
+      <key>place</key>
+      <value>island</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Island</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
+    <tagPattern>
+      <key>place</key>
+      <value>county</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/County</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
+    <tagPattern>
+      <key>place</key>
+      <value>city</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/City</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
+    <tagPattern>
+      <key>place</key>
+      <value>farm</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Farm</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
+    <tagPattern>
+      <key>place</key>
+      <value>isolated_dwelling</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/IsolatedDwelling</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
+    <tagPattern>
+      <key>place</key>
+      <value>Region</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Region</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
+    <tagPattern>
+      <key>place</key>
+      <value>islet</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Islet</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
+    <tagPattern>
+      <key>place</key>
+      <value>state</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/State</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
+    <tagPattern>
+      <key>place</key>
+      <value>subdivision</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Subdivision</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
+    <tagPattern>
+      <key>place</key>
+      <value>municipality</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Municipality</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
+    <tagPattern>
+      <key>place</key>
+      <value>country</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Country</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+
+
+
+
+
+
+
+
+
+
   <org.linkedgeodata.osm.mapping.impl.SimpleDataTypeTagMapper>
     <property>http://linkedgeodata.org/ontology/it%3Alombardia%3Actrn%3Alocalita_significativa%3AFID</property>
     <tagPattern>
@@ -21936,16 +22108,6 @@
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
     <tagPattern>
       <key>waterway</key>
-      <value>take_right_side</value>
-    </tagPattern>
-    <describesOSMEntity>false</describesOSMEntity>
-    <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/TakeRightSide</object>
-  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
-  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
-    <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
-    <tagPattern>
-      <key>waterway</key>
       <value>stream</value>
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
@@ -21960,7 +22122,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/WaterwayWaterfall</object>
+    <object>http://linkedgeodata.org/ontology/Waterfall</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
@@ -22196,16 +22358,6 @@
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
     <tagPattern>
       <key>waterway</key>
-      <value>take_left_side</value>
-    </tagPattern>
-    <describesOSMEntity>false</describesOSMEntity>
-    <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/TakeLeftSide</object>
-  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
-  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
-    <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
-    <tagPattern>
-      <key>waterway</key>
       <value>dam</value>
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
@@ -22240,7 +22392,7 @@
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
     <objectAsPrefix>false</objectAsPrefix>
-    <object>http://linkedgeodata.org/ontology/WaterwayRiver</object>
+    <object>http://linkedgeodata.org/ontology/River</object>
   </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
