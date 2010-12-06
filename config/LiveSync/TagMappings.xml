@@ -9,6 +9,16 @@
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
     <tagPattern>
       <key>place</key>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Place</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
+    <tagPattern>
+      <key>place</key>
       <value>village</value>
     </tagPattern>
     <describesOSMEntity>false</describesOSMEntity>
@@ -2960,14 +2970,6 @@
     <describesOSMEntity>false</describesOSMEntity>
     <dataType>http://www.w3.org/2001/XMLSchema#integer</dataType>
   </org.linkedgeodata.osm.mapping.impl.SimpleDataTypeTagMapper>
-  <org.linkedgeodata.osm.mapping.impl.SimpleTextTagMapper>
-    <property>http://linkedgeodata.org/ontology/place</property>
-    <tagPattern>
-      <key>place:en</key>
-    </tagPattern>
-    <describesOSMEntity>false</describesOSMEntity>
-    <langTag>en</langTag>
-  </org.linkedgeodata.osm.mapping.impl.SimpleTextTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleDataTypeTagMapper>
     <property>http://linkedgeodata.org/ontology/census2001%3AMALELIT</property>
     <tagPattern>
