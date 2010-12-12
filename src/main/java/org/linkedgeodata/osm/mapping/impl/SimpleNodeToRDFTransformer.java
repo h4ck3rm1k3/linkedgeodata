@@ -113,7 +113,7 @@ public class SimpleNodeToRDFTransformer
 	
 	public static Literal generateVirtuosoLiteral(Point2D point)
 	{
-		Literal result = ResourceFactory.createTypedLiteral("POINT(" + point.getX() + " " + point.getY() + ")", virtrdfGeometry);
+		Literal result = ResourceFactory.createTypedLiteral("POINT(" + (float)point.getX() + " " + (float)point.getY() + ")", virtrdfGeometry);
 		return result;
 	}
 	
