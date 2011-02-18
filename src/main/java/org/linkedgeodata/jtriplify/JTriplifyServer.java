@@ -1116,7 +1116,7 @@ public class JTriplifyServer
 		//dataHandler.getRIC().put(".*/near/(-?[^-]+)-(-?[^,]+),(-?[^-]+)-(-?[^/]+)/label/([^/]*)/(*.)/?(\\?.*)?", bboxFn, "$0", "$1", "$2", "$3", "$5", "$6");
 		
 		IInvocable getOntologyFn = DefaultCoercions.wrap(methods, "publicGetOntology.*");
-		dataHandler.getRIC().put(".*/ontology(\\.[^/]*)/?(\\?.*)?", getOntologyFn);		
+		dataHandler.getRIC().put(".*/ontology(\\.[^/]*)?/?(\\?.*)?", getOntologyFn);		
 
 		IInvocable describeFn = DefaultCoercions.wrap(methods, "publicDescribe.*");
 		dataHandler.getRIC().put(".*/(ontology/[^/]+)(\\?.*)?", describeFn, "$1");
