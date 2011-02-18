@@ -47,10 +47,14 @@ import org.linkedgeodata.dao.TagMapperDAO;
 import org.linkedgeodata.jtriplify.methods.Pair;
 import org.linkedgeodata.osm.mapping.CachingTagMapper;
 import org.linkedgeodata.osm.mapping.ITagMapper;
+import org.linkedgeodata.util.ModelUtil;
 import org.linkedgeodata.util.SQLUtil;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.RDFNode;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.vocabulary.RDF;
 import com.hp.hpl.jena.vocabulary.RDFS;
 
@@ -66,6 +70,11 @@ import com.hp.hpl.jena.vocabulary.RDFS;
  */
 public class ServerMethods
 {
+	// A model containing metadata definitions
+	// Such as the definition of the lgdo:hasNodes property 
+	private Model ontologyModel;
+	
+	
 	//private ConnectionConfig connectionConfig;
 	private IConnectionFactory connectionFactory;
 	private ISessionProvider sessionFactory;
@@ -84,8 +93,10 @@ public class ServerMethods
 	private Map<String, String> prefixMap = null;
 	
 	
-	public ServerMethods(LGDRDFDAO lgdRDFDAO, Map<String, String> prefixMap, IConnectionFactory connectionFactory, ISessionProvider sessionFactory)
+	public ServerMethods(LGDRDFDAO lgdRDFDAO, Map<String, String> prefixMap, IConnectionFactory connectionFactory, ISessionProvider sessionFactory, Model ontologyModel)
 	{
+		this.ontologyModel = ontologyModel;
+		
 		hibernateDAOs.add(new TagMapperDAO());
 		/*
 		NodeDAO nodeDAO;
@@ -351,7 +362,8 @@ public class ServerMethods
 		Transaction tx = lgdRDFDAO.getSession().beginTransaction();
 		Model model = createModel();
 		try {
-			lgdRDFDAO.getOntologyDAO().getOntology(model);
+			//lgdRDFDAO.getOntologyDAO().getOntology(model);
+			model.add(ontologyModel.listStatements(null, null, (RDFNode)null));
 			
 		} catch(Throwable e) {
 			tx.rollback();
@@ -361,7 +373,7 @@ public class ServerMethods
 		tx.commit();
 		return model;
 	}
-		
+
 	public Model publicDescribe(String uri)
 		throws Exception
 	{
@@ -374,17 +386,26 @@ public class ServerMethods
 		// the domain and port may be differ.
 		uri = uri.replaceFirst("^ontology/", lgdRDFDAO.getVocabulary().getOntologyNS());
 
+		Resource subject = ResourceFactory.createResource(uri);
+		
 
 		// FIXME The model returned differs from the one being passed in!
 		Transaction tx = lgdRDFDAO.getSession().beginTransaction();
 		try {
-			model = lgdRDFDAO.getOntologyDAO().describe(uri, model);
+			//System.out.println(ModelUtil.toString(ontologyModel, "N-TRIPLE"));
+			
+			model.add(ontologyModel.listStatements(subject, null, (RDFNode)null));
+
+			//model = lgdRDFDAO.getOntologyDAO().describe(uri, model);
 		} catch(Throwable e) {
 			tx.rollback();
 			throw new Exception(e);
 		}
 		tx.commit();
 
+		
+		// Check the metadata 
+		
 		return model;
 	}
 	

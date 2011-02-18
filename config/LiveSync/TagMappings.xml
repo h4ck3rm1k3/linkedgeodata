@@ -5,6 +5,77 @@
     <describesOSMEntity>false</describesOSMEntity>
   </org.linkedgeodata.osm.mapping.impl.SimpleTextTagMapper>
 
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleTextTagMapper>
+    <property>http://linkedgeodata.org/ontology/hasHouseNumber</property>
+    <tagPattern>
+      <key>addr:housenumber</key>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <langTag></langTag>
+  </org.linkedgeodata.osm.mapping.impl.SimpleTextTagMapper>
+  <org.linkedgeodata.osm.mapping.impl.SimpleTextTagMapper>
+    <property>http://linkedgeodata.org/ontology/hasStreet</property>
+    <tagPattern>
+      <key>addr:street</key>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <langTag></langTag>
+  </org.linkedgeodata.osm.mapping.impl.SimpleTextTagMapper>
+  <org.linkedgeodata.osm.mapping.impl.SimpleTextTagMapper>
+    <property>http://linkedgeodata.org/ontology/hasCity</property>
+    <tagPattern>
+      <key>addr:city</key>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <langTag></langTag>
+  </org.linkedgeodata.osm.mapping.impl.SimpleTextTagMapper>
+  <org.linkedgeodata.osm.mapping.impl.SimpleTextTagMapper>
+    <property>http://linkedgeodata.org/ontology/hasCountry</property>
+    <tagPattern>
+      <key>addr:country</key>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <langTag></langTag>
+  </org.linkedgeodata.osm.mapping.impl.SimpleTextTagMapper>
+  <org.linkedgeodata.osm.mapping.impl.SimpleTextTagMapper>
+    <property>http://linkedgeodata.org/ontology/hasPostalCode</property>
+    <tagPattern>
+      <key>addr:postcode</key>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <langTag></langTag>
+  </org.linkedgeodata.osm.mapping.impl.SimpleTextTagMapper>
+  <org.linkedgeodata.osm.mapping.impl.SimpleTextTagMapper>
+    <property>http://linkedgeodata.org/ontology/hasConscriptionNumber</property>
+    <tagPattern>
+      <key>addr:conscriptionnumber</key>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <langTag></langTag>
+  </org.linkedgeodata.osm.mapping.impl.SimpleTextTagMapper>
+  <org.linkedgeodata.osm.mapping.impl.SimpleTextTagMapper>
+    <property>http://linkedgeodata.org/ontology/hasStreetNumber</property>
+    <tagPattern>
+      <key>addr:streetnumber</key>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <langTag></langTag>
+  </org.linkedgeodata.osm.mapping.impl.SimpleTextTagMapper>
+  <org.linkedgeodata.osm.mapping.impl.SimpleTextTagMapper>
+    <property>http://linkedgeodata.org/ontology/hasState</property>
+    <tagPattern>
+      <key>addr:state</key>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <langTag></langTag>
+  </org.linkedgeodata.osm.mapping.impl.SimpleTextTagMapper>
+
+
+
+
+
+
   <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
     <property>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</property>
     <tagPattern>

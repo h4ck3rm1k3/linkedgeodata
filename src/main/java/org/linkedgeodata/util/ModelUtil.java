@@ -19,7 +19,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 
 public class ModelUtil
-{
+{	
 	/**
 	 * 
 	 * @param model
@@ -117,8 +117,8 @@ public class ModelUtil
 		String name = uri;
 
 		NavigableMap<String, String> candidates = prefixMap.headMap(uri, false).descendingMap();
-		Map.Entry<String, String> candidate = candidates.firstEntry();
-				
+		Map.Entry<String, String> candidate = candidates.firstEntry();		
+		
 		if(candidate != null && uri.startsWith(candidate.getKey())) {
 			String candidateNs = candidate.getKey();
 			String candidatePrefix = candidate.getValue();

@@ -1,0 +1,13 @@
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+
+@prefix lgdo: <http://linkedgeodata.org/ontology/> .
+@prefix wgs:  <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+
+
+lgdo:hasNodes a owl:ObjectProperty
+	; rdfs:comment "This property connects an object with an ordered sequence of nodes. Note that this relation is not meant to be transitive: If A is a part of B, and A 'hasNodes', then B does not have these nodes."
+	; rdfs:range rdf:Seq
+	.

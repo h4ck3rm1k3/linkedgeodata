@@ -47,6 +47,11 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.RDF;
 
 
+/**
+ * 
+ * @author raven
+ *
+ */
 public class LGDRDFDAO
 	implements ISQLDAO, IHibernateDAO
 {

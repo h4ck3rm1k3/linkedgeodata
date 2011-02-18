@@ -35,7 +35,7 @@ public class DumpTagMappingDb
 		CommandLineParser cliParser = new GnuParser();
 		CommandLine commandLine = cliParser.parse(cliOptions, args);
 
-		String fileName = commandLine.getOptionValue("f", "TagMapping.xml");
+		String fileName = commandLine.getOptionValue("f", "DumpedTagMapping.xml");
 		File file = new File(fileName);
 		
 		if(file.exists()) {

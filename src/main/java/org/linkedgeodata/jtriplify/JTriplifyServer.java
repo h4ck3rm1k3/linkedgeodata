@@ -21,6 +21,7 @@
 package org.linkedgeodata.jtriplify;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
@@ -55,6 +56,7 @@ import org.linkedgeodata.dao.JDBCConnectionProvider;
 import org.linkedgeodata.dao.LGDDAO;
 import org.linkedgeodata.dao.LGDRDFDAO;
 import org.linkedgeodata.dao.TagMapperDAO;
+import org.linkedgeodata.dao.gragh.RdfGraphDaoGraph;
 import org.linkedgeodata.jtriplify.methods.DefaultCoercions;
 import org.linkedgeodata.jtriplify.methods.IInvocable;
 import org.linkedgeodata.jtriplify.methods.JavaMethodInvocable;
@@ -62,6 +64,7 @@ import org.linkedgeodata.jtriplify.methods.Pair;
 import org.linkedgeodata.osm.mapping.CachingTagMapper;
 import org.linkedgeodata.osm.mapping.ITagMapper;
 import org.linkedgeodata.osm.mapping.TagMappingDB;
+import org.linkedgeodata.osm.osmosis.plugins.LgdRdfUtils;
 import org.linkedgeodata.util.ConnectionConfig;
 import org.linkedgeodata.util.ExceptionUtil;
 import org.linkedgeodata.util.HTMLJenaWriter;
@@ -69,6 +72,8 @@ import org.linkedgeodata.util.ModelUtil;
 import org.linkedgeodata.util.StringUtil;
 import org.linkedgeodata.util.URIUtil;
 
+import com.hp.hpl.jena.graph.Graph;
+import com.hp.hpl.jena.graph.compose.Union;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.RDFWriter;
@@ -1014,7 +1019,23 @@ public class JTriplifyServer
 		dao.setSession(session);
 		dbTagMapper.setSession(session);
 		
-		ServerMethods methods = new ServerMethods(dao, prefixMap, connectionFactory, sessionFactory);
+		
+		/* Create a unified Jena-Model-View for the meta ontology (the lgd vocab)
+		 * and the osm vocab. 
+		 */
+		Graph metaOntologyGraph = MyBeanFactory.getSingleton().getMetaOntologyModel().getGraph();		
+		RdfGraphDaoGraph dataOntologyGraph = new RdfGraphDaoGraph(dao); 
+		
+		Graph ontologyGraph = new Union(metaOntologyGraph, dataOntologyGraph);
+		Model ontologyModel = ModelFactory.createModelForGraph(ontologyGraph);
+		
+		
+		
+		//ontolgyModel.read(
+		//new FileInputStream(
+		
+		
+		ServerMethods methods = new ServerMethods(dao, prefixMap, connectionFactory, sessionFactory, ontologyModel);
 		
 		Method m;
 
@@ -1095,7 +1116,7 @@ public class JTriplifyServer
 		//dataHandler.getRIC().put(".*/near/(-?[^-]+)-(-?[^,]+),(-?[^-]+)-(-?[^/]+)/label/([^/]*)/(*.)/?(\\?.*)?", bboxFn, "$0", "$1", "$2", "$3", "$5", "$6");
 		
 		IInvocable getOntologyFn = DefaultCoercions.wrap(methods, "publicGetOntology.*");
-		dataHandler.getRIC().put(".*/ontology/?(\\?.*)?", getOntologyFn);		
+		dataHandler.getRIC().put(".*/ontology(\\.[^/]*)/?(\\?.*)?", getOntologyFn);		
 
 		IInvocable describeFn = DefaultCoercions.wrap(methods, "publicDescribe.*");
 		dataHandler.getRIC().put(".*/(ontology/[^/]+)(\\?.*)?", describeFn, "$1");

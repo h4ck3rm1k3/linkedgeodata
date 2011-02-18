@@ -71,7 +71,7 @@ public class ClassToPropertyMappingRulesConverter
 			
 		}
 		
-		output.save(new File("data/triplify/config/LGDMappingRules.2.0.xml.new"));
+		output.save(new File("data/triplify/config/LGDMappingRules.3.0.xml.new"));
 
 
 		
