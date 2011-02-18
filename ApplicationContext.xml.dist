@@ -6,8 +6,8 @@
 	<bean id="triplifyCSSFile" class="java.lang.String">
   		<constructor-arg type="java.lang.String" value="http://localhost/LinkedGeoData/triplify.css"/>
 	</bean>	
-	
-	<bean id="metaOntologyFile" class="java.lang.String">
-  		<constructor-arg type="java.lang.String" value="http://localhost/LinkedGeoData/LgdMetaOntology.nt"/>
-	</bean>	
+
+	<bean id="lgdMetaOntologyUrl" class="java.lang.String">
+		<constructor-arg type="java.lang.String" value="http://linkedgeodata.org/LgdMetaOntology.ttl"/>
+	</bean>
 </beans>
