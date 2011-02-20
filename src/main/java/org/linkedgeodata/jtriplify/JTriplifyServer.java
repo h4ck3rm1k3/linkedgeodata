@@ -39,6 +39,7 @@ import javax.activation.UnsupportedDataTypeException;
 import javax.mail.internet.ContentType;
 import javax.mail.internet.ParseException;
 
+import org.aksw.commons.util.strings.StringUtils;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
@@ -540,6 +541,7 @@ class MyHandler
 	private static Map<String, String> formatToJenaFormat = new HashMap<String, String>();
 	private static Map<String, String> extensionToJenaFormat = new HashMap<String, String>();
 	
+	private static Map<String, ContentType> jenaFormatToContentType = new HashMap<String, ContentType>();
 
 	public static RDFWriter getWriter(String format)
 	{
@@ -577,6 +579,11 @@ class MyHandler
 			
 			contentTypeToJenaFormat.put(new ContentType("text/n3"), "N3");
 			contentTypeToJenaFormat.put(new ContentType("text/rdf+n3"), "N3");
+			
+			jenaFormatToContentType.put("RDF/XML", new ContentType("application/rdf+xml; charset=utf-8"));
+			jenaFormatToContentType.put("TURTLE", new ContentType("application/x-turtle; charset=utf-8"));
+			jenaFormatToContentType.put("N3", new ContentType("text/rdf+n3; charset=utf-8"));
+			
 		}
 		catch(Exception e) {
 			logger.fatal(ExceptionUtil.toString(e));
@@ -737,7 +744,13 @@ class MyHandler
 			//return null;
 			//return new SimpleResponse(406, "text/plain", "Requested " + requestedFormat + " but accept-header " + formats + " is not compatible.");    			
 		//}
-    		return new Pair<String, ContentType>(requestedFormat, new ContentType("text/plain; charset=utf-8"));
+			
+			ContentType contentType =
+				StringUtils.coalesce(
+						jenaFormatToContentType.get(requestedFormat),
+						new ContentType("text/plain; charset=utf-8"));
+			
+    		return new Pair<String, ContentType>(requestedFormat, contentType);
 		}
     	else {
     		return new Pair<String, ContentType>(requestedFormat, new ContentType("text/plain; charset=utf-8"));
@@ -818,6 +831,8 @@ class MyHandler
 		int responseLength = 0;
 		if(body == null)
 			responseLength = -1;
+		else
+			responseLength = body.length();
 		
 		x.getResponseHeaders().set("Content-Type", contentType);
 		
@@ -1116,10 +1131,10 @@ public class JTriplifyServer
 		//dataHandler.getRIC().put(".*/near/(-?[^-]+)-(-?[^,]+),(-?[^-]+)-(-?[^/]+)/label/([^/]*)/(*.)/?(\\?.*)?", bboxFn, "$0", "$1", "$2", "$3", "$5", "$6");
 		
 		IInvocable getOntologyFn = DefaultCoercions.wrap(methods, "publicGetOntology.*");
-		dataHandler.getRIC().put(".*/ontology(\\.[^/]*)?/?(\\?.*)?", getOntologyFn);		
+		dataHandler.getRIC().put(".*/ontology(\\.[^/]*)?/?(\\?.*)?", getOntologyFn);
 
 		IInvocable describeFn = DefaultCoercions.wrap(methods, "publicDescribe.*");
-		dataHandler.getRIC().put(".*/(ontology/[^/]+)(\\?.*)?", describeFn, "$1");
+		dataHandler.getRIC().put(".*/(ontology/[^/\\.]+)(\\.[^/\\?]*)?(\\?.*)?", describeFn, "$1");
 	}
 	
 
