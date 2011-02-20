@@ -25,6 +25,7 @@ import org.openstreetmap.osmosis.core.domain.v0_6.Node;
 import org.openstreetmap.osmosis.core.domain.v0_6.Way;
 
 import com.hp.hpl.jena.query.DatasetFactory;
+import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
 
@@ -40,7 +41,7 @@ public class LGDVocab
 	
 	public static final String ONTOLOGY_NS = NS + "ontology/";
 	
-	public static final String MEMBER_OF_WAY = ONTOLOGY_NS + "memberOfWay";
+	public static final Property MEMBER_OF_WAY = ResourceFactory.createProperty(ONTOLOGY_NS + "memberOfWay");
 	public static final String HAS_NODES = ONTOLOGY_NS + "hasNodes";
 	
 	// NIR = Non-Information-Resource
@@ -83,7 +84,7 @@ public class LGDVocab
 	}
 
 	@Override
-	public String getMemberOfWayPred()
+	public Property getMemberOfWayPred()
 	{
 		return MEMBER_OF_WAY;
 	}

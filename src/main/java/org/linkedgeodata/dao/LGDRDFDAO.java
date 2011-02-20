@@ -96,9 +96,9 @@ public class LGDRDFDAO
 		for(Map.Entry<Long, Collection<Long>> entry : members.entrySet()) {
 			for(Long wayId : entry.getValue()) {
 				model.add(
-						model.createResource(vocab.createOSMNodeURI(entry.getKey())),
-						model.createProperty(vocab.getMemberOfWayPred()),
-						model.createResource(vocab.createOSMWayURI(wayId))
+						vocab.createOSMNodeURI(entry.getKey()),
+						vocab.getMemberOfWayPred(),
+						vocab.createOSMWayURI(wayId)
 						);
 			}
 		}

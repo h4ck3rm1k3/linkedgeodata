@@ -3,6 +3,7 @@ package org.linkedgeodata.core;
 import org.openstreetmap.osmosis.core.domain.v0_6.Entity;
 
 import com.hp.hpl.jena.rdf.model.AnonId;
+import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 public interface ILGDVocab
@@ -12,7 +13,7 @@ public interface ILGDVocab
 	//String getNode
 	
 	String getHasNodesPred();
-	String getMemberOfWayPred();
+	Property getMemberOfWayPred();
 
 	// NIR = Non-Information-Resource
 	Resource createNIRNodeURI(long id);

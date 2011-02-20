@@ -3,6 +3,7 @@ package org.linkedgeodata.core;
 import org.apache.commons.lang.NotImplementedException;
 import org.openstreetmap.osmosis.core.domain.v0_6.Entity;
 
+import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
 
@@ -18,7 +19,7 @@ public class DeprecatedLGDVocab
 	
 	public static final String ONTOLOGY = NS + "ontology/";
 	
-	public static final String MEMBER_OF_WAY = ONTOLOGY + "memberOfWay";
+	public static final Property MEMBER_OF_WAY = ResourceFactory.createProperty(ONTOLOGY + "memberOfWay");
 	public static final String HAS_NODES = ONTOLOGY + "hasNodes";
 	
 	// NIR = Non-Information-Resource
@@ -62,7 +63,7 @@ public class DeprecatedLGDVocab
 	}
 
 	@Override
-	public String getMemberOfWayPred()
+	public Property getMemberOfWayPred()
 	{
 		return MEMBER_OF_WAY;
 	}

@@ -831,8 +831,8 @@ class MyHandler
 		int responseLength = 0;
 		if(body == null)
 			responseLength = -1;
-		else
-			responseLength = body.length();
+		//else
+			//responseLength = body.length();
 		
 		x.getResponseHeaders().set("Content-Type", contentType);
 		
@@ -1069,13 +1069,17 @@ public class JTriplifyServer
 		// Set up actual data URIs
 		DataHandler dataHandler = new DataHandler();
 		mainHandler.getSubHandlers().add(dataHandler);
+
+		m = ServerMethods.class.getMethod("getWayNode", String.class);
+		dataHandler.getRIC().put(".*/way([^.]*)/nodes.*", new JavaMethodInvocable(m, methods), "$1");
+
 		
 		m = ServerMethods.class.getMethod("getNode", String.class);
-		dataHandler.getRIC().put(".*/node([^.]*).*", new JavaMethodInvocable(m, methods), "$1");
+		dataHandler.getRIC().put(".*/node([0-9]+).*", new JavaMethodInvocable(m, methods), "$1");
 	
 		m = ServerMethods.class.getMethod("getWay", String.class);
-		dataHandler.getRIC().put(".*/way([^.]*).*", new JavaMethodInvocable(m, methods), "$1");
-		
+		dataHandler.getRIC().put(".*/way([^./]*)(\\.[^/]*)?/?(\\?.*)?", new JavaMethodInvocable(m, methods), "$1");
+
 		
 		// Set up page URIs
 		/*

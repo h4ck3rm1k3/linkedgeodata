@@ -223,6 +223,23 @@ public class ServerMethods
 		}	
 	}
 	
+	
+	public Model getWayNode(String idStr)
+		throws Exception
+	{
+		// TODO This is a hack, since we should use the vocab object for creating resources
+		Resource subject = ResourceFactory.createResource("http://linkedgeodata.org/triplify/way" + idStr + "/nodes");
+		
+		Model tmp = getWay(idStr);
+		
+		Model result = ModelFactory.createDefaultModel();
+		result.add(tmp.listStatements(subject, null, (RDFNode)null));
+			
+		return result;
+		
+	}
+	
+	
 	public Model getWay(String idStr)
 		throws Exception
 	{
