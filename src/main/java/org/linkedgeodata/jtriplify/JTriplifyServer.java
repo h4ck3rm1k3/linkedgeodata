@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.lang.reflect.Method;
 import java.net.InetSocketAddress;
 import java.net.URI;
@@ -38,6 +39,7 @@ import java.util.Map;
 import javax.activation.UnsupportedDataTypeException;
 import javax.mail.internet.ContentType;
 import javax.mail.internet.ParseException;
+import javax.management.RuntimeErrorException;
 
 import org.aksw.commons.util.strings.StringUtils;
 import org.apache.commons.cli.CommandLine;
@@ -70,14 +72,20 @@ import org.linkedgeodata.util.ConnectionConfig;
 import org.linkedgeodata.util.ExceptionUtil;
 import org.linkedgeodata.util.HTMLJenaWriter;
 import org.linkedgeodata.util.ModelUtil;
+import org.linkedgeodata.util.StreamUtil;
 import org.linkedgeodata.util.StringUtil;
 import org.linkedgeodata.util.URIUtil;
+import org.openstreetmap.osmosis.core.xml.common.BaseXmlWriter;
 
 import com.hp.hpl.jena.graph.Graph;
 import com.hp.hpl.jena.graph.compose.Union;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFWriter;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.ResourceFactory;
+import com.hp.hpl.jena.xmloutput.impl.BaseXMLWriter;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -127,7 +135,8 @@ class MyHttpHandler
 			}
 		}
 		
-		MyHandler.sendResponse(x, 500, null, null);
+		String msg = "Internal server error. Maybe a misspelled or non-existent resource was requested?";
+		MyHandler.sendResponse(x, 500, "text/plain", msg);
 	}
 }
 
@@ -194,6 +203,10 @@ class DataHandler
 	private boolean _handle(HttpExchange x)
 		throws Exception
 	{		
+		System.out.println("Request method = " + x.getRequestMethod());
+		System.out.println("Request body = " + StreamUtil.toString(x.getRequestBody()));
+
+
 		// Check whether we have a data or page URI
 		Map.Entry<String, ContentType> resultType;
 
@@ -253,7 +266,7 @@ class DataHandler
 			return false;
 
 		
-		RDFWriter writer = MyHandler.getWriter(resultType.getKey());
+		RDFWriter writer = MyHandler.getWriter(resultType.getKey());		
 		
 		String body = ModelUtil.toString(model, writer);
 		
@@ -550,7 +563,15 @@ class MyHandler
 		if("HTML".equalsIgnoreCase(format))
 			return new HTMLJenaWriter();
 		
-		return ModelFactory.createDefaultModel().getWriter(format);
+		RDFWriter writer = ModelFactory.createDefaultModel().getWriter(format);
+		/*
+		if(writer instanceof BaseXMLWriter) {
+			writer.setProperty("showXMLDeclaration","true");
+		}
+		*/
+
+		//return ModelFactory.createDefaultModel().getWriter(format);
+		return writer;
 	}
 	
 	{
@@ -580,9 +601,11 @@ class MyHandler
 			contentTypeToJenaFormat.put(new ContentType("text/n3"), "N3");
 			contentTypeToJenaFormat.put(new ContentType("text/rdf+n3"), "N3");
 			
-			jenaFormatToContentType.put("RDF/XML", new ContentType("application/rdf+xml; charset=utf-8"));
+			//jenaFormatToContentType.put("RDF/XML", new ContentType("application/rdf+xml; charset=utf-8"));
+			//jenaFormatToContentType.put("RDF/XML", new ContentType("application/rdf+xml"));
+			jenaFormatToContentType.put("RDF/XML", new ContentType("application/rdf+xml"));
 			jenaFormatToContentType.put("TURTLE", new ContentType("application/x-turtle; charset=utf-8"));
-			jenaFormatToContentType.put("N3", new ContentType("text/rdf+n3; charset=utf-8"));
+			jenaFormatToContentType.put("N3", new ContentType("text/rdf+n3;"));
 			
 		}
 		catch(Exception e) {
@@ -596,6 +619,7 @@ class MyHandler
 		formatToJenaFormat.put("turtle", "TURTLE");
 
 		
+		extensionToJenaFormat.put("rdfxml", "TURTLE");
 		extensionToJenaFormat.put("rdf", "RDF/XML");
 		extensionToJenaFormat.put("n3", "N3");
 		extensionToJenaFormat.put("nt", "N-TRIPLE");
@@ -753,7 +777,8 @@ class MyHandler
     		return new Pair<String, ContentType>(requestedFormat, contentType);
 		}
     	else {
-    		return new Pair<String, ContentType>(requestedFormat, new ContentType("text/plain; charset=utf-8"));
+    		return new Pair<String, ContentType>(requestedFormat, accepts.get(requestedFormat));
+    		//return new Pair<String, ContentType>(requestedFormat, new ContentType("text/plain; charset=utf-8"));
     	}
 	}
 	
@@ -820,28 +845,78 @@ class MyHandler
 		x.sendResponseHeaders(303, -1);
 	}
 	
-	
+
+
 	public static void sendResponse(HttpExchange x, int statusCode, String contentType, String body)
+		throws IOException
+	{
+		try {
+			//System.out.println(x.getRequestMethod());
+			//System.out.println(x.getRequestHeaders());
+			//System.out.println(StreamUtil.toString(x.getRequestBody()));
+			
+			Model model = ModelFactory.createDefaultModel();
+			
+			Resource r = ResourceFactory.createResource("http://ex.org/resource/a");
+			Property p = ResourceFactory.createProperty("http://ex.org/ontology/b");
+			model.add(r, p, r);
+			
+			//x.getResponseHeaders().set("Content-Type", "application/rdf+xml");
+			x.getResponseHeaders().set("Content-Type", contentType);
+			x.sendResponseHeaders(200, 0);
+			
+			OutputStream out = x.getResponseBody();
+			String str = ModelUtil.toString(model, "RDF/XML");
+			out.write(body.getBytes());
+			out.close();
+		} catch (Throwable t) {
+			t.printStackTrace();
+		}
+	}
+
+
+	public static void sendResponseX(HttpExchange x, int statusCode, String contentType, String body)
 		throws IOException
 	{
 		if(contentType == null)
 			contentType = "text/plain";
 		
 		
-		int responseLength = 0;
-		if(body == null)
-			responseLength = -1;
-		//else
-			//responseLength = body.length();
+		//byte[] bodyBytes = body == null ? null : body.getBytes("UTF8");
 		
-		x.getResponseHeaders().set("Content-Type", contentType);
+		int responseLength = 0;
+		if(body == null) {
+			responseLength = -1;
+		} /* else {
+			responseLength = body.length();
+		} */
+		
+		Headers headers = x.getResponseHeaders();
+
+		//headers.
+		
+		//x.getResponseHeaders().add("Content-Type", contentType);
+		//x.setAttribute(arg0, arg1)
+		headers.set("Content-Type", contentType);
+		//x.getResponseHeaders().set("Accept-Ranges", "bytes");
 		
 		x.sendResponseHeaders(statusCode, responseLength);
         OutputStream os = x.getResponseBody();
+
+        OutputStreamWriter osw;
+        try {
+        	osw = new OutputStreamWriter(os, "UTF-8");
+        } catch(Exception e) {
+        	throw new RuntimeException(e);
+        }
+
+    	if(responseLength != -1) {
+        	//os.write(bodyBytes);
+    		osw.write(body);
+    	}
     	
-    	if(responseLength != -1)
-        	os.write(body.getBytes());
-        os.close();		
+        osw.close();
+        os.close();
 	}
 	
 	/*
@@ -998,6 +1073,12 @@ public class JTriplifyServer
 	private static void initCurrent(MyHttpHandler mainHandler, ConnectionConfig connectionConfig)
 		throws Exception
 	{
+		// Init jena
+		//RDFWriter writer = MyHandler.getWriter("RDF/XML");
+		//writer.setProperty("showXMLDeclaration","true");
+
+		
+		
 		// FIXME Somehow get rid of the need for the following line
 		TagMappingDB.getSession();
 		

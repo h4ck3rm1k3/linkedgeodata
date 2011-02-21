@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
@@ -94,6 +96,17 @@ public class ModelUtil
 	public static String toString(Model model, RDFWriter writer)
 	{
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		
+		/*
+		OutputStreamWriter osw;
+		try {
+			osw = new OutputStreamWriter(baos, "UTF8");
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		writer.write(model, osw, "");
+		*/ 
+		
 		writer.write(model, baos, ""); 
 		
 		return baos.toString();
