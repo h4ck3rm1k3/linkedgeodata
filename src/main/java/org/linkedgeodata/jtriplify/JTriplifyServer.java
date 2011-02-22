@@ -199,7 +199,75 @@ class DataHandler
 		return content;
 	}
 
+
+	private boolean _handle(HttpExchange x)
+		throws Exception
+	{
+		System.out.println("Request method = " + x.getRequestMethod());
+		System.out.println("Request body = " + StreamUtil.toString(x.getRequestBody()));
+
+
+		// Check whether we have a data or page URI
+		Map.Entry<String, ContentType> resultType;
+
+		Map<String, ContentType> accepts = MyHandler.getPreferredFormats(x.getRequestHeaders());
+ 		
+		String extension = MyHandler.getExtension(x.getRequestURI().toString());
+		String requestedFormat = null;
+		if(extension != null) {
+			requestedFormat = MyHandler.getFormatFromExtension(extension);
+
+			if(requestedFormat == null) {
+				MyHandler.sendResponse(x, 500, "text/plain", "Unknown extension: '" + extension + "'");
+				return true;
+			}
+		}
+		
+		//String requestedFormat = MyHandler.getJenaFormatByExtension(x.getRequestURI());
+		String qsFormat = MyHandler.getJenaFormatByQueryString(x.getRequestURI());
+		
+		requestedFormat = StringUtil.coalesce(requestedFormat, qsFormat);
+		
+		resultType = MyHandler.getContentType(requestedFormat, accepts);			
+		
+		// Check whether we need to do a redirect on the URI
+		// (this is the case when the URI contains a 'triplify'/'resource'
+		String requestURI = x.getRequestURI().toString(); 
+
+		
+		Model model = null;
+		try {
+			model = (Model)ric.invoke(x.getRequestURI().toString());
+		}
+		catch(Throwable t) {
+			logger.error(ExceptionUtil.toString(t));
+		}
+		
+		if(model == null)
+			return false;
+
+		
+		RDFWriter writer = MyHandler.getWriter(resultType.getKey());		
+		
+		String body = ModelUtil.toString(model, writer);
+		
+		if("HTML".equalsIgnoreCase(resultType.getKey())) {
+			body = generateHTMLRepresentation(body);
+		}
+		
+		if(resultType != null) {
+			MyHandler.sendResponse(x, 200, resultType.getValue().toString(), body);
+			return true;
+		}
+		return false;		
+	}
+
 	
+	/*
+	 * 
+	 * This is tho old version which had a page and data namespace
+	 * (analogous to dbpedia)
+	 *
 	private boolean _handle(HttpExchange x)
 		throws Exception
 	{		
@@ -282,6 +350,7 @@ class DataHandler
 		
 		//return true;
 	}
+	*/
 }
 
 /*
@@ -619,11 +688,12 @@ class MyHandler
 		formatToJenaFormat.put("turtle", "TURTLE");
 
 		
-		extensionToJenaFormat.put("rdfxml", "TURTLE");
+		extensionToJenaFormat.put("rdfxml", "RDF/XML");
 		extensionToJenaFormat.put("rdf", "RDF/XML");
 		extensionToJenaFormat.put("n3", "N3");
 		extensionToJenaFormat.put("nt", "N-TRIPLE");
 		extensionToJenaFormat.put("ttl", "TURTLE");
+		extensionToJenaFormat.put("htm", "HTML");
 		extensionToJenaFormat.put("html", "HTML");
 	}
 	
@@ -678,8 +748,8 @@ class MyHandler
 		if(ext == null)
 			return null;
 		
-		System.out.println(extensionToJenaFormat);
-		System.out.println(formatToJenaFormat);
+		//System.out.println(extensionToJenaFormat);
+		//System.out.println(formatToJenaFormat);
 		String result = extensionToJenaFormat.get(ext);
 		return result;
 	}
@@ -707,7 +777,9 @@ class MyHandler
 	    		// FIXME Would be nice if this was configurable
 	    		if(ct.match("text/plain") || ct.match("text/html") || ct.match("*/*")) {
 	    			if(!result.containsKey("N-TRIPLE")) {
-	    				result.put("N-TRIPLE", ct);
+	    				//result.put("N-TRIPLE", ct);
+	    				// We serve N-Triples by default
+	    				result.put("N-TRIPLE", new ContentType("text/plain"));
 	    			}
 	    			
 	    			//responseContentType = "text/plain; charset=UTF-8";
