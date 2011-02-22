@@ -253,7 +253,10 @@ class DataHandler
 		
 		if("HTML".equalsIgnoreCase(resultType.getKey())) {
 			// FIXME For now prepend an info to the html doc
-			String url = x.getRequestURI().toString();
+			String url = x.getRequestURI().toString().trim();
+			if(url.endsWith("/")) {
+				url = url.substring(0, url.length() - 1);
+			}
 			
 			if(extension != null) {
 				url = url.substring(0, url.length() - extension.length() - 1);
