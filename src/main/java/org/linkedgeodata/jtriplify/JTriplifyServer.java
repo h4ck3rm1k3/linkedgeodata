@@ -252,7 +252,28 @@ class DataHandler
 		String body = ModelUtil.toString(model, writer);
 		
 		if("HTML".equalsIgnoreCase(resultType.getKey())) {
+			// FIXME For now prepend an info to the html doc
+			String url = x.getRequestURI().toString();
+			
+			if(extension != null) {
+				url = url.substring(0, url.length() - extension.length() - 1);
+			}
+			
+			String note = ""
+	        	+ "<p>"
+				+ "You are viewing the html representation of this document."
+	        	+ "<br />Other formats: "
+	        	+ "<a href='" + url + ".rdf'>rdf/xml</a> "
+	        	+ "<a href='" + url + ".nt'>n-triples</a> "
+	        	+ "<a href='" + url + ".ttl'>turtle</a> "
+	        	+ "<a href='" + url + ".n3'>n3</a> "
+	        	+ "</p>"
+	        	;
+
+			body = note + body;
+			
 			body = generateHTMLRepresentation(body);
+						
 		}
 		
 		if(resultType != null) {
