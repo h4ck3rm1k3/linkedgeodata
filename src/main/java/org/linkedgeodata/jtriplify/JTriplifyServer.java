@@ -211,16 +211,23 @@ class DataHandler
 		Map.Entry<String, ContentType> resultType;
 
 		Map<String, ContentType> accepts = MyHandler.getPreferredFormats(x.getRequestHeaders());
- 		
+		
 		String extension = MyHandler.getExtension(x.getRequestURI().toString());
 		String requestedFormat = null;
 		if(extension != null) {
 			requestedFormat = MyHandler.getFormatFromExtension(extension);
 
+			// Assume no extension if the extension is unknown
+			if(requestedFormat == null) {
+				extension = null;
+			}
+			
+			/*
 			if(requestedFormat == null) {
 				MyHandler.sendResponse(x, 500, "text/plain", "Unknown extension: '" + extension + "'");
 				return true;
 			}
+			*/
 		}
 		
 		//String requestedFormat = MyHandler.getJenaFormatByExtension(x.getRequestURI());
@@ -234,10 +241,20 @@ class DataHandler
 		// (this is the case when the URI contains a 'triplify'/'resource'
 		String requestURI = x.getRequestURI().toString(); 
 
+		// Cut off extensions of the request uri
+		if(requestURI.endsWith("/")) {
+			requestURI = requestURI.substring(0, requestURI.length() - 1);
+		}
+		
+		if(extension != null) {
+			requestURI = requestURI.substring(0, requestURI.length() - extension.length() - 1);
+		}
+		
+		
 		
 		Model model = null;
 		try {
-			model = (Model)ric.invoke(x.getRequestURI().toString());
+			model = (Model)ric.invoke(requestURI);
 		}
 		catch(Throwable t) {
 			logger.error(ExceptionUtil.toString(t));
@@ -252,15 +269,8 @@ class DataHandler
 		String body = ModelUtil.toString(model, writer);
 		
 		if("HTML".equalsIgnoreCase(resultType.getKey())) {
-			// FIXME For now prepend an info to the html doc
-			String url = x.getRequestURI().toString().trim();
-			if(url.endsWith("/")) {
-				url = url.substring(0, url.length() - 1);
-			}
-			
-			if(extension != null) {
-				url = url.substring(0, url.length() - extension.length() - 1);
-			}
+			// FIXME For now prepensd an info to the html doc
+			String url = requestURI;
 			
 			String note = ""
 	        	+ "<p>"
