@@ -199,6 +199,10 @@ class DataHandler
 		return content;
 	}
 
+	private boolean isDataUri(String uri)
+	{
+		return uri.contains("/data");
+	}
 
 	private boolean _handle(HttpExchange x)
 		throws Exception
@@ -211,6 +215,11 @@ class DataHandler
 		Map.Entry<String, ContentType> resultType;
 
 		Map<String, ContentType> accepts = MyHandler.getPreferredFormats(x.getRequestHeaders());
+
+		String requestURI = x.getRequestURI().toString(); 
+		if(isDataUri(requestURI)) {
+			accepts.remove("HTML");
+		}
 		
 		String extension = MyHandler.getExtension(x.getRequestURI().toString());
 		String requestedFormat = null;
@@ -236,10 +245,19 @@ class DataHandler
 		requestedFormat = StringUtil.coalesce(requestedFormat, qsFormat);
 		
 		resultType = MyHandler.getContentType(requestedFormat, accepts);			
+				
+		if(requestURI.contains("triplify")) {
+			String targetURL = (resultType.getValue().match("text/html"))
+				? requestURI.replace("triplify", "page")
+				: requestURI.replace("triplify", "data");
+			
+			MyHandler.sendRedirect(x, targetURL);
+			return true;
+		}
+		
 		
 		// Check whether we need to do a redirect on the URI
 		// (this is the case when the URI contains a 'triplify'/'resource'
-		String requestURI = x.getRequestURI().toString(); 
 
 		// Cut off extensions of the request uri
 		if(requestURI.endsWith("/")) {
@@ -250,6 +268,9 @@ class DataHandler
 			requestURI = requestURI.substring(0, requestURI.length() - extension.length() - 1);
 		}
 		
+		if(isDataUri(requestURI) && extension == null) {
+			resultType = Pair.create("RDF/XML", MyHandler.jenaFormatToContentType.get("RDF/XML"));
+		}
 		
 		
 		Model model = null;
@@ -657,7 +678,7 @@ class MyHandler
 	private static Map<String, String> formatToJenaFormat = new HashMap<String, String>();
 	private static Map<String, String> extensionToJenaFormat = new HashMap<String, String>();
 	
-	private static Map<String, ContentType> jenaFormatToContentType = new HashMap<String, ContentType>();
+	public static Map<String, ContentType> jenaFormatToContentType = new HashMap<String, ContentType>();
 
 	public static RDFWriter getWriter(String format)
 	{
