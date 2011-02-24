@@ -248,7 +248,7 @@ public class LiveSync
 
 	
 	public static ITransformer<Model, Model> getPostTransformer(Map<String, String> config)
-		throws IOException
+		throws Exception
 	{
 		ITransformer<Model, Model> virtuosoTransformer = new VirtuosoStatementNormalizer();
 		

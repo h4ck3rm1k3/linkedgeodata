@@ -1,0 +1,23 @@
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+
+@prefix lgd: <http://linkedgeodata.org/triplify/> .
+@prefix lgdo: <http://linkedgeodata.org/ontology/> .
+@prefix wgs:  <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+
+lgd:node262816
+	rdf:type	lgdo:Pub ;
+	rdfs:label	"Five Bells" ;
+	wgs:geometry	"POINT(-0.950004 50.9766)"^^<http://www.openlinksw.com/schemas/virtrdf#Geometry> ;
+	wgs:long	"-0.9500042"^^<http://www.w3.org/2001/XMLSchema#double> ;
+	wgs:lat	"50.9766164"^^<http://www.w3.org/2001/XMLSchema#double> ;
+	lgdo:hasNodes <http://linkedgeodata.org/triplify/node262816/nodes> .
+
+<http://linkedgeodata.org/triplify/node262816/nodes>
+	a rdf:Seq ;
+	rdf:_1 lgdo:node1 ;
+	rdf:_2 lgdo:node2 ;
+	rdf:_3 lgdo:node3 .
+	

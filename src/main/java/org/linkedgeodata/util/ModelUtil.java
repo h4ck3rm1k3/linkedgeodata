@@ -88,7 +88,7 @@ public class ModelUtil
 	*/
 	
 	public static Model read(File file)
-		throws IOException
+		throws Exception
 	{
 		Collection<String> langs = null;
 
@@ -116,6 +116,9 @@ public class ModelUtil
 				logMessage += " Success (" + lang + ")";
 				break;
 			} catch(Exception e) {
+				if(langs.size() == 1) {
+					throw e;
+				}
 			}
 			finally {
 				if(in != null) in.close();

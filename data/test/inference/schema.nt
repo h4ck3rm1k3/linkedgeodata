@@ -1,2 +1,0 @@
-<http://linkedgeodata.org/ontology/Pub> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://linkedgeodata.org/ontology/Amenity> .
-<http://www.w3.org/2003/01/geo/wgs84_pos#geometry> <http://www.w3.org/2000/01/rdf-schema#domain> <http://linkedgeodata.org/ontology/Node> .

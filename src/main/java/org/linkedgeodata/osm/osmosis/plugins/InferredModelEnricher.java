@@ -1,5 +1,7 @@
 package org.linkedgeodata.osm.osmosis.plugins;
 
+import java.util.Iterator;
+
 import org.linkedgeodata.util.ITransformer;
 import org.mindswap.pellet.jena.PelletReasoner;
 
@@ -7,9 +9,11 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.reasoner.Reasoner;
 import com.hp.hpl.jena.reasoner.rulesys.OWLMicroReasonerFactory;
 import com.hp.hpl.jena.reasoner.transitiveReasoner.TransitiveReasoner;
+import com.hp.hpl.jena.vocabulary.OWL;
 import com.hp.hpl.jena.vocabulary.RDF;
 import com.hp.hpl.jena.vocabulary.RDFS;
 
@@ -36,11 +40,11 @@ public class InferredModelEnricher
 	@Override
 	public Model transform(Model out, Model in)
 	{
-		//Reasoner reasoner = new PelletReasoner();
+		Reasoner reasoner = new PelletReasoner();
 		//Reasoner reasoner = new TransitiveReasoner();
 		
-		//Model model = ModelFactory.createInfModel(reasoner, schema, in);
-		Model model = ModelFactory.createRDFSModel(schema, in);		
+		Model model = ModelFactory.createInfModel(reasoner, schema, in);
+		//Model model = ModelFactory.createRDFSModel(schema, in);		
 		// FIXME Create tmp model as out could be the same as in
 		// However, maybe that is not necessary, as we retrieve the set
 		// of subjects first anyway
@@ -51,12 +55,20 @@ public class InferredModelEnricher
 			tmp.add(model.listStatements(subject, null, (RDFNode)null));
 		}
 		
-	
-		tmp.remove(tmp.listStatements(null, RDF.type, RDFS.Resource));
+		tmp.remove(tmp.listStatements(null, RDF.type, OWL.Thing));
+		
+		Iterator<Statement> it = tmp.listStatements(null, OWL.sameAs, (RDFNode)null);
+		while(it.hasNext()) {
+			Statement stmt = it.next();
+			
+			if(stmt.getSubject().equals(stmt.getObject())) {
+				it.remove();
+			}
+		}
 		
 		//out.add(tmp.listStatements());
 
-		return null;
+		return out;
 	}
 
 }

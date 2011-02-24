@@ -3,22 +3,25 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix owl:  <http://www.w3.org/2002/07/owl#> .
 
+@prefix lgd: <http://linkedgeodata.org/triplify/> .
 @prefix lgdo: <http://linkedgeodata.org/ontology/> .
 @prefix wgs:  <http://www.w3.org/2003/01/geo/wgs84_pos#> .
 
+
+lgdo:Pub
+	rdfs:subClassOf lgdo:Amenity .
 
 wgs:geometry
 	a owl:DatatypeProperty .
 
 lgdo:hasNodes
-	a owl:ObjectProperty ;
-	rdfs:comment "This property connects an object with an ordered sequence of nodes. Note that this relation is not meant to be transitive: If A is a part of B, and A 'hasNodes', then B does not have these nodes." ;
-	rdfs:range rdf:Seq .
+	a owl:ObjectProperty .
 
 
 lgdo:Node
     a owl:Class ;
-	owl:equivalentClass lgdo:NodeRestriction .
+	owl:equivalentClass lgdo:NodeRestriction
+	.
 
 lgdo:NodeRestriction
 	a owl:Restriction ;
