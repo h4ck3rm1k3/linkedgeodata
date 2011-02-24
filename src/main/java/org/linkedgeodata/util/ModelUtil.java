@@ -34,7 +34,7 @@ public class ModelUtil
 	
 	public static Map<String, String> extensionToJenaFormat = new HashMap<String, String>();
 	
-	{
+	static {
 		extensionToJenaFormat.put(".rdfxml", "RDF/XML");
 		extensionToJenaFormat.put(".rdf", "RDF/XML");
 		extensionToJenaFormat.put(".n3", "N3");
@@ -81,16 +81,22 @@ public class ModelUtil
 		return read(ModelFactory.createDefaultModel(), in, lang);
 	}
 
+	/*
+	public static void main(String[] args) throws IOException {
+		read(new File("test.nt"));
+	}
+	*/
+	
 	public static Model read(File file)
 		throws IOException
 	{
 		Collection<String> langs = null;
 
 		// Auto detect language by file name extension
-		String fileName = file.getName();
+		String fileName = file.getPath().toLowerCase();
 		
 		for(Map.Entry<String, String> entry : extensionToJenaFormat.entrySet()) {
-			if(fileName.endsWith(entry.getKey())) {
+			if(fileName.endsWith(entry.getKey().toLowerCase())) {
 				langs = Collections.singleton(entry.getValue());
 				break;
 			}
