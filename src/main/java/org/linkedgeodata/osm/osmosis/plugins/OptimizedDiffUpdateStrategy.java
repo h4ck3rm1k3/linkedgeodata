@@ -149,6 +149,7 @@ public class OptimizedDiffUpdateStrategy
 		this.nodePositionDAO = nodePositionDAO;
 		// this.nodeGraphName = nodeGraphName;
 		this.tagRelevanceFilter = tagRelevanceFilter;
+		this.postProcessTransformer = postProcessTransformer;
 
 		this.linePolygonGraph = ((SparqlEndpointFilteredGraph) deltaGraph
 				.getBaseGraph()).createSubGraph("?p = <" + GeoRSS.line
