@@ -292,7 +292,7 @@ class DataHandler
 		if("HTML".equalsIgnoreCase(resultType.getKey())) {
 			// FIXME For now prepensd an info to the html doc
 			String url = requestURI;
-			
+
 			String note = ""
 	        	+ "<p>"
 				+ "You are viewing the html representation of this document."
@@ -674,12 +674,12 @@ class MyHandler
 
 	//private static Map<String, RDFWriter> rdfFormatToWriter = new HashMap<String, RDFWriter>(); 
 	
-	private static Map<ContentType, String> contentTypeToJenaFormat = new HashMap<ContentType, String>();
+	private static Map<ContentType, String> contentTypeToJenaFormat = new HashMap<ContentType, String>();	
+	public static Map<String, ContentType> jenaFormatToContentType = new HashMap<String, ContentType>();
+
 	private static Map<String, String> formatToJenaFormat = new HashMap<String, String>();
 	private static Map<String, String> extensionToJenaFormat = new HashMap<String, String>();
 	
-	public static Map<String, ContentType> jenaFormatToContentType = new HashMap<String, ContentType>();
-
 	public static RDFWriter getWriter(String format)
 	{
 		// FIXME The Jena writer needs to be configurable (e.g. css path)
@@ -737,6 +737,7 @@ class MyHandler
 			System.exit(1);
 		}
 		
+
 		formatToJenaFormat.put("rdfxml", "RDF/XML");
 		formatToJenaFormat.put("n3", "N3");
 		formatToJenaFormat.put("nt", "N-TRIPLE");

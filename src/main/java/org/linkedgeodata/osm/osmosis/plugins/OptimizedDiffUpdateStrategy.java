@@ -138,7 +138,8 @@ public class OptimizedDiffUpdateStrategy
 			ITransformer<Entity, Model> entityTransformer,
 			INodeSerializer nodeSerializer, DeltaGraph deltaGraph,
 			DeltaBulkMap<Long, Point2D> nodePositionDAO,
-			Predicate<Tag> tagRelevanceFilter) throws Exception
+			Predicate<Tag> tagRelevanceFilter,
+			ITransformer<Model, Model> postProcessTransformer) throws Exception
 	{
 		this.vocab = vocab;
 		this.entityTransformer = entityTransformer;
@@ -695,9 +696,11 @@ public class OptimizedDiffUpdateStrategy
 			
 			TreeMap<Integer, RDFNode> fixes = affectedWay.getValue();
 
+			/*
 			if(way.getURI().toString().equals("http://linkedgeodata.org/triplify/way54871694")) {
 				System.out.println("GOT IT");
 			}
+			*/
 			
 			
 			Set<Statement> georssStmts =

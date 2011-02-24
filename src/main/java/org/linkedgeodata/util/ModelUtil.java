@@ -8,9 +8,17 @@ import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.NavigableMap;
+
+import javax.mail.internet.ContentType;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -22,6 +30,20 @@ import com.hp.hpl.jena.rdf.model.Statement;
 
 public class ModelUtil
 {	
+	private static Logger logger = LoggerFactory.getLogger(ModelUtil.class);
+	
+	public static Map<String, String> extensionToJenaFormat = new HashMap<String, String>();
+	
+	{
+		extensionToJenaFormat.put(".rdfxml", "RDF/XML");
+		extensionToJenaFormat.put(".rdf", "RDF/XML");
+		extensionToJenaFormat.put(".n3", "N3");
+		extensionToJenaFormat.put(".nt", "N-TRIPLE");
+		extensionToJenaFormat.put(".ttl", "TURTLE");
+	}
+
+	
+	
 	/**
 	 * 
 	 * @param model
@@ -57,6 +79,54 @@ public class ModelUtil
 		throws IOException
 	{
 		return read(ModelFactory.createDefaultModel(), in, lang);
+	}
+
+	public static Model read(File file)
+		throws IOException
+	{
+		Collection<String> langs = null;
+
+		// Auto detect language by file name extension
+		String fileName = file.getName();
+		
+		for(Map.Entry<String, String> entry : extensionToJenaFormat.entrySet()) {
+			if(fileName.endsWith(entry.getKey())) {
+				langs = Collections.singleton(entry.getValue());
+				break;
+			}
+		}
+		
+		if(langs == null) {
+			langs = new HashSet<String>(extensionToJenaFormat.values());
+		}
+		
+		String logMessage = "Parsing file '" + fileName + "' with languages " + langs + ": ";
+		Model result = null;
+		for(String lang : langs) {
+			FileInputStream in = new FileInputStream(file);
+			try {
+				result = read(in, lang);
+				
+				logMessage += " Success (" + lang + ")";
+				break;
+			} catch(Exception e) {
+			}
+			finally {
+				if(in != null) in.close();
+			}
+		}
+		
+		if(result == null) {
+			logMessage += " Failed. ";
+		}
+		
+		logger.debug(logMessage);
+		
+		if(result == null) {
+			throw new IOException("Unsupported file format");
+		}
+
+		return result;
 	}
 
 	

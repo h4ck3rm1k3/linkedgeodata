@@ -83,7 +83,7 @@ public class NodePositionDAO
 	private boolean isTableExisting;
 	
 	public NodePositionDAO(String tableName)
-	{
+	{		
 		this.tableName = tableName;
 	}
 	

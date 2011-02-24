@@ -46,6 +46,7 @@ import org.linkedgeodata.osm.osmosis.plugins.EntityFilter;
 import org.linkedgeodata.osm.osmosis.plugins.EntityFilterPlugin;
 import org.linkedgeodata.osm.osmosis.plugins.INodeSerializer;
 import org.linkedgeodata.osm.osmosis.plugins.IUpdateStrategy;
+import org.linkedgeodata.osm.osmosis.plugins.InferredModelEnricher;
 import org.linkedgeodata.osm.osmosis.plugins.OptimizedDiffUpdateStrategy;
 import org.linkedgeodata.osm.osmosis.plugins.RDFDiff;
 import org.linkedgeodata.osm.osmosis.plugins.RDFDiffWriter;
@@ -54,6 +55,7 @@ import org.linkedgeodata.osm.osmosis.plugins.TagFilterPlugin;
 import org.linkedgeodata.osm.osmosis.plugins.TreeSetDiff;
 import org.linkedgeodata.osm.osmosis.plugins.VirtuosoCommercialNodeSerializer;
 import org.linkedgeodata.osm.osmosis.plugins.VirtuosoOseNodeSerializer;
+import org.linkedgeodata.osm.osmosis.plugins.VirtuosoStatementNormalizer;
 import org.linkedgeodata.tagmapping.client.entity.AbstractTagMapperState;
 import org.linkedgeodata.tagmapping.client.entity.IEntity;
 import org.linkedgeodata.util.IDiff;
@@ -61,6 +63,7 @@ import org.linkedgeodata.util.ITransformer;
 import org.linkedgeodata.util.ModelUtil;
 import org.linkedgeodata.util.PostGISUtil;
 import org.linkedgeodata.util.StringUtil;
+import org.linkedgeodata.util.TransformerChain;
 import org.linkedgeodata.util.URIUtil;
 import org.linkedgeodata.util.VirtuosoUtils;
 import org.linkedgeodata.util.sparql.ISparulExecutor;
@@ -242,7 +245,31 @@ public class LiveSync
 		SerializationUtils.serializeXml(state, subStateFile, true);
 		subState = state;
 	}
+
 	
+	public static ITransformer<Model, Model> getPostTransformer(Map<String, String> config)
+		throws IOException
+	{
+		ITransformer<Model, Model> virtuosoTransformer = new VirtuosoStatementNormalizer();
+		
+		// Check if an ontology file is specified for materializing inferences
+		ITransformer<Model, Model> postTransformer;
+	
+		// materialized inferences file
+		String ontologyFileName = config.get("matInfSchemaFile");
+		if(ontologyFileName != null) {
+			Model schema = ModelUtil.read(new File(ontologyFileName));
+			
+			ITransformer<Model, Model> matInfTransformer = new InferredModelEnricher(schema);
+			
+			postTransformer = TransformerChain.create(matInfTransformer, virtuosoTransformer);
+		} else {
+			postTransformer = virtuosoTransformer;
+		}
+		
+		return postTransformer;
+	}
+
 	
 	public LiveSync(Map<String, String> config) throws Exception
 	{
@@ -308,14 +335,17 @@ public class LiveSync
 
 		
 		
+		String nodeTableName = config.get("nodePositionTableName");
+		if(nodeTableName == null)
+			throw new NullPointerException("Table name must not be null");
+
 		
-		
-		NodePositionDAO nodePositionDaoCore = new NodePositionDAO("node_position");
+		NodePositionDAO nodePositionDaoCore = new NodePositionDAO(nodeTableName);
 		nodePositionDaoCore.setConnection(nodeConn);
 
 		CacheBulkMap<Long, Point2D> nodePositionDaoCache = CacheBulkMap.create(nodePositionDaoCore, 1000000, 1000000);
 		nodePositionDao = DeltaBulkMap.create(nodePositionDaoCache);
-
+		
 
 		//GeoRSSNodeMapper nodeMapper = new GeoRSSNodeMapper(vocab);
 		//RDFNodePositionDAO rdfNodePositionDao = new RDFNodePositionDAO(
@@ -330,6 +360,9 @@ public class LiveSync
 		TripleCacheIndexImpl.create(baseGraph, 1000000, 1000, 1000000,
 				new int[] { 2 });
 
+		
+		ITransformer<Model, Model> postTransformer = getPostTransformer(config);
+		
 		/*
 		 * diffStrategy = new IgnoreModifyDeleteDiffUpdateStrategy( vocab,
 		 * entityTransformer, graphDAO, graphName, rdfNodePositionDao);
@@ -351,7 +384,7 @@ public class LiveSync
 		
 		
 		diffStrategy = new OptimizedDiffUpdateStrategy(vocab,
-				entityTransformer, nodeSerializer, deltaGraph, nodePositionDao, relevanceFilter);
+				entityTransformer, nodeSerializer, deltaGraph, nodePositionDao, relevanceFilter, postTransformer);
 
 		TagFilterPlugin tagFilterPlugin = new TagFilterPlugin(tagFilter);
 

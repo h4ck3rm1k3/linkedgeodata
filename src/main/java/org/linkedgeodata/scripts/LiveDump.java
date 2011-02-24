@@ -225,7 +225,14 @@ public class LiveDump
 		ITransformer<Entity, Model> entityTransformer = new OSMEntityToRDFTransformer(
 				tagMapper, vocab, nodeSerializer);
 
-		NodePositionDAO nodePositionDaoCore = new NodePositionDAO("node_position");
+		
+		String nodeTableName = config.get("nodePositionTableName");
+		if(nodeTableName == null)
+			throw new NullPointerException("Table name must not be null");
+
+		
+		NodePositionDAO nodePositionDaoCore = new NodePositionDAO(nodeTableName);
+		
 		nodePositionDaoCore.setConnection(nodeConn);
 
 		CacheBulkMap<Long, Point2D> nodePositionDaoCache = CacheBulkMap.create(nodePositionDaoCore, 1000000, 1000000);
@@ -238,6 +245,8 @@ public class LiveDump
 		// inputStream = new
 		// CompressionActivator(CompressionMethod.GZip).createCompressionInputStream(inputStream);
 
+		ITransformer<Model, Model> postTransformer = LiveSync.getPostTransformer(config);
+		
 
 		// Load the entity tag filter
 		TagFilter entityTagFilter = new TagFilter();
@@ -263,7 +272,7 @@ public class LiveDump
 		
 		
 		OptimizedDiffUpdateStrategy diffStrategy = new OptimizedDiffUpdateStrategy(vocab,
-				entityTransformer, nodeSerializer, deltaGraph, nodePositionDao, relevanceFilter);
+				entityTransformer, nodeSerializer, deltaGraph, nodePositionDao, relevanceFilter, postTransformer);
 
 		LiveDumpChangeSink dumpSink = new LiveDumpChangeSink(diffStrategy, deltaGraph, nodePositionDao);
 

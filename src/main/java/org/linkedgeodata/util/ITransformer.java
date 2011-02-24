@@ -5,7 +5,6 @@ import org.apache.commons.collections15.Transformer;
 /**
  * Interface intended for directly transforming into a target collection.
  * 
- * 
  * @author Claus Stadler
  *
  * @param <I>
