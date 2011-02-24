@@ -1,11 +1,17 @@
 package org.linkedgeodata.osm.osmosis.plugins;
 
 import org.linkedgeodata.util.ITransformer;
+import org.mindswap.pellet.jena.PelletReasoner;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.reasoner.Reasoner;
+import com.hp.hpl.jena.reasoner.rulesys.OWLMicroReasonerFactory;
+import com.hp.hpl.jena.reasoner.transitiveReasoner.TransitiveReasoner;
+import com.hp.hpl.jena.vocabulary.RDF;
+import com.hp.hpl.jena.vocabulary.RDFS;
 
 public class InferredModelEnricher
 	implements ITransformer<Model, Model>
@@ -29,7 +35,11 @@ public class InferredModelEnricher
 
 	@Override
 	public Model transform(Model out, Model in)
-	{		
+	{
+		//Reasoner reasoner = new PelletReasoner();
+		//Reasoner reasoner = new TransitiveReasoner();
+		
+		//Model model = ModelFactory.createInfModel(reasoner, schema, in);
 		Model model = ModelFactory.createRDFSModel(schema, in);		
 		// FIXME Create tmp model as out could be the same as in
 		// However, maybe that is not necessary, as we retrieve the set
@@ -40,6 +50,9 @@ public class InferredModelEnricher
 		for(Resource subject : in.listSubjects().toSet()) {
 			tmp.add(model.listStatements(subject, null, (RDFNode)null));
 		}
+		
+	
+		tmp.remove(tmp.listStatements(null, RDF.type, RDFS.Resource));
 		
 		//out.add(tmp.listStatements());
 

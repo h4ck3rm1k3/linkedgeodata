@@ -1,0 +1,5 @@
+<http://linkedgeodata.org/triplify/node262816>	<http://www.w3.org/2000/01/rdf-schema#label>	"Five Bells" .
+<http://linkedgeodata.org/triplify/node262816>	<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>	<http://linkedgeodata.org/ontology/Pub> .
+<http://linkedgeodata.org/triplify/node262816>	<http://www.w3.org/2003/01/geo/wgs84_pos#geometry>	"POINT(-0.950004 50.9766)"^^<http://www.openlinksw.com/schemas/virtrdf#Geometry> .
+<http://linkedgeodata.org/triplify/node262816>	<http://www.w3.org/2003/01/geo/wgs84_pos#long>	"-0.9500042"^^<http://www.w3.org/2001/XMLSchema#double> .
+<http://linkedgeodata.org/triplify/node262816>	<http://www.w3.org/2003/01/geo/wgs84_pos#lat>	"50.9766164"^^<http://www.w3.org/2001/XMLSchema#double> .
