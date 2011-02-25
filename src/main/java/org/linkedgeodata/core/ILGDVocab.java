@@ -8,11 +8,15 @@ import com.hp.hpl.jena.rdf.model.Resource;
 
 public interface ILGDVocab
 {
+	Resource getNodeClass();
+	Resource getWayClass();
+
+	
 	String getBaseNS();
 	String getResourceNS();
 	//String getNode
 	
-	String getHasNodesPred();
+	Property getHasNodesPred();
 	Property getMemberOfWayPred();
 
 	// NIR = Non-Information-Resource

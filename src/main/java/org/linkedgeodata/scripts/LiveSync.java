@@ -52,6 +52,7 @@ import org.linkedgeodata.osm.osmosis.plugins.RDFDiff;
 import org.linkedgeodata.osm.osmosis.plugins.RDFDiffWriter;
 import org.linkedgeodata.osm.osmosis.plugins.TagFilter;
 import org.linkedgeodata.osm.osmosis.plugins.TagFilterPlugin;
+import org.linkedgeodata.osm.osmosis.plugins.TransitiveInferredModelEnricher;
 import org.linkedgeodata.osm.osmosis.plugins.TreeSetDiff;
 import org.linkedgeodata.osm.osmosis.plugins.VirtuosoCommercialNodeSerializer;
 import org.linkedgeodata.osm.osmosis.plugins.VirtuosoOseNodeSerializer;
@@ -247,7 +248,7 @@ public class LiveSync
 	}
 
 	
-	public static ITransformer<Model, Model> getPostTransformer(Map<String, String> config)
+	public static ITransformer<Model, Model> getPostTransformer(Map<String, String> config, ILGDVocab vocab)
 		throws Exception
 	{
 		ITransformer<Model, Model> virtuosoTransformer = new VirtuosoStatementNormalizer();
@@ -260,7 +261,7 @@ public class LiveSync
 		if(ontologyFileName != null) {
 			Model schema = ModelUtil.read(new File(ontologyFileName));
 			
-			ITransformer<Model, Model> matInfTransformer = new InferredModelEnricher(schema);
+			ITransformer<Model, Model> matInfTransformer = new TransitiveInferredModelEnricher(vocab, schema);
 			
 			postTransformer = TransformerChain.create(matInfTransformer, virtuosoTransformer);
 		} else {
@@ -361,7 +362,7 @@ public class LiveSync
 				new int[] { 2 });
 
 		
-		ITransformer<Model, Model> postTransformer = getPostTransformer(config);
+		ITransformer<Model, Model> postTransformer = getPostTransformer(config, vocab);
 		
 		/*
 		 * diffStrategy = new IgnoreModifyDeleteDiffUpdateStrategy( vocab,

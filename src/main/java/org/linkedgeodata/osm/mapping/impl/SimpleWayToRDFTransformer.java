@@ -95,7 +95,7 @@ public class SimpleWayToRDFTransformer
 		
 		model.add(
 				vocab.createOSMWayURI(wayId),
-				model.createProperty(vocab.getHasNodesPred()),
+				vocab.getHasNodesPred(),
 				memberRes);
 
 		model.add(memberRes, RDF.type, RDF.Seq);

@@ -245,7 +245,7 @@ public class LiveDump
 		// inputStream = new
 		// CompressionActivator(CompressionMethod.GZip).createCompressionInputStream(inputStream);
 
-		ITransformer<Model, Model> postTransformer = LiveSync.getPostTransformer(config);
+		ITransformer<Model, Model> postTransformer = LiveSync.getPostTransformer(config, vocab);
 		
 
 		// Load the entity tag filter

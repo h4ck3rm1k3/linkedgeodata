@@ -42,7 +42,20 @@ public class LGDVocab
 	public static final String ONTOLOGY_NS = NS + "ontology/";
 	
 	public static final Property MEMBER_OF_WAY = ResourceFactory.createProperty(ONTOLOGY_NS + "memberOfWay");
-	public static final String HAS_NODES = ONTOLOGY_NS + "hasNodes";
+	public static final Property HAS_NODES = ResourceFactory.createProperty(ONTOLOGY_NS + "hasNodes");
+	
+	public static final Resource NODE_CLASS = ResourceFactory.createResource(ONTOLOGY_NS + "Node");
+	public static final Resource WAY_CLASS = ResourceFactory.createResource(ONTOLOGY_NS + "Way");
+
+	public Resource getNodeClass()
+	{
+		return NODE_CLASS;
+	}
+
+	public Resource getWayClass()
+	{
+		return WAY_CLASS;
+	}
 	
 	// NIR = Non-Information-Resource
 	@Override
@@ -78,7 +91,7 @@ public class LGDVocab
 	}
 
 	@Override
-	public String getHasNodesPred()
+	public Property getHasNodesPred()
 	{
 		return HAS_NODES;
 	}

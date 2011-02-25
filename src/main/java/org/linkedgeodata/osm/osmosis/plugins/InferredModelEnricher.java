@@ -11,16 +11,14 @@ import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.reasoner.Reasoner;
-import com.hp.hpl.jena.reasoner.rulesys.OWLMicroReasonerFactory;
-import com.hp.hpl.jena.reasoner.transitiveReasoner.TransitiveReasoner;
 import com.hp.hpl.jena.vocabulary.OWL;
 import com.hp.hpl.jena.vocabulary.RDF;
-import com.hp.hpl.jena.vocabulary.RDFS;
 
 public class InferredModelEnricher
 	implements ITransformer<Model, Model>
 {
 	private Model schema;
+	private Reasoner reasoner = new PelletReasoner();
 	
 	public InferredModelEnricher(Model schema)
 	{
@@ -40,9 +38,6 @@ public class InferredModelEnricher
 	@Override
 	public Model transform(Model out, Model in)
 	{
-		Reasoner reasoner = new PelletReasoner();
-		//Reasoner reasoner = new TransitiveReasoner();
-		
 		Model model = ModelFactory.createInfModel(reasoner, schema, in);
 		//Model model = ModelFactory.createRDFSModel(schema, in);		
 		// FIXME Create tmp model as out could be the same as in
