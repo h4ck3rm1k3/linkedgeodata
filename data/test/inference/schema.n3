@@ -7,6 +7,15 @@
 @prefix lgdo: <http://linkedgeodata.org/ontology/> .
 @prefix wgs:  <http://www.w3.org/2003/01/geo/wgs84_pos#> .
 
+lgdo:A rdfs:subClassOf lgdo:D .
+lgdo:B rdfs:subClassOf lgdo:D .
+lgdo:C rdfs:subClassOf lgdo:D .
+lgdo:D rdfs:subClassOf lgdo:E .
+lgdo:E rdfs:subClassOf lgdo:A .
+lgdo:A rdfs:subClassOf lgdo:X .
+lgdo:X rdfs:subClassOf lgdo:Y .
+
+
 
 lgdo:Pub
 	rdfs:subClassOf lgdo:Amenity .

@@ -5,8 +5,6 @@ import java.util.Set;
 
 import org.aksw.commons.jena.ModelUtils;
 import org.aksw.commons.util.collections.MultiMaps;
-import org.aksw.commons.util.collections.ResourceComparator;
-import org.aksw.commons.util.graph.TransitiveClosure;
 import org.linkedgeodata.core.ILGDVocab;
 import org.linkedgeodata.core.vocab.WGS84Pos;
 import org.linkedgeodata.util.ITransformer;
@@ -29,7 +27,7 @@ public class TransitiveInferredModelEnricher
 	{
 		this.vocab = vocab;
 		classHierarchy = ModelUtils.extractDirectSuperClassMap(schema);
-		TransitiveClosure.transitiveClosureInPlace(classHierarchy);
+		MultiMaps.transitiveClosureInPlace(classHierarchy);
 	}
 	
 	@Override
