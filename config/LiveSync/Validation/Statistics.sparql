@@ -1,0 +1,8 @@
+# Count the instanzes of each class
+Select * from <http://linkedgeodata.org> {
+    { Select ?o, COUNT(*) as ?c 
+        {?s a ?o . }
+    }. 
+    Filter(?c > 1000) .
+} Order by Asc(?c) 
+

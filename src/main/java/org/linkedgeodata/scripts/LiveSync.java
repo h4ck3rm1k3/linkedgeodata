@@ -284,9 +284,9 @@ public class LiveSync
 		
 		// LiveRDFDeltaPluginFactory factory.create();
 		Connection conn = VirtuosoUtils.connect(
-				config.get("rdfStore_hostName"),
-				config.get("rdfStore_userName"),
-				config.get("rdfStore_passWord"));
+				config.get("liveRdfStore_hostName"),
+				config.get("liveRdfStore_userName"),
+				config.get("liveRdfStore_passWord"));
 
 		graphName = config.get("rdfStore_graphName");
 
