@@ -437,7 +437,7 @@ public class LiveSync
 		}
 	}
 
-	private SAXParser createParser()
+	public static SAXParser createParser()
 	{
 		try {
 			return SAXParserFactory.newInstance().newSAXParser();

@@ -129,15 +129,17 @@ public class WayDAO
 		}
 
 		
-		String sql = "SELECT id, linestring::geometry FROM ways WHERE id IN (" + StringUtil.implode(",", subIds) + ") ";
+		String sql = "SELECT id, user_id, linestring::geometry FROM ways WHERE id IN (" + StringUtil.implode(",", subIds) + ") ";
 		logger.trace(sql);
 		
 		ResultSet rs = conn.createStatement().executeQuery(sql);
 		while(rs.next()) {
-			long id = rs.getLong(1);
+			long id = rs.getLong("id");
 			PGgeometry g = (PGgeometry)rs.getObject("linestring");
 
-			Way way = new Way(id, -1, (Date)null, (OsmUser)null, -1);
+			int userId = rs.getInt("user_id");
+			
+			Way way = new Way(id, -1, (Date)null, new OsmUser(userId, "<not set>"), -1);
 			result.add(way);
 			
 			Collection<Tag> tags = idToTags.get(id);

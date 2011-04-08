@@ -19,6 +19,10 @@ public interface ILGDVocab
 	Property getHasNodesPred();
 	Property getMemberOfWayPred();
 
+	
+	Property getUserIdPredicate();
+	
+	
 	// NIR = Non-Information-Resource
 	Resource createNIRNodeURI(long id);
 	Resource createOSMNodeURI(long id);	
@@ -33,4 +37,5 @@ public interface ILGDVocab
 	
 	Resource wayToWayNode(Resource res);
 	Resource wayNodeToWay(Resource res);
+	Resource createContributorURI(int userId);
 }

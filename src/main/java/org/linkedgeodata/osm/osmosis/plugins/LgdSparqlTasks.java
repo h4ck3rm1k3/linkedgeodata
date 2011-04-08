@@ -1,5 +1,6 @@
 package org.linkedgeodata.osm.osmosis.plugins;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -12,8 +13,6 @@ import org.linkedgeodata.util.sparql.ISparqlExecutor;
 import org.linkedgeodata.util.sparql.cache.IGraph;
 import org.linkedgeodata.util.sparql.cache.TripleIndexUtils;
 import org.linkedgeodata.util.sparql.cache.TripleUtils;
-
-import scala.actors.threadpool.Arrays;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Iterables;

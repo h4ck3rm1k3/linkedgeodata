@@ -120,5 +120,19 @@ public class DeprecatedLGDVocab
 	{
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public Property getUserIdPredicate()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Resource createContributorURI(int userId)
+	{
+		// TODO Auto-generated method stub
+		return null;
 	}	
 }

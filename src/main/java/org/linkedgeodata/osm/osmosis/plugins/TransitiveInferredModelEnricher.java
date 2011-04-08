@@ -6,6 +6,7 @@ import java.util.Set;
 import org.aksw.commons.jena.ModelUtils;
 import org.aksw.commons.util.collections.MultiMaps;
 import org.linkedgeodata.core.ILGDVocab;
+import org.linkedgeodata.core.LGDVocab;
 import org.linkedgeodata.core.vocab.WGS84Pos;
 import org.linkedgeodata.util.ITransformer;
 
@@ -51,6 +52,33 @@ public class TransitiveInferredModelEnricher
 	
 	private Model transformUsingDomainSpecificCode(Model out, Model in)
 	{
+		
+		// Add directType triples
+		// FIXME Move this processing into separate class, as it has nothing to
+		// do with the inference
+		{
+			Model tmp = ModelFactory.createDefaultModel();
+			StmtIterator it = in.listStatements(null, RDF.type, (RDFNode)null);
+			while(it.hasNext()) {
+				Statement stmt = it.next();
+				RDFNode o = stmt.getObject();
+				
+				if(o.equals(vocab.getNodeClass()) || o.equals(vocab.getWayClass()))
+					continue;
+						
+						
+				tmp.add(stmt.getSubject(), LGDVocab.DIRECT_TYPE, o);
+				
+			}
+			it.close();
+			
+			out.add(tmp);
+			
+			if(out != in) {
+				out.add(in);
+			}
+		}
+		
 		{
 			StmtIterator it = in.listStatements(null, WGS84Pos.geometry, (RDFNode)null);
 			while(it.hasNext()) {
@@ -87,6 +115,7 @@ public class TransitiveInferredModelEnricher
 				out.add(in);
 			}
 		}
+
 		
 		return out;
 	}

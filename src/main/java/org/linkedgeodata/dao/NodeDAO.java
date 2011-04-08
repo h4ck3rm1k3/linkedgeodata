@@ -20,7 +20,6 @@
  */
 package org.linkedgeodata.dao;
 
-import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -158,15 +157,17 @@ public class NodeDAO
 			return result;
 		}
 		
-		String sql = "SELECT id, geom::geometry FROM nodes WHERE id IN (" + StringUtil.implode(",", subIds) + ") ";
+		String sql = "SELECT id, user_id, geom::geometry FROM nodes WHERE id IN (" + StringUtil.implode(",", subIds) + ") ";
 	
 		//System.out.println(sql);
 		logger.trace("getNodes: " + sql);
 		ResultSet rs = conn.createStatement().executeQuery(sql);
 		while(rs.next()) {
-			long id = rs.getLong(1);
+			long id = rs.getLong("id");
 			PGgeometry g = (PGgeometry)rs.getObject("geom");
 
+			int userId = rs.getInt("user_id");
+			
 			double lat = 0.0;
 			double lon = 0.0;
 			
@@ -177,7 +178,7 @@ public class NodeDAO
 			}
 
 			
-			Node node = new Node(id, -1, (Date)null, (OsmUser)null, -1, lat, lon);
+			Node node = new Node(id, -1, (Date)null, new OsmUser(userId, "<not set>"), -1, lat, lon);
 			result.add(node);
 			
 			Collection<Tag> tags = idToTags.get(id);

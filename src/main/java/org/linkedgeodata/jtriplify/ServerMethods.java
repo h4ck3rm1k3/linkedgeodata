@@ -69,6 +69,7 @@ import com.hp.hpl.jena.vocabulary.RDFS;
  *
  */
 public class ServerMethods
+	implements IRestApi
 {
 	// A model containing metadata definitions
 	// Such as the definition of the lgdo:hasNodes property 
@@ -204,11 +205,13 @@ public class ServerMethods
 	
 	
 	
-	public Model getNode(String idStr)
+	/* (non-Javadoc)
+	 * @see org.linkedgeodata.jtriplify.IRestApi#getNode(java.lang.String)
+	 */
+	@Override
+	public Model getNode(Long id)
 		throws Exception
 	{
-		Long id = Long.parseLong(idStr);
-
 		Model result = createModel();
 
 		prepare();
@@ -224,14 +227,16 @@ public class ServerMethods
 	}
 	
 	
-	public Model getWayNode(String idStr)
+	/* (non-Javadoc)
+	 * @see org.linkedgeodata.jtriplify.IRestApi#getWayNode(java.lang.String)
+	 */
+	@Override
+	public Model getWayNode(Long id)
 		throws Exception
-	{
-		Long id = Long.parseLong(idStr);
-		
+	{		
 		Resource subject = lgdRDFDAO.getVocabulary().wayToWayNode(lgdRDFDAO.getVocabulary().createNIRWayURI(id));
 		
-		Model tmp = getWay(idStr);
+		Model tmp = getWay(id);
 		
 		Model result = createModel();
 		result.add(tmp.listStatements(subject, null, (RDFNode)null));
@@ -241,11 +246,13 @@ public class ServerMethods
 	}
 	
 	
-	public Model getWay(String idStr)
+	/* (non-Javadoc)
+	 * @see org.linkedgeodata.jtriplify.IRestApi#getWay(java.lang.String)
+	 */
+	@Override
+	public Model getWay(Long id)
 		throws Exception
-	{
-		Long id = Long.parseLong(idStr);
-		
+	{		
 		Model result = createModel();
 
 		prepare();
@@ -303,6 +310,10 @@ public class ServerMethods
 	
 
 	
+	/* (non-Javadoc)
+	 * @see org.linkedgeodata.jtriplify.IRestApi#publicGetEntitiesWithinRadius(java.lang.Double, java.lang.Double, java.lang.Double, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.Long, java.lang.Long)
+	 */
+	@Override
 	public Model publicGetEntitiesWithinRadius(Double lat, Double lon, Double radius, String className, String language, String matchMode, String label, Long offset, Long limit)
 		throws Exception
 	{
@@ -327,6 +338,10 @@ public class ServerMethods
 	}
 
 	
+	/* (non-Javadoc)
+	 * @see org.linkedgeodata.jtriplify.IRestApi#publicGetEntitiesWithinRect(java.lang.Double, java.lang.Double, java.lang.Double, java.lang.Double, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.Long, java.lang.Long)
+	 */
+	@Override
 	public Model publicGetEntitiesWithinRect(Double latMin, Double latMax, Double lonMin, Double lonMax, String className, String language, String matchMode, String label, Long offset, Long limit)
 		throws Exception
 	{
@@ -392,6 +407,10 @@ public class ServerMethods
 		return model;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.linkedgeodata.jtriplify.IRestApi#publicDescribe(java.lang.String)
+	 */
+	@Override
 	public Model publicDescribe(String uri)
 		throws Exception
 	{

@@ -1259,7 +1259,7 @@ public class JTriplifyServer
 		//new FileInputStream(
 		
 		
-		ServerMethods methods = new ServerMethods(dao, prefixMap, connectionFactory, sessionFactory, ontologyModel);
+		IRestApi methods = new ServerMethods(dao, prefixMap, connectionFactory, sessionFactory, ontologyModel);
 		
 		Method m;
 
@@ -1279,15 +1279,18 @@ public class JTriplifyServer
 		DataHandler dataHandler = new DataHandler();
 		mainHandler.getSubHandlers().add(dataHandler);
 
-		m = ServerMethods.class.getMethod("getWayNode", String.class);
-		dataHandler.getRIC().put(".*/way([^.]*)/nodes.*", new JavaMethodInvocable(m, methods), "$1");
+		m = ServerMethods.class.getMethod("getWayNode", Long.class);
+		//dataHandler.getRIC().put(".*/way([^.]*)/nodes.*", new JavaMethodInvocable(m, methods), "$1");
+		dataHandler.getRIC().put(".*/way([^.]*)/nodes.*", DefaultCoercions.wrap(methods, "getWayNode"), "$1");
 
 		
-		m = ServerMethods.class.getMethod("getNode", String.class);
-		dataHandler.getRIC().put(".*/node([0-9]+).*", new JavaMethodInvocable(m, methods), "$1");
+		m = ServerMethods.class.getMethod("getNode", Long.class);
+		//dataHandler.getRIC().put(".*/node([0-9]+).*", new JavaMethodInvocable(m, methods), "$1");
+		dataHandler.getRIC().put(".*/node([0-9]+).*", DefaultCoercions.wrap(methods, "getNode"), "$1");
 	
-		m = ServerMethods.class.getMethod("getWay", String.class);
-		dataHandler.getRIC().put(".*/way([^./]*)(\\.[^/]*)?/?(\\?.*)?", new JavaMethodInvocable(m, methods), "$1");
+		m = ServerMethods.class.getMethod("getWay", Long.class);
+		//dataHandler.getRIC().put(".*/way([^./]*)(\\.[^/]*)?/?(\\?.*)?", new JavaMethodInvocable(m, methods), "$1");
+		dataHandler.getRIC().put(".*/way([^./]*)(\\.[^/]*)?/?(\\?.*)?", DefaultCoercions.wrap(methods, "getWay"), "$1");
 
 		
 		// Set up page URIs

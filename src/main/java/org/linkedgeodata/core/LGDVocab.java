@@ -36,6 +36,8 @@ public class LGDVocab
 	
 	public static final String RESOURCE = NS + "triplify/";
 	
+	public static final String USER = RESOURCE + "user";
+
 	public static final String NODE = RESOURCE + "node";
 	public static final String WAY = RESOURCE + "way";
 	
@@ -43,10 +45,16 @@ public class LGDVocab
 	
 	public static final Property MEMBER_OF_WAY = ResourceFactory.createProperty(ONTOLOGY_NS + "memberOfWay");
 	public static final Property HAS_NODES = ResourceFactory.createProperty(ONTOLOGY_NS + "hasNodes");
+
+	public static final Property HAS_USER_ID = ResourceFactory.createProperty(ONTOLOGY_NS + "contributor");
+	
 	
 	public static final Resource NODE_CLASS = ResourceFactory.createResource(ONTOLOGY_NS + "Node");
 	public static final Resource WAY_CLASS = ResourceFactory.createResource(ONTOLOGY_NS + "Way");
 
+	public static final Property DIRECT_TYPE = ResourceFactory.createProperty(ONTOLOGY_NS + "directType");
+	
+	
 	public Resource getNodeClass()
 	{
 		return NODE_CLASS;
@@ -155,5 +163,17 @@ public class LGDVocab
 	public Resource wayToWayNode(Resource res)
 	{
 		return ResourceFactory.createResource(res.getURI().toString() + "/nodes");
+	}
+
+	@Override
+	public Property getUserIdPredicate()
+	{
+		return HAS_USER_ID;
+	}
+
+	@Override
+	public Resource createContributorURI(int userId)
+	{
+		return ResourceFactory.createResource(USER + userId);
 	}
 }

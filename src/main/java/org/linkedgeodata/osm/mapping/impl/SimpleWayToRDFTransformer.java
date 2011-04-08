@@ -60,7 +60,8 @@ public class SimpleWayToRDFTransformer
 		//generateGeoRSS(model, subjectRes, node);
 
 		SimpleNodeToRDFTransformer.generateTags(tagMapper, model, subject.toString(), way.getTags());
-
+		SimpleNodeToRDFTransformer.generateAttribution(model, vocab, subject, way);
+		
 		generateWayNodes(model, vocab, way);
 		//model.createResource(subject).addProperty(RDF.type, model.createResource(WGS84_WAY));
 		

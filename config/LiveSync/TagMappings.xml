@@ -6,6 +6,739 @@
   </org.linkedgeodata.osm.mapping.impl.SimpleTextTagMapper>
 
 
+
+
+
+
+
+
+
+
+ <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/religion</property>
+    <tagPattern>
+      <key>religion</key>
+      <value>christian</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Christian</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/religion</property>
+    <tagPattern>
+      <key>religion</key>
+      <value>muslim</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Muslim</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/religion</property>
+    <tagPattern>
+      <key>religion</key>
+      <value>buddhist</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Buddhist</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/religion</property>
+    <tagPattern>
+      <key>religion</key>
+      <value>jewish</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Jewish</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+ <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/religion</property>
+    <tagPattern>
+      <key>religion</key>
+      <value>hindu</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Hindu</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+ <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/religion</property>
+    <tagPattern>
+      <key>religion</key>
+      <value>shinto</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Shinto</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+ <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/religion</property>
+    <tagPattern>
+      <key>religion</key>
+      <value>sikh</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Sikh</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+
+
+
+
+
+ <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/denomination</property>
+    <tagPattern>
+      <key>denomination</key>
+      <value>baptist</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Baptist</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+
+ <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/denomination</property>
+    <tagPattern>
+      <key>denomination</key>
+      <value>catholic</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Catholic</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+ <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/denomination</property>
+    <tagPattern>
+      <key>denomination</key>
+      <value>methodist</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Methodist</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+ <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/denomination</property>
+    <tagPattern>
+      <key>denomination</key>
+      <value>lutheran</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Lutheran</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+ <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/denomination</property>
+    <tagPattern>
+      <key>denomination</key>
+      <value>protestant</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Protestant</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+ <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/denomination</property>
+    <tagPattern>
+      <key>denomination</key>
+      <value>presbyterian</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Presbyterian</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/denomination</property>
+    <tagPattern>
+      <key>denomination</key>
+      <value>anglican</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Anglican</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/denomination</property>
+    <tagPattern>
+      <key>denomination</key>
+      <value>orthodox</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Orthodox</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/denomination</property>
+    <tagPattern>
+      <key>denomination</key>
+      <value>pentecostal</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Pentecostal</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/denomination</property>
+    <tagPattern>
+      <key>denomination</key>
+      <value>roman_catholic</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/RomanCatholic</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+
+
+
+
+
+
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/denomination</property>
+    <tagPattern>
+      <key>denomination</key>
+      <value>evangelical</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Evangelical</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/denomination</property>
+    <tagPattern>
+      <key>denomination</key>
+      <value>mormon</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Mormon</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/denomination</property>
+    <tagPattern>
+      <key>denomination</key>
+      <value>jehovahs_witness</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/JehovahsWitness</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+  
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/denomination</property>
+    <tagPattern>
+      <key>denomination</key>
+      <value>sunni</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Sunni</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/denomination</property>
+    <tagPattern>
+      <key>denomination</key>
+      <value>church_of_england</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/ChurchOfEngland</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/denomination</property>
+    <tagPattern>
+      <key>denomination</key>
+      <value>urban</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Urban</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/denomination</property>
+    <tagPattern>
+      <key>denomination</key>
+      <value>new_apostolic</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/NewApostolic</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/denomination</property>
+    <tagPattern>
+      <key>denomination</key>
+      <value>greek_orthodox</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/GreekOrthodox</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/denomination</property>
+    <tagPattern>
+      <key>denomination</key>
+      <value>episcopal</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Episcopal</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/denomination</property>
+    <tagPattern>
+      <key>denomination</key>
+      <value>adventist</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Adventist</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/denomination</property>
+    <tagPattern>
+      <key>denomination</key>
+      <value>united_reformed</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/UnitedReformed</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/denomination</property>
+    <tagPattern>
+      <key>denomination</key>
+      <value>seventh_day_adventist</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/SeventhDayAdventist</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/denomination</property>
+    <tagPattern>
+      <key>denomination</key>
+      <value>russian_orthodox</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/RussianOrthodox</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/denomination</property>
+    <tagPattern>
+      <key>denomination</key>
+      <value>iglesia_ni_cristo</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/IglesiaNiCristo</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/denomination</property>
+    <tagPattern>
+      <key>denomination</key>
+      <value>reformed</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Reformed</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/denomination</property>
+    <tagPattern>
+      <key>denomination</key>
+      <value>uniting</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Uniting</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/denomination</property>
+    <tagPattern>
+      <key>denomination</key>
+      <value>salvation_army</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/SalvationArmy</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/denomination</property>
+    <tagPattern>
+      <key>denomination</key>
+      <value>church_of_scotland</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/ChurchOfScotland</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/denomination</property>
+    <tagPattern>
+      <key>denomination</key>
+      <value>congregational</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Congregational</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/denomination</property>
+    <tagPattern>
+      <key>denomination</key>
+      <value>assembly_of_god</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/AssemblyOfGod</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/denomination</property>
+    <tagPattern>
+      <key>denomination</key>
+      <value>quaker</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Quaker</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+
+
+
+
+
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/denotation</property>
+    <tagPattern>
+      <key>denotation</key>
+      <value>cluster</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Cluster</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/denotation</property>
+    <tagPattern>
+      <key>denotation</key>
+      <value>urban</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Urban</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/denotation</property>
+    <tagPattern>
+      <key>denotation</key>
+      <value>avenue</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Avenue</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/wheelchair</property>
+    <tagPattern>
+      <key>wheelchair</key>
+      <value>yes</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Yes_%28WheelChair%29</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/wheelchair</property>
+    <tagPattern>
+      <key>wheelchair</key>
+      <value>no</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/No_%28WheelChair%29</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/wheelchair</property>
+    <tagPattern>
+      <key>wheelchair</key>
+      <value>unknown</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Unknown_%28WheelChair%29</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/wheelchair</property>
+    <tagPattern>
+      <key>wheelchair</key>
+      <value>unknown</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Limited_%28WheelChair%29</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+
+
+
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/motorcar</property>
+    <tagPattern>
+      <key>motorcar</key>
+      <value>yes</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Yes_%28Motorcar%29</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/motorcar</property>
+    <tagPattern>
+      <key>motorcar</key>
+      <value>no</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/No_%28Motorcar%29</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/motorcar</property>
+    <tagPattern>
+      <key>motorcar</key>
+      <value>private</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Private_%28Motorcar%29</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/agricultural</property>
+    <tagPattern>
+      <key>motorcar</key>
+      <value>agricultural</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Agricultural_%28Motorcar%29</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/direction</property>
+    <tagPattern>
+      <key>direction</key>
+      <value>clockwise</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Clockwise</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+
+
+
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/surfaces</property>
+    <tagPattern>
+      <key>surfaces</key>
+      <value>paved</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Paved</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/surfaces</property>
+    <tagPattern>
+      <key>surfaces</key>
+      <value>asphalt</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Asphalt</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/surfaces</property>
+    <tagPattern>
+      <key>surfaces</key>
+      <value>paving_stones</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/PavingStones</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/surfaces</property>
+    <tagPattern>
+      <key>surfaces</key>
+      <value>gravel</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Gravel</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/surfaces</property>
+    <tagPattern>
+      <key>surfaces</key>
+      <value>grass</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Grass</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/surfaces</property>
+    <tagPattern>
+      <key>surfaces</key>
+      <value>unpaved</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Unpaved</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/surfaces</property>
+    <tagPattern>
+      <key>surfaces</key>
+      <value>sand</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Sand</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/surfaces</property>
+    <tagPattern>
+      <key>surfaces</key>
+      <value>ground</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Ground</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/surfaces</property>
+    <tagPattern>
+      <key>surfaces</key>
+      <value>earth</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Earth</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/surfaces</property>
+    <tagPattern>
+      <key>surfaces</key>
+      <value>concrete</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Concrete</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+
+  <org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+    <property>http://linkedgeodata.org/ontology/surfaces</property>
+    <tagPattern>
+      <key>surfaces</key>
+      <value>cobblestone</value>
+    </tagPattern>
+    <describesOSMEntity>false</describesOSMEntity>
+    <objectAsPrefix>false</objectAsPrefix>
+    <object>http://linkedgeodata.org/ontology/Cobblestone</object>
+  </org.linkedgeodata.osm.mapping.impl.SimpleObjectPropertyTagMapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   <org.linkedgeodata.osm.mapping.impl.SimpleTextTagMapper>
     <property>http://linkedgeodata.org/ontology/hasHouseNumber</property>
     <tagPattern>
@@ -4597,14 +5330,6 @@
     <describesOSMEntity>false</describesOSMEntity>
     <dataType>http://www.w3.org/2001/XMLSchema#integer</dataType>
   </org.linkedgeodata.osm.mapping.impl.SimpleDataTypeTagMapper>
-  <org.linkedgeodata.osm.mapping.impl.SimpleTextTagMapper>
-    <property>http://linkedgeodata.org/ontology/religion</property>
-    <tagPattern>
-      <key>religion:de</key>
-    </tagPattern>
-    <describesOSMEntity>false</describesOSMEntity>
-    <langTag>de</langTag>
-  </org.linkedgeodata.osm.mapping.impl.SimpleTextTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleDataTypeTagMapper>
     <property>http://linkedgeodata.org/ontology/passing_places</property>
     <tagPattern>
@@ -15181,14 +15906,6 @@
     <describesOSMEntity>false</describesOSMEntity>
     <dataType>http://www.w3.org/2001/XMLSchema#float</dataType>
   </org.linkedgeodata.osm.mapping.impl.SimpleDataTypeTagMapper>
-  <org.linkedgeodata.osm.mapping.impl.SimpleTextTagMapper>
-    <property>http://linkedgeodata.org/ontology/religion</property>
-    <tagPattern>
-      <key>religion:ru</key>
-    </tagPattern>
-    <describesOSMEntity>false</describesOSMEntity>
-    <langTag>ru</langTag>
-  </org.linkedgeodata.osm.mapping.impl.SimpleTextTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleDataTypeTagMapper>
     <property>http://linkedgeodata.org/ontology/bulb</property>
     <tagPattern>
@@ -16626,14 +17343,6 @@
     <describesOSMEntity>false</describesOSMEntity>
     <dataType>http://www.w3.org/2001/XMLSchema#integer</dataType>
   </org.linkedgeodata.osm.mapping.impl.SimpleDataTypeTagMapper>
-  <org.linkedgeodata.osm.mapping.impl.SimpleTextTagMapper>
-    <property>http://linkedgeodata.org/ontology/religion</property>
-    <tagPattern>
-      <key>religion:it</key>
-    </tagPattern>
-    <describesOSMEntity>false</describesOSMEntity>
-    <langTag>it</langTag>
-  </org.linkedgeodata.osm.mapping.impl.SimpleTextTagMapper>
   <org.linkedgeodata.osm.mapping.impl.SimpleTextTagMapper>
     <property>http://linkedgeodata.org/ontology/addr%3Astreet</property>
     <tagPattern>

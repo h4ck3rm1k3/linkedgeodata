@@ -20,6 +20,7 @@ public class JavaMethodInvocable
 	public Object invoke(Object... args)
 		throws Exception
 	{
+		System.out.println("Invoking: " + method + args);
 		return method.invoke(object, args);
 	}
 	

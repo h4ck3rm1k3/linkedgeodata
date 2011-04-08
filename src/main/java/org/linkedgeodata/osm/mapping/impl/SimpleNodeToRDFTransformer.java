@@ -31,7 +31,9 @@ import org.linkedgeodata.osm.mapping.ITagMapper;
 import org.linkedgeodata.osm.osmosis.plugins.INodeSerializer;
 import org.linkedgeodata.osm.osmosis.plugins.VirtuosoOseNodeSerializer;
 import org.linkedgeodata.util.ITransformer;
+import org.openstreetmap.osmosis.core.domain.v0_6.Entity;
 import org.openstreetmap.osmosis.core.domain.v0_6.Node;
+import org.openstreetmap.osmosis.core.domain.v0_6.OsmUser;
 import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 
 import com.hp.hpl.jena.datatypes.RDFDatatype;
@@ -98,10 +100,40 @@ public class SimpleNodeToRDFTransformer
 		
 		generateTags(tagMapper, model, subjectRes.toString(), node.getTags());
 		
+		
+		generateAttribution(model, vocab, subjectRes, node);
+		
 		return model;		
 	}
 	
+
+	/**
+	 * 
+	 * Note: For optimization it may happen that the user is not set on an osm entity
+	 * 
+	 * 
+	 * @param model
+	 * @param vocab
+	 * @param subject
+	 * @param entity
+	 */
+	public static void generateAttribution(Model model, ILGDVocab vocab, Resource subject, Entity entity) {
+		
+		//TypeMapper tm = TypeMapper.getInstance();
+		//RDFDatatype dataType = tm.getSafeTypeByName(XSD.xint.getURI());
+		
+		OsmUser user = entity.getUser();
+		if(user == null)
+			return;
+		//model.add(subject, vocab.getUserIdPredicate(), Integer.toString(userId), dataType);
+
+		
+		int userId = user.getId();
+		Resource contributor = vocab.createContributorURI(userId);
+		model.add(subject, vocab.getUserIdPredicate(), contributor);
+	}
 	
+
 	
 	@Override
 	public Model transform(Node node) {
