@@ -1,0 +1,20 @@
+#!/bin/bash
+
+sortedFile="$1"
+metaData="$2"
+
+#bzip2 files do not seem to store the uncompressed file size, hence we write it out here
+baseName=`basename "$sortedFile"`
+
+compressedFile="$sortedFile.bz2"
+compressedFileBase="$baseName.bz2"
+metaFile="$compressedFile.meta"
+echo -e "$metaData\n" >> "$metaFile"
+echo "fileName=$compressedFileBase" >> "$metaFile"
+echo "originalSize=$(stat -c%s $sortedFile)" >> "$metaFile"
+echo "lineCount=$(wc -l $sortedFile | cut -d' ' -f1)" >> "$metaFile"
+
+pbzip2 -p4 "$sortedFile"
+
+echo "compressedSize=$(stat -c%s $compressedFile)" >> "$metaFile"
+

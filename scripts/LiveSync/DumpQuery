@@ -1,0 +1,23 @@
+#!/bin/bash
+# Dumps datasets from a store
+
+date=$1
+
+source "$date/config.ini"
+
+query=$2
+file=$3
+metaData=$4
+
+#file_extension=${file##*.}
+#file_target=${file%.*}
+
+sorted_file="$file.sorted.nt"
+
+#echo $isqlHome/isql "$rdfStore_hostName" "$rdfStore_userName" "$rdfStore_passWord" "\"EXEC=dump_query_nt('$query', '$file_target');\""
+
+$isqlHome/isql "$rdfStore_hostName" "$rdfStore_userName" "$rdfStore_passWord" "EXEC=dump_query_nt('$query', '$file');"
+sort -u "$file.nt" > "$sorted_file"
+
+./PackDump "$sorted_file" "$metaData"
+

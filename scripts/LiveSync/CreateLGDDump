@@ -1,0 +1,22 @@
+#!/bin/bash
+# Dumps datasets from a store
+
+date=$1
+source "$date/config.ini"
+
+prefix="/tmp/LGD-Dump-$date-"
+
+#echo "$date" "Select ?s ?p ?o {?s a <http://linkedgeodata.org/ontology/Node> . ?s ?p ?o .}" "${prefix}RelevantNodes"
+
+#./DumpQuery "$date" "Select ?s ?p ?o {?s a <http://linkedgeodata.org/ontology/Node> . ?s ?p ?o .} Limit 100" "${prefix}Test"
+#exit 0
+
+curl -LH "accept: text/plain" http://linkedgeodata.org/ontology > "${prefix}Ontology.nt"
+./PackDump "${prefix}Ontology.nt" "displayName=Ontology\nsortKey=0"
+
+./DumpQuery "$date" "Select ?s ?p ?o {?s a <http://linkedgeodata.org/ontology/Node> . ?s ?p ?o .}" "${prefix}RelevantNodes" "displayName=RelevantNodes\nsortKey=1" &
+./DumpQuery "$date" "Select ?s ?p ?o {?s a <http://linkedgeodata.org/ontology/Way> . ?s ?p ?o .}" "${prefix}RelevantWays" "displayName=RelevantWays\nsortKey=2" &
+./DumpQuery "$date" "Select ?s ?p ?o {?s a <http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq> . ?s ?p ?o .}" "${prefix}WayNodes" "displayName=RelevantWayNodes\nsortKey=3" &
+./DumpQuery "$date" "Select ?s ?p ?o {?s ?p ?o . Filter(?p = <http://www.w3.org/2003/01/geo/wgs84_pos#geometry>) .}" "${prefix}NodePositions" "displayName=RelevantNodePositions\nsortKey=4" &
+
+
