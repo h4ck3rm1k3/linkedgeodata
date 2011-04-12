@@ -13,11 +13,21 @@ import java.util.zip.GZIPInputStream;
 import org.aksw.commons.util.collections.MultiMaps;
 import org.apache.commons.compress.tar.TarEntry;
 import org.apache.commons.compress.tar.TarInputStream;
+import org.linkedgeodata.core.ILGDVocab;
+import org.linkedgeodata.core.LGDVocab;
+import org.linkedgeodata.i18n.gettext.EntityResolver2;
+import org.linkedgeodata.i18n.gettext.IEntityResolver;
+import org.linkedgeodata.osm.mapping.InMemoryTagMapper;
 import org.linkedgeodata.util.URIUtil;
 import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 
 import com.google.common.io.Files;
 import com.google.common.io.PatternFilenameFilter;
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.ResourceFactory;
+import com.hp.hpl.jena.vocabulary.RDF;
 
 
 /**
@@ -55,23 +65,67 @@ public class ImportIconsBrionQuinion
 	private File destDir = new File("/var/www/linkedgeodata.org/integration/icons/sjjb/"); 
 	private String baseUrl = "http://linkedgeodata.org/integration/icons/sjjb/";
 	
+	public ImportIconsBrionQuinion()
+	{
+	}
+	
+	public void run()
+		throws Exception
+	{
+		InMemoryTagMapper tagMapper = new InMemoryTagMapper();
+		tagMapper.load(new File("config/LiveSync/TagMappings.xml"));
+		
+		IEntityResolver resolver = new EntityResolver2(tagMapper);
+
+		
+		Map<Tag, Set<File>> result = readMapping();
+		
+		Model model = ModelFactory.createDefaultModel();
+		//ILGDVocab vocab = new LGDVocab();
+				
+		// Publish the files and generate triples
+		for(Map.Entry<Tag, Set<File>> entry : result.entrySet()) {
+			Tag tag = entry.getKey();
+			Resource subject = resolver.resolve(tag.getKey(), tag.getValue());
+			
+			if(subject == null) {
+				System.out.println("Skipping: " + tag);
+				continue;
+			}
+			
+			//System.out.println("Accepting: " + tag);
+			
+			for(File file : entry.getValue()) {
+				//publishFile(file);
+				
+				Resource object = createResourceForFile(file);
+				
+				model.add(subject, RDF.rest, object);
+			}
+			
+		}
+		
+		model.write(System.out, "N3");
+	}
+	
+	
 	public static void main(String[] args)
 		throws Exception
 	{
-		Map<Tag, Set<File>> result = readMapping();
-		
-		// Publish the files and generate triples
-		
-		
-		System.out.println(result);
+		ImportIconsBrionQuinion main = new ImportIconsBrionQuinion();
+		main.run();
 	}
 		
+	public Resource createResourceForFile(File file)
+	{
+		return ResourceFactory.createResource(baseUrl + file.getName());
+	}
 	
-	public URL publishFile(File srcFile)
+	public void publishFile(File srcFile)
 		throws IOException
 	{
+		destDir.mkdirs();
 		Files.copy(srcFile, destDir);
-		return new URL(baseUrl + srcFile.getName());
 	}
 	
 	
@@ -93,10 +147,16 @@ public class ImportIconsBrionQuinion
 		if(!dir.exists()) {
 			untar(file, dir);
 		}
-		
+				
 		// Iterate the dir
 		File root = new File(dir.getPath() + "/svg/");
 		//System.out.println(root);
+		
+		File powDir = new File(root.getPath() + "/place_of_worship");
+		if(powDir.exists()) {
+			Files.move(powDir, new File(root.getPath() + "/denomination"));
+		}
+		
 		
 		for(File keyFile : root.listFiles()) {
 			if(!keyFile.isDirectory())

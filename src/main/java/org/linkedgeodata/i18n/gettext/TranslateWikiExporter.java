@@ -7,7 +7,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.net.URI;
 import java.net.URL;
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -15,7 +14,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
@@ -25,16 +23,12 @@ import org.linkedgeodata.osm.mapping.InMemoryTagMapper;
 import org.linkedgeodata.util.ConnectionConfig;
 import org.linkedgeodata.util.PostGISUtil;
 import org.linkedgeodata.util.SinglePrefetchIterator;
-import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
-import com.hp.hpl.jena.vocabulary.RDF;
 import com.hp.hpl.jena.vocabulary.RDFS;
 
 /**
@@ -164,113 +158,6 @@ class GetTextRecord
 		}
 	}
 }
-
-interface IEntityResolver
-{
-	public String resolve(String key, String value);
-}
-
-class EntityResolver2
-	implements IEntityResolver
-{
-	private InMemoryTagMapper tagMapper;
-	
-	public EntityResolver2(InMemoryTagMapper tagMapper)
-	{
-		this.tagMapper = tagMapper;
-	}
-	
-	@Override
-	public String resolve(String key, String value)
-	{
-		Model model = tagMapper.map("http://ex.org", new Tag(key, value), null);
-	
-		Iterator<Statement> it = model.listStatements();
-
-		while(it.hasNext()) {
-			Statement stmt = it.next();
-			
-			if(!stmt.getPredicate().equals(RDF.type))
-				continue;
-			
-			String classRes = stmt.getObject().asNode().getURI();
-			
-			return classRes;			
-		}
-		
-		return null;
-	}
-	
-}
-
-class EntityResolverImpl
-		implements IEntityResolver
-{
-	private static final Logger logger = Logger.getLogger(EntityResolverImpl.class);
-	
-	private Map<List<String>, URI>	map	= new HashMap<List<String>, URI>();
-
-	public EntityResolverImpl() throws Exception
-	{
-		URL url = new URL("http://linkedgeodata.org/vocabulary/core");
-		InputStream in = null;
-		try {
-			in = url.openStream();
-
-			Model model = ModelFactory.createDefaultModel();
-			model.read(in, "", "N-TRIPLE");
-
-			process(model);
-		} finally {
-			if (in != null)
-				in.close();
-		}
-	}
-
-	private void process(Model model)
-	{
-		Property subClassOf = model.getProperty("http://www.w3.org/2000/01/rdf-schema#subClassOf");
-		Iterator<Statement> it = model.listStatements((Resource)null, subClassOf, (RDFNode)null);
-	
-		int prefixLength = "http://linkedgeodata.org/vocabulary#".length();
-		
-		while(it.hasNext()) {
-			Statement stmt = it.next();
-			
-			URI uri = URI.create(stmt.getSubject().getURI());
-			
-			String v = stmt.getSubject().getURI().substring(prefixLength);
-			String k = stmt.getObject().asNode().getURI().substring(prefixLength);
-			
-			k = k.trim().toLowerCase();
-			v = v.trim().toLowerCase();
-			
-			List<String> list = new ArrayList<String>();
-			list.add(k);
-			list.add(v);
-			
-			logger.trace("Loaded Mapping: (" + k + ", " + v + ") -> " + uri); 
-			
-			map.put(list, uri);
-		}
-	}
-
-	@Override
-	public String resolve(String key, String value)
-	{		
-		String k = key.trim().toLowerCase();
-		String v = value.trim().toLowerCase();
-		
-		List<String> list = new ArrayList<String>();
-		list.add(k);
-		list.add(v);
-		
-		URI result = map.get(list);
-
-		return result.toString();
-	}
-}
-
 
 /**
  * Ok, simply loading the po.file seems to be out of scope of the
@@ -540,14 +427,13 @@ public class TranslateWikiExporter
 				String key = kv[0];
 				String value = kv[1]; //.trim();
 
-				String uri = resolver.resolve(key, value);
-				if(uri == null) {
+				Resource subject = resolver.resolve(key, value);
+				if(subject == null) {
 					logger.warn("Skipping: (" + key + ", " + value + ")");
 					continue;
 				}
-				logger.trace("Mapped: " + key + ", " + value + ") -> " + uri);
+				logger.trace("Mapped: " + key + ", " + value + ") -> " + subject);
 				
-				Resource subject = model.createResource(uri.toString());
 
 				model.add(subject, RDFS.label, literal);
 			}
