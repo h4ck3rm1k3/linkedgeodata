@@ -141,7 +141,7 @@ public class OntologyGeneratorVisitor
 		}
 		else {
 			model.createProperty(m.getProperty())
-			.addProperty(RDF.type, OWL.Thing);
+			.addProperty(RDF.type, OWL.ObjectProperty);
 		}
 		
 		return null;
