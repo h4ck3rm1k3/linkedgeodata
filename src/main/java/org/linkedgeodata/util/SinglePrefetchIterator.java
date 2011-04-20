@@ -39,6 +39,7 @@ public abstract class SinglePrefetchIterator<T>
 	{
 		this.finished = true;
 
+		close();
 		return null;
 	}
 	
@@ -78,6 +79,16 @@ public abstract class SinglePrefetchIterator<T>
 		return current;
 	}
 
+	
+	/**
+	 * An iterator must always free all resources once done with iteration.
+	 * However, if iteration is aborted, this method should be called.
+	 * 
+	 */
+	public void close()
+	{
+	}
+	
 	@Override
 	public void remove()
 	{

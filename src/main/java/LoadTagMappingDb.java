@@ -53,11 +53,14 @@ public class LoadTagMappingDb
 		
 		Set<IOneOneTagMapper> newOnes = new HashSet<IOneOneTagMapper>(source.getAllMappers());
 		
+
 		
 		TagMapperDAO dao = new TagMapperDAO();
 		Session session = TagMappingDB.getSession(); 
 		Transaction tx = session.beginTransaction();
 		dao.setSession(session);
+
+		
 		Set<IOneOneTagMapper> tmp = new HashSet<IOneOneTagMapper>(dao.getAllMappers());
 		tx.commit();
 				

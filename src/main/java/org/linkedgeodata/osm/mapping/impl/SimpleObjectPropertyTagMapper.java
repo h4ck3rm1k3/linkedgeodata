@@ -141,7 +141,7 @@ public class SimpleObjectPropertyTagMapper
 		if(!getTagPattern().matches(tag)) {
 			return null;
 		}
-
+		
 		String suffix = (isObjectAsPrefix() && (getTagPattern().getValue() == null))
 			? URIUtil.encodeUTF8(tag.getValue())
 			: "";

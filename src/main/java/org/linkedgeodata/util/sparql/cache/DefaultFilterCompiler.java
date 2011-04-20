@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.aksw.commons.util.collections.FlatMapView;
+import org.aksw.commons.collections.FlatMapView;
 
 import com.google.common.base.Joiner;
 import com.hp.hpl.jena.graph.Node;

@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import org.aksw.commons.util.random.RandomUtils;
+import org.aksw.commons.collections.random.RandomUtils;
 import org.apache.log4j.PropertyConfigurator;
 import org.linkedgeodata.osm.osmosis.plugins.RDFDiff;
 import org.linkedgeodata.util.CollectionUtils;
@@ -36,7 +36,6 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
-import com.hp.hpl.jena.sparql.util.NodeFactory;
 
 
 /**
@@ -530,7 +529,6 @@ public class GraphBackedResourceCache
 				///*
 		for(int i = 0; i < 100000; ++i) {
 			Set<Resource> resources = RandomUtils.randomSampleSet(subjects, 1000, random);
-			
 			
 			Set<List<Object>> keys = toKeys(resources);
 			

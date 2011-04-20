@@ -220,7 +220,8 @@ public class TranslateWikiExporter
 			String overrideLangCode, IEntityResolver resolver)
 		throws Exception
 	{
-		exportToDataBase(initLangCode, idMode, overrideLangCode);
+		//exportToDataBase(initLangCode, idMode, overrideLangCode);
+		exportToTriples(initLangCode, idMode, overrideLangCode, resolver);
 	}
 	
 	public static void exportToDataBase(String initLangCode, boolean idMode,

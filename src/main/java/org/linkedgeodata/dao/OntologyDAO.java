@@ -304,7 +304,7 @@ public class OntologyDAO
 			
 			x.accept(visitor);
 			
-			if(x.getTagPattern().getKey() == null && x.getTagPattern().getValue() == null)
+			if(x.getTagPattern().getKey() == null || x.getTagPattern().getValue() == null)
 				continue;
 			
 			Tag tag = new Tag(x.getTagPattern().getKey(), x.getTagPattern().getValue());

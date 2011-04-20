@@ -10,11 +10,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.zip.GZIPInputStream;
 
-import org.aksw.commons.util.collections.MultiMaps;
+import org.aksw.commons.collections.MultiMaps;
 import org.apache.commons.compress.tar.TarEntry;
 import org.apache.commons.compress.tar.TarInputStream;
-import org.linkedgeodata.core.ILGDVocab;
-import org.linkedgeodata.core.LGDVocab;
 import org.linkedgeodata.i18n.gettext.EntityResolver2;
 import org.linkedgeodata.i18n.gettext.IEntityResolver;
 import org.linkedgeodata.osm.mapping.InMemoryTagMapper;
@@ -72,6 +70,17 @@ public class ImportIconsBrionQuinion
 	public void run()
 		throws Exception
 	{
+		
+	
+		/*
+		Connection nodeConn = PostGISUtil.connectPostGIS(
+				config.get("osmDb_hostName"), config.get("osmDb_dataBaseName"),
+				config.get("osmDb_userName"), config.get("osmDb_passWord"));
+		
+		ITagDAO tagDao = new TagDAO();
+		tagDao.setConnection(conn);
+		*/
+		
 		InMemoryTagMapper tagMapper = new InMemoryTagMapper();
 		tagMapper.load(new File("config/LiveSync/TagMappings.xml"));
 		

@@ -19,13 +19,13 @@
 				<artifactId>surefire-report-maven-plugin</artifactId>
 				<version>2.0-beta-1</version>
 			</plugin>
-            <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-surefire-plugin</artifactId>
-              <configuration>
-                <skipTests>true</skipTests>
-              </configuration>
-            </plugin>			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<skipTests>true</skipTests>
+				</configuration>
+			</plugin>
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<configuration>
@@ -60,12 +60,41 @@
 	</repositories>
 
 	<dependencies>
-        <dependency>
-            <groupId>org.aksw.commons</groupId>
-            <artifactId>commons</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>	
+		<!-- <dependency> <groupId>org.aksw.commons</groupId> <artifactId>commons</artifactId> 
+			<version>1.0-SNAPSHOT</version> <scope>compile</scope> </dependency> -->
+
+		<dependency>
+			<groupId>org.aksw.commons</groupId>
+			<artifactId>jena-tools</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.aksw.commons</groupId>
+			<artifactId>sparql-scala</artifactId>
+			<version>1.0-SNAPSHOT</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.aksw.commons</groupId>
+			<artifactId>util</artifactId>
+			<version>1.0-SNAPSHOT</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.aksw.commons</groupId>
+			<artifactId>collections</artifactId>
+			<version>1.0-SNAPSHOT</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.aksw.commons</groupId>
+			<artifactId>model</artifactId>
+			<version>1.0-SNAPSHOT</version>
+			<scope>compile</scope>
+		</dependency>
+
 		<dependency>
 			<groupId>com.jamonapi</groupId>
 			<artifactId>jamon</artifactId>
@@ -262,13 +291,13 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
-		
-       <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>r07</version>
-        </dependency>
-					</dependencies>
+
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>r07</version>
+		</dependency>
+	</dependencies>
 	<properties>
 		<maven.compiler.source>1.6</maven.compiler.source>
 		<maven.compiler.target>1.6</maven.compiler.target>

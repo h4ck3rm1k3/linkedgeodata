@@ -35,9 +35,8 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.aksw.commons.collections.TransformCollection;
 import org.aksw.commons.jena.ModelSetView;
-import org.aksw.commons.util.collections.TransformCollection;
-import org.aksw.commons.util.collections.TransformIterable;
 import org.apache.commons.collections15.MultiMap;
 import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.map.LRUMap;
@@ -55,6 +54,7 @@ import org.linkedgeodata.util.Diff;
 import org.linkedgeodata.util.IDiff;
 import org.linkedgeodata.util.ITransformer;
 import org.linkedgeodata.util.StringUtil;
+import org.linkedgeodata.util.TransformIterable;
 import org.linkedgeodata.util.sparql.ISparqlExecutor;
 import org.linkedgeodata.util.sparql.ISparulExecutor;
 import org.openstreetmap.osmosis.core.container.v0_6.ChangeContainer;

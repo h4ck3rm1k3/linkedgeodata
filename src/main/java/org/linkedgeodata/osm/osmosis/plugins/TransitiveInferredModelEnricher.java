@@ -3,8 +3,8 @@ package org.linkedgeodata.osm.osmosis.plugins;
 import java.util.Map;
 import java.util.Set;
 
+import org.aksw.commons.collections.MultiMaps;
 import org.aksw.commons.jena.ModelUtils;
-import org.aksw.commons.util.collections.MultiMaps;
 import org.linkedgeodata.core.ILGDVocab;
 import org.linkedgeodata.core.LGDVocab;
 import org.linkedgeodata.core.vocab.WGS84Pos;
