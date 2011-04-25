@@ -93,4 +93,8 @@ interface ITripleCacheIndex
 	//Set<Triple> bulkFind(Set<Triple> patterns);
 	
 	void clear();
+	
+	
+
+	CacheState getState();
 }

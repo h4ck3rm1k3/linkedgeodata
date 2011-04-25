@@ -27,19 +27,16 @@ import java.util.Collection;
 import java.util.Date;
 
 import org.apache.log4j.PropertyConfigurator;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.linkedgeodata.util.ConnectionConfig;
 import org.linkedgeodata.util.VirtuosoUtils;
 import org.linkedgeodata.util.sparql.ISparulExecutor;
 import org.linkedgeodata.util.sparql.VirtuosoJdbcSparulExecutor;
-import org.openstreetmap.osmosis.core.container.v0_6.ChangeContainer;
-import org.openstreetmap.osmosis.core.container.v0_6.EntityContainer;
-import org.openstreetmap.osmosis.core.container.v0_6.NodeContainer;
 import org.openstreetmap.osmosis.core.domain.v0_6.CommonEntityData;
 import org.openstreetmap.osmosis.core.domain.v0_6.Node;
 import org.openstreetmap.osmosis.core.domain.v0_6.OsmUser;
 import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
-import org.openstreetmap.osmosis.core.task.common.ChangeAction;
 import org.openstreetmap.osmosis.core.xml.common.CompressionMethod;
 import org.openstreetmap.osmosis.core.xml.v0_6.XmlChangeReader;
 
@@ -62,6 +59,7 @@ public class IgnoreModifyDeleteDiffUpdateStrategyTest
 	 * @throws Exception
 	 */
 	@Test
+	@Ignore
 	public void nodeTest()
 		throws Exception
 	{

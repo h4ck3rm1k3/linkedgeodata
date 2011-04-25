@@ -76,7 +76,7 @@ public class TripleCacheIndexImpl
 	
 	
 	
-	public static void create(IGraph graph,
+	public static TripleCacheIndexImpl create(IGraph graph,
 			Integer fullMaxSize,
 			Integer partialMaxSize,
 			Integer emptyMaxSize,
@@ -97,6 +97,8 @@ public class TripleCacheIndexImpl
 					set);
 
 		graph.getCacheProvider().getIndexes().add(index);
+		
+		return index;
 	}
 	
 		
@@ -620,6 +622,13 @@ public class TripleCacheIndexImpl
 	public void registerMisses(Set<List<Object>> keys)
 	{
 		noDataCache.addAll(keys);
+	}
+
+
+	@Override
+	public CacheState getState()
+	{
+		return new CacheState(full.size(), partial.size(), noDataCache.size());
 	}
 	
 	/**

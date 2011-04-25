@@ -8,6 +8,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import junit.framework.Assert;
+
 import org.junit.Test;
 
 import com.google.common.collect.Sets;
@@ -98,23 +100,28 @@ public class CacheTest
 
 		
 		MemoryGraph base = new MemoryGraph();
-		TripleCacheIndexImpl.create(base, 1000, 0, 100, 0); 
-
+		ITripleCacheIndex index = TripleCacheIndexImpl.create(base, 1000, 0, 100, 0); 
 		
-		// Assumed: partial.
+		// Add the base triples
+		// This should make them partial
 		base.add(baseTriples);
-		System.out.println("Status: " + base);
+		//System.out.println("Status: " + base);
+		Assert.assertEquals(index.getState(), new CacheState(0, 1, 0));
 		
-		
+
+		// Remove the base triple again
+		// This should make it empty
 		base.remove(baseTriples);
-		System.out.println("Status: " + base);
-		//assertTrue(base..isEmpty());
+		//System.out.println("Status: " + base);
+		//assertTrue(base.isEmpty());
+		Assert.assertEquals(index.getState(), new CacheState(0, 0, 0));
 		
 		
 		Set<Triple> triples = base.bulkFind(Collections.singleton(Collections.singletonList((Object)subject)), new int[]{0});
 		
-		System.out.println("Status: " + base);
-		assertTrue(triples.isEmpty());
+		//System.out.println("Status: " + base);
+		//assertTrue(triples.isEmpty());
+		Assert.assertEquals(index.getState(), new CacheState(0, 0, 1));
 		
 		
 		
@@ -122,16 +129,29 @@ public class CacheTest
 		
 		
 		triples = base.bulkFind(Collections.singleton(Collections.singletonList((Object)subject)), new int[]{0});
-		System.out.println(base);
+		//System.out.println(base);
 		
-		System.out.println("Status: " + base);
-		assertFalse(triples.isEmpty());
+		//System.out.println("Status: " + base);
+		//assertFalse(triples.isEmpty());
+		Assert.assertEquals(index.getState(), new CacheState(1, 0, 0));
 
 		
 		base.remove(triples);
 
-		System.out.println("Status: " + base);
-		assertTrue(triples.isEmpty());
+		//System.out.println("Status: " + base);
+		Assert.assertEquals(index.getState(), new CacheState(0, 0, 1));
+		
+		triples = base.bulkFind(Collections.singleton(Collections.singletonList((Object)Node.createURI("http://miss.me"))), new int[]{0});
+		//System.out.println("Status: " + base);		
+		Assert.assertEquals(index.getState(), new CacheState(0, 0, 2));
+
+	
+		baseTriples.add(new Triple(Node.createURI("http://aeou.org"), Node.createURI("http://p.org"), Node.createURI("http://o.org")));
+		base.add(baseTriples);
+		
+		//System.out.println("Status: " + base);
+		Assert.assertEquals(index.getState(), new CacheState(1, 1, 1));
+	
 	}
 	
 	

@@ -66,6 +66,7 @@ public abstract class BaseIndexedGraph
 	
 	@Override
 	public String toString() {
+		//return "Index Status:\n" + getCacheProvider().toString();
 		return "Index Status:\n" + getCacheProvider().toString();
 	}
 }

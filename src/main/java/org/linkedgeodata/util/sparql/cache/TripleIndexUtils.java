@@ -155,6 +155,10 @@ public class TripleIndexUtils
 	
 	public static <K, V> Map<K, V> createMap(Integer maxSize)
 	{		
+		if(maxSize == 0) {
+			maxSize = 1;
+		}
+		
 		return (maxSize == null)
 			? new HashMap<K, V>()
 			: new LRUMap<K, V>(maxSize);
