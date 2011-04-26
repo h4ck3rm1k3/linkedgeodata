@@ -34,3 +34,9 @@ lgdo:WayRestriction
 	a owl:Restriction ;
 	owl:onProperty lgdo:hasNodes ;
 	owl:someValuesFrom owl:Thing .
+
+lgdo:schemaIcon
+	a owl:AnnotationProperty .
+	
+lgdo:contributor
+	a owl:AnnotationProperty .

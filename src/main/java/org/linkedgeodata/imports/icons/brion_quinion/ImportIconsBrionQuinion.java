@@ -5,17 +5,23 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.zip.GZIPInputStream;
 
 import org.aksw.commons.collections.MultiMaps;
+import org.apache.commons.cli.Options;
 import org.apache.commons.compress.tar.TarEntry;
 import org.apache.commons.compress.tar.TarInputStream;
+import org.linkedgeodata.dao.ITagDAO;
+import org.linkedgeodata.dao.TagDAO;
 import org.linkedgeodata.i18n.gettext.EntityResolver2;
 import org.linkedgeodata.i18n.gettext.IEntityResolver;
 import org.linkedgeodata.osm.mapping.InMemoryTagMapper;
+import org.linkedgeodata.scripts.LiveSync;
+import org.linkedgeodata.util.PostGISUtil;
 import org.linkedgeodata.util.URIUtil;
 import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 
@@ -23,8 +29,12 @@ import com.google.common.io.Files;
 import com.google.common.io.PatternFilenameFilter;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
+import com.hp.hpl.jena.vocabulary.DCTerms;
+import com.hp.hpl.jena.vocabulary.DCTypes;
+import com.hp.hpl.jena.vocabulary.OWL;
 import com.hp.hpl.jena.vocabulary.RDF;
 
 
@@ -60,8 +70,8 @@ import com.hp.hpl.jena.vocabulary.RDF;
  */
 public class ImportIconsBrionQuinion
 {
-	private File destDir = new File("/var/www/linkedgeodata.org/integration/icons/sjjb/"); 
-	private String baseUrl = "http://linkedgeodata.org/integration/icons/sjjb/";
+	private File destDir = new File("/tmp/var/www/linkedgeodata.org/resource/icon/sjjb/"); 
+	private String baseUrl = "http://linkedgeodata.org/resource/icon/sjjb/";
 	
 	public ImportIconsBrionQuinion()
 	{
@@ -70,16 +80,29 @@ public class ImportIconsBrionQuinion
 	public void run()
 		throws Exception
 	{
+		Options cliOptions = new Options();
+		//cliOptions.addOption("c", "config", true, "Config filename");
 		
+		
+		//CommandLineParser cliParser = new GnuParser();
+		//CommandLine commandLine = cliParser.parse(cliOptions, args);
+
+		
+		//String configFileName = commandLine.getOptionValue("c", "config.ini");
+
+		String configFileName = "src/main/java/org/linkedgeodata/imports/icons/brion_quinion/hackconfig.ini";
+		File configFile = new File(configFileName);
+
+		Map<String, String> config = LiveSync.loadIniFile(configFile);
+
 	
-		/*
-		Connection nodeConn = PostGISUtil.connectPostGIS(
+		Connection conn = PostGISUtil.connectPostGIS(
 				config.get("osmDb_hostName"), config.get("osmDb_dataBaseName"),
 				config.get("osmDb_userName"), config.get("osmDb_passWord"));
 		
 		ITagDAO tagDao = new TagDAO();
 		tagDao.setConnection(conn);
-		*/
+
 		
 		InMemoryTagMapper tagMapper = new InMemoryTagMapper();
 		tagMapper.load(new File("config/LiveSync/TagMappings.xml"));
@@ -96,25 +119,35 @@ public class ImportIconsBrionQuinion
 		for(Map.Entry<Tag, Set<File>> entry : result.entrySet()) {
 			Tag tag = entry.getKey();
 			Resource subject = resolver.resolve(tag.getKey(), tag.getValue());
-			
+						
 			if(subject == null) {
-				System.out.println("Skipping: " + tag);
+				//System.out.println("Skipping: " + tag);
 				continue;
 			}
 			
+			if(!tagDao.doesTagExist(tag)) {
+				continue;
+			}
+
 			//System.out.println("Accepting: " + tag);
 			
 			for(File file : entry.getValue()) {
-				//publishFile(file);
+				publishFile(file);
 				
 				Resource object = createResourceForFile(file);
-				
-				model.add(subject, RDF.rest, object);
+
+				Property schemaIcon = ResourceFactory.createProperty("http://linkedgeodata.org/ontology/schemaIcon"); 
+				model.add(subject, schemaIcon, object);
+				model.add(schemaIcon, RDF.type, OWL.AnnotationProperty);
+
+				model.add(subject, ResourceFactory.createProperty("http://linkedgeodata.org/ontology/schemaIcon"), object);
+				model.add(object, DCTerms.type, DCTypes.Image);
+				model.add(object, DCTerms.source, ResourceFactory.createResource("http://www.sjjb.co.uk/mapicons/"));
 			}
 			
 		}
 		
-		model.write(System.out, "N3");
+		model.write(System.out, "N-TRIPLE");
 	}
 	
 	
@@ -127,14 +160,36 @@ public class ImportIconsBrionQuinion
 		
 	public Resource createResourceForFile(File file)
 	{
-		return ResourceFactory.createResource(baseUrl + file.getName());
+		return ResourceFactory.createResource(baseUrl + file.getParentFile().getName() + "/" + file.getName());
 	}
 	
 	public void publishFile(File srcFile)
 		throws IOException
 	{
-		destDir.mkdirs();
-		Files.copy(srcFile, destDir);
+		File tmpDir = new File(destDir + "/" + srcFile.getParentFile().getName());
+		tmpDir.mkdirs();
+		Files.copy(srcFile, new File(tmpDir + "/" + srcFile.getName()));
+	}
+	
+	
+	public static void renameK(File root, String suffix, String renamed) throws IOException
+	{
+		File dir = new File(root.getPath() + "/" + suffix);
+		if(dir.exists()) {
+			Files.move(dir, new File(root.getPath() + "/" + renamed));
+		}
+	}
+	
+
+	public static void renameKV(File root, String k, String v, String kk, String vv) throws IOException
+	{		
+		File file = new File(root.getPath() + "/" + k + "/" + v + ".svg");
+		if(file.exists()) {
+			File dir = new File(root.getPath() + "/" + kk);
+			dir.mkdirs();
+			
+			Files.move(file, new File(dir.getPath() + "/" + vv + ".svg"));
+		}
 	}
 	
 	
@@ -161,10 +216,15 @@ public class ImportIconsBrionQuinion
 		File root = new File(dir.getPath() + "/svg/");
 		//System.out.println(root);
 		
-		File powDir = new File(root.getPath() + "/place_of_worship");
-		if(powDir.exists()) {
-			Files.move(powDir, new File(root.getPath() + "/denomination"));
-		}
+		renameK(root, "place_of_worship", "denomination");
+		renameK(root, "shopping", "shop");
+
+		renameKV(root, "poi", "place_city", "place", "city");
+		renameKV(root, "poi", "place_suburb", "place", "suburb");
+		renameKV(root, "poi", "place_hamlet", "place", "hamlet");
+		renameKV(root, "poi", "place_town", "place", "town");
+		renameKV(root, "poi", "place_village", "place", "village");
+		//renameKV(root, "poi", "place_village");
 		
 		
 		for(File keyFile : root.listFiles()) {
