@@ -265,6 +265,9 @@ public class LiveSync
 			
 			postTransformer = TransformerChain.create(matInfTransformer, virtuosoTransformer);
 		} else {
+			System.out.println("NO SCHEMA FILE FOUND - NO INFERENCES WILL BE MATERIALIZED - continuing in 3 sec");
+			Thread.sleep(3000);
+			
 			postTransformer = virtuosoTransformer;
 		}
 		
