@@ -469,7 +469,44 @@ public class LiveSync
 			deltaGraph.remove(diff.getRemoved().getGraph().find(null, null, null).toSet());
 			deltaGraph.add(diff.getAdded().getGraph().find(null, null, null).toSet());
 			deltaGraph.commit();
+		
+			setState(LiveSyncState.PROCESSING);			
+			return;
+		}
+		case PROCESSING: {
+			// Get the stream to the OSC file
+			// InputStream in = getChangeSetStream(sequenceNumber);
+			// File changeFile = getChangeFile(sequenceNumber);
+
+			// XmlChangeReader reader = new XmlChangeReader(changeFile, true,
+			// CompressionMethod.GZip);
+
+			// IDiff<Model> diff = computeDiff(sequenceNumber);
+			DiffResult diff = computeDiff(sequenceNumber);
+
+			logger.info("Publishing diff");
+
+			publishDiff(sequenceNumber);
+			setState(LiveSyncState.PRE_COMMIT);
 			
+			logger.info("Applying main diff (added/removed) = "
+					+ diff.getMainDiff().getAdded().size() + "/"
+					+ diff.getMainDiff().getRemoved().size());
+			applyDiff(diff.getMainDiff());
+
+			logger.info("Applying node diff (added/removed) = "
+					+ diff.getNodeDiff().getAdded().size() + "/"
+					+ diff.getNodeDiff().getRemoved().size());
+			applyNodeDiff(diff.getNodeDiff());
+
+
+			logger.info("Downloading new state");
+
+			setState(LiveSyncState.POST_COMMIT);
+			
+			advance(sequenceNumber + 1);
+
+			setState(LiveSyncState.PROCESSING);
 			return;
 		}
 		case POST_COMMIT: { // Diff was applied, however the new state file has not yet been loaded
@@ -481,48 +518,12 @@ public class LiveSync
 			// The solution is to introduce PRE_DOWNLOAD and POST_DOWNLOAD states
 			//
 			advance(sequenceNumber + 1);
+			setState(LiveSyncState.PROCESSING);			
 			return;
 		}
 		}
-		
-		setState(LiveSyncState.PROCESSING);			
-		
-		
-		
-		// Get the stream to the OSC file
-		// InputStream in = getChangeSetStream(sequenceNumber);
-		// File changeFile = getChangeFile(sequenceNumber);
-
-		// XmlChangeReader reader = new XmlChangeReader(changeFile, true,
-		// CompressionMethod.GZip);
-
-		// IDiff<Model> diff = computeDiff(sequenceNumber);
-		DiffResult diff = computeDiff(sequenceNumber);
-
-		logger.info("Publishing diff");
-
-		publishDiff(sequenceNumber);
-		setState(LiveSyncState.PRE_COMMIT);
-		
-		logger.info("Applying main diff (added/removed) = "
-				+ diff.getMainDiff().getAdded().size() + "/"
-				+ diff.getMainDiff().getRemoved().size());
-		applyDiff(diff.getMainDiff());
-
-		logger.info("Applying node diff (added/removed) = "
-				+ diff.getNodeDiff().getAdded().size() + "/"
-				+ diff.getNodeDiff().getRemoved().size());
-		applyNodeDiff(diff.getNodeDiff());
-
-
-		logger.info("Downloading new state");
-
-		setState(LiveSyncState.POST_COMMIT);
-		
-		advance(sequenceNumber + 1);
-
-		setState(LiveSyncState.PROCESSING);
 	}
+
 
 	private void advance(long id) throws IOException
 	{

@@ -7,6 +7,7 @@ import org.aksw.commons.collections.MultiMaps;
 import org.aksw.commons.jena.ModelUtils;
 import org.linkedgeodata.core.ILGDVocab;
 import org.linkedgeodata.core.LGDVocab;
+import org.linkedgeodata.core.vocab.GeoRSS;
 import org.linkedgeodata.core.vocab.WGS84Pos;
 import org.linkedgeodata.util.ITransformer;
 
@@ -63,7 +64,7 @@ public class TransitiveInferredModelEnricher
 				Statement stmt = it.next();
 				RDFNode o = stmt.getObject();
 				
-				if(o.equals(vocab.getNodeClass()) || o.equals(vocab.getWayClass()))
+				if(o.equals(vocab.getNodeClass()) || o.equals(vocab.getWayClass()) || o.equals(RDF.Seq))
 					continue;
 						
 						
@@ -88,6 +89,16 @@ public class TransitiveInferredModelEnricher
 			it.close();
 		}
 
+		{
+			StmtIterator it = in.listStatements(null, GeoRSS.point, (RDFNode)null);
+			while(it.hasNext()) {
+				Statement stmt = it.next();
+				out.add(stmt.getSubject(), RDF.type, vocab.getNodeClass());
+			}
+			it.close();
+		}
+
+		
 		{
 			StmtIterator it = in.listStatements(null, vocab.getHasNodesPred(), (RDFNode)null);
 			while(it.hasNext()) {
