@@ -59,6 +59,10 @@ public class TagDAO
 	public boolean doesTagExist(Tag tag)
 		throws SQLException
 	{
+		if(tag == null) {
+			return false;
+		}
+		
 		Long tileId = (tag.getValue() == null)
 		 ? execute(Query.DOES_TAG_K_EXIST, Long.class, tag.getKey())
 		 : execute(Query.DOES_TAG_KV_EXIST, Long.class, tag.getKey(), tag.getValue());
