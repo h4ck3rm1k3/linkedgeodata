@@ -5,6 +5,7 @@
 
 @prefix lgdo: <http://linkedgeodata.org/ontology/> .
 @prefix wgs:  <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
 
 
 wgs:geometry
@@ -40,3 +41,7 @@ lgdo:schemaIcon
 	
 lgdo:contributor
 	a owl:AnnotationProperty .
+	
+	
+
+	
