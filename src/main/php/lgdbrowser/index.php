@@ -29,7 +29,7 @@ $val = $_GET['val'];
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 
   <title>LinkedGeoData Browser</title>
 <script type="text/javascript" src="jquery-1.2.6.min.js"></script>
@@ -84,7 +84,7 @@ $val = $_GET['val'];
 				<table style='width:100%'>
 					<tr>
 						<td style='text-align:left'><b>Search results</b></td>
-						<td style='text-align:right'><a id='search-toggle' href='#' onclick="$('#search-area').hide(); $('#facet-area').show(); return false;"><img class='noborder' src='facet-icon.png'></a></td>
+						<td style='text-align:right'><a id='search-toggle' href='#' onclick="$('#search-area').hide(); $('#facet-area').show(); return false;"><img class='noborder' src='facet-icon.png' /></a></td>
 					</tr>
 				</table>
 			</div>
@@ -97,7 +97,7 @@ $val = $_GET['val'];
 	
 		<div style='width:50%; height:100%; float:left;'>
 			<div class='map-bar'>
-				<b>Facets<b/>
+				<b>Facets</b>
 			</div>
 			<div id="prop" style='height:100%; overflow:auto;'></div>
 		</div>
@@ -107,7 +107,7 @@ $val = $_GET['val'];
 				<table style='width:100%'>
 					<tr>
 						<td style='text-align:left'><b>Instances</b></td>
-						<td style='text-align:right'><a id='facet-toggle' href='#' onclick="$('#facet-area').hide(); $('#search-area').show(); return false;"><img class='noborder' src='search-icon.png'></a></td>
+						<td style='text-align:right'><a id='facet-toggle' href='#' onclick="$('#facet-area').hide(); $('#search-area').show(); return false;"><img class='noborder' src='search-icon.png' /></a></td>
 					</tr>
 				</table>
 			</div>
@@ -124,7 +124,7 @@ $val = $_GET['val'];
 					<td style='text-align:left; width:50%;'>
 						<div><form style='float:left' action='javascript: doSearch();'><label for="search"><b>Search:</b></label>
 						<input type="text" id="search-field" name="search-field" value="<?=$_GET['search']?>" autocomplete="off" aonchange="this.form.submit();" /></form></div>
-						powered by <a class='link' href='http://gazetteer.openstreetmap.org/namefinder/'><img class='noborder' src='osm-logo-small.png' />Namefinder</a>
+						powered by <a class='link' href='http://nominatim.openstreetmap.org'><img class='noborder' src='osm-logo-small.png' />Nominatim</a>
 					</td>
 					<td style='text-align:right; width:50%;'>
 						<a id='map-link' class="link" href="#"><img class='noborder' src='icon/permalink.png' />Link</a>
@@ -197,10 +197,10 @@ function doSearch(form)
 	$('#search-area').show();
 
 
-	value = encodeURI($('#search-field').val());
+	searchValue = encodeURI($('#search-field').val());
 
 	$('#search-result').html("<img src='loading.gif' />");
-	$('#search-result').load("search_proxy.php?find=" + value);	
+	$('#search-result').load("search_proxy.php?find=" + searchValue);	
 }
 
 $('#search').autocomplete('autocomplete.php',{extraParams:{p:'name'}});

@@ -6,8 +6,8 @@
  * @param tags A map (a set of key value pairs)
  * @return
  */
-function oldrenderNode(id, lon, lat, tags) {
-	
+function oldrenderNode(id, xlon, xlat, tags) {
+
 	var autoc='';
 	
 	var ret = "";
@@ -16,7 +16,9 @@ function oldrenderNode(id, lon, lat, tags) {
 	
 	ret += "<br />";
 
-        ret += "<a href='http://linkedgeodata.org/triplify/node" + id + ".ttl'><img class='noborder' src='icon/rdf-export2.png'> <br />";
+        //ret += "<a href='http://linkedgeodata.org/triplify/node" + id + ".ttl'><img class='noborder' src='icon/rdf-export2.png'> <br />";
+        ret += "<a href='http://linkedgeodata.org/triplify/node" + id + ".ttl'>node:" + id + "</a><br />";
+        ret += "<a href='http://openstreetmap.org/edit?editor=potlatch&lat=" + xlat + "&lon=" + xlon + "&zoom=18&node=" + id + "' target='_blank'>Edit on OpenStreetMap</a><br />";
 
 	var depiction = tags['foaf:depiction'];
 	if(depiction != null)
@@ -28,7 +30,7 @@ function oldrenderNode(id, lon, lat, tags) {
 	
 	ret += "<p style='clear:left;' >";
 	
-	ret +='<form class="nodeform"><input type="hidden" name="id" value="'+(id||'')+'" /><input type="hidden" name="lon" value="'+lon+'" /><input type="hidden" name="lat" value="'+lat+'" />\
+	ret +='<form class="nodeform"><input type="hidden" name="id" value="'+(id||'')+'" /><input type="hidden" name="lon" value="'+xlon+'" /><input type="hidden" name="lat" value="'+xlat+'" />\
 		<table><tr><td>Name</td><td><input disabled="true" type="text" name="t[name]" value="'+(tags['name']||'')+'" /></td></tr>\
 		<tr><td>Description</td><td><textarea disabled="true" name="t[description]">'+(tags['description']||'')+'</textarea></td></tr>\
 		<tr><td>Image</td><td><input disabled="true" type="text" name="t[image]" value="'+(tags['image']||'')+'" /></td></tr>\
@@ -79,7 +81,7 @@ function namespaceUri(uri)
 function extractTags(json)
 {
 	var result = {};
-	for each(var item in json.results.bindings) {
+	for(var item in json.results.bindings) {
 		var key = item.p.value;
 		
 		// Check if the key is prefixed with a known namespace
@@ -179,9 +181,7 @@ function addNode(event) {
 var bottom,top,left,right,prop,val;
 var instanceData = {};
 
-function mapEvent(event) {
-	
-	
+function mapEvent(event) {	
 	var b=map.getExtent().transform(map.projection,map.displayProjection);
 	if(bottom==b.bottom && top==b.top && left==b.left && right==b.right && prop==property && val==value)
 		return;
@@ -224,10 +224,10 @@ function mapEvent(event) {
 }
 
 
-function loadData(popup, nodeId, tags)
+function loadData(popup, nodeId, xlon, xlat, tags)
 {
 	//popup.setContentHTML(printKeys(tags));
-	var content = oldrenderNode(nodeId, popup.lonlat.lon, popup.lonlat.lat, tags);
+	var content = oldrenderNode(nodeId, xlon, xlat, tags);
 	
 	/**
 	 * Load DBpedia resources if the tags contain the key dbpedia-resource
@@ -291,7 +291,7 @@ function updateExport()
 }
 
 
-function addMarker(ll, nodeId, tags) {
+function addMarker(ll, nodeId, xlon, xlat, tags) {
 	var feature = new OpenLayers.Feature(layerMarkers, ll); 
 	feature.closeBox = true;
 	feature.popupClass = OpenLayers.Class(OpenLayers.Popup.FramedCloud,{'panMapIfOutOfView':false, 'autoSize': true});
@@ -319,7 +319,7 @@ function addMarker(ll, nodeId, tags) {
 		}
 		currentPopup = this.popup;
 		
-		loadData(currentPopup, nodeId, tags);
+		loadData(currentPopup, nodeId, xlon, xlat, tags);
 		
 		OpenLayers.Event.stop(evt);
 	};

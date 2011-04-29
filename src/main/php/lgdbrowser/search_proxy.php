@@ -13,7 +13,7 @@ function stripNameFinderName($name)
 
 function processNameFinderQuery($search, $global)
 {
-	$base = "http://gazetteer.openstreetmap.org/namefinder/search.xml?find=";
+	$base = "http://nominatim.openstreetmap.org/search?format=xml&q=";
 	$url = $base . urlencode($search);
 
 	$result = "Your search was: '$search'<br />";
@@ -28,14 +28,19 @@ function processNameFinderQuery($search, $global)
 	
 	$ranking = array();
 	$id = 0;	
-	foreach($xml->xpath('//named') as $named) {		
+	foreach($xml->xpath('//place') as $named) {		
 		$attrs = $named->attributes();
 
-		$name = $attrs->name;
+		$tmp = explode(",", $attrs->display_name, 2);		
+
+
+		$name = trim($tmp[0]);
 		$lat  = $attrs->lat;
 		$lon  = $attrs->lon;
-		$is_in = $attrs->is_in;
-		$zoom = $attrs->zoom;
+		$is_in = trim($tmp[1]);
+		//$zoom = $attrs->zoom;
+
+		$zoom = 10;
 		
 		$name = stripNameFinderName($name);
 		$is_in = stripNameFinderName($is_in);
@@ -57,7 +62,7 @@ function processNameFinderQuery($search, $global)
 						onmouseover=\"
 							$(this).addClass('highlight');
 						\"
-					><b>$name</b><br /><div style='margin-left:20px;'>$is_in</div</li>
+					><b>$name</b><br /><div style='margin-left:20px;'>$is_in</div></li>
 				";
 			
 				/*

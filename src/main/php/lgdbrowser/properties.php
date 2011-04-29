@@ -1,8 +1,7 @@
 <ul style="margin-left:-1em; list-style-type:none;">
 <?php
-//echo "Under maintainance - since Mon, May 3";
+//echo "Under maintainance";
 //die; 
-
 
 include('inc.php');
 
@@ -80,18 +79,18 @@ if($zoom >= 14) {
 	$sql =
 		"SELECT
 			t.k           property,
-			p.ontology_entity_type AS type,
+			p.owl_entity_type AS type,
 			COUNT(*)          c
 		FROM
 			node_tags t
-			INNER JOIN lgd_properties p ON (p.k = t.k)
+			INNER JOIN lgd_tag_ontology_k p ON (p.k = t.k)
 		WHERE
 			t.geom && $exactBox
 			$filterPart
 		GROUP BY
-			t.k, p.ontology_entity_type
+			t.k, p.owl_entity_type
 		ORDER BY
-			p.ontology_entity_type, t.k";
+			p.owl_entity_type, t.k";
 
 // Ooops, the subselect belongs to the instance query
 /*
@@ -139,18 +138,18 @@ else {
 	$sql =
 		"SELECT
 			t.k property,
-			p.ontology_entity_type AS type,
+			p.owl_entity_type AS type,
 			SUM(t.usage_count) c
 		FROM
 			lgd_stats_node_tags_tilek_$zoom t
-			INNER JOIN lgd_properties p ON (p.k = t.k)
+			INNER JOIN lgd_tag_ontology_k p ON (p.k = t.k)
 		WHERE
 			$tileBox
 			$filterPart
 		GROUP BY
-			t.k, p.ontology_entity_type
+			t.k, p.owl_entity_type
 		ORDER BY
-			p.ontology_entity_type, t.k";
+			p.owl_entity_type, t.k";
 }
 //echo $sql;	
 //echo "Zoom level was $zoom <br />";
@@ -163,8 +162,12 @@ $currentType = "";
 $selectedProperty = $_GET['property'];
 
 //echo $zoom;
-//die;
+//echo "Debug output";
 //echo $sql;
+//$res=$db->query($sql);
+//print_r($db->error);
+//die;
+
 foreach($db->query($sql) as $row) {
 	$count = $row['c'];
 	

@@ -168,12 +168,12 @@ function generateInstanceHTML($latMin, $latMax, $lonMin, $lonMax, $zoom, $proper
 //echo "$zoom <br />";
 		
 //echo "$sql <br />";
-//die;
-	//$res=$db->query($sql);
-	//print_r($db->error);
+//	$res=$db->query($sql);
+//	print_r($db->error);
 	//while($row=$res->fetch_assoc()) {
 	//echo $sql;
 	//echo $box;
+//die;
 	$idToTags = array();
 	foreach($db->query($sql) as $row) {
 		//$p=$db->query('SELECT rk.label property, rv.label value FROM tags t INNER JOIN resources rk ON(k=rk.id) INNER JOIN resources rv ON(v=rv.id) WHERE t.type="'.$row['type'].'" AND t.id='.$row['id']);
@@ -192,7 +192,7 @@ function generateInstanceHTML($latMin, $latMax, $lonMin, $lonMax, $zoom, $proper
 		unset($desc,$popdesc,$popform,$name,$ta);
 
 		foreach($pr as $p => $v) {
-			$ta.='"'.$p.'":"'.htmlspecialchars(utf8_encode($v)).'",';
+			$ta.='"'.$p.'":"'.htmlspecialchars($v).'",';
 		}
 	
 
@@ -261,6 +261,8 @@ function generateInstanceHTML($latMin, $latMax, $lonMin, $lonMax, $zoom, $proper
 						new OpenLayers.LonLat($lonD, $latD)
 							.transform(map.displayProjection, map.projection),
 						$nodeId,
+                                                $lonD,
+                                                $latD,
 						{{$ta}}
 					);
 			</script>";
