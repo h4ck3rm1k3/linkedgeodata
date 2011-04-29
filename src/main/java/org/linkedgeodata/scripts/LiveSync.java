@@ -465,7 +465,8 @@ public class LiveSync
 
 		LiveSyncState state = getState();
 		switch(state) {
-		case PRE_COMMIT: { // Applying the last diff did not complete - undo the diff
+		case PRE_COMMIT: { // The diff was published, but not applied
+			
 			logger.warn("Diff was not cleanly committed, recommitting...");
 			
 			RDFDiff diff = readDiff(sequenceNumber);			
@@ -473,7 +474,7 @@ public class LiveSync
 			deltaGraph.add(diff.getAdded().getGraph().find(null, null, null).toSet());
 			deltaGraph.commit();
 		
-			setState(LiveSyncState.PROCESSING);			
+			setState(LiveSyncState.POST_COMMIT);			
 			return;
 		}
 		case PROCESSING: {
@@ -491,7 +492,7 @@ public class LiveSync
 
 			publishDiff(sequenceNumber);
 			setState(LiveSyncState.PRE_COMMIT);
-			
+
 			logger.info("Applying main diff (added/removed) = "
 					+ diff.getMainDiff().getAdded().size() + "/"
 					+ diff.getMainDiff().getRemoved().size());
