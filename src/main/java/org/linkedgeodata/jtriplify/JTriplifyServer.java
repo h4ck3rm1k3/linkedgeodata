@@ -828,7 +828,12 @@ class MyHandler
     			++acceptCounter;
     			
     			ContentType ct = null;
-				ct = new ContentType(item);
+    			try {
+    				ct = new ContentType(item);
+    			} catch(Exception e) {
+    				logger.warn("Error parsing content type", e);
+    				continue;
+    			}
     			
 	    		// FIXME Would be nice if this was configurable
 	    		if(ct.match("text/plain") || ct.match("text/html") || ct.match("*/*")) {
@@ -1313,7 +1318,13 @@ public class JTriplifyServer
 	
 		dataHandler.getRIC().put(pattern, nearFn, "$1", "$2", "$3", "$5", "$7", "$8", "$9", "$11", "$13");
 
+
 		
+		IInvocable areaFn = DefaultCoercions.wrap(methods, "publicGetAreaStatistics.*");
+		pattern = ".*/area/(-?[^-]+)-(-?[^,]+),(-?[^-]+)-(-?[^/]+)?/?(\\?.*)?";
+	
+		dataHandler.getRIC().put(pattern, areaFn, "$1", "$2", "$3", "$4");
+
 		//dataHandler.getRIC().put(pattern, bboxFn, "$1", "$2", "$3", "$4", "$6", "$8", "$9", "$10", "$11", "$12");
 
 		//dataHandler.getRIC().put(".*/near/([^,]*),([^/]*)/([^/]*)/([^/=?]*)/?(\\?.*)?", nearFn, "$0", "$1", "$2", "$3", null, false);
