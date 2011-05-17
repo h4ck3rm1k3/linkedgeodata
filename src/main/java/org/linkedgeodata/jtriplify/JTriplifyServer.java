@@ -722,14 +722,14 @@ class MyHandler
 			contentTypeToJenaFormat.put(new ContentType("application/x-turtle"), "TURTLE");
 			contentTypeToJenaFormat.put(new ContentType("text/turtle"), "TURTLE");
 			
-			contentTypeToJenaFormat.put(new ContentType("text/n3"), "N3");
+			contentTypeToJenaFormat.put(new ContentType("text/n3;"), "N3");
 			contentTypeToJenaFormat.put(new ContentType("text/rdf+n3"), "N3");
 			
 			//jenaFormatToContentType.put("RDF/XML", new ContentType("application/rdf+xml; charset=utf-8"));
 			//jenaFormatToContentType.put("RDF/XML", new ContentType("application/rdf+xml"));
 			jenaFormatToContentType.put("RDF/XML", new ContentType("application/rdf+xml"));
 			jenaFormatToContentType.put("TURTLE", new ContentType("application/x-turtle; charset=utf-8"));
-			jenaFormatToContentType.put("N3", new ContentType("text/rdf+n3;"));
+			jenaFormatToContentType.put("N3", new ContentType("text/rdf+n3; charset=utf-8"));
 			
 		}
 		catch(Exception e) {
