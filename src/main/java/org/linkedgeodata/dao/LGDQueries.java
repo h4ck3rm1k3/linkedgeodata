@@ -21,6 +21,16 @@
 package org.linkedgeodata.dao;
 
 import java.awt.geom.RectangularShape;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.NavigableSet;
+
+import org.linkedgeodata.util.SQLUtil;
+import org.linkedgeodata.util.tiles.TileInfo;
+import org.linkedgeodata.util.tiles.TileUtil;
+
+import com.google.common.base.Joiner;
 
 
 /**
@@ -35,7 +45,125 @@ import java.awt.geom.RectangularShape;
  */
 public class LGDQueries
 {
+	public static double log(double value, int base) {
+		return Math.log(value) / Math.log(base);
+	}
+	
+	public static String sqlForArea(RectangularShape rect, Integer zoom, String colName)
+	{
+		if(zoom == null) {
+			zoom = (int)(2 + Math.max(
+					16 - Math.max(0, Math.min(2 * Math.round(0.5*log((rect.getMaxY()+90-(rect.getMinY()+90))*65536/180,2)),16)),
+					16 - Math.max(0, Math.min(2 * Math.round(0.5*log((rect.getMaxX()+180-(rect.getMinX()+180))*65536/360,2)),16))));
+		}
 
+		NavigableSet<TileInfo> tiles = TileUtil.tilesForArea(rect, zoom);
+
+		String result = "FALSE";
+		
+		TileInfo rangeStart = null;
+		TileInfo prev = null;
+		List<Long> individuals = new ArrayList<Long>();
+		for(TileInfo tile : tiles) {
+			if(rangeStart == null) {
+				rangeStart = tile;
+				prev = tile;
+				continue;
+			}
+			
+			if(tile.getZipped() == prev.getZipped() + 1) {
+				continue;
+			} else {
+				
+				if(rangeStart == prev) {
+					individuals.add(prev.getZipped());
+				} else {
+					result += " OR " + colName + " BETWEEN " + rangeStart.getZipped() + " AND " + prev.getZipped();
+				}
+
+				rangeStart = tile;
+				prev = tile;
+			}
+			
+		}
+
+		if(rangeStart == prev) {
+			individuals.add(prev.getZipped());
+		} else {
+			result += " OR " + colName + " BETWEEN " + rangeStart.getZipped() + " AND " + prev.getZipped();
+		}
+
+		if(!individuals.isEmpty()) {
+			result += " OR " + colName + " IN (" + Joiner.on(",").join(individuals) + ")";
+		}
+		
+		return result;
+	}
+	
+	public static String buildAreaStatsQueryExact(RectangularShape rect, Collection<String> keys)
+	{
+		List<String> ks = SQLUtil.escapeCollectionPostgres(keys);
+		String filterPart = "AND k IN (" + Joiner.on(",").join(ks) + ")";
+
+		return
+			"SELECT\n" +
+			"	t.k           k,\n" +
+			"	COUNT(*)          c\n" +
+			"FROM\n" +
+			"	node_tags t\n" +
+			"WHERE\n" +
+			"	t.geom && " + BBox(rect) + "\n" +
+				filterPart +
+			"GROUP BY\n" +
+			"	t.k\n" +
+			"ORDER BY\n" +
+			"	t.k";
+		
+		/*
+		return
+			"SELECT\n" +
+			"	t.k           property,\n" +
+			"	p.owl_entity_type AS type,\n" +
+			"	COUNT(*)          c\n" +
+			"FROM\n" +
+			"	node_tags t\n" +
+			//"	INNER JOIN lgd_tag_ontology_k p ON (p.k = t.k)\n" +
+			"WHERE\n" +
+			"	t.geom && " + BBox(rect) + "\n" +
+				filterPart +
+			"GROUP BY\n" +
+			"	t.k, p.owl_entity_type\n" +
+			"ORDER BY\n" +
+			"	p.owl_entity_type, t.k";
+		*/
+	}
+	
+	public static String buildAreaStatsQueryApprox(RectangularShape rect, int zoom)
+	{
+		String tileBox = sqlForArea(rect, zoom, "tile");
+		return
+			"SELECT\n" +
+			"	t.k property,\n" +
+			"	p.owl_entity_type AS type,\n" +
+			"	SUM(t.usage_count) c\n" +
+			"FROM\n" +
+			"	lgd_stats_node_tags_tilek_$zoom t\n" +
+			"	INNER JOIN lgd_tag_ontology_k p ON (p.k = t.k)\n" +
+			"WHERE\n" +
+			"	" + tileBox + "\n" +
+			"GROUP BY\n" +
+			"t.k, p.owl_entity_type\n" +
+			"ORDER BY\n" +
+			"	p.owl_entity_type, t.k\n";
+	}
+	
+
+	
+	
+	
+	
+	
+	
 	public static String distancePostGISSphere(
 			String geomCol,
 			String latArg,
@@ -201,7 +329,6 @@ public class LGDQueries
 	}
 
 	
-
 	public static String buildFindNodesQuery(String distance_m, String k, String v, boolean bOr)
 	{
 		String kvPred = createPredicate("snt", k, v, bOr);

@@ -4,9 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Stack;
 import java.util.regex.Matcher;
@@ -349,7 +349,16 @@ public class SQLUtil
 		return v;
 	}
 	*/
-	
+
+	public static List<String> escapeCollectionPostgres(Collection<?> c)
+	{
+		List<String> result = new ArrayList<String>();
+		for(Object o : c) {
+			result.add(quotePostgres(o));
+		}
+		return result;
+	}
+
 	public static String escapePostgres(Object o)
 	{
 		return o.toString().replace("\\", "\\\\").replace("'", "\\'");

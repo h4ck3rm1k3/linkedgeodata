@@ -1,5 +1,7 @@
 package org.linkedgeodata.core;
 
+import java.awt.geom.RectangularShape;
+
 import org.openstreetmap.osmosis.core.domain.v0_6.Entity;
 
 import com.hp.hpl.jena.rdf.model.AnonId;
@@ -38,4 +40,8 @@ public interface ILGDVocab
 	Resource wayToWayNode(Resource res);
 	Resource wayNodeToWay(Resource res);
 	Resource createContributorURI(int userId);
+	
+	Resource resourceForArea(RectangularShape shape);
+	
+	Entity createEntity(Resource res);
 }

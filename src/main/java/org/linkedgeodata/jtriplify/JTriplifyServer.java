@@ -21,7 +21,6 @@
 package org.linkedgeodata.jtriplify;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -32,15 +31,18 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.activation.UnsupportedDataTypeException;
 import javax.mail.internet.ContentType;
 import javax.mail.internet.ParseException;
-import javax.management.RuntimeErrorException;
 
+import org.aksw.commons.sparql.core.SparqlEndpoint;
+import org.aksw.commons.sparql.core.impl.HttpSparqlEndpoint;
 import org.aksw.commons.util.strings.StringUtils;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -62,12 +64,10 @@ import org.linkedgeodata.dao.TagMapperDAO;
 import org.linkedgeodata.dao.gragh.RdfGraphDaoGraph;
 import org.linkedgeodata.jtriplify.methods.DefaultCoercions;
 import org.linkedgeodata.jtriplify.methods.IInvocable;
-import org.linkedgeodata.jtriplify.methods.JavaMethodInvocable;
 import org.linkedgeodata.jtriplify.methods.Pair;
 import org.linkedgeodata.osm.mapping.CachingTagMapper;
 import org.linkedgeodata.osm.mapping.ITagMapper;
 import org.linkedgeodata.osm.mapping.TagMappingDB;
-import org.linkedgeodata.osm.osmosis.plugins.LgdRdfUtils;
 import org.linkedgeodata.util.ConnectionConfig;
 import org.linkedgeodata.util.ExceptionUtil;
 import org.linkedgeodata.util.HTMLJenaWriter;
@@ -75,7 +75,6 @@ import org.linkedgeodata.util.ModelUtil;
 import org.linkedgeodata.util.StreamUtil;
 import org.linkedgeodata.util.StringUtil;
 import org.linkedgeodata.util.URIUtil;
-import org.openstreetmap.osmosis.core.xml.common.BaseXmlWriter;
 
 import com.hp.hpl.jena.graph.Graph;
 import com.hp.hpl.jena.graph.compose.Union;
@@ -85,7 +84,6 @@ import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFWriter;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
-import com.hp.hpl.jena.xmloutput.impl.BaseXMLWriter;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -1240,8 +1238,14 @@ public class JTriplifyServer
 		
 		ILGDVocab vocab = new LGDVocab();
 		
-		LGDRDFDAO dao = new LGDRDFDAO(innerDAO, tagMapper, vocab);
+		Set<String> defaultGraphNames = new HashSet<String>();
+		defaultGraphNames.add("http://linkedgeodata.org/110406/dbpedia");
+		defaultGraphNames.add("http://linkedgeodata.org/110406/geonames");
 		
+		
+		SparqlEndpoint sparqlEndpoint = new HttpSparqlEndpoint("http://linkedgeodata.org/sparql");
+		LGDRDFDAO dao = new LGDRDFDAO(innerDAO, tagMapper, vocab, sparqlEndpoint);
+
 		
 		dao.setConnection(conn);
 		Session session = sessionFactory.createSession(); 

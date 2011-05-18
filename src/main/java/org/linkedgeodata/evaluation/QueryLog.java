@@ -11,11 +11,15 @@ import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.regex.Pattern;
 
 import org.aksw.commons.sparql.core.SparqlEndpoint;
@@ -106,6 +110,80 @@ public class QueryLog
 		return map.put(key, newValue);
 	}
 	
+	
+	public static void main(String[] args) throws IOException
+	{
+		mainDistinctIps();
+	}
+	
+	
+	public static void mainDistinctIps() throws IOException
+	{
+		Map<String, Integer> ipToTotalQueryCount = new HashMap<String, Integer>();
+		
+		
+		BufferedReader reader = new BufferedReader(new InputStreamReader(
+				new FileInputStream(new File(
+						"/home/raven/Desktop/LGDSparql.txt"))));
+		
+		
+
+		String line;
+		while ((line = reader.readLine()) != null) {
+			
+
+
+			String[] parts = line.split("\t");
+
+			String ip = parts[1];
+			String url = parts[2];
+			
+			
+			/**
+			 * Count distinct ips
+			 */
+			Integer queryCount = ipToTotalQueryCount.get(ip);
+			if(queryCount == null) {
+				queryCount = 0;
+			}
+			ipToTotalQueryCount.put(ip, queryCount + 1);
+		}
+
+		reader.close();
+
+		SortedSet<Entry<String, Integer>> set = new TreeSet<Entry<String, Integer>>(
+				new Comparator<Entry<String, Integer>>() {
+
+					@Override
+					public int compare(Entry<String, Integer> a,
+							Entry<String, Integer> b)
+					{
+						return a.getValue().equals(b.getValue()) ? a.getKey().compareTo(b.getKey()) : b.getValue().compareTo(a.getValue());
+					}
+					
+					
+				});
+		
+		for(Entry<String, Integer> entry : ipToTotalQueryCount.entrySet()) {
+			set.add(entry);
+		}
+		
+		for(Entry<String, Integer> entry : set) {
+			System.out.println(entry.getKey() + ": " + entry.getValue());
+		}
+
+		long total = 0;
+		for(Entry<String, Integer> entry : set) {
+			total += entry.getValue();
+		}
+		
+		
+		System.out.println("distinct ips: " + ipToTotalQueryCount.keySet().size());
+		System.out.println("total queryCount: " + total);		
+		
+	}
+	
+	
 	/**
 	 * TODO This method could be generalized to a sparql query log cleaner:
 	 * Given an iterator over query strings, return:
@@ -119,7 +197,7 @@ public class QueryLog
 	 * @param args
 	 * @throws Exception
 	 */
-	public static void main(String[] args) throws Exception
+	public static void mainUniqueQueries(String[] args) throws Exception
 	{
 		/**
 		 * Set up default prefixes

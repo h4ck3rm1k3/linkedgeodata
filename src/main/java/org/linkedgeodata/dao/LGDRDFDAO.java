@@ -29,24 +29,42 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.aksw.commons.sparql.core.SparqlEndpoint;
 import org.apache.commons.collections15.MultiMap;
 import org.hibernate.Session;
 import org.linkedgeodata.core.ILGDVocab;
 import org.linkedgeodata.core.OSMEntityType;
 import org.linkedgeodata.osm.mapping.ITagMapper;
-import org.linkedgeodata.osm.mapping.InMemoryTagMapper;
 import org.linkedgeodata.osm.mapping.impl.SimpleNodeToRDFTransformer;
 import org.linkedgeodata.osm.mapping.impl.SimpleWayToRDFTransformer;
 import org.linkedgeodata.util.ITransformer;
 import org.openstreetmap.osmosis.core.domain.v0_6.Node;
 import org.openstreetmap.osmosis.core.domain.v0_6.Way;
 
-import com.hp.hpl.jena.rdf.model.AnonId;
+import com.google.common.base.Joiner;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.vocabulary.RDF;
 
 
+class CannedQueries {
+    public static String constructBySubjects(Collection<Resource> subjects)
+    {
+        String filterStr = Joiner.on("> || ?s = <").join(subjects);
+
+        String queryStr =
+                "Construct { ?s ?p ?o . } { ?s ?p ?o . Filter(?s = <" + filterStr + "> ) . }";
+
+        //Query query = new Query();
+        //QueryFactory.parse(query, queryStr, null, Syntax.syntaxSPARQL);
+
+        return queryStr;
+    }
+
+    public static Model execConstructBySubjects(SparqlEndpoint endpoint, Model model, Collection<Resource> subjects)
+    {
+        return endpoint.executeConstruct(constructBySubjects(subjects), model);
+    }
+}
 /**
  * 
  * @author raven
@@ -65,12 +83,17 @@ public class LGDRDFDAO
 	
 	private ILGDVocab vocab;
 	
+	// A sparql endpoint for additional data such as icons,
+	// and interlinks
+	private SparqlEndpoint sparqlEndpoint;
+	
+	
 	public ILGDVocab getVocabulary()
 	{
 		return vocab;
 	}
 	
-	public LGDRDFDAO(LGDDAO dao, ITagMapper tagMapper, ILGDVocab vocab)
+	public LGDRDFDAO(LGDDAO dao, ITagMapper tagMapper, ILGDVocab vocab, SparqlEndpoint sparqlEndpoint)
 		throws SQLException
 	{
 		this.dao = dao;
@@ -82,6 +105,8 @@ public class LGDRDFDAO
 		
 		this.nodeTransformer = new SimpleNodeToRDFTransformer(tagMapper, vocab);
 		this.wayTransformer = new SimpleWayToRDFTransformer(tagMapper, vocab);
+		
+		this.sparqlEndpoint = sparqlEndpoint;
 	}
 	
 	
@@ -143,8 +168,22 @@ public class LGDRDFDAO
 		
 		MultiMap<Long, Long> members = dao.getNodeDAO().getWayMemberships(subIds);
 		writeNodeWays(model, members);
+
+		
+		
+		Collection<Resource> resources = new ArrayList<Resource>();
+		for(long id : ids) {
+			resources.add(vocab.createNIRNodeURI(id));
+		}
+		constructModelBySubjects(resources, model);
+
 		
 		return subIds.size();
+	}
+	
+	Model constructModelBySubjects(Collection<Resource> subjects, Model model)
+	{
+		return CannedQueries.execConstructBySubjects(sparqlEndpoint, model, subjects);
 	}
 	
 	
@@ -166,6 +205,14 @@ public class LGDRDFDAO
 	
 		//writeWayNodes(model, members);
 
+		
+		Collection<Resource> resources = new ArrayList<Resource>();
+		for(long id : ids) {
+			resources.add(vocab.createNIRNodeURI(id));
+		}
+		constructModelBySubjects(resources, model);
+		
+		
 		return subIds.size();
 	}
 

@@ -33,8 +33,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.xml.datatype.DatatypeFactory;
-
+import org.aksw.commons.sparql.core.impl.ModelSparqlEndpoint;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
@@ -53,7 +52,6 @@ import org.linkedgeodata.dao.LGDRDFDAO;
 import org.linkedgeodata.dao.TagMapperDAO;
 import org.linkedgeodata.dump.NodeIdIterator;
 import org.linkedgeodata.dump.WayIdIterator;
-import org.linkedgeodata.osm.mapping.CachingTagMapper;
 import org.linkedgeodata.osm.mapping.ITagMapper;
 import org.linkedgeodata.osm.mapping.InMemoryTagMapper;
 import org.linkedgeodata.osm.mapping.TagMappingDB;
@@ -269,7 +267,7 @@ public class LGDDumper
 		LGDDAO innerDao = new LGDDAO(conn);
 		
 		ILGDVocab vocab = new LGDVocab();
-		LGDRDFDAO dao = new LGDRDFDAO(innerDao, tagMapper, vocab);
+		LGDRDFDAO dao = new LGDRDFDAO(innerDao, tagMapper, vocab, new ModelSparqlEndpoint());
 		
 		logger.info("Opening output stream: " + outFileName);
 		OutputStream out = new FileOutputStream(outFileName);

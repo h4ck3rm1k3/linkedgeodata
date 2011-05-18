@@ -9,10 +9,16 @@ import org.apache.commons.lang.NotImplementedException;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.sparql.algebra.Op;
 import com.hp.hpl.jena.sparql.algebra.op.OpFilter;
+import com.hp.hpl.jena.sparql.algebra.op.OpGroup;
 import com.hp.hpl.jena.sparql.algebra.op.OpJoin;
 import com.hp.hpl.jena.sparql.algebra.op.OpLeftJoin;
+import com.hp.hpl.jena.sparql.algebra.op.OpMinus;
+import com.hp.hpl.jena.sparql.algebra.op.OpOrder;
 import com.hp.hpl.jena.sparql.algebra.op.OpQuadPattern;
 import com.hp.hpl.jena.sparql.algebra.op.OpSequence;
+import com.hp.hpl.jena.sparql.algebra.op.OpService;
+import com.hp.hpl.jena.sparql.algebra.op.OpSlice;
+import com.hp.hpl.jena.sparql.algebra.op.OpTable;
 import com.hp.hpl.jena.sparql.algebra.op.OpUnion;
 import com.hp.hpl.jena.sparql.core.Quad;
 import com.hp.hpl.jena.sparql.core.Var;
@@ -38,7 +44,7 @@ public class PatternUtils
 			collectQuads(x.getLeft(), result);
 			collectQuads(x.getRight(), result);
 		} else if(op instanceof OpUnion) {
-			System.out.println("Warning: Collecting expressions from unions. Since the same vars may appear within different (parts of) unions, it may be ambiguous to which part the expression refers.");
+			//System.out.println("Warning: Collecting expressions from unions. Since the same vars may appear within different (parts of) unions, it may be ambiguous to which part the expression refers.");
 	
 			OpUnion x = (OpUnion)op;
 	
@@ -52,6 +58,30 @@ public class PatternUtils
 			for(Op element : x.getElements()) {
 				collectQuads(element, result);
 			}			
+		} else if(op instanceof OpTable) {
+			OpTable x = (OpTable)op;
+		} else if(op instanceof OpOrder) {
+			OpOrder x = (OpOrder)op;
+			collectQuads(x.getSubOp(), result);
+		} else if(op instanceof OpMinus) {
+			OpMinus x = (OpMinus)op;
+			
+			collectQuads(x.getLeft(), result);
+			collectQuads(x.getRight(), result);
+		} else if(op instanceof OpGroup) {
+			OpGroup x = (OpGroup)op;
+			
+			collectQuads(x.getSubOp(), result);
+		} else if(op instanceof OpSlice) {
+			OpSlice x = (OpSlice)op;
+			
+			collectQuads(x.getSubOp(), result);
+		} else if(op instanceof OpService) {
+			OpService x = (OpService)op;
+			
+			System.err.println("Ignoring service op");
+			
+			//collectQuads(x.getSubOp(), result);
 		} else {
 			throw new NotImplementedException("Encountered class: " + op);
 		}

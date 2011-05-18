@@ -38,6 +38,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.aksw.commons.sparql.core.impl.ModelSparqlEndpoint;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.ini4j.Ini;
@@ -171,7 +172,7 @@ public class NodeStatsDAO
 		
 		TagMapperDAO tagMapper = new TagMapperDAO();
 		LGDDAO lgdDAO = new LGDDAO(conn);
-		LGDRDFDAO dao = new LGDRDFDAO(lgdDAO, tagMapper, new LGDVocab());
+		LGDRDFDAO dao = new LGDRDFDAO(lgdDAO, tagMapper, new LGDVocab(), new ModelSparqlEndpoint());
 
 		OntologyDAO ontologyDAO = new OntologyDAO(tagMapper, conn);
 		TagFilterUtils filterUtil = new TagFilterUtils(ontologyDAO);

@@ -1,5 +1,7 @@
 package org.linkedgeodata.core;
 
+import java.awt.geom.RectangularShape;
+
 import org.apache.commons.lang.NotImplementedException;
 import org.openstreetmap.osmosis.core.domain.v0_6.Entity;
 
@@ -131,6 +133,20 @@ public class DeprecatedLGDVocab
 
 	@Override
 	public Resource createContributorURI(int userId)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Resource resourceForArea(RectangularShape shape)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Entity createEntity(Resource res)
 	{
 		// TODO Auto-generated method stub
 		return null;

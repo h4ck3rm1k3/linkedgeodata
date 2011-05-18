@@ -1,0 +1,633 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix lgdo: <http://linkedgeodata.org/ontology/> .
+@prefix wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+lgdo:Alcohol
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/shop/alcohol.svg> .
+
+lgdo:Amenitysurvey_point
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/amenity/survey_point.svg> .
+
+lgdo:Archery
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/sport/archery.svg> .
+
+lgdo:Bakery
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/shop/bakery.svg> .
+
+lgdo:BarrierCattleGrid
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/barrier/cattle_grid.svg> .
+
+lgdo:BarrierEntrance
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/barrier/entrance.svg> .
+
+lgdo:BarrierGate
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/barrier/gate.svg> .
+
+lgdo:BarrierKissingGate
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/barrier/kissing_gate.svg> .
+
+lgdo:BarrierStile
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/barrier/stile.svg> .
+
+lgdo:BarrierTollBooth
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/barrier/toll_booth.svg> .
+
+lgdo:Barrierblocks
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/barrier/blocks.svg> .
+
+lgdo:Barrierexit
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/barrier/exit.svg> .
+
+lgdo:Barriersteps
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/barrier/steps.svg> .
+
+lgdo:Baseball
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/sport/baseball.svg> .
+
+lgdo:Bench
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/amenity/bench.svg> .
+
+lgdo:BicycleShop
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/shop/bicycle.svg> .
+
+lgdo:Bollard
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/barrier/bollard.svg> .
+
+lgdo:Book
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/shop/book.svg> .
+
+lgdo:Butcher
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/shop/butcher.svg> .
+
+lgdo:Canoe
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/sport/canoe.svg> .
+
+lgdo:Car
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/shop/car.svg> .
+
+lgdo:CarRepairShop
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/shop/car_repair.svg> .
+
+lgdo:City
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/place/city.svg> .
+
+lgdo:Clothes
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/shop/clothes.svg> .
+
+lgdo:Computer
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/shop/computer.svg> .
+
+lgdo:Confectionery
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/shop/confectionery.svg> .
+
+lgdo:Convenience
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/shop/convenience.svg> .
+
+lgdo:Copyshop
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/shop/copyshop.svg> .
+
+lgdo:Cricket
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/sport/cricket.svg> .
+
+lgdo:CycleBarrier
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/barrier/cycle_barrier.svg> .
+
+lgdo:DepartmentStore
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/shop/department_store.svg> .
+
+lgdo:Diy
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/shop/diy.svg> .
+
+lgdo:Fish
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/shop/fish.svg> .
+
+lgdo:FloristShop
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/shop/florist.svg> .
+
+lgdo:Fountain
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/amenity/fountain.svg> .
+
+lgdo:GardenCentre
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/shop/garden_centre.svg> .
+
+lgdo:Gift
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/shop/gift.svg> .
+
+lgdo:Golf
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/sport/golf.svg> .
+
+lgdo:Grass
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/landuse/grass.svg> .
+
+lgdo:Greengrocer
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/shop/greengrocer.svg> .
+
+lgdo:HairdresserShop
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/shop/hairdresser.svg> .
+
+lgdo:Hamlet
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/place/hamlet.svg> .
+
+lgdo:HearingAids
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/shop/hearing_aids.svg> .
+
+lgdo:Hifi
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/shop/hifi.svg> .
+
+lgdo:HorseRacing
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/sport/horse_racing.svg> .
+
+lgdo:Jewelry
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/shop/jewelry.svg> .
+
+lgdo:Kiosk
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/shop/kiosk.svg> .
+
+lgdo:Landusequary
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/landuse/quary.svg> .
+
+lgdo:Landusescrub
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/landuse/scrub.svg> .
+
+lgdo:Library
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/amenity/library.svg> .
+
+lgdo:LiftGate
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/barrier/lift_gate.svg> .
+
+lgdo:MobilePhone
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/shop/mobile_phone.svg> .
+
+lgdo:Motorcycle
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/shop/motorcycle.svg> .
+
+lgdo:Music
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/shop/music.svg> .
+
+lgdo:Pet
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/shop/pet.svg> .
+
+lgdo:Photo
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/shop/photo.svg> .
+
+lgdo:Playground
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/amenity/playground.svg> .
+
+lgdo:Police
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/amenity/police.svg> .
+
+lgdo:PostBox
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/amenity/post_box.svg> .
+
+lgdo:PostOffice
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/amenity/post_office.svg> .
+
+lgdo:Prison
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/amenity/prison.svg> .
+
+lgdo:PublicBuilding
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/amenity/public_building.svg> .
+
+lgdo:Recycling
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/amenity/recycling.svg> .
+
+lgdo:Sailing
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/sport/sailing.svg> .
+
+lgdo:Shooting
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/sport/shooting.svg> .
+
+lgdo:Shopmarketplace
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/shop/marketplace.svg> .
+
+lgdo:Shopnewspaper
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/shop/newspaper.svg> .
+
+lgdo:Shoptackle
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/shop/tackle.svg> .
+
+lgdo:Snooker
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/sport/snooker.svg> .
+
+lgdo:Soccer
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/sport/soccer.svg> .
+
+lgdo:SportGym
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/sport/gym.svg> .
+
+lgdo:Sportdiving
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/sport/diving.svg> .
+
+lgdo:Sportgymnasium
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/sport/gymnasium.svg> .
+
+lgdo:Sporticeskating
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/sport/iceskating.svg> .
+
+lgdo:Sportstadium
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/sport/stadium.svg> .
+
+lgdo:Substation
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/power/substation.svg> .
+
+lgdo:Suburb
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/place/suburb.svg> .
+
+lgdo:Supermarket
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/shop/supermarket.svg> .
+
+lgdo:Telephone
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/amenity/telephone.svg> .
+
+lgdo:Tennis
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/sport/tennis.svg> .
+
+lgdo:Tobacco
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/shop/tobacco.svg> .
+
+lgdo:Toilets
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/amenity/toilets.svg> .
+
+lgdo:Town
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/place/town.svg> .
+
+lgdo:Toys
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/shop/toys.svg> .
+
+lgdo:Transformer
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/power/transformer.svg> .
+
+lgdo:VideoRental
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/shop/video_rental.svg> .
+
+lgdo:Village
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/place/village.svg> .
+
+lgdo:Windsurfing
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/sport/windsurfing.svg> .
+
+lgdo:schemaIcon
+    a owl:AnnotationProperty .
+
+lgdo:unknown
+    lgdo:schemaIcon <http://linkedgeodata.org/resource/icon/sjjb/denomination/unknown.svg> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/amenity/bench.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/amenity/fountain.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/amenity/library.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/amenity/playground.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/amenity/police.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/amenity/post_box.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/amenity/post_office.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/amenity/prison.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/amenity/public_building.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/amenity/recycling.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/amenity/survey_point.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/amenity/telephone.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/amenity/toilets.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/barrier/blocks.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/barrier/bollard.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/barrier/cattle_grid.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/barrier/cycle_barrier.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/barrier/entrance.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/barrier/exit.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/barrier/gate.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/barrier/kissing_gate.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/barrier/lift_gate.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/barrier/steps.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/barrier/stile.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/barrier/toll_booth.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/denomination/unknown.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/landuse/grass.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/landuse/quary.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/landuse/scrub.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/place/city.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/place/hamlet.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/place/suburb.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/place/town.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/place/village.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/power/substation.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/power/transformer.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/shop/alcohol.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/shop/bakery.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/shop/bicycle.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/shop/book.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/shop/butcher.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/shop/car.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/shop/car_repair.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/shop/clothes.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/shop/computer.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/shop/confectionery.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/shop/convenience.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/shop/copyshop.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/shop/department_store.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/shop/diy.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/shop/fish.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/shop/florist.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/shop/garden_centre.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/shop/gift.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/shop/greengrocer.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/shop/hairdresser.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/shop/hearing_aids.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/shop/hifi.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/shop/jewelry.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/shop/kiosk.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/shop/marketplace.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/shop/mobile_phone.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/shop/motorcycle.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/shop/music.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/shop/newspaper.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/shop/pet.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/shop/photo.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/shop/supermarket.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/shop/tackle.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/shop/tobacco.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/shop/toys.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/shop/video_rental.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/sport/archery.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/sport/baseball.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/sport/canoe.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/sport/cricket.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/sport/diving.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/sport/golf.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/sport/gym.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/sport/gymnasium.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/sport/horse_racing.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/sport/iceskating.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/sport/sailing.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/sport/shooting.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/sport/snooker.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/sport/soccer.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/sport/stadium.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/sport/tennis.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .
+
+<http://linkedgeodata.org/resource/icon/sjjb/sport/windsurfing.svg>
+    dcterms:source <http://www.sjjb.co.uk/mapicons/> ;
+    dcterms:type <http://purl.org/dc/dcmitype/Image> .

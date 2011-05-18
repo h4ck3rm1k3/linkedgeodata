@@ -34,6 +34,32 @@ Select ?s From <http://linkedgeodata.org> {
 	Filter(!Bound(?s)) .
 }
 
+#Find instances of node that only have a position
+Prefix lgdo:<http://linkedgeodata.org/ontology/>
+Select ?s From <http://linkedgeodata.org>
+{
+    ?s a lgdo:Node .
+    ?s geo:geometry ?g .
+    Optional {
+        ?s ?p ?o .
+        Filter(?p != rdf:type && ?p != geo:geometry) .
+    }
+    Filter(!Bound(?p)) .
+}
+
+
+#Find sequences without ways
+Prefix lgdo:<http://linkedgeodata.org/ontology/>
+Select ?s From <http://linkedgeodata.org>
+{
+    ?s a rdf:Seq .
+    Optional {
+        ?x lgdo:hasNodes ?s .
+    }
+    Filter(!Bound(?x)) .
+}
+
+
 
 # Find dangling nodes
 # These are nodes without relevant tags that are not referenced by ways

@@ -1,8 +1,10 @@
 package org.linkedgeodata.util.tiles;
 
 import java.awt.Point;
-import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.awt.geom.RectangularShape;
+import java.util.NavigableSet;
+import java.util.TreeSet;
 
 
 
@@ -63,6 +65,58 @@ public class TileUtil
 		System.out.println("inter = " + zip(new Point(0, 3)));
 		System.out.println("inter = " + zip(new Point(2, 3)));
 		*/
+	}
+	
+	/**
+	 * Normalizes a longitude value in the range [-180 .. 180] to [0 .. 1] 
+	 *
+	 * @param unknown_type $lon
+	 * @return unknown
+	 */
+	/*
+	public static double lonNormX(double lon)
+	{
+		return (lon + 180.0) / 360.0;
+	}
+	 */
+	/**
+	 * Normalizes a latitude value in the range [-90 .. 90] to [0 .. 1]
+	 *
+	 * @param unknown_type $lon
+	 * @return unknown
+	 */
+	/*
+	public static double latNormY(double lat)
+	{
+		return (lat + 90.0) / 180.0;
+	}
+	*/
+	/*
+	public static Point llToXY(double lon, double lat, int zoom)
+	{
+		double f = Math.pow(2, zoom) - 1;
+
+		int x = (int)Math.round(lonNormX(lon) * f);
+		int y = (int)Math.round(latNormY(lat) * f);
+		
+		return new Point(x, y);
+	}*/
+	
+	// lat = y, lon = x
+	public static NavigableSet<TileInfo> tilesForArea(RectangularShape rect, int zoom)
+	{
+		// Transform the given geo-coordinates into tile coordinates.
+		Point min = llToXY(rect.getMinX(), rect.getMinY(), zoom);
+		Point max = llToXY(rect.getMaxX(), rect.getMaxY(), zoom);
+
+		NavigableSet<TileInfo> result = new TreeSet<TileInfo>();
+
+		for(int x = min.x; x <= max.x; x++) {
+			for(int y = min.y; y <= max.y; y++) {
+				result.add(new TileInfo(x, y));
+			}
+		}
+		return result;
 	}
 	
 	

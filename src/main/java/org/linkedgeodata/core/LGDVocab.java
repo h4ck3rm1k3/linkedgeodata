@@ -20,11 +20,15 @@
  */
 package org.linkedgeodata.core;
 
+import java.awt.geom.RectangularShape;
+import java.util.Date;
+
+import org.openstreetmap.osmosis.core.domain.v0_6.CommonEntityData;
 import org.openstreetmap.osmosis.core.domain.v0_6.Entity;
 import org.openstreetmap.osmosis.core.domain.v0_6.Node;
+import org.openstreetmap.osmosis.core.domain.v0_6.OsmUser;
 import org.openstreetmap.osmosis.core.domain.v0_6.Way;
 
-import com.hp.hpl.jena.query.DatasetFactory;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
@@ -175,5 +179,25 @@ public class LGDVocab
 	public Resource createContributorURI(int userId)
 	{
 		return ResourceFactory.createResource(USER + userId);
+	}
+
+	@Override
+	public Resource resourceForArea(RectangularShape shape)
+	{
+		return ResourceFactory.createResource(NS + "area/" + shape.getMinY() + "-" + shape.getMaxY() + "/" + shape.getMinX() + "-" + shape.getMaxX());
+	}
+
+	@Override
+	public Entity createEntity(Resource res)
+	{
+		if(res.toString().startsWith(NODE)) {
+			String idStr = res.toString().substring(NODE.length());
+			Long id = Long.parseLong(idStr);
+			
+			CommonEntityData data = new CommonEntityData(id, 0, new Date(), new OsmUser(0, ""), 0);
+			return new Node(data, 0.0, 0.0);
+		}
+
+		return null;
 	}
 }
