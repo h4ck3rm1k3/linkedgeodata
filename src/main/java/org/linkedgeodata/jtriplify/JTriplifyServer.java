@@ -1243,7 +1243,7 @@ public class JTriplifyServer
 		defaultGraphNames.add("http://linkedgeodata.org/110406/geonames");
 		
 		
-		SparqlEndpoint sparqlEndpoint = new HttpSparqlEndpoint("http://linkedgeodata.org/sparql");
+		SparqlEndpoint sparqlEndpoint = new HttpSparqlEndpoint("http://linkedgeodata.org/sparql", defaultGraphNames);
 		LGDRDFDAO dao = new LGDRDFDAO(innerDAO, tagMapper, vocab, sparqlEndpoint);
 
 		

@@ -52,7 +52,8 @@ class CannedQueries {
         String filterStr = Joiner.on("> || ?s = <").join(subjects);
 
         String queryStr =
-                "Construct { ?s ?p ?o . } { ?s ?p ?o . Filter(?s = <" + filterStr + "> ) . }";
+                "Construct { ?s ?p ?o . } From <http://linkedgeodata.org/110406/dbpedia> From <http://linkedgeodata.org/110406/geonames> { ?s ?p ?o . Filter(?s = <" + filterStr + "> ) . }";
+        //          "Construct { ?s ?p ?o . } { ?s ?p ?o . Filter(?s = <" + filterStr + "> ) . }";
 
         //Query query = new Query();
         //QueryFactory.parse(query, queryStr, null, Syntax.syntaxSPARQL);
