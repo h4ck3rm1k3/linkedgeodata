@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.net.URLConnection;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Collection;
@@ -16,10 +17,18 @@ import org.apache.commons.collections15.multimap.MultiHashMap;
 
 public class URIUtil
 {
-	public static void download(URL url, File file)
+	public static void download(URL url, File file, String userAgent)
 		throws IOException
 	{
-		InputStream in = url.openStream();
+		URLConnection conn = url.openConnection();
+		
+		if(userAgent != null) {
+			conn.setRequestProperty("User-Agent", userAgent);
+		}
+		
+		InputStream in = conn.getInputStream();
+		
+		
 		FileOutputStream out = new FileOutputStream(file);
 		
 		StreamUtil.copyThenClose(in, out);

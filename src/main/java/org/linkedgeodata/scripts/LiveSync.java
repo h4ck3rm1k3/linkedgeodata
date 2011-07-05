@@ -529,6 +529,11 @@ public class LiveSync
 	}
 
 
+	
+	long lastRequest = 0;
+	// Delay requests for 3000
+	int delay = 3000;
+	
 	private void advance(long id) throws IOException
 	{
 		URL sourceURL = new URL(config.get("baseUrl") + "/" + getFragment(id)
@@ -536,22 +541,48 @@ public class LiveSync
 		File targetFile = new File(config.get("osmReplicationConfigPath")
 				+ "/state.txt");
 
+		
+		long waitTime;
+		do {
+			long now = System.currentTimeMillis();
+			long delta = now - lastRequest;
+			
+			waitTime = Math.max(delay - delta, 0);
+
+			doWait(waitTime);
+		} while(waitTime != 0);
+	
+
 		while(true) {
 			try {
-				URIUtil.download(sourceURL, targetFile);
+				// Set last request already here, so that in case something goes wrong
+				// we still avoid flooding with requests
+				lastRequest = System.currentTimeMillis();
+				URIUtil.download(sourceURL, targetFile, "http://linkedgeodata.org");
+				lastRequest = System.currentTimeMillis();
 				break;
 			} catch(FileNotFoundException e) {
-				logger.info("Statefile " + sourceURL + " not found. Retrying in 60 seconds.");
-				
-				try {
-					Thread.sleep(60 * 1000);
-				} catch(InterruptedException f) {
-					logger.warn("Sleep interrupted", f);
-				}
+				logger.info("Statefile " + sourceURL + " not found. Retrying in 60 seconds.");				
+			} catch(Exception e) {
+				logger.warn("An exception occurred, Retrying in 60 seconds: ", e);
 			}
+			
+			doWait(60 * 1000);
 		}
 	}
 
+	private void doWait(long ms) {
+		if(ms == 0) {
+			return;
+		}
+		
+		try {
+			Thread.sleep(ms);
+		} catch(InterruptedException f) {
+			logger.warn("Sleep interrupted", f);
+		}
+	}
+	
 	private void applyDiff(IDiff<Model> diff) throws Exception
 	{
 		deltaGraph.commit();
@@ -657,7 +688,7 @@ public class LiveSync
 		URL url = getChangeSetURL(id);
 		File file = new File(config.get("tmpPath") + ".diff.osc.gz");
 
-		URIUtil.download(url, file);
+		URIUtil.download(url, file, "http://linkedgeodata.org");
 
 		return file;
 	}
