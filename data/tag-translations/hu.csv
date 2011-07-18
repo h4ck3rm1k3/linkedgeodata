@@ -1,0 +1,420 @@
+amenity	airport	hu	Repülőtér
+amenity	arts_centre	hu	Művészeti központ
+amenity	atm	hu	Bankautomata
+amenity	auditorium	hu	Auditórium
+amenity	bank	hu	Bank
+amenity	bar	hu	Bár
+amenity	bench	hu	Pad
+amenity	bicycle_parking	hu	Kerékpártároló
+amenity	bicycle_rental	hu	Kerékpárkölcsönző
+amenity	brothel	hu	Bordélyház
+amenity	bureau_de_change	hu	Pénzváltó
+amenity	bus_station	hu	Autóbusz-állomás
+amenity	cafe	hu	Kávézó
+amenity	car_rental	hu	Autókölcsönző
+amenity	car_sharing	hu	Autómegosztás
+amenity	car_wash	hu	Autómosó
+amenity	casino	hu	Kaszinó
+amenity	cinema	hu	Mozi
+amenity	clinic	hu	Klinika
+amenity	club	hu	Klub
+amenity	college	hu	Főiskola
+amenity	community_centre	hu	Művelődési központ
+amenity	courthouse	hu	Bíróság
+amenity	crematorium	hu	Krematórium
+amenity	dentist	hu	Fogorvos
+amenity	doctors	hu	Orvosi rendelő
+amenity	dormitory	hu	Kollégium
+amenity	drinking_water	hu	Ivóvíz
+amenity	driving_school	hu	Autósiskola
+amenity	embassy	hu	Nagykövetség
+amenity	emergency_phone	hu	Segélyhívó
+amenity	fast_food	hu	Gyorsétterem
+amenity	ferry_terminal	hu	Kompkikötő
+amenity	fire_hydrant	hu	Tűzcsap
+amenity	fire_station	hu	Tűzoltóság
+amenity	fountain	hu	Szökőkút
+amenity	fuel	hu	Benzinkút
+amenity	grave_yard	hu	Kis temető
+amenity	gym	hu	Fitness- / Tornaterem
+amenity	hall	hu	Csarnok
+amenity	health_centre	hu	Egészségügyi központ
+amenity	hospital	hu	Kórház
+amenity	hotel	hu	Szálloda
+amenity	hunting_stand	hu	Magasles
+amenity	ice_cream	hu	Jégkrém
+amenity	kindergarten	hu	Óvoda
+amenity	library	hu	Könyvtár
+amenity	market	hu	Piac
+amenity	marketplace	hu	Vásártér
+amenity	mountain_rescue	hu	Hegyimentők
+amenity	nightclub	hu	Éjszakai bár
+amenity	nursery	hu	Óvoda
+amenity	nursing_home	hu	Idősek otthona
+amenity	office	hu	Iroda
+amenity	park	hu	Park
+amenity	parking	hu	Parkoló
+amenity	pharmacy	hu	Gyógyszertár
+amenity	place_of_worship	hu	Vallási hely
+amenity	police	hu	Rendőrség
+amenity	post_box	hu	Postaláda
+amenity	post_office	hu	Posta
+amenity	preschool	hu	Óvoda
+amenity	prison	hu	Börtön
+amenity	pub	hu	Kocsma
+amenity	public_building	hu	Középület
+amenity	public_market	hu	Piac
+amenity	reception_area	hu	Recepció
+amenity	recycling	hu	Szelektív hulladékgyűjtő
+amenity	restaurant	hu	Étterem
+amenity	retirement_home	hu	Nyugdíjasotthon
+amenity	sauna	hu	Szauna
+amenity	school	hu	Iskola
+amenity	shelter	hu	Esőház
+amenity	shop	hu	Bolt
+amenity	shopping	hu	Bevásárlás
+amenity	social_club	hu	Társasági klub
+amenity	studio	hu	Stúdió
+amenity	supermarket	hu	Szupermarket
+amenity	taxi	hu	Taxi
+amenity	telephone	hu	Nyilvános telefon
+amenity	theatre	hu	Színház
+amenity	toilets	hu	WC
+amenity	townhall	hu	Városháza
+amenity	university	hu	Egyetem
+amenity	vending_machine	hu	Árusító automata
+amenity	veterinary	hu	Állatorvosi rendelő
+amenity	village_hall	hu	Községháza
+amenity	waste_basket	hu	Szemétgyűjtő kosár
+amenity	wifi	hu	WiFi hozzáférés
+amenity	youth_centre	hu	Ifjúsági központ
+boundary	administrative	hu	Közigazgatási határ
+building	apartments	hu	Társasház
+building	block	hu	Háztömb
+building	bunker	hu	Bunker
+building	chapel	hu	Kápolna
+building	church	hu	Templom
+building	city_hall	hu	Városháza
+building	commercial	hu	Kereskedelmi épület
+building	dormitory	hu	Kollégium
+building	entrance	hu	Épületbejárat
+building	faculty	hu	Egyetemi épület
+building	farm	hu	Tanyaépület
+building	flats	hu	Lakások
+building	garage	hu	Garázs
+building	hall	hu	Csarnok
+building	hospital	hu	Kórházépület
+building	hotel	hu	Szálloda
+building	house	hu	Ház
+building	industrial	hu	Ipari épület
+building	office	hu	Irodaház
+building	public	hu	Középület
+building	residential	hu	Lakóház
+building	retail	hu	Kereskedelmi épület
+building	school	hu	Iskolaépület
+building	shop	hu	Bolt
+building	stadium	hu	Stadion
+building	store	hu	Áruház
+building	terrace	hu	Sorház
+building	tower	hu	Torony
+building	train_station	hu	Vasútállomás
+building	university	hu	Egyetemi épület
+highway	bridleway	hu	Lovaglóút
+highway	bus_guideway	hu	Buszsín
+highway	bus_stop	hu	Buszmegálló
+highway	byway	hu	Kiépítetlen ösvény
+highway	construction	hu	Építés alatt álló közút
+highway	cycleway	hu	Kerékpárút
+highway	distance_marker	hu	Távolságjelölő
+highway	emergency_access_point	hu	Vészhelyzeti hozzáférési pont
+highway	footway	hu	Gyalogút
+highway	ford	hu	Gázló
+highway	gate	hu	Kapu
+highway	living_street	hu	Pihenőút
+highway	minor	hu	Alárendelt út
+highway	motorway	hu	Autópálya
+highway	motorway_junction	hu	Autópálya-csomópont
+highway	motorway_link	hu	Autópálya
+highway	path	hu	Ösvény
+highway	pedestrian	hu	Sétálóutca
+highway	platform	hu	Peron
+highway	primary	hu	Főút
+highway	primary_link	hu	Főút
+highway	raceway	hu	Versenypálya
+highway	residential	hu	Lakóövezeti út
+highway	road	hu	Út
+highway	secondary	hu	Összekötő út
+highway	secondary_link	hu	Összekötő út
+highway	service	hu	Szervizút
+highway	services	hu	Autópálya-pihenőhely
+highway	steps	hu	Lépcső
+highway	stile	hu	Lépcsős átjáró
+highway	tertiary	hu	Bekötőút
+highway	track	hu	Földút
+highway	trail	hu	Túraút
+highway	trunk	hu	Autóút
+highway	trunk_link	hu	Autóút
+highway	unclassified	hu	Egyéb út
+highway	unsurfaced	hu	Burkolatlan út
+historic	archaeological_site	hu	Régészeti lelőhely
+historic	battlefield	hu	Csatamező
+historic	boundary_stone	hu	Határkő
+historic	building	hu	Épület
+historic	castle	hu	Vár
+historic	church	hu	Templom
+historic	house	hu	Ház
+historic	icon	hu	Ikon
+historic	manor	hu	Majorság
+historic	memorial	hu	Emlékmű
+historic	mine	hu	Bánya
+historic	monument	hu	Műemlék
+historic	museum	hu	Múzeum
+historic	ruins	hu	Rom
+historic	tower	hu	Torony
+historic	wayside_cross	hu	Útszéli kereszt
+historic	wayside_shrine	hu	Útszéli kegyhely
+historic	wreck	hu	Hajóroncs
+landuse	allotments	hu	Kert
+landuse	basin	hu	Medence
+landuse	brownfield	hu	Barnamező
+landuse	cemetery	hu	Temető
+landuse	commercial	hu	Irodaterület
+landuse	conservation	hu	Védelmi terület
+landuse	construction	hu	Építési terület
+landuse	farm	hu	Tanya
+landuse	farmland	hu	Mezőgazdasági terület
+landuse	farmyard	hu	Tanya épületei
+landuse	forest	hu	Erdő
+landuse	grass	hu	Füves terület
+landuse	greenfield	hu	Zöldmező
+landuse	industrial	hu	Ipari terület
+landuse	landfill	hu	Hulladéklerakó
+landuse	meadow	hu	Rét
+landuse	military	hu	Katonai terület
+landuse	mine	hu	Bánya
+landuse	mountain	hu	Hegy
+landuse	nature_reserve	hu	Természetvédelmi terület
+landuse	park	hu	Park
+landuse	piste	hu	Sípálya
+landuse	plaza	hu	Tér
+landuse	quarry	hu	Kőfejtő
+landuse	railway	hu	Vasúti terület
+landuse	recreation_ground	hu	Szabadidőpark
+landuse	reservoir	hu	Víztározó
+landuse	residential	hu	Lakóövezet
+landuse	retail	hu	Kereskedelmi terület
+landuse	village_green	hu	Közös mező
+landuse	vineyard	hu	Szőlős
+landuse	wetland	hu	Láp
+landuse	wood	hu	Erdő
+leisure	beach_resort	hu	Tengerparti üdülőhely
+leisure	common	hu	Közös terület
+leisure	fishing	hu	Horgászterület
+leisure	garden	hu	Kert
+leisure	golf_course	hu	Golfpálya
+leisure	ice_rink	hu	Műjégpálya
+leisure	marina	hu	Kishajókikötő
+leisure	miniature_golf	hu	Minigolfpálya
+leisure	nature_reserve	hu	Természetvédelmi terület
+leisure	park	hu	Park
+leisure	pitch	hu	Labdarúgópálya
+leisure	playground	hu	Játszótér
+leisure	recreation_ground	hu	Szabadidőpark
+leisure	slipway	hu	Sólya
+leisure	sports_centre	hu	Sportközpont
+leisure	stadium	hu	Stadion
+leisure	swimming_pool	hu	Uszoda
+leisure	track	hu	Futópálya
+leisure	water_park	hu	Vízipark
+natural	bay	hu	Öböl
+natural	beach	hu	Part
+natural	cape	hu	Partfok
+natural	cave_entrance	hu	Barlangbejárat
+natural	channel	hu	Csatorna
+natural	cliff	hu	Szikla
+natural	coastline	hu	Tengerpart
+natural	crater	hu	Kráter
+natural	feature	hu	Tereptárgy
+natural	fell	hu	Kopár
+natural	fjord	hu	Fjord
+natural	geyser	hu	Gejzír
+natural	glacier	hu	Gleccser
+natural	heath	hu	Puszta
+natural	hill	hu	Domb
+natural	island	hu	Sziget
+natural	land	hu	Szárazföld
+natural	marsh	hu	Mocsár
+natural	moor	hu	Mocsár
+natural	mud	hu	Iszap
+natural	peak	hu	Hegycsúcs
+natural	point	hu	Pont
+natural	reef	hu	Zátony
+natural	ridge	hu	Hegygerinc
+natural	river	hu	Folyó
+natural	rock	hu	Szikla
+natural	scree	hu	Sziklatörmelék
+natural	scrub	hu	Cserjés
+natural	shoal	hu	Zátony
+natural	spring	hu	Forrás
+natural	strait	hu	Tengerszoros
+natural	tree	hu	Fa
+natural	valley	hu	Völgy
+natural	volcano	hu	Vulkán
+natural	water	hu	Tó
+natural	wetland	hu	Láp
+natural	wetlands	hu	Láp
+natural	wood	hu	Erdő
+place	airport	hu	Repülőtér
+place	city	hu	Nagyváros
+place	country	hu	Ország
+place	county	hu	Megye
+place	farm	hu	Tanya
+place	hamlet	hu	Község
+place	house	hu	Ház
+place	houses	hu	Házak
+place	island	hu	Sziget
+place	islet	hu	Kis sziget
+place	locality	hu	Hely
+place	moor	hu	Mocsár
+place	municipality	hu	Település
+place	postcode	hu	Irányítószám
+place	region	hu	Régió
+place	sea	hu	Tenger
+place	state	hu	Állam
+place	subdivision	hu	Településrész
+place	suburb	hu	Városrész
+place	town	hu	Város
+place	unincorporated_area	hu	Jogi személyiséggel nem rendelkező terület
+place	village	hu	Nagyközség
+railway	abandoned	hu	Felhagyott vasút
+railway	construction	hu	Építés alatt álló vasút
+railway	disused	hu	Használaton kívüli vasút
+railway	disused_station	hu	Használaton kívüli vasútállomás
+railway	funicular	hu	Siklóvasút
+railway	halt	hu	Vasúti megállóhely
+railway	historic_station	hu	Történelmi vasútállomás
+railway	junction	hu	Vasúti csomópont
+railway	level_crossing	hu	Vasúti átjáró
+railway	light_rail	hu	HÉV
+railway	monorail	hu	Egysínű vasút
+railway	narrow_gauge	hu	Keskeny nyomközű vasút
+railway	platform	hu	Vasúti peron
+railway	preserved	hu	Megőrzött vasút
+railway	spur	hu	Vasúti szárnyvonal
+railway	station	hu	Vasútállomás
+railway	subway	hu	Metróállomás
+railway	subway_entrance	hu	Metrókijárat
+railway	switch	hu	Vasúti váltó
+railway	tram	hu	Villamos
+railway	tram_stop	hu	Villamosmegálló
+railway	yard	hu	Rendező-pályaudvar
+shop	alcohol	hu	Alkoholos italbolt
+shop	apparel	hu	Ruházati bolt
+shop	art	hu	Művészeti bolt
+shop	bakery	hu	Pékség
+shop	beauty	hu	Szépészeti bolt
+shop	beverages	hu	Italbolt
+shop	bicycle	hu	Kerékpárbolt
+shop	books	hu	Könyvesbolt
+shop	butcher	hu	Hentesbolt
+shop	car	hu	Autókereskedés
+shop	car_dealer	hu	Autókereskedés
+shop	car_parts	hu	Autóalkatrészbolt
+shop	carpet	hu	Szőnyegbolt
+shop	car_repair	hu	Autószerviz
+shop	charity	hu	Adománybolt
+shop	chemist	hu	Vegyipari bolt
+shop	clothes	hu	Ruházati bolt
+shop	computer	hu	Számítástechnikai bolt
+shop	confectionery	hu	Cukrászda
+shop	convenience	hu	Kisbolt
+shop	copyshop	hu	Fénymásoló bolt
+shop	cosmetics	hu	Kozmetikai bolt
+shop	department_store	hu	Áruház
+shop	discount	hu	Diszkontárubolt
+shop	doityourself	hu	Barkácsbolt
+shop	drugstore	hu	Illatszerbolt
+shop	dry_cleaning	hu	Ruhatisztító
+shop	electronics	hu	Elektronikai bolt
+shop	estate_agent	hu	Ingatlankereskedés
+shop	farm	hu	Kertészbolt
+shop	fashion	hu	Divatbolt
+shop	fish	hu	Halbolt
+shop	florist	hu	Virágárus
+shop	food	hu	Élelmiszerbolt
+shop	funeral_directors	hu	Temetkezési vállalkozó
+shop	furniture	hu	Bútorbolt
+shop	gallery	hu	Galéria
+shop	garden_centre	hu	Cserepes virágbolt
+shop	general	hu	Vegyeskereskedés
+shop	gift	hu	Ajándékbolt
+shop	greengrocer	hu	Zöldséges
+shop	grocery	hu	Fűszerbolt
+shop	hairdresser	hu	Fodrászat
+shop	hardware	hu	Szerelési bolt
+shop	hifi	hu	Hi-Fi bolt
+shop	insurance	hu	Biztosító
+shop	jewelry	hu	Ékszerbolt
+shop	kiosk	hu	Trafik
+shop	laundry	hu	Mosoda
+shop	mall	hu	Üzletház
+shop	market	hu	Piac
+shop	mobile_phone	hu	Mobiltelefonbolt
+shop	motorcycle	hu	Motorbolt
+shop	music	hu	Zenebolt
+shop	newsagent	hu	Újságárus
+shop	optician	hu	Látszerész
+shop	organic	hu	Bioélelmiszerbolt
+shop	outdoor	hu	Túrabolt
+shop	pet	hu	Állatkereskedés
+shop	photo	hu	Fotóbolt
+shop	salon	hu	Szalon
+shop	shoes	hu	Cipőbolt
+shop	shopping_centre	hu	Bevásárlóközpont
+shop	sports	hu	Sportbolt
+shop	stationery	hu	Írószerbolt
+shop	supermarket	hu	Szupermarket
+shop	toys	hu	Játékbolt
+shop	travel_agency	hu	Utazási iroda
+shop	video	hu	Videókölcsönző
+shop	wine	hu	Borárusító italbolt
+tourism	alpine_hut	hu	Alpesi kunyhó
+tourism	artwork	hu	Műalkotás
+tourism	attraction	hu	Látnivaló
+tourism	bed_and_breakfast	hu	Vendégház
+tourism	cabin	hu	Kunyhó
+tourism	camp_site	hu	Kemping
+tourism	caravan_site	hu	Lakókocsitábor
+tourism	chalet	hu	Nyaralóház
+tourism	guest_house	hu	Vendégház
+tourism	hostel	hu	Turistaszálló
+tourism	hotel	hu	Szálloda
+tourism	information	hu	Információ
+tourism	lean_to	hu	Kunyhó
+tourism	motel	hu	Motel
+tourism	museum	hu	Múzeum
+tourism	picnic_site	hu	Piknikezőhely
+tourism	theme_park	hu	Vidámpark
+tourism	valley	hu	Völgy
+tourism	viewpoint	hu	Kilátó
+tourism	zoo	hu	Állatkert
+waterway	boatyard	hu	Hajóhangár
+waterway	canal	hu	Csatorna
+waterway	connector	hu	Vízi csatlakozó
+waterway	dam	hu	Gát
+waterway	derelict_canal	hu	Felhagyott csatorna
+waterway	ditch	hu	Árok
+waterway	dock	hu	Kikötő
+waterway	drain	hu	Árok
+waterway	lock	hu	Zsilip
+waterway	lock_gate	hu	Zsilip
+waterway	mineral_spring	hu	Ásványos patak
+waterway	mooring	hu	Kikötő
+waterway	rapids	hu	Zuhatag
+waterway	river	hu	Folyó
+waterway	riverbank	hu	Folyópart
+waterway	stream	hu	Patak
+waterway	wadi	hu	Vádi
+waterway	waterfall	hu	Vízesés
+waterway	water_point	hu	Vízi fordítópont
+waterway	weir	hu	Bukógát

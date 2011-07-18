@@ -1,0 +1,40 @@
+amenity	dentist	sq	Dentist
+amenity	embassy	sq	Ambasada
+amenity	fire_station	sq	Zjarrëfiksat
+amenity	theatre	sq	Teatër
+amenity	university	sq	Universitet
+building	store	sq	Dyqan
+historic	church	sq	Kisha
+historic	museum	sq	Muze
+natural	cave_entrance	sq	Shpella Hyrja
+natural	island	sq	Ishull
+natural	volcano	sq	Vullkan
+natural	water	sq	Ujë
+place	airport	sq	Aeroport
+place	city	sq	Qyteti
+place	country	sq	Veni
+place	farm	sq	Ferma
+place	house	sq	Shtepi
+place	houses	sq	Shtepi
+place	island	sq	Ishull
+place	municipality	sq	Komuna
+place	postcode	sq	Post kodi
+place	region	sq	Regjioni
+place	sea	sq	Deti
+place	state	sq	Shteti
+place	town	sq	Veni
+place	village	sq	Fshati
+shop	bakery	sq	Dyqan buke
+shop	computer	sq	Shitore e kompjuterave
+tourism	artwork	sq	Puna artistike
+tourism	bed_and_breakfast	sq	Bujtin dhe Mengjes
+tourism	cabin	sq	Kabine
+tourism	camp_site	sq	Ven per kamping
+tourism	hostel	sq	Bujtine
+tourism	hotel	sq	Hotel
+tourism	information	sq	Informacione
+tourism	motel	sq	Motel
+tourism	museum	sq	Muze
+tourism	picnic_site	sq	Vend per Piknik
+tourism	valley	sq	Lugine
+tourism	zoo	sq	Kopsht zoologjik

@@ -1,0 +1,417 @@
+amenity	airport	ast	Aeropuertu
+amenity	arts_centre	ast	Centru d'arte
+amenity	atm	ast	Caxeru automáticu
+amenity	auditorium	ast	Auditoriu
+amenity	bank	ast	Bancu
+amenity	bar	ast	Bar
+amenity	bench	ast	Bancu
+amenity	bicycle_parking	ast	Aparcaderu de bicicletes
+amenity	bicycle_rental	ast	Alquiler de bicicletes
+amenity	brothel	ast	Taburdiu
+amenity	bureau_de_change	ast	Troquéu de moneda
+amenity	bus_station	ast	Estación d'autobús
+amenity	cafe	ast	Café
+amenity	car_rental	ast	Alquiler de coches
+amenity	car_sharing	ast	Compartir coche
+amenity	car_wash	ast	Llaváu de coches
+amenity	casino	ast	Casino
+amenity	cinema	ast	Cine
+amenity	clinic	ast	Clínica
+amenity	club	ast	Club
+amenity	college	ast	Colexu universitariu
+amenity	community_centre	ast	Centru comunitariu
+amenity	courthouse	ast	Xulgáu
+amenity	crematorium	ast	Crematoriu
+amenity	dentist	ast	Dentista
+amenity	doctors	ast	Ambulatoriu
+amenity	dormitory	ast	Dormitoriu
+amenity	drinking_water	ast	Agua potable
+amenity	driving_school	ast	Autoescuela
+amenity	embassy	ast	Embaxada
+amenity	emergency_phone	ast	Teléfonu d'emerxencia
+amenity	fast_food	ast	Comida rápida
+amenity	ferry_terminal	ast	Terminal de ferry
+amenity	fire_hydrant	ast	Boca d'incendios
+amenity	fire_station	ast	Bomberos
+amenity	fountain	ast	Fonte
+amenity	fuel	ast	Combustible
+amenity	grave_yard	ast	Cementeriu
+amenity	gym	ast	Ximnasiu / Fitness
+amenity	hall	ast	Centru de reuniones
+amenity	health_centre	ast	Centru de salú
+amenity	hospital	ast	Hospital
+amenity	hotel	ast	Hotel
+amenity	hunting_stand	ast	Puestu de caza
+amenity	ice_cream	ast	Xelaos
+amenity	kindergarten	ast	Guardería
+amenity	library	ast	Biblioteca
+amenity	market	ast	Mercáu
+amenity	marketplace	ast	Mercáu
+amenity	mountain_rescue	ast	Salvamentu nel monte
+amenity	nightclub	ast	Sala de fiestes
+amenity	nursery	ast	Preescolar
+amenity	nursing_home	ast	Residencia asistencial
+amenity	office	ast	Oficina
+amenity	park	ast	Parque
+amenity	parking	ast	Aparcaderu
+amenity	pharmacy	ast	Farmacia
+amenity	place_of_worship	ast	Llugar de cultu
+amenity	police	ast	Policía
+amenity	post_box	ast	Buzón
+amenity	post_office	ast	Oficina de correos
+amenity	preschool	ast	Preescolar
+amenity	prison	ast	Cárcel
+amenity	pub	ast	Pub
+amenity	public_building	ast	Edificiu públicu
+amenity	public_market	ast	Mercáu públicu
+amenity	reception_area	ast	Llugar de recepción
+amenity	recycling	ast	Puntu llimpiu
+amenity	restaurant	ast	Restaurán
+amenity	retirement_home	ast	Residencia de mayores
+amenity	sauna	ast	Sauna
+amenity	school	ast	Escuela
+amenity	shelter	ast	Abellugu
+amenity	shop	ast	Tienda
+amenity	shopping	ast	Compres
+amenity	social_club	ast	Club social
+amenity	studio	ast	Estudiu
+amenity	supermarket	ast	Supermercáu
+amenity	taxi	ast	Taxi
+amenity	telephone	ast	Teléfonu públicu
+amenity	theatre	ast	Teatru
+amenity	toilets	ast	Servicios
+amenity	townhall	ast	Casa conceyu
+amenity	university	ast	Universidá
+amenity	vending_machine	ast	Venta automática
+amenity	veterinary	ast	Ciruxía veterinaria
+amenity	village_hall	ast	Casa de la villa
+amenity	waste_basket	ast	Papelera
+amenity	wifi	ast	Accesu WiFi
+amenity	youth_centre	ast	Centru de mocedá
+boundary	administrative	ast	Llende alministrativa
+building	apartments	ast	Bloque d'apartamentos
+building	block	ast	Bloque de viviendes
+building	bunker	ast	Bunker
+building	chapel	ast	Capiella
+building	church	ast	Ilesia
+building	city_hall	ast	Casa del conceyu
+building	commercial	ast	Edificiu comercial
+building	dormitory	ast	Dormitoriu
+building	entrance	ast	Accesu al edificiu
+building	faculty	ast	Facultá
+building	farm	ast	Casería
+building	flats	ast	Pisos
+building	garage	ast	Garaxe
+building	hall	ast	Centru de reuniones
+building	hospital	ast	Hospital
+building	hotel	ast	Hotel
+building	house	ast	Casa
+building	industrial	ast	Edificiu industrial
+building	office	ast	Edificiu d'oficines
+building	public	ast	Edificiu públicu
+building	residential	ast	Edificiu residencial
+building	retail	ast	Edificiu comercial
+building	school	ast	Edificiu escolar
+building	shop	ast	Tienda
+building	stadium	ast	Estadiu
+building	store	ast	Almacén
+building	terrace	ast	Terraza
+building	tower	ast	Torre
+building	train_station	ast	Estación de tren
+building	university	ast	Edificiu universitariu
+highway	bridleway	ast	Caleya
+highway	bus_guideway	ast	Carril bus con guía
+highway	bus_stop	ast	Parada d'autobús
+highway	byway	ast	Camín
+highway	construction	ast	Carretera en construcción
+highway	cycleway	ast	Sienda ciclista
+highway	distance_marker	ast	Marca de distancia
+highway	emergency_access_point	ast	Puntu de llocalización d'emerxencia
+highway	footway	ast	Sienda
+highway	ford	ast	Vau
+highway	gate	ast	Puerta
+highway	living_street	ast	Cai residencial
+highway	minor	ast	Carretera menor
+highway	motorway	ast	Autopista
+highway	motorway_junction	ast	Enllaz d'autopista
+highway	motorway_link	ast	Autopista
+highway	path	ast	Camín
+highway	pedestrian	ast	Vía peatonal
+highway	platform	ast	Andén
+highway	primary	ast	Carretera primaria
+highway	primary_link	ast	Enllaz de carretera primaria
+highway	raceway	ast	Pista de carreres
+highway	residential	ast	Residencial
+highway	road	ast	Carretera
+highway	secondary	ast	Carretera secundaria
+highway	secondary_link	ast	Enllaz de carretera secundaria
+highway	service	ast	Carretera de serviciu
+highway	services	ast	Servicios n'autopista
+highway	steps	ast	Escaleres
+highway	stile	ast	Pasera de muries
+highway	tertiary	ast	Carretera terciaria
+highway	track	ast	Pista
+highway	trail	ast	Camín
+highway	trunk	ast	Carretera nacional
+highway	trunk_link	ast	Enllaz de carretera nacional
+highway	unclassified	ast	Carretera ensin clasificar
+highway	unsurfaced	ast	Carretera ensin asfaltar
+historic	archaeological_site	ast	Llugar arqueolóxicu
+historic	battlefield	ast	Campu de batalla
+historic	boundary_stone	ast	Finxu
+historic	building	ast	Edificiu
+historic	castle	ast	Castiellu
+historic	church	ast	Ilesia
+historic	house	ast	Casa
+historic	icon	ast	Iconu
+historic	manor	ast	Casona
+historic	memorial	ast	Monumentu
+historic	mine	ast	Mina
+historic	monument	ast	Monumentu
+historic	museum	ast	Muséu
+historic	ruins	ast	Ruines
+historic	tower	ast	Torre
+historic	wayside_cross	ast	Cruceru
+historic	wayside_shrine	ast	Ermita
+historic	wreck	ast	Naufraxu
+landuse	allotments	ast	Güertes recreatives
+landuse	basin	ast	Conca
+landuse	brownfield	ast	Terrén en derribu
+landuse	cemetery	ast	Cementeriu
+landuse	commercial	ast	Área comercial
+landuse	conservation	ast	Conservación
+landuse	construction	ast	Construcción
+landuse	farm	ast	Casería
+landuse	farmland	ast	Tierres de llabor
+landuse	farmyard	ast	Corral
+landuse	forest	ast	Área forestal
+landuse	grass	ast	Yerba
+landuse	greenfield	ast	Plan d'espansión
+landuse	industrial	ast	Área industrial
+landuse	landfill	ast	Vertederu
+landuse	meadow	ast	Prau
+landuse	military	ast	Área militar
+landuse	mine	ast	Mina
+landuse	mountain	ast	Monte
+landuse	nature_reserve	ast	Reserva natural
+landuse	park	ast	Parque
+landuse	piste	ast	Pista
+landuse	plaza	ast	Plaza
+landuse	quarry	ast	Cantera
+landuse	railway	ast	Ferrocarril
+landuse	recreation_ground	ast	Campu recreativu
+landuse	reservoir	ast	Banzáu
+landuse	residential	ast	Área residencial
+landuse	retail	ast	Área comercial
+landuse	vineyard	ast	Viña
+landuse	wetland	ast	Llamuerga
+landuse	wood	ast	Viesca
+leisure	beach_resort	ast	Turismu de playa
+leisure	fishing	ast	Área de pesca
+leisure	garden	ast	Xardín
+leisure	golf_course	ast	Campu de golf
+leisure	ice_rink	ast	Pista de xelu
+leisure	marina	ast	Puertu deportivu
+leisure	miniature_golf	ast	Mini golf
+leisure	nature_reserve	ast	Reserva natural
+leisure	park	ast	Parque
+leisure	pitch	ast	Campu deportivu
+leisure	playground	ast	Xuegos infantiles
+leisure	recreation_ground	ast	Campu recreativu
+leisure	slipway	ast	Rampla de botadura
+leisure	sports_centre	ast	Centru deportivu
+leisure	stadium	ast	Estadiu
+leisure	swimming_pool	ast	Piscina
+leisure	track	ast	Pista de carreres
+leisure	water_park	ast	Parque acuáticu
+natural	bay	ast	Golfu
+natural	beach	ast	Playa
+natural	cape	ast	Cabu
+natural	cave_entrance	ast	Boca de cueva
+natural	channel	ast	Canal
+natural	cliff	ast	Cantil
+natural	coastline	ast	Llinia de costa
+natural	crater	ast	Crater
+natural	feature	ast	Carauterística
+natural	fell	ast	Braña
+natural	fjord	ast	Fiordu
+natural	geyser	ast	Guéiser
+natural	glacier	ast	Glaciar
+natural	heath	ast	Berezal
+natural	hill	ast	Llomba
+natural	island	ast	Islla
+natural	land	ast	Tierra
+natural	marsh	ast	Llamuerga
+natural	moor	ast	Amarradera
+natural	mud	ast	Barru
+natural	peak	ast	Picu
+natural	point	ast	Puntu
+natural	reef	ast	Petón
+natural	ridge	ast	Cordal
+natural	river	ast	Ríu
+natural	rock	ast	Roca
+natural	scree	ast	Llera
+natural	scrub	ast	Cotollal
+natural	shoal	ast	Baxu
+natural	spring	ast	Fonte
+natural	strait	ast	Estrechu
+natural	tree	ast	Árbol
+natural	valley	ast	Valle
+natural	volcano	ast	Volcan
+natural	water	ast	Agua
+natural	wetland	ast	Llamuerga
+natural	wetlands	ast	Llamuergues
+natural	wood	ast	Viesca
+place	airport	ast	Aeropuertu
+place	city	ast	Ciudá
+place	country	ast	País
+place	county	ast	Condáu, conceyu
+place	farm	ast	Casería
+place	hamlet	ast	Aldea
+place	house	ast	Casa
+place	houses	ast	Cases
+place	island	ast	Islla
+place	islet	ast	Castru de mar
+place	locality	ast	Llocalidá
+place	moor	ast	Amarradera
+place	municipality	ast	Conceyu
+place	postcode	ast	Códigu postal
+place	region	ast	Fastera, provincia
+place	sea	ast	Mar
+place	state	ast	Estáu, comunidá autónoma
+place	subdivision	ast	Subdivisión
+place	suburb	ast	Barriu
+place	town	ast	Villa
+place	unincorporated_area	ast	Área ensin conceyu
+place	village	ast	Pueblu
+railway	abandoned	ast	Ferrocarril abandonáu
+railway	construction	ast	Ferrocarril en construcción
+railway	disused	ast	Ferrocarril ensin usu
+railway	disused_station	ast	Estación de ferrocarril ensin usu
+railway	funicular	ast	Tren funicular
+railway	halt	ast	Parada de tren
+railway	historic_station	ast	Estación de ferrocarril históricu
+railway	junction	ast	Disvíu de ferrocarril
+railway	level_crossing	ast	Pasu a nivel
+railway	light_rail	ast	Ferrocarril llixeru
+railway	monorail	ast	Monorraíl
+railway	narrow_gauge	ast	Ferrocarril de vía estrecha
+railway	platform	ast	Andén de ferrocarril
+railway	preserved	ast	Ferrocarril conserváu
+railway	spur	ast	Apartaderu industrial
+railway	station	ast	Estación de tren
+railway	subway	ast	Estación de metro
+railway	subway_entrance	ast	Entrada de metro
+railway	switch	ast	Aguyes de ferrocarril
+railway	tram	ast	Tranvía
+railway	tram_stop	ast	Parada de tranvía
+railway	yard	ast	Apartaderu de clasificación
+shop	alcohol	ast	Venta de bébores
+shop	apparel	ast	Boutique
+shop	art	ast	Venta d'arte
+shop	bakery	ast	Panadería
+shop	beauty	ast	Cuidaos corporales
+shop	beverages	ast	Venta de bébores
+shop	bicycle	ast	Tienda de bicicletes
+shop	books	ast	Llibrería
+shop	butcher	ast	Carnicería
+shop	car	ast	Automóvil
+shop	car_dealer	ast	Concesionariu d'automóviles
+shop	car_parts	ast	Repuestos d'automóvil
+shop	carpet	ast	Alfombres
+shop	car_repair	ast	Taller d'automóviles
+shop	charity	ast	Rastru solidariu
+shop	chemist	ast	Droguería
+shop	clothes	ast	Tienda de ropa
+shop	computer	ast	Tienda d'informática
+shop	confectionery	ast	Confitería
+shop	convenience	ast	Alimentación
+shop	copyshop	ast	Copistería
+shop	cosmetics	ast	Perfumería
+shop	department_store	ast	Grandes almacenes
+shop	discount	ast	Productos con descuentu
+shop	doityourself	ast	Bricolax
+shop	drugstore	ast	Droguería
+shop	dry_cleaning	ast	Tintorería
+shop	electronics	ast	Tienda d'electrónica
+shop	estate_agent	ast	Axencia inmobiliaria
+shop	farm	ast	Tienda de casería
+shop	fashion	ast	Tienda de modes
+shop	fish	ast	Pescaos
+shop	florist	ast	Floristería
+shop	food	ast	Comestibles
+shop	funeral_directors	ast	Servicios funerarios
+shop	furniture	ast	Muebles
+shop	gallery	ast	Venta d'arte
+shop	garden_centre	ast	Xardinería
+shop	general	ast	Mercancía xeneral
+shop	gift	ast	Tienda de regalos
+shop	greengrocer	ast	Frutería
+shop	grocery	ast	Frutería
+shop	hairdresser	ast	Peluquería
+shop	hardware	ast	Ferretería
+shop	hifi	ast	Soníu
+shop	insurance	ast	Seguros
+shop	jewelry	ast	Xoyería
+shop	kiosk	ast	Quioscu
+shop	laundry	ast	Llavandería
+shop	mall	ast	Centru comercial
+shop	market	ast	Mercáu
+shop	mobile_phone	ast	Tienda de telefonía móvil
+shop	motorcycle	ast	Venta de motos
+shop	music	ast	Discos
+shop	newsagent	ast	Prensa
+shop	optician	ast	Óptica
+shop	organic	ast	Comida ecolóxica
+shop	outdoor	ast	Aire llibre
+shop	pet	ast	Paxarería
+shop	photo	ast	Fotografía
+shop	salon	ast	Cuidaos corporales
+shop	shoes	ast	Zapatería
+shop	shopping_centre	ast	Centru comercial
+shop	sports	ast	Deportes
+shop	stationery	ast	Papelería
+shop	supermarket	ast	Supermercáu
+shop	toys	ast	Xuguetería
+shop	travel_agency	ast	Axencia de viaxes
+shop	video	ast	Videu club
+shop	wine	ast	Venta de bébores
+tourism	alpine_hut	ast	Refuxu de montaña
+tourism	artwork	ast	Obra d'arte
+tourism	attraction	ast	Interés turísticu
+tourism	cabin	ast	Cabaña
+tourism	camp_site	ast	Camping
+tourism	caravan_site	ast	Camping pa caravanes
+tourism	chalet	ast	Xalé
+tourism	guest_house	ast	Agospiamientu
+tourism	hostel	ast	Albergue
+tourism	hotel	ast	Hotel
+tourism	information	ast	Información
+tourism	lean_to	ast	Abrigu
+tourism	motel	ast	Motel
+tourism	museum	ast	Muséu
+tourism	picnic_site	ast	Área recreativa
+tourism	theme_park	ast	Parque temáticu
+tourism	valley	ast	Valle
+tourism	viewpoint	ast	Mirador
+tourism	zoo	ast	Zoo
+waterway	boatyard	ast	Astilleru
+waterway	canal	ast	Canal
+waterway	connector	ast	Regueru
+waterway	dam	ast	Presa
+waterway	derelict_canal	ast	Canal abandonáu
+waterway	ditch	ast	Riega
+waterway	dock	ast	Dársena
+waterway	drain	ast	Desagüe
+waterway	lock	ast	Esclusa
+waterway	lock_gate	ast	Compuerta
+waterway	mineral_spring	ast	Agua mineral
+waterway	mooring	ast	Amarradera
+waterway	rapids	ast	Rabión
+waterway	river	ast	Ríu
+waterway	riverbank	ast	Ribera'l ríu
+waterway	stream	ast	Regatu
+waterway	wadi	ast	Riera
+waterway	waterfall	ast	Saltu d'agua
+waterway	water_point	ast	Toma d'agua
+waterway	weir	ast	Banzáu

@@ -1,0 +1,420 @@
+amenity	airport	sl	Letališče
+amenity	arts_centre	sl	Umetnostni center
+amenity	atm	sl	Bankomat
+amenity	auditorium	sl	Avditorij
+amenity	bank	sl	Banka
+amenity	bar	sl	Bar
+amenity	bench	sl	Klop
+amenity	bicycle_parking	sl	Parkirišče za kolesa
+amenity	bicycle_rental	sl	Izposoja koles
+amenity	brothel	sl	Javna hiša
+amenity	bureau_de_change	sl	Menjalnica
+amenity	bus_station	sl	Avtobusna postaja
+amenity	cafe	sl	Kavarna
+amenity	car_rental	sl	Rent-a-car
+amenity	car_sharing	sl	Souporaba avtomobila
+amenity	car_wash	sl	Avtopralnica
+amenity	casino	sl	Kazino
+amenity	cinema	sl	Kinematograf
+amenity	clinic	sl	Klinika
+amenity	club	sl	Klub
+amenity	college	sl	Srednja šola
+amenity	community_centre	sl	Center skupnosti
+amenity	courthouse	sl	Sodišče
+amenity	crematorium	sl	Krematorij
+amenity	dentist	sl	Zobozdravnik
+amenity	doctors	sl	Zdravniki
+amenity	dormitory	sl	Študentski dom
+amenity	drinking_water	sl	Pitna voda
+amenity	driving_school	sl	Avtošola
+amenity	embassy	sl	Veleposlaništvo
+amenity	emergency_phone	sl	Klic v sili
+amenity	fast_food	sl	Hitra hrana
+amenity	ferry_terminal	sl	Trajekt
+amenity	fire_hydrant	sl	Hidrant
+amenity	fire_station	sl	Gasilska postaja
+amenity	fountain	sl	Vodomet
+amenity	fuel	sl	Bencinska črpalka
+amenity	grave_yard	sl	Pokopališče
+amenity	gym	sl	Fitnes / Telovadnica
+amenity	hall	sl	Dvorana
+amenity	health_centre	sl	Dom zdravja
+amenity	hospital	sl	Bolnišnica
+amenity	hotel	sl	Hotel
+amenity	hunting_stand	sl	Lovska opazovalnica
+amenity	ice_cream	sl	Sladoled
+amenity	kindergarten	sl	Vrtec
+amenity	library	sl	Knjižnica
+amenity	market	sl	Trg
+amenity	marketplace	sl	Tržnica
+amenity	mountain_rescue	sl	GRS - Gorska reševalna služba
+amenity	nightclub	sl	Nočni klub
+amenity	nursery	sl	Vrtec
+amenity	nursing_home	sl	Dom za ostarele
+amenity	office	sl	Pisarne
+amenity	park	sl	Park
+amenity	parking	sl	Parkirišče
+amenity	pharmacy	sl	Lekarna
+amenity	place_of_worship	sl	Cerkev
+amenity	police	sl	Policija
+amenity	post_box	sl	Poštni nabiralnik
+amenity	post_office	sl	Pošta
+amenity	preschool	sl	Vrtec
+amenity	prison	sl	Zapor
+amenity	pub	sl	Pivnica
+amenity	public_building	sl	Javne zgradba
+amenity	public_market	sl	Javni trg
+amenity	reception_area	sl	Recepcija
+amenity	recycling	sl	Reciklirna točka
+amenity	restaurant	sl	Restavracija
+amenity	retirement_home	sl	Dom za ostarele
+amenity	sauna	sl	Savna
+amenity	school	sl	Šola
+amenity	shelter	sl	Zaklonišče
+amenity	shop	sl	Trgovina
+amenity	shopping	sl	Nakupovanje
+amenity	social_club	sl	Društveni klub
+amenity	studio	sl	Studio
+amenity	supermarket	sl	Supermarket
+amenity	taxi	sl	Taksi
+amenity	telephone	sl	Telefonska govorilnica
+amenity	theatre	sl	Gledališče
+amenity	toilets	sl	Stranišča
+amenity	townhall	sl	Mestna hiša
+amenity	university	sl	Univerza
+amenity	vending_machine	sl	Avtomat
+amenity	veterinary	sl	Veterinarska klinika
+amenity	village_hall	sl	Vaško središče
+amenity	waste_basket	sl	Koš za odpadke
+amenity	wifi	sl	Dostop WiFi
+amenity	youth_centre	sl	Mladinski center
+boundary	administrative	sl	Upravne meje
+building	apartments	sl	Stanovanjski blok
+building	block	sl	Blok
+building	bunker	sl	Bunker
+building	chapel	sl	Kapelica
+building	church	sl	Cerkev
+building	city_hall	sl	Mestna hiša
+building	commercial	sl	Poslovna zgradba
+building	dormitory	sl	Študentski dom
+building	entrance	sl	Vhod
+building	faculty	sl	Fakulteta
+building	farm	sl	Kmetija
+building	flats	sl	Stanovanja
+building	garage	sl	Garaža
+building	hall	sl	Dvorana
+building	hospital	sl	Bolnišnica
+building	hotel	sl	Hotel
+building	house	sl	Hiša
+building	industrial	sl	Industrijski objekt
+building	office	sl	Poslovna stavba
+building	public	sl	Javne zgradba
+building	residential	sl	Stanovanjska stavba
+building	retail	sl	Trgovina na drobno
+building	school	sl	Šola
+building	shop	sl	Trgovina
+building	stadium	sl	Stadion
+building	store	sl	Trgovina
+building	terrace	sl	Terasa
+building	tower	sl	Stolp
+building	train_station	sl	Železniška postaja
+building	university	sl	Univerza
+highway	bridleway	sl	Jahalna pot
+highway	bus_guideway	sl	Turistični avtobus
+highway	bus_stop	sl	Avtobusna postaja
+highway	byway	sl	Obvoz
+highway	construction	sl	Autocesta v izgradnji
+highway	cycleway	sl	Kolesarska steza
+highway	distance_marker	sl	Kilometerski stebriček
+highway	emergency_access_point	sl	Dostop za interventna vozila
+highway	footway	sl	Pešpot
+highway	ford	sl	Prehod
+highway	gate	sl	Vrata
+highway	living_street	sl	Ulica z umirjenim prometom
+highway	minor	sl	Manjša cesta
+highway	motorway	sl	Avtocesta
+highway	motorway_junction	sl	Avtocestno križišče
+highway	motorway_link	sl	Avtocestni priključek
+highway	path	sl	Pot
+highway	pedestrian	sl	Pločnik
+highway	platform	sl	Platforma
+highway	primary	sl	Glavna cesta
+highway	primary_link	sl	Priključek na glavno cesto
+highway	raceway	sl	Dirkališče
+highway	residential	sl	Stanovanjska
+highway	road	sl	Nedoločena cesta
+highway	secondary	sl	Regionalna cesta
+highway	secondary_link	sl	Priključek na regionalno cesto
+highway	service	sl	Servisna cesta
+highway	services	sl	Avtocestno postajališče
+highway	steps	sl	Stopnice
+highway	stile	sl	Prehod preko ograje
+highway	tertiary	sl	Lokalna cesta
+highway	track	sl	Kolovoz
+highway	trail	sl	Sled
+highway	trunk	sl	Hitra cesta
+highway	trunk_link	sl	Priključek na hitro cesto
+highway	unclassified	sl	Neopredeljena cesta
+highway	unsurfaced	sl	Makadamska pot
+historic	archaeological_site	sl	Arheološko najdbišče
+historic	battlefield	sl	Bojišče
+historic	boundary_stone	sl	Mejni kamen
+historic	building	sl	Zgradba
+historic	castle	sl	Grad
+historic	church	sl	Cerkev
+historic	house	sl	Hiša
+historic	icon	sl	Ikona
+historic	manor	sl	Graščina
+historic	memorial	sl	Spomenik
+historic	mine	sl	Rudnik
+historic	monument	sl	Spomenik
+historic	museum	sl	Muzej
+historic	ruins	sl	Ruševine
+historic	tower	sl	Stolp
+historic	wayside_cross	sl	Križ
+historic	wayside_shrine	sl	Kapelica
+historic	wreck	sl	Razbitina
+landuse	allotments	sl	Vrtički
+landuse	basin	sl	Čistilni bazen
+landuse	brownfield	sl	Gradbišče
+landuse	cemetery	sl	Pokopališče
+landuse	commercial	sl	Poslovna cona
+landuse	conservation	sl	Zaštićeno področje
+landuse	construction	sl	Gradbišče
+landuse	farm	sl	Kmetija
+landuse	farmland	sl	Kmetijsko zemljišče
+landuse	farmyard	sl	Vrt
+landuse	forest	sl	Gozd
+landuse	grass	sl	Travnik
+landuse	greenfield	sl	Pripravljeno za gradbišče
+landuse	industrial	sl	Industrijska cona
+landuse	landfill	sl	Smetišče
+landuse	meadow	sl	Travnik
+landuse	military	sl	Vojaško območje
+landuse	mine	sl	Minsko polje
+landuse	mountain	sl	Planina
+landuse	nature_reserve	sl	Naravni rezervat
+landuse	park	sl	Park
+landuse	piste	sl	Proga
+landuse	plaza	sl	Trg
+landuse	quarry	sl	Dnevni kop
+landuse	railway	sl	Železnica
+landuse	recreation_ground	sl	Rekreacijsko območje
+landuse	reservoir	sl	Zbiralnik
+landuse	residential	sl	Stanovanjska cona
+landuse	retail	sl	Trgovine
+landuse	village_green	sl	Zelenica
+landuse	vineyard	sl	Vinograd
+landuse	wetland	sl	Mokrišče
+landuse	wood	sl	Pragozd
+leisure	beach_resort	sl	kopališče
+leisure	common	sl	Javno zemljišče
+leisure	fishing	sl	Ribolovno območje
+leisure	garden	sl	Vrt
+leisure	golf_course	sl	Igrišče za Golf
+leisure	ice_rink	sl	Drsališče
+leisure	marina	sl	Marina
+leisure	miniature_golf	sl	Mini golf
+leisure	nature_reserve	sl	Naravni rezervat
+leisure	park	sl	Park
+leisure	pitch	sl	Športno igrišče
+leisure	playground	sl	Otroško igrišče
+leisure	recreation_ground	sl	Rekreacijsko območje
+leisure	slipway	sl	Rampa
+leisure	sports_centre	sl	Športni center
+leisure	stadium	sl	Stadion
+leisure	swimming_pool	sl	Bazen
+leisure	track	sl	Tekaška proga
+leisure	water_park	sl	Vodni park
+natural	bay	sl	Zaliv
+natural	beach	sl	Obala
+natural	cape	sl	Rt
+natural	cave_entrance	sl	Vhod v jamo
+natural	channel	sl	Kanal
+natural	cliff	sl	Klif
+natural	coastline	sl	Obala
+natural	crater	sl	Krater
+natural	feature	sl	Znamenitost
+natural	fell	sl	Višinski travnik
+natural	fjord	sl	Fjord
+natural	geyser	sl	Gejzir
+natural	glacier	sl	Ledenik
+natural	heath	sl	Ravnina
+natural	hill	sl	Hrib
+natural	island	sl	Otok
+natural	land	sl	Otok
+natural	marsh	sl	Močvirje
+natural	moor	sl	Močvirje
+natural	mud	sl	Blato
+natural	peak	sl	Vrh
+natural	point	sl	Točka
+natural	reef	sl	Greben
+natural	ridge	sl	Greben
+natural	river	sl	Reka
+natural	rock	sl	Skala
+natural	scree	sl	Melišče
+natural	scrub	sl	Grmovje
+natural	shoal	sl	Peščena plaža
+natural	spring	sl	Izvir
+natural	strait	sl	Ožina
+natural	tree	sl	Drevo
+natural	valley	sl	Dolina
+natural	volcano	sl	Vulkan
+natural	water	sl	Vodovje
+natural	wetland	sl	Mokrišče
+natural	wetlands	sl	Mokrišča
+natural	wood	sl	Pragozd
+place	airport	sl	Letališče
+place	city	sl	Mesto
+place	country	sl	Država
+place	county	sl	Okrožje
+place	farm	sl	Kmetija
+place	hamlet	sl	Zaselek
+place	house	sl	Hiša
+place	houses	sl	Hiše
+place	island	sl	Otok
+place	islet	sl	Otoček
+place	locality	sl	Krajevno ime
+place	moor	sl	Muring
+place	municipality	sl	Občina
+place	postcode	sl	Poštna številka
+place	region	sl	Regija
+place	sea	sl	Morje
+place	state	sl	Država (ZDA):
+place	subdivision	sl	Pododdelek
+place	suburb	sl	Predmestje
+place	town	sl	Mesto
+place	unincorporated_area	sl	Nikogaršnje območje
+place	village	sl	Vas
+railway	abandoned	sl	Opuščena železnica
+railway	construction	sl	Železnica v izgradnji
+railway	disused	sl	Opuščena železnica
+railway	disused_station	sl	Opuščena železniška postaja
+railway	funicular	sl	Žična vzpenjača
+railway	halt	sl	Železniška postaja
+railway	historic_station	sl	Zgodovinska železniška postaja
+railway	junction	sl	Križišče železnic
+railway	level_crossing	sl	Prehod
+railway	light_rail	sl	Tramvaj
+railway	monorail	sl	Monorail
+railway	narrow_gauge	sl	Ozkotirna železnica
+railway	platform	sl	Železniški peron
+railway	preserved	sl	Ohranjena železniška proga
+railway	spur	sl	Tir
+railway	station	sl	Železniška postaja
+railway	subway	sl	Podzemna postaja
+railway	subway_entrance	sl	Vhod na podzemno
+railway	switch	sl	Kretnica
+railway	tram	sl	Tramvaj
+railway	tram_stop	sl	Tramvajska postaja
+railway	yard	sl	Železniško dvorišče
+shop	alcohol	sl	Trgovina alkoholnih pijač
+shop	apparel	sl	Trgovina z oblekami
+shop	art	sl	Prodajna galerija
+shop	bakery	sl	Pekarna
+shop	beauty	sl	Salon lepote
+shop	beverages	sl	Trgovina pijač
+shop	bicycle	sl	Trgovina koles
+shop	books	sl	Knjigarna
+shop	butcher	sl	Mesar
+shop	car	sl	Avtomobilski salon
+shop	car_dealer	sl	Avto trgovec
+shop	car_parts	sl	Avtomobilski deli
+shop	carpet	sl	Prodajalna preprog
+shop	car_repair	sl	Avtoservis
+shop	charity	sl	Dobrodelni trgovina
+shop	chemist	sl	Kemična trgovina
+shop	clothes	sl	Trgovina z oblekami
+shop	computer	sl	Računalniška trgovina
+shop	confectionery	sl	Trgovina sladkarij
+shop	convenience	sl	Minimarket
+shop	copyshop	sl	Kopirnica
+shop	cosmetics	sl	Drogerija
+shop	department_store	sl	Trgovska hiša
+shop	discount	sl	Outlet
+shop	doityourself	sl	Orodjarna
+shop	drugstore	sl	Lekarna
+shop	dry_cleaning	sl	Čistilnica
+shop	electronics	sl	Elektronska trgovina
+shop	estate_agent	sl	Nepremičninska agencija
+shop	farm	sl	Kmečka trgovina
+shop	fashion	sl	Modna trgovina
+shop	fish	sl	Ribarnica
+shop	florist	sl	Cvetličarna
+shop	food	sl	Prehrambena trgovina
+shop	funeral_directors	sl	Pogrebni zavod
+shop	furniture	sl	Pohištvo
+shop	gallery	sl	Prodajna galerija
+shop	garden_centre	sl	Vrtni center
+shop	general	sl	Trgovina z mešanim blagom
+shop	gift	sl	Prodajalna daril
+shop	greengrocer	sl	Sadje in zelenjava
+shop	grocery	sl	Živilska trgovona
+shop	hairdresser	sl	Frizerski salon
+shop	hardware	sl	Železnina
+shop	hifi	sl	Trgovina z avdio opremo
+shop	insurance	sl	Zavarovalnica
+shop	jewelry	sl	Draguljarna
+shop	kiosk	sl	Kiosk prodajalna
+shop	laundry	sl	Pralnica
+shop	mall	sl	Trgovski center
+shop	market	sl	Trg
+shop	mobile_phone	sl	Trgovina mobilnih telefonov
+shop	motorcycle	sl	Trgovina z motorji
+shop	music	sl	Trgovina z glasbo
+shop	newsagent	sl	Trafika
+shop	optician	sl	Optik
+shop	organic	sl	Trgovina z ekološko hrano
+shop	outdoor	sl	Trgovina na prostem
+shop	pet	sl	Trgovina za male živali
+shop	photo	sl	Fotograf
+shop	salon	sl	Lepotilni salon
+shop	shoes	sl	Trgovina s čevlji
+shop	shopping_centre	sl	Nakupovalno središče
+shop	sports	sl	Športna trgovina
+shop	stationery	sl	Papirnica
+shop	supermarket	sl	Supermarket
+shop	toys	sl	Trgovina igrač
+shop	travel_agency	sl	Potovalna agencija
+shop	video	sl	Videoteka
+shop	wine	sl	Vinoteka
+tourism	alpine_hut	sl	Koča
+tourism	artwork	sl	Umetnina
+tourism	attraction	sl	Zanimivost
+tourism	bed_and_breakfast	sl	Nočitev z zajtrkom
+tourism	cabin	sl	Nočitev
+tourism	camp_site	sl	Kamp
+tourism	caravan_site	sl	Kamp
+tourism	chalet	sl	Apartma
+tourism	guest_house	sl	Penzion
+tourism	hostel	sl	Hostel
+tourism	hotel	sl	Hotel
+tourism	information	sl	Informacije
+tourism	lean_to	sl	Bivak
+tourism	motel	sl	Motel
+tourism	museum	sl	Muzej
+tourism	picnic_site	sl	Prostor za piknike
+tourism	theme_park	sl	Zabaviščni park
+tourism	valley	sl	Dolina
+tourism	viewpoint	sl	Razgledna točka
+tourism	zoo	sl	Živalski vrt
+waterway	boatyard	sl	Ladjedelnica
+waterway	canal	sl	Prekop
+waterway	connector	sl	Vodne povezave
+waterway	dam	sl	Jez
+waterway	derelict_canal	sl	Zapuščen prekop
+waterway	ditch	sl	Jarek
+waterway	dock	sl	Dok
+waterway	drain	sl	Jarek
+waterway	lock	sl	Zapornica
+waterway	lock_gate	sl	Velika zapornica
+waterway	mineral_spring	sl	Mineral vrelec
+waterway	mooring	sl	Sidrišče
+waterway	rapids	sl	Brzice
+waterway	river	sl	Reka
+waterway	riverbank	sl	Breg
+waterway	stream	sl	Potok
+waterway	wadi	sl	Vadi
+waterway	waterfall	sl	Slap
+waterway	water_point	sl	Pitna voda
+waterway	weir	sl	Zapornica

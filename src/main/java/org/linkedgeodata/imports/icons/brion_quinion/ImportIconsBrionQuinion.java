@@ -205,7 +205,7 @@ public class ImportIconsBrionQuinion
 			URIUtil.download(
 				new URL(
 						"http://www.sjjb.co.uk/mapicons/download/SJJB-SVG-Icons-20110406.tar.gz"),
-				file);
+				file, null);
 		}
 		
 		if(!dir.exists()) {

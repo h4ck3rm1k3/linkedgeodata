@@ -1,0 +1,368 @@
+amenity	airport	lv	Lidosta
+amenity	arts_centre	lv	Mākslas centrs
+amenity	atm	lv	Bankomāts
+amenity	auditorium	lv	Auditorija
+amenity	bank	lv	Banka
+amenity	bar	lv	Bārs
+amenity	bench	lv	Soliņš
+amenity	bicycle_parking	lv	Velosipēdu novietne
+amenity	bicycle_rental	lv	Velosipēdu noma
+amenity	brothel	lv	Bordelis
+amenity	bureau_de_change	lv	Valūtas maiņas punkts
+amenity	bus_station	lv	Autoosta
+amenity	cafe	lv	Kafejnīca
+amenity	car_rental	lv	Autonoma
+amenity	car_sharing	lv	Auto koplietošana
+amenity	car_wash	lv	Automazgātava
+amenity	casino	lv	Kazino
+amenity	cinema	lv	Kino
+amenity	clinic	lv	Klīnika
+amenity	club	lv	Klubs
+amenity	college	lv	Koledža
+amenity	community_centre	lv	Sabiedriskais centrs
+amenity	courthouse	lv	Tiesa
+amenity	crematorium	lv	Krematorija
+amenity	dentist	lv	Zobārsts
+amenity	doctors	lv	Ārsti
+amenity	dormitory	lv	Kopmītnes
+amenity	drinking_water	lv	Dzeramais ūdens
+amenity	driving_school	lv	Braukšanas skola
+amenity	embassy	lv	Vēstniecība
+amenity	emergency_phone	lv	Avārijas telefons
+amenity	fast_food	lv	Bistro
+amenity	ferry_terminal	lv	Prāmju termināls
+amenity	fire_hydrant	lv	Hidrants
+amenity	fire_station	lv	Ugunsdzēsēju depo
+amenity	fountain	lv	Strūklaka
+amenity	fuel	lv	Degviela
+amenity	grave_yard	lv	Kapsēta
+amenity	gym	lv	Fitnesa centrs / Sporta zāle
+amenity	hall	lv	Zāle
+amenity	health_centre	lv	Veselības centrs
+amenity	hospital	lv	Slimnīca
+amenity	hotel	lv	Viesnīca
+amenity	hunting_stand	lv	Medību tornis
+amenity	ice_cream	lv	Saldējums
+amenity	kindergarten	lv	Bērnudārzs
+amenity	library	lv	Bibliotēka
+amenity	market	lv	Tirgus
+amenity	marketplace	lv	Tirgus
+amenity	mountain_rescue	lv	Kalnu glābēji
+amenity	nightclub	lv	Naktsklubs
+amenity	nursing_home	lv	Pansionāts
+amenity	office	lv	Birojs
+amenity	park	lv	Parks
+amenity	parking	lv	Autostāvvieta
+amenity	pharmacy	lv	Aptieka
+amenity	place_of_worship	lv	Dievnams
+amenity	police	lv	Policija
+amenity	post_box	lv	Pastkaste
+amenity	post_office	lv	Pasts
+amenity	preschool	lv	Pirmsskolas apmācība
+amenity	prison	lv	Cietums
+amenity	pub	lv	Krogs
+amenity	public_building	lv	Sabiedriskā ēka
+amenity	public_market	lv	Tirgus
+amenity	reception_area	lv	Uzņemšanas zona
+amenity	recycling	lv	Pārstrādes punkts
+amenity	restaurant	lv	Restorāns
+amenity	retirement_home	lv	Pansionāts
+amenity	sauna	lv	Sauna
+amenity	school	lv	Skola
+amenity	shelter	lv	Pajumte
+amenity	shop	lv	Veikals
+amenity	shopping	lv	Iepirkšanās
+amenity	social_club	lv	Sociālais klubs
+amenity	studio	lv	Studija
+amenity	supermarket	lv	Lielveikals
+amenity	taxi	lv	Taksometrs
+amenity	telephone	lv	Publisks telefons
+amenity	theatre	lv	Teātris
+amenity	toilets	lv	Tualetes
+amenity	townhall	lv	Rātsnams
+amenity	university	lv	Universitāte
+amenity	vending_machine	lv	Tirdzniecības automāts
+amenity	veterinary	lv	Veterinārā ķirurģija
+amenity	village_hall	lv	Pagastmāja
+amenity	waste_basket	lv	Atkritumu grozs
+amenity	wifi	lv	WiFi piekļuves punkts
+amenity	youth_centre	lv	Jauniešu centrs
+boundary	administrative	lv	Administratīvā robeža
+building	bunker	lv	Bunkurs
+building	chapel	lv	Kapela
+building	church	lv	Baznīca
+building	city_hall	lv	Rātsnams
+building	commercial	lv	Tirdzniecības ēka
+building	dormitory	lv	Kopmītnes
+building	entrance	lv	Ēkas ieeja
+building	faculty	lv	Fakultātes ēka
+building	farm	lv	Saimniecības ēka
+building	flats	lv	Dzīvokļi
+building	garage	lv	Garāža
+building	hall	lv	Zāle
+building	hospital	lv	Slimnīcas ēka
+building	hotel	lv	Viesnīca
+building	house	lv	Māja
+building	industrial	lv	Ražošanas ēka
+building	office	lv	Biroju ēka
+building	public	lv	Sabiedriskā ēka
+building	residential	lv	Dzīvojamā ēka
+building	retail	lv	Mazumtirdzniecības ēka
+building	school	lv	Skolas ēka
+building	shop	lv	Veikals
+building	stadium	lv	Stadions
+building	store	lv	Veikals
+building	terrace	lv	Terase
+building	tower	lv	Tornis
+building	train_station	lv	Dzelzceļa stacija
+building	university	lv	Universitātes ēka
+highway	bridleway	lv	Izjādes taka
+highway	bus_stop	lv	Autobusa pietura
+highway	byway	lv	Blakusceļš
+highway	construction	lv	Automaģistrāle būvniecības stadijā
+highway	cycleway	lv	Veloceliņš
+highway	emergency_access_point	lv	Ārkārtas piekļuves punkts
+highway	footway	lv	Taka
+highway	gate	lv	Vārti
+highway	living_street	lv	Dzīvojamā zona
+highway	motorway	lv	Automaģistrāle
+highway	motorway_junction	lv	Automaģistrāles krustojums
+highway	motorway_link	lv	Automaģistrāles pievedceļš
+highway	path	lv	Taka
+highway	pedestrian	lv	Gājēju ceļš
+highway	platform	lv	Platforma
+highway	primary	lv	Galvenais valsts ceļš
+highway	primary_link	lv	Galvenais valsts ceļš
+highway	raceway	lv	Sacensību trase
+highway	residential	lv	Dzīvojamā
+highway	road	lv	Ceļš
+highway	secondary	lv	Sekundāras nozīmes ceļš
+highway	secondary_link	lv	Sekundāras nozīmes ceļš
+highway	steps	lv	Pakāpieni
+highway	tertiary	lv	Pašvaldību autoceļi
+highway	track	lv	Zemesceļš
+highway	trail	lv	Taka
+highway	trunk	lv	Maģistrālais ceļš
+highway	trunk_link	lv	Maģistrālais ceļš
+highway	unclassified	lv	Neklasificēts ceļš
+highway	unsurfaced	lv	Ceļš bez seguma
+historic	archaeological_site	lv	Arheoloģisku izrakumu vieta
+historic	battlefield	lv	Kaujas lauks
+historic	boundary_stone	lv	Robežstabs
+historic	building	lv	Ēka
+historic	castle	lv	Pils
+historic	church	lv	Baznīca
+historic	house	lv	Māja
+historic	icon	lv	Ikona
+historic	manor	lv	Muiža
+historic	memorial	lv	Memoriāls
+historic	mine	lv	Raktuves
+historic	monument	lv	Piemineklis
+historic	museum	lv	Muzejs
+historic	ruins	lv	Drupas
+historic	tower	lv	Tornis
+historic	wayside_cross	lv	Krusts ceļmalā
+historic	wayside_shrine	lv	Ceļmalas svētnīca
+historic	wreck	lv	Vraks
+landuse	allotments	lv	Mazdārziņi
+landuse	brownfield	lv	Attīrīts būvlaukums
+landuse	cemetery	lv	Kapsēta
+landuse	commercial	lv	Tirdzniecības zona
+landuse	construction	lv	Būvlaukums
+landuse	farm	lv	Saimniecība
+landuse	farmland	lv	Saimniecības zeme
+landuse	farmyard	lv	Saimniecības pagalms
+landuse	forest	lv	Mežs
+landuse	grass	lv	Zāle
+landuse	greenfield	lv	Zaļā zona
+landuse	industrial	lv	Rūpniecības zona
+landuse	landfill	lv	Atkritumu izgāztuve
+landuse	meadow	lv	Pļava
+landuse	military	lv	Militārā zona
+landuse	mine	lv	Raktuves
+landuse	mountain	lv	Kalns
+landuse	nature_reserve	lv	Dabas rezervāts
+landuse	park	lv	Parks
+landuse	piste	lv	Slēpošanas trase
+landuse	plaza	lv	Tirgus laukums
+landuse	quarry	lv	Karjers
+landuse	railway	lv	Dzelzceļš
+landuse	reservoir	lv	Ūdenskrātuve
+landuse	residential	lv	Dzīvojamā zona
+landuse	retail	lv	Mazumtirdzniecība
+landuse	vineyard	lv	Vīna dārzs
+landuse	wetland	lv	Mitrājs
+landuse	wood	lv	Mežs
+leisure	fishing	lv	Zvejas apgabals
+leisure	garden	lv	Dārzs
+leisure	golf_course	lv	Golfa laukums
+leisure	ice_rink	lv	Ledus halle
+leisure	marina	lv	Osta
+leisure	miniature_golf	lv	Minigolfs
+leisure	nature_reserve	lv	Dabas rezervāts
+leisure	park	lv	Parks
+leisure	pitch	lv	Sporta laukums
+leisure	playground	lv	Spēļu laukums
+leisure	recreation_ground	lv	Atpūtas Zona
+leisure	sports_centre	lv	Sporta centrs
+leisure	stadium	lv	Stadions
+leisure	swimming_pool	lv	Peldbaseins
+leisure	track	lv	Skrejceļš
+leisure	water_park	lv	Ūdens atrakciju parks
+natural	bay	lv	Līcis
+natural	beach	lv	Pludmale
+natural	cave_entrance	lv	Ieeja alā
+natural	channel	lv	Kanāls
+natural	cliff	lv	Klints
+natural	coastline	lv	Piekrastes līnija
+natural	crater	lv	Krāteris
+natural	fjord	lv	Fjords
+natural	geyser	lv	Geizers
+natural	glacier	lv	Ledājs
+natural	heath	lv	Tīrelis
+natural	hill	lv	Kalns
+natural	island	lv	Sala
+natural	land	lv	Zeme
+natural	marsh	lv	Purvs
+natural	moor	lv	Tīrelis
+natural	mud	lv	Dubļi
+natural	peak	lv	Smaile
+natural	point	lv	Punkts
+natural	reef	lv	Rifs
+natural	ridge	lv	Grēda
+natural	river	lv	Upe
+natural	rock	lv	Klints
+natural	scree	lv	Nogāze
+natural	scrub	lv	Krūmājs
+natural	shoal	lv	Sēklis
+natural	spring	lv	Avots
+natural	strait	lv	Jūras šaurums
+natural	tree	lv	Koks
+natural	valley	lv	Ieleja
+natural	volcano	lv	Vulkāns
+natural	water	lv	Ūdens
+natural	wetland	lv	Mitrājs
+natural	wetlands	lv	Mitrājs
+natural	wood	lv	Mežs
+place	airport	lv	Lidosta
+place	city	lv	Pilsēta
+place	country	lv	Valsts
+place	county	lv	Apgabals
+place	farm	lv	Saimniecība
+place	hamlet	lv	Ciems
+place	house	lv	Māja
+place	houses	lv	Mājas
+place	island	lv	Sala
+place	islet	lv	Saliņa
+place	locality	lv	Vieta
+place	moor	lv	Tīrelis
+place	municipality	lv	Pašvaldība
+place	postcode	lv	Pasta indekss
+place	region	lv	Reģions
+place	sea	lv	Jūra
+place	state	lv	Štats
+place	suburb	lv	Piepilsēta
+place	town	lv	Pilsēta
+place	village	lv	Ciems
+railway	abandoned	lv	Pamests dzelzceļš
+railway	construction	lv	Dzelzceļš būvniecības stadijā
+railway	disused	lv	Nelietots dzelzceļš
+railway	disused_station	lv	Nelietota dzelzceļa stacija
+railway	funicular	lv	Trošu dzelzceļš
+railway	halt	lv	Vilciena pietura
+railway	historic_station	lv	Vēsturiska dzelzceļa stacija
+railway	junction	lv	Dzelzceļa mezgls
+railway	light_rail	lv	Tramvaja sliedes
+railway	monorail	lv	Monosliede
+railway	narrow_gauge	lv	Šaursliežu dzelzceļš
+railway	platform	lv	Dzelzceļa perons
+railway	preserved	lv	Iekonservēts Dzelzceļš
+railway	station	lv	Dzelzceļa stacija
+railway	subway	lv	Metro stacija
+railway	subway_entrance	lv	Metro ieeja
+railway	tram	lv	Tramvajs
+railway	tram_stop	lv	Tramvaja pietura
+shop	art	lv	Mākslas salons
+shop	bakery	lv	Maiznīca
+shop	beauty	lv	Kosmētiskais salons
+shop	bicycle	lv	Velosipēdu veikals
+shop	books	lv	Grāmatu veikals
+shop	butcher	lv	Miesnieks
+shop	car	lv	Auto veikals
+shop	car_dealer	lv	Auto tirgotājs
+shop	car_parts	lv	Automašīnu rezerves daļas
+shop	carpet	lv	Paklāju veikals
+shop	car_repair	lv	Auto remonts
+shop	charity	lv	Labdarības veikals
+shop	clothes	lv	Apģērbu veikals
+shop	confectionery	lv	Konditorejas veikals
+shop	cosmetics	lv	Kosmētikas veikals
+shop	department_store	lv	Universālveikals
+shop	drugstore	lv	Aptieka
+shop	dry_cleaning	lv	Ķīmiskā tīrīšana
+shop	electronics	lv	Elektronikas veikals
+shop	fish	lv	Zivju veikals
+shop	florist	lv	Florists
+shop	food	lv	Pārtikas veikals
+shop	funeral_directors	lv	Apbedīšanas birojs
+shop	furniture	lv	Mēbeles
+shop	gallery	lv	Galerija
+shop	gift	lv	Dāvanu veikals
+shop	greengrocer	lv	Dārzeņu tirgotājs
+shop	grocery	lv	Pārtikas preču veikals
+shop	hairdresser	lv	Frizētava
+shop	hifi	lv	Hi-Fi
+shop	insurance	lv	Apdrošināšana
+shop	jewelry	lv	Juvelierizstrādājumu veikals
+shop	kiosk	lv	Kiosks
+shop	laundry	lv	Veļas mazgātava
+shop	mall	lv	Tirdzniecības centrs
+shop	market	lv	Tirgus
+shop	mobile_phone	lv	Mobilo telefonu veikals
+shop	motorcycle	lv	Motociklu veikals
+shop	music	lv	Mūzikas veikals
+shop	optician	lv	Optikas veikals
+shop	organic	lv	Bioloģiskās pārtikas veikals
+shop	pet	lv	Zooveikals
+shop	photo	lv	Fotoveikals
+shop	salon	lv	Salons
+shop	shoes	lv	Apavu veikals
+shop	shopping_centre	lv	Iepirkšanās centrs
+shop	sports	lv	Sporta veikals
+shop	stationery	lv	Kancelejas preču veikals
+shop	supermarket	lv	Lielveikals
+shop	toys	lv	Rotaļlietu veikals
+shop	travel_agency	lv	Tūrisma aģentūra
+tourism	alpine_hut	lv	Kalnu būda
+tourism	artwork	lv	Mākslas darbs
+tourism	attraction	lv	Atrakcija
+tourism	bed_and_breakfast	lv	Guļamvieta un brokastis
+tourism	camp_site	lv	Nometnes vieta
+tourism	caravan_site	lv	Kempings
+tourism	guest_house	lv	Viesu nams
+tourism	hostel	lv	Hostelis
+tourism	hotel	lv	Viesnīca
+tourism	information	lv	Informācija
+tourism	motel	lv	Motelis
+tourism	museum	lv	Muzejs
+tourism	picnic_site	lv	Piknika vieta
+tourism	theme_park	lv	Atrakciju parks
+tourism	valley	lv	Ieleja
+tourism	viewpoint	lv	Skatu punkts
+tourism	zoo	lv	Zooloģiskais dārzs
+waterway	boatyard	lv	Jahtu piestātne
+waterway	canal	lv	Kanāls
+waterway	dam	lv	Aizsprosts
+waterway	ditch	lv	Grāvis
+waterway	dock	lv	Doks
+waterway	drain	lv	Grāvis
+waterway	lock	lv	Slūžas
+waterway	lock_gate	lv	Slūžu vārti
+waterway	mineral_spring	lv	Minerālavots
+waterway	mooring	lv	Piestātne
+waterway	rapids	lv	Krāces
+waterway	river	lv	Upe
+waterway	riverbank	lv	Upes krasts
+waterway	stream	lv	Strauts
+waterway	waterfall	lv	Ūdenskritums
+waterway	weir	lv	Dambis

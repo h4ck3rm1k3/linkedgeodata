@@ -1,0 +1,136 @@
+amenity	airport	fa	فرودگاه
+amenity	atm	fa	عابر بانک
+amenity	bank	fa	بانک
+amenity	bench	fa	نیمکت
+amenity	brothel	fa	فاحشه خانه
+amenity	cafe	fa	کافه
+amenity	cinema	fa	سینما
+amenity	clinic	fa	درمانگاه
+amenity	courthouse	fa	دادگاه
+amenity	dentist	fa	دندانپزشک
+amenity	dormitory	fa	خوابگاه دانشجویی
+amenity	embassy	fa	سفارت
+amenity	fire_station	fa	آتش نشانی
+amenity	fuel	fa	پمپ بنزین
+amenity	hospital	fa	بیمارستان
+amenity	hotel	fa	هتل
+amenity	ice_cream	fa	بستنی فروشی
+amenity	kindergarten	fa	کودکستان
+amenity	library	fa	کتابخانه
+amenity	market	fa	بازار
+amenity	marketplace	fa	بازار
+amenity	office	fa	دفتر
+amenity	park	fa	پارک
+amenity	parking	fa	پارکینگ
+amenity	pharmacy	fa	داروخانه
+amenity	police	fa	پلیس
+amenity	post_box	fa	صندوق پست
+amenity	post_office	fa	اداره پست
+amenity	prison	fa	زندان
+amenity	pub	fa	میخانه
+amenity	recycling	fa	بازیافت
+amenity	restaurant	fa	رستوران
+amenity	school	fa	مدرسه
+amenity	shop	fa	فروشگاه
+amenity	supermarket	fa	سوپرمارکت
+amenity	taxi	fa	تاکسی
+amenity	theatre	fa	تئاتر
+amenity	toilets	fa	توالت
+amenity	townhall	fa	شهر داری
+amenity	university	fa	دانشگاه
+amenity	waste_basket	fa	سطل اشغال
+building	church	fa	کلیسا
+building	garage	fa	گاراژ
+building	hospital	fa	ساختمان بیمارستان
+building	hotel	fa	هتل
+building	house	fa	خانه
+building	shop	fa	فروشگاه
+building	stadium	fa	ورزشگاه
+building	tower	fa	برج
+highway	bus_stop	fa	ایستگاه اتوبوس
+highway	footway	fa	پیاده رو
+highway	gate	fa	دروازه
+highway	motorway	fa	اتوبان
+highway	path	fa	مسیر
+highway	pedestrian	fa	پیاده راه
+highway	residential	fa	مسکونی
+highway	road	fa	جاده
+highway	steps	fa	پله
+highway	trunk	fa	بزرگراه
+highway	trunk_link	fa	بزرگراه
+historic	castle	fa	قلعه
+historic	church	fa	کلیسا
+historic	museum	fa	موزه
+historic	tower	fa	برج
+landuse	cemetery	fa	گورستان
+landuse	farmland	fa	زمین کشاورزی
+landuse	forest	fa	جنگل
+landuse	mine	fa	معدن
+landuse	mountain	fa	کوه
+landuse	park	fa	پارک
+landuse	railway	fa	ریل
+leisure	fishing	fa	نواحی ماهی‌گیری
+leisure	garden	fa	باغ
+leisure	marina	fa	تفریح‌گاه ساحلی
+leisure	park	fa	پارک
+leisure	stadium	fa	ورزشگاه
+leisure	swimming_pool	fa	استخر شنا
+natural	bay	fa	خالیج
+natural	beach	fa	ساحل
+natural	cave_entrance	fa	ورودی غار
+natural	channel	fa	کانال
+natural	coastline	fa	ساحل
+natural	fell	fa	قطع کردن
+natural	glacier	fa	یخچال طبیعی
+natural	hill	fa	تپه
+natural	island	fa	جزیره
+natural	moor	fa	دشت
+natural	mud	fa	گل
+natural	peak	fa	قله
+natural	point	fa	نقطه
+natural	river	fa	رود خانه
+natural	rock	fa	صخره
+natural	spring	fa	بهار
+natural	tree	fa	درخت
+natural	valley	fa	دره
+natural	volcano	fa	کوه آتشفشان
+natural	water	fa	اب
+natural	wood	fa	جنگل
+place	airport	fa	فرودگاه
+place	city	fa	شهر بزرگ
+place	country	fa	کشور
+place	farm	fa	مزرعه
+place	house	fa	خانه
+place	island	fa	جزیره
+place	islet	fa	جزیره کوچک
+place	locality	fa	محل
+place	postcode	fa	کدپستی
+place	sea	fa	دریا
+place	suburb	fa	محله
+place	town	fa	شهر
+place	village	fa	دهکده
+shop	bakery	fa	نانوایی
+shop	books	fa	فروشگاه کتاب
+shop	butcher	fa	قصاب
+shop	greengrocer	fa	سبزی فروش
+shop	kiosk	fa	کیوسک
+shop	laundry	fa	خشکشویی
+shop	market	fa	بازار
+shop	supermarket	fa	سوپرمارکت
+tourism	artwork	fa	آثار هنری
+tourism	attraction	fa	جاذبه
+tourism	bed_and_breakfast	fa	تخت‌خواب و صبحانه
+tourism	cabin	fa	اطاق
+tourism	camp_site	fa	محل اردوگاه
+tourism	chalet	fa	کلبه ییلاقی
+tourism	hostel	fa	هتل
+tourism	hotel	fa	هتل
+tourism	information	fa	اطلاعات
+tourism	motel	fa	متل
+tourism	museum	fa	موزه
+tourism	valley	fa	دره
+tourism	zoo	fa	باغ وحش
+waterway	canal	fa	کانال
+waterway	dam	fa	سد
+waterway	river	fa	رودخانه
+waterway	waterfall	fa	ابشار

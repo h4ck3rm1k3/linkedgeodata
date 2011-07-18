@@ -1,0 +1,273 @@
+amenity	airport	eu	Aireportu
+amenity	arts_centre	eu	Arte Zentroa
+amenity	auditorium	eu	Entzunareto
+amenity	bank	eu	Banku
+amenity	bar	eu	Taberna
+amenity	bench	eu	Eserleku
+amenity	bicycle_rental	eu	Txirrindu Alokairua
+amenity	brothel	eu	Putetxe
+amenity	bureau_de_change	eu	Diru-truke Bulegoa
+amenity	bus_station	eu	Autobus-geltoki
+amenity	cafe	eu	Kafetegi
+amenity	car_rental	eu	Ibilgailu-alokairu
+amenity	car_wash	eu	Auto Garbiketa
+amenity	casino	eu	Kasino
+amenity	cinema	eu	Zinema
+amenity	clinic	eu	Klinika
+amenity	club	eu	Diskoteka
+amenity	college	eu	Kolegioa
+amenity	community_centre	eu	Komunitate Zentroa
+amenity	courthouse	eu	Epaitegia
+amenity	crematorium	eu	Errauste labe
+amenity	dentist	eu	Dentista
+amenity	doctors	eu	Medikuak
+amenity	drinking_water	eu	Edateko ur
+amenity	driving_school	eu	Autoeskola
+amenity	embassy	eu	Enbaxada
+amenity	emergency_phone	eu	Larrialdi Telefonoa
+amenity	fast_food	eu	Janari Azkarra
+amenity	ferry_terminal	eu	Ferry terminal
+amenity	fire_station	eu	Suhiltzaileak
+amenity	fountain	eu	Iturri
+amenity	grave_yard	eu	Hilerri
+amenity	gym	eu	Osasun Zentroa / Gimnasioa
+amenity	hall	eu	Aretoa
+amenity	health_centre	eu	Osasun Zentroa
+amenity	hospital	eu	Ospitalea
+amenity	hotel	eu	Hotel
+amenity	ice_cream	eu	Izozkiak
+amenity	kindergarten	eu	Haurtzaindegi
+amenity	library	eu	Liburutegia
+amenity	market	eu	Merkatu
+amenity	marketplace	eu	Merkatua
+amenity	mountain_rescue	eu	Mendiko Erreskatea
+amenity	nightclub	eu	Gau-klub
+amenity	nursery	eu	Haurtzaindegi
+amenity	office	eu	Bulego
+amenity	park	eu	Parke
+amenity	parking	eu	Aparkaleku
+amenity	pharmacy	eu	Farmazia
+amenity	place_of_worship	eu	Otoitzerako Lekua
+amenity	police	eu	Polizia
+amenity	post_box	eu	Postontzia
+amenity	post_office	eu	Postetxe
+amenity	preschool	eu	Eskolaurre
+amenity	prison	eu	Espetxe
+amenity	public_building	eu	Eraikin publiko
+amenity	public_market	eu	Herri Azoka
+amenity	recycling	eu	Birziklatze gune
+amenity	restaurant	eu	Jatetxe
+amenity	retirement_home	eu	Nagusien etxea
+amenity	sauna	eu	Sauna
+amenity	school	eu	Ikastetxe
+amenity	shop	eu	Denda
+amenity	shopping	eu	Erosketak
+amenity	studio	eu	Estudio
+amenity	supermarket	eu	Supermerkatu
+amenity	taxi	eu	Taxi
+amenity	telephone	eu	Telefono publiko
+amenity	theatre	eu	Antzokia
+amenity	toilets	eu	Komunak
+amenity	townhall	eu	Udaletxe
+amenity	university	eu	Unibertsitate
+amenity	vending_machine	eu	Salmenta automatiko
+amenity	wifi	eu	WiFi Sarbidea
+amenity	youth_centre	eu	Gaztelekua
+boundary	administrative	eu	Muga Administratiboa
+building	bunker	eu	Bunker
+building	chapel	eu	Kapera
+building	church	eu	Eliza
+building	city_hall	eu	Udaletxea
+building	garage	eu	Garajea
+building	hospital	eu	Ospitale erakina
+building	hotel	eu	Hotela
+building	house	eu	Etxe
+building	industrial	eu	Eraikin industriala
+building	public	eu	Eraikin publiko
+building	school	eu	Eskola eraikina
+building	shop	eu	Denda
+building	stadium	eu	Estadio
+building	store	eu	Denda
+building	tower	eu	Dorre
+building	train_station	eu	Tren Geltokia
+building	university	eu	Unibertsitate eraikina
+highway	bus_stop	eu	Autobus-geraleku
+highway	construction	eu	Eraikitze-lanetan dagoen Autopista
+highway	emergency_access_point	eu	Larrialdi Sarbide Gunea
+highway	footway	eu	Oinezkoen bide
+highway	gate	eu	Ate
+highway	motorway	eu	Autobide
+highway	motorway_link	eu	Autobidea
+highway	platform	eu	Nasa
+highway	primary	eu	Lehen mailako errepide
+highway	primary_link	eu	Errepide nagusi
+highway	residential	eu	Bizileku
+highway	road	eu	Errepide
+highway	secondary	eu	Bigarren mailako errepide
+highway	secondary_link	eu	Bigarren mailako errepide
+highway	service	eu	Zerbitzu Errepidea
+highway	services	eu	Autobide Zerbitzuak
+highway	steps	eu	Eskailera-mailak
+highway	tertiary	eu	Hirugarren mailako errepide
+highway	track	eu	Pista
+historic	archaeological_site	eu	Aztarnategi arkeologiko
+historic	building	eu	Eraikina
+historic	castle	eu	Gaztelu
+historic	church	eu	Eliza
+historic	house	eu	Etxea
+historic	memorial	eu	Memoriala
+historic	mine	eu	Meategi
+historic	monument	eu	Monumentu
+historic	museum	eu	Museo
+historic	tower	eu	Dorre
+landuse	cemetery	eu	Hilerri
+landuse	commercial	eu	Merkataritza Eremua
+landuse	construction	eu	Eraikuntza
+landuse	farm	eu	Baserria
+landuse	forest	eu	Baso
+landuse	meadow	eu	Larre
+landuse	military	eu	Eremu Militarra
+landuse	mine	eu	Meategi
+landuse	mountain	eu	Mendi
+landuse	nature_reserve	eu	Natura-erreserba
+landuse	park	eu	Parke
+landuse	plaza	eu	Enparantza
+landuse	quarry	eu	Harrobi
+landuse	railway	eu	Trenbide
+landuse	reservoir	eu	Urtegi
+leisure	beach_resort	eu	Hondartza konplexu
+leisure	common	eu	Lur Komunak
+leisure	fishing	eu	Arrantza Lekua
+leisure	garden	eu	Lorategi
+leisure	golf_course	eu	Golf-zelai
+leisure	ice_rink	eu	Izotz-pista
+leisure	marina	eu	Kirol-portu
+leisure	miniature_golf	eu	Minigolfa
+leisure	nature_reserve	eu	Natura Erreserba
+leisure	park	eu	Parkea
+leisure	pitch	eu	Kirolgunea
+leisure	playground	eu	Jolastoki
+leisure	sports_centre	eu	Kiroldegi
+leisure	stadium	eu	Estadio
+leisure	swimming_pool	eu	Igerilekua
+natural	bay	eu	Badia
+natural	beach	eu	Hondartza
+natural	cape	eu	Lurmutur
+natural	cave_entrance	eu	Kobazulo Sarrera
+natural	channel	eu	Kanal
+natural	coastline	eu	Itsasertz
+natural	crater	eu	Crater
+natural	fjord	eu	Fiordo
+natural	geyser	eu	Geiser
+natural	glacier	eu	Glaziar
+natural	hill	eu	Muinoa
+natural	island	eu	Irla
+natural	mud	eu	Lohi
+natural	peak	eu	Gailur
+natural	point	eu	Puntu
+natural	reef	eu	Arrezife
+natural	river	eu	Ibai
+natural	rock	eu	Arroka
+natural	scree	eu	Harritza
+natural	shoal	eu	Hondar-banku
+natural	strait	eu	Itsasertza
+natural	tree	eu	Zuhaitza
+natural	valley	eu	Haran
+natural	volcano	eu	Sumendi
+natural	water	eu	Ura
+natural	wood	eu	Baso
+place	airport	eu	Aireportu
+place	city	eu	Hiria
+place	country	eu	Herrialdea
+place	county	eu	Konderria
+place	farm	eu	Baserria
+place	hamlet	eu	Herrixka
+place	house	eu	Etxe
+place	houses	eu	Etxeak
+place	island	eu	Irla
+place	islet	eu	Uhartea
+place	locality	eu	Lokalitate
+place	municipality	eu	Udalerri
+place	postcode	eu	Posta-kode
+place	region	eu	Eskualde
+place	sea	eu	Itsasoa
+place	state	eu	Estatua
+place	subdivision	eu	Subdibisio
+place	suburb	eu	Aldiri
+place	town	eu	Herria
+place	unincorporated_area	eu	Elkartu Gabeko Gunea
+place	village	eu	Herrixka
+railway	construction	eu	Eraikitze-lanetan dagoen Trenbidea
+railway	halt	eu	Tren Geralekua
+railway	historic_station	eu	Tren Geltoki Historikoa
+railway	light_rail	eu	Tren Arina
+railway	monorail	eu	Monoraila
+railway	platform	eu	Trenbide Plataforma
+railway	station	eu	Tren Geltokia
+railway	subway	eu	Metro geltoki
+railway	subway_entrance	eu	Metro Sarbidea
+railway	tram	eu	Tranbia
+railway	tram_stop	eu	Tranbia geltoki
+shop	art	eu	Arte-denda
+shop	bakery	eu	Okindegi
+shop	books	eu	Liburudenda
+shop	butcher	eu	Harategi
+shop	chemist	eu	Farmazia
+shop	clothes	eu	Arropa denda
+shop	computer	eu	Ordenagailu-denda
+shop	confectionery	eu	Gozotegi
+shop	electronics	eu	Elektronika-denda
+shop	estate_agent	eu	Higiezinen agente
+shop	fish	eu	Arrantza-denda
+shop	florist	eu	Loradenda
+shop	food	eu	Janari-denda
+shop	furniture	eu	Altzari
+shop	gallery	eu	Galeria
+shop	gift	eu	Opari-denda
+shop	greengrocer	eu	Barazki-saltzaile
+shop	grocery	eu	Janaridenda
+shop	hairdresser	eu	Ile-apaindegi
+shop	hifi	eu	Hi-Fi
+shop	insurance	eu	Aseguruak
+shop	jewelry	eu	Bitxi-denda
+shop	kiosk	eu	Kiosko
+shop	laundry	eu	Garbitegi
+shop	mall	eu	Merkataritza-gunea
+shop	market	eu	Merkatu
+shop	mobile_phone	eu	Mugikor-denda
+shop	music	eu	Musika-denda
+shop	newsagent	eu	Kioskoa
+shop	optician	eu	Optika
+shop	pet	eu	Animalia-denda
+shop	photo	eu	Argazki-denda
+shop	shoes	eu	Zapatadenda
+shop	shopping_centre	eu	Merkatal Gunea
+shop	sports	eu	Kirol denda
+shop	supermarket	eu	Supermerkatu
+shop	toys	eu	Jostailu Denda
+shop	travel_agency	eu	Bidaia-agentzia
+tourism	alpine_hut	eu	Aterpe alpinoa
+tourism	attraction	eu	Atrakzio
+tourism	bed_and_breakfast	eu	Ohe eta gosari (B&B)
+tourism	cabin	eu	Kabina
+tourism	camp_site	eu	Kanpin
+tourism	chalet	eu	Txalet
+tourism	guest_house	eu	Aterpe
+tourism	hostel	eu	Ostatu
+tourism	hotel	eu	Hotel
+tourism	information	eu	Informazioa
+tourism	motel	eu	Motel
+tourism	museum	eu	Museoa
+tourism	picnic_site	eu	Piknik-gune
+tourism	theme_park	eu	Parke tematiko
+tourism	valley	eu	Haran
+tourism	viewpoint	eu	Behatoki
+tourism	zoo	eu	Zoologiko
+waterway	canal	eu	Kanal
+waterway	dam	eu	Urtegia
+waterway	ditch	eu	Lubakia
+waterway	drain	eu	Isurbidea
+waterway	rapids	eu	Ur-lasterrak
+waterway	river	eu	Ibai
+waterway	waterfall	eu	Ur-jauzi
+waterway	weir	eu	Uharka

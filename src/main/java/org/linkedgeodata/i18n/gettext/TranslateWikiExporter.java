@@ -3,17 +3,16 @@ package org.linkedgeodata.i18n.gettext;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.sql.Connection;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
@@ -22,7 +21,6 @@ import org.linkedgeodata.dao.TagLabelDAO;
 import org.linkedgeodata.osm.mapping.InMemoryTagMapper;
 import org.linkedgeodata.util.ConnectionConfig;
 import org.linkedgeodata.util.PostGISUtil;
-import org.linkedgeodata.util.SinglePrefetchIterator;
 
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -31,133 +29,50 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.vocabulary.RDFS;
 
-/**
- * Currently this file is not cleanup up.
- * 
- * Essentially it contains a .po file parser for the "gettext" format and an
- * exporter for Translate Wiki.
- * 
- * 
- * @author Claus Stadler
- * 
- */
 
-class TranslateWikiUtil
+interface ITagLabelOutput
 {
-	public static URL getOSMExportURL(String langCode)
+	void write(String k, String v, String language, String label);
+}
+
+
+class TagLabelOutputCsv
+	implements ITagLabelOutput
+{
+	private PrintStream out;
+	
+	public TagLabelOutputCsv(PrintStream out)
 	{
-		return getExportURL("out-osm-site", langCode);
+		this.out = out;
+	}
+	
+	@Override
+	public void write(String k, String v, String language, String label) {
+		out.println(k + "\t" + v + "\t" + language + "\t" + label);
+	}
+}
+
+
+class TagLabelOutputDao
+	implements ITagLabelOutput
+{
+	public TagLabelOutputDao(TagLabelDAO out)
+	{
+		this.out = out;
 	}
 
-	// out-osm-site
-	public static URL getExportURL(String groupId, String langCode)
-	{
+	private TagLabelDAO out;
+	
+	@Override
+	public void write(String k, String v, String language, String label) {
 		try {
-			return new URL(
-					"http://translatewiki.net/w/i.php?title=Special%3ATranslate&task=export-as-po&group="
-							+ groupId + "&language=" + langCode);
+			out.insert(k, v, language, label);
 		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-}
-
-class GetTextIterator
-		extends SinglePrefetchIterator<GetTextRecord>
-{
-	private BufferedReader	reader;
-
-	public GetTextIterator(BufferedReader reader)
-	{
-		this.reader = reader;
-	}
-
-	private static String stripDoubleQuotes(String str)
-	{
-		int offset = str.startsWith("\"") ? 1 : 0;
-		int deltaLen = str.endsWith("\"") ? 1 : 0;
-
-		String result = str.substring(offset, str.length() - deltaLen);
-		return result;
-	}
-
-	@Override
-	protected GetTextRecord prefetch() throws Exception
-	{
-		GetTextRecord record = new GetTextRecord();
-
-		String line = "";
-		while ((line = reader.readLine()) != null) {
-			if (line.trim().isEmpty()) {
-				if (record.isEmpty() && record.getPlainValues().isEmpty())
-					continue;
-
-				return record;
-			}
-
-			if (line.startsWith(GetTextRecord.Msg.COMMENT.getValue()))
-				continue;
-
-			for (GetTextRecord.Msg msg : GetTextRecord.Msg.values()) {
-				if (line.startsWith(msg.getValue())) {
-					String sub = line.substring(msg.getValue().length()).trim();
-
-					sub = stripDoubleQuotes(sub);
-
-					record.put(msg, sub);
-					continue;
-				}
-			}
-
-			record.getPlainValues().add(stripDoubleQuotes(line));
-		}
-
-		return finish();
-	}
-
-}
-
-class GetTextRecord
-		extends HashMap<GetTextRecord.Msg, String>
-{
-	private List<String>	plainValues	= new ArrayList<String>();
-
-	public List<String> getPlainValues()
-	{
-		return plainValues;
-	}
-
-	@Override
-	public String get(Object msg)
-	{
-		String result = super.get(msg);
-
-		return result == null ? "" : result;
-	}
-
-	/**
-	 * 
-	 */
-	private static final long	serialVersionUID	= 7884124527648846411L;
-
-	enum Msg
-	{
-		COMMENT("#"), MSGCTXT("msgctxt"), MSGID("msgid"), MSGSTR("msgstr");
-
-		private String	value;
-
-		Msg(String value)
-		{
-			this.value = value;
-		}
-
-		public String getValue()
-		{
-			return value;
+			e.printStackTrace();
 		}
 	}
 }
+
 
 /**
  * Ok, simply loading the po.file seems to be out of scope of the
@@ -207,13 +122,17 @@ public class TranslateWikiExporter
 		logger.info("Starting export");
 		//export("de", false, null, resolver);
 		
-		String[] langs = {"de", "es", "ru", "ja", "it", "fr", "ar"};
+		String[] langs = {"en","de","fr","pl","ja","it","nl","pt","es","ru","sv","zh","no","fi","ca","uk","tr","cs","hu","ro","vo","eo","da","sk","id","ar","ko","he","lt","vi","sl","sr","bg","et","fa","hr","simple","new","ht","nn","gl","th","te","el","ms","eu","ceb","mk","hi","ka","la","bs","lb","br","is","bpy","mr","sq","cy","az","sh","tl","lv","pms","bn","be_x_old","jv","ta","oc","io","be","an","su","nds","scn","nap","ku","ast","af","fy","sw","wa","zh_yue","bat_smg","qu","ur","cv","ksh"};
 		for(String lang : langs) {
 			logger.info("Processing language: " + lang);
-			export(lang, false, null, resolver);
+			try {
+				export(lang, false, null, resolver);
+			} catch(Exception e) {
+				logger.warn("Failed for language:" + lang);
+			}
 		}
 
-		export("de", true, "en", resolver);
+		//export("de", true, "en", resolver);
 	}
 
 	public static void export(String initLangCode, boolean idMode,
@@ -221,7 +140,8 @@ public class TranslateWikiExporter
 		throws Exception
 	{
 		//exportToDataBase(initLangCode, idMode, overrideLangCode);
-		exportToTriples(initLangCode, idMode, overrideLangCode, resolver);
+		//exportToTriples(initLangCode, idMode, overrideLangCode, resolver);
+		exportToFile("languages", initLangCode, idMode, overrideLangCode);
 	}
 	
 	public static void exportToDataBase(String initLangCode, boolean idMode,
@@ -233,8 +153,32 @@ public class TranslateWikiExporter
 		
 		TagLabelDAO dao = new TagLabelDAO(conn);
 		
+		ITagLabelOutput out = new TagLabelOutputDao(dao);
 		
+		doExport(initLangCode, idMode, overrideLangCode, out);
+	}
+	
+	public static void exportToFile(String basePath, String initLangCode, boolean idMode,
+			String overrideLangCode)
+		throws Exception
+	{
+		File file = new File(basePath + "/" + initLangCode + ".csv");
+		if(file.getParentFile() != null) {
+			file.getParentFile().mkdirs();
+		}
 		
+		PrintStream ps = new PrintStream(new FileOutputStream(new File(basePath + "/" + initLangCode + ".csv")));
+		
+		ITagLabelOutput out = new TagLabelOutputCsv(ps);
+		
+		doExport(initLangCode, idMode, overrideLangCode, out);
+		
+		ps.close();
+	}	
+	
+	public static void doExport(String initLangCode, boolean idMode,
+			String overrideLangCode, ITagLabelOutput out) throws IOException
+	{	
 		logger.info("Processing: " + initLangCode);
 
 		URL source = TranslateWikiUtil.getOSMExportURL(initLangCode);
@@ -293,7 +237,7 @@ public class TranslateWikiExporter
 				String value = kv[1]; //.trim();
 
 				try {
-					dao.insert(key, value, langCode, label);
+					out.write(key, value, langCode, label);
 				}
 				catch(Exception e) {
 					logger.warn(ExceptionUtils.getStackTrace(e));

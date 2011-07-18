@@ -1,0 +1,405 @@
+amenity	airport	it	Aeroporto
+amenity	arts_centre	it	Centro d'arte
+amenity	atm	it	Cassa automatica
+amenity	auditorium	it	Auditorium
+amenity	bank	it	Banca
+amenity	bar	it	Bar
+amenity	bench	it	Panchina
+amenity	bicycle_parking	it	Parcheggio per biciclette
+amenity	bicycle_rental	it	Noleggio biciclette
+amenity	brothel	it	Bordello
+amenity	bureau_de_change	it	Cambia valute
+amenity	bus_station	it	Stazione degli autobus
+amenity	cafe	it	Cafe
+amenity	car_rental	it	Autonoleggio
+amenity	car_sharing	it	Car Sharing
+amenity	car_wash	it	Autolavaggio
+amenity	casino	it	Casinò
+amenity	cinema	it	Cinema
+amenity	clinic	it	Clinica
+amenity	club	it	Club
+amenity	college	it	Scuola superiore
+amenity	community_centre	it	Centro civico
+amenity	courthouse	it	Tribunale
+amenity	crematorium	it	Crematorio
+amenity	dentist	it	Dentista
+amenity	doctors	it	Medici
+amenity	dormitory	it	Dormitorio
+amenity	drinking_water	it	Acqua potabile
+amenity	driving_school	it	Scuola guida
+amenity	embassy	it	Ambasciata
+amenity	emergency_phone	it	Colonnina SOS
+amenity	fast_food	it	Fast Food
+amenity	ferry_terminal	it	Terminal traghetti
+amenity	fire_hydrant	it	Pompa antincendio
+amenity	fire_station	it	Vigili del fuoco
+amenity	fountain	it	Fontana
+amenity	fuel	it	Stazione di rifornimento
+amenity	grave_yard	it	Cimitero
+amenity	gym	it	Centro fitness / Palestra
+amenity	hall	it	Sala
+amenity	health_centre	it	Casa di cura
+amenity	hospital	it	Ospedale
+amenity	hotel	it	Hotel
+amenity	hunting_stand	it	Postazione di caccia
+amenity	ice_cream	it	Gelateria
+amenity	kindergarten	it	Asilo infantile
+amenity	library	it	Biblioteca
+amenity	market	it	Mercato
+amenity	marketplace	it	Mercato
+amenity	mountain_rescue	it	Soccorso alpino
+amenity	nightclub	it	Locale notturno
+amenity	nursery	it	Asilo nido
+amenity	nursing_home	it	Asilo nido
+amenity	office	it	Ufficio
+amenity	park	it	Parco
+amenity	parking	it	Parcheggio
+amenity	pharmacy	it	Farmacia
+amenity	place_of_worship	it	Luogo di culto
+amenity	police	it	Polizia
+amenity	post_box	it	Cassetta delle lettere
+amenity	post_office	it	Ufficio postale
+amenity	preschool	it	Scuola Materna
+amenity	prison	it	Prigione
+amenity	pub	it	Pub
+amenity	public_building	it	Edificio pubblico
+amenity	public_market	it	Mercato pubblico
+amenity	reception_area	it	Area accoglienza
+amenity	recycling	it	Punto riciclaggio rifiuti
+amenity	restaurant	it	Ristorante
+amenity	retirement_home	it	Casa di Riposo
+amenity	sauna	it	Sauna
+amenity	school	it	Scuola
+amenity	shelter	it	Pensilina/ricovero
+amenity	shop	it	Negozio
+amenity	social_club	it	Centro Sociale
+amenity	studio	it	Studio
+amenity	supermarket	it	Supermercato
+amenity	taxi	it	Taxi
+amenity	telephone	it	Telefono pubblico
+amenity	theatre	it	Teatro
+amenity	toilets	it	Bagni pubblici
+amenity	townhall	it	Municipio
+amenity	university	it	Università
+amenity	vending_machine	it	Distributore automatico
+amenity	veterinary	it	Veterinario
+amenity	waste_basket	it	Cestino rifiuti
+amenity	wifi	it	Punto di accesso WiFi
+amenity	youth_centre	it	Centro Giovanile
+boundary	administrative	it	Confine amministrativo
+building	apartments	it	Edificio residenziale
+building	bunker	it	Bunker
+building	chapel	it	Cappella
+building	church	it	Chiesa
+building	city_hall	it	Municipio
+building	commercial	it	Uffici
+building	dormitory	it	Dormitorio
+building	entrance	it	Entrata dell'edificio
+building	farm	it	Edificio rurale
+building	flats	it	Appartamenti
+building	garage	it	Autorimessa
+building	hall	it	Sala
+building	hospital	it	Ospedale
+building	hotel	it	Albergo
+building	house	it	Casa
+building	industrial	it	Edificio industriale
+building	office	it	Uffici
+building	public	it	Edificio pubblico
+building	residential	it	Edificio residenziale
+building	school	it	Edificio scolastico
+building	shop	it	Negozio
+building	stadium	it	Stadio
+building	store	it	Negozio
+building	terrace	it	Terrazza
+building	tower	it	Torre
+building	train_station	it	Stazione ferroviaria
+building	university	it	Sede universitaria
+highway	bridleway	it	Percorso per equitazione
+highway	bus_guideway	it	Autobus guidato
+highway	bus_stop	it	Fermata autobus
+highway	byway	it	Byway (UK)
+highway	construction	it	Strada in costruzione
+highway	cycleway	it	Percorso ciclabile
+highway	distance_marker	it	Distanziometro
+highway	emergency_access_point	it	Colonnina SOS
+highway	footway	it	Percorso pedonale
+highway	ford	it	Guado
+highway	gate	it	Cancello
+highway	living_street	it	Strada pedonale
+highway	minor	it	Strada secondaria
+highway	motorway	it	Autostrada/tangenziale
+highway	motorway_junction	it	Svincolo
+highway	motorway_link	it	Autostrada
+highway	path	it	Sentiero
+highway	pedestrian	it	Percorso pedonale
+highway	platform	it	Piattaforma
+highway	primary	it	Strada di importanza nazionale
+highway	primary_link	it	Strada principale
+highway	raceway	it	Pista
+highway	residential	it	Strada residenziale
+highway	road	it	Strada generica
+highway	secondary	it	Strada di importanza regionale
+highway	secondary_link	it	Strada secondaria
+highway	service	it	Strada di servizio
+highway	services	it	Stazione di servizio
+highway	steps	it	Scala
+highway	stile	it	Scaletta
+highway	tertiary	it	Strada di importanza locale
+highway	track	it	Strada forestale o agricola
+highway	trail	it	Percorso escursionistico
+highway	trunk	it	Superstrada
+highway	trunk_link	it	Superstrada
+highway	unclassified	it	Strada minore
+highway	unsurfaced	it	Strada non pavimentata
+historic	archaeological_site	it	Sito archeologico
+historic	battlefield	it	Campo di battaglia
+historic	boundary_stone	it	Pietra confinaria
+historic	building	it	Edificio
+historic	castle	it	Castello
+historic	church	it	Chiesa
+historic	house	it	Casa storica
+historic	icon	it	Icona
+historic	manor	it	Maniero
+historic	memorial	it	Memoriale
+historic	mine	it	Mina
+historic	monument	it	Monumento
+historic	museum	it	Museo
+historic	ruins	it	Rovine
+historic	tower	it	Torre
+historic	wayside_cross	it	Croce
+historic	wayside_shrine	it	Edicola votiva
+historic	wreck	it	Relitto
+landuse	allotments	it	Orti casalinghi
+landuse	basin	it	Bacino
+landuse	brownfield	it	Area con edifici in demolizione
+landuse	cemetery	it	Cimitero
+landuse	commercial	it	Zona di uffici
+landuse	conservation	it	Conservazione
+landuse	construction	it	Costruzione
+landuse	farm	it	Fattoria
+landuse	farmland	it	Terreno agricolo
+landuse	farmyard	it	Aia
+landuse	forest	it	Foresta
+landuse	grass	it	Prato
+landuse	greenfield	it	Area da adibire a costruzioni
+landuse	industrial	it	Zona Industriale
+landuse	landfill	it	Discarica di rifiuti
+landuse	meadow	it	Prato
+landuse	military	it	Zona militare
+landuse	mine	it	Miniera
+landuse	mountain	it	Montagna
+landuse	nature_reserve	it	Riserva naturale
+landuse	park	it	Parco
+landuse	piste	it	Piste
+landuse	quarry	it	Cava
+landuse	railway	it	Ferrovia
+landuse	recreation_ground	it	Area di svago
+landuse	reservoir	it	Riserva idrica
+landuse	residential	it	Area Residenziale
+landuse	retail	it	Negozi
+landuse	vineyard	it	Vigneto
+landuse	wetland	it	Zona umida
+landuse	wood	it	Bosco
+leisure	common	it	Area comune (UK)
+leisure	fishing	it	Riserva di pesca
+leisure	garden	it	Giardino
+leisure	golf_course	it	Campo da golf
+leisure	ice_rink	it	Pista di ghiaccio
+leisure	marina	it	Porto turistico
+leisure	miniature_golf	it	Minigolf
+leisure	nature_reserve	it	Riserva naturale
+leisure	park	it	Parco
+leisure	pitch	it	Campo sportivo
+leisure	playground	it	Parco giochi
+leisure	recreation_ground	it	Area di svago
+leisure	slipway	it	Rampa per la messa in acqua di imbarcazioni
+leisure	sports_centre	it	Centro sportivo
+leisure	stadium	it	Stadio
+leisure	swimming_pool	it	Piscina
+leisure	track	it	Pista da corsa
+leisure	water_park	it	Parco acquatico
+natural	bay	it	Baia
+natural	beach	it	Spiaggia
+natural	cape	it	Capo
+natural	cave_entrance	it	Entrata di grotta/caverna
+natural	channel	it	Canale
+natural	cliff	it	Rupe
+natural	coastline	it	Linea di costa
+natural	crater	it	Cratere
+natural	feature	it	Caratteristica
+natural	fell	it	Prato alpino
+natural	fjord	it	Fiordo
+natural	geyser	it	Geyser
+natural	glacier	it	Ghiacciaio
+natural	heath	it	Brughiera
+natural	hill	it	Collina
+natural	island	it	Isola
+natural	land	it	Terra
+natural	marsh	it	Palude alluvionale
+natural	moor	it	Molo
+natural	mud	it	Zona fangosa (sabbie mobili)
+natural	peak	it	Picco montuoso
+natural	point	it	Punto
+natural	reef	it	Scogliera
+natural	ridge	it	Cresta montuosa
+natural	river	it	Fiume
+natural	rock	it	Roccia
+natural	scree	it	Ghiaione
+natural	scrub	it	Boscaglia
+natural	shoal	it	Secca
+natural	spring	it	Sorgente
+natural	strait	it	Stretto
+natural	tree	it	Albero
+natural	valley	it	Valle
+natural	volcano	it	Vulcano
+natural	water	it	Acqua
+natural	wetland	it	Zona umida
+natural	wetlands	it	Zona umida
+natural	wood	it	Bosco
+place	airport	it	Aeroporto
+place	city	it	Città
+place	country	it	Nazione
+place	county	it	Contea (in Italia NON usare)
+place	farm	it	Area agricola
+place	hamlet	it	Gruppo di case
+place	house	it	Casa
+place	houses	it	Gruppo di case
+place	island	it	Isola
+place	islet	it	Isoletta
+place	locality	it	Località (luogo con nome, non popolato)
+place	moor	it	Molo
+place	municipality	it	Comune
+place	postcode	it	CAP
+place	region	it	Provincia
+place	sea	it	Mare
+place	state	it	Regione
+place	subdivision	it	Suddivisione
+place	suburb	it	Quartiere
+place	town	it	Paese
+place	unincorporated_area	it	Area non inclusa
+place	village	it	Piccolo paese
+railway	abandoned	it	Linea ferroviaria abbandonata
+railway	construction	it	Ferrovia in costruzione
+railway	disused	it	Linea ferroviaria dismessa
+railway	disused_station	it	Stazione ferroviaria dismessa
+railway	funicular	it	Funicolare
+railway	halt	it	Fermata del treno
+railway	historic_station	it	Storica stazione ferroviaria
+railway	level_crossing	it	Passaggio a livello
+railway	light_rail	it	Ferrovia leggera
+railway	monorail	it	Monorotaia
+railway	narrow_gauge	it	Ferrovia a scartamento ridotto
+railway	platform	it	Banchina ferroviaria
+railway	preserved	it	Ferrovia storica
+railway	station	it	Stazione ferroviaria
+railway	subway	it	Stazione della metropolitana
+railway	subway_entrance	it	Ingresso alla metropolitana
+railway	tram	it	Tramvia
+railway	tram_stop	it	Fermata del tram
+railway	yard	it	Zona di manovra ferroviaria
+shop	alcohol	it	Alcolici
+shop	art	it	Negozio d'arte
+shop	bakery	it	Panetteria
+shop	beauty	it	Prodotti cosmetici
+shop	beverages	it	Negozio bevande
+shop	bicycle	it	Negozio biciclette
+shop	books	it	Libreria
+shop	butcher	it	Macellaio
+shop	car	it	Concessionaria
+shop	car_dealer	it	Concessionaria auto
+shop	car_parts	it	Autoricambi
+shop	carpet	it	Tappeti
+shop	car_repair	it	Autofficina
+shop	charity	it	Negozio solidale
+shop	chemist	it	Farmacia
+shop	clothes	it	Negozio di abbigliamento
+shop	computer	it	Negozio di computer
+shop	confectionery	it	Pasticceria
+shop	convenience	it	Minimarket
+shop	copyshop	it	Copisteria
+shop	cosmetics	it	Negozio cosmetici
+shop	department_store	it	Grande magazzino
+shop	discount	it	Discount
+shop	doityourself	it	Fai da-te
+shop	drugstore	it	Emporio
+shop	dry_cleaning	it	Lavasecco
+shop	electronics	it	Elettronica
+shop	estate_agent	it	Agenzia immobiliare
+shop	farm	it	Parafarmacia
+shop	fashion	it	Negozio moda
+shop	fish	it	Pescheria
+shop	florist	it	Fioraio
+shop	food	it	Alimentari
+shop	funeral_directors	it	Agenzia funebre
+shop	furniture	it	Arredamenti
+shop	gallery	it	Galleria d'arte
+shop	garden_centre	it	Centro giardinaggio
+shop	general	it	Emporio
+shop	gift	it	Articoli da regalo
+shop	greengrocer	it	Fruttivendolo
+shop	grocery	it	Fruttivendolo
+shop	hairdresser	it	Parrucchiere
+shop	hardware	it	Ferramenta
+shop	hifi	it	Hi-Fi
+shop	insurance	it	Assicurazioni
+shop	jewelry	it	Gioielleria
+shop	kiosk	it	Edicola
+shop	laundry	it	Lavanderia
+shop	mall	it	Centro commerciale
+shop	market	it	Mercato
+shop	mobile_phone	it	Centro telefonia mobile
+shop	motorcycle	it	Concessionario di motociclette
+shop	music	it	Articoli musicali
+shop	newsagent	it	Giornalaio
+shop	optician	it	Ottico
+shop	organic	it	Negozio di prodotti naturali ed ecologici
+shop	pet	it	Negozio animali
+shop	photo	it	Articoli fotografici
+shop	salon	it	Salone
+shop	shoes	it	Negozio di calzature
+shop	shopping_centre	it	Centro commerciale
+shop	sports	it	Articoli sportivi
+shop	supermarket	it	Supermercato
+shop	toys	it	Negozio di giocattoli
+shop	travel_agency	it	Agenzia di viaggi
+shop	video	it	Videoteca
+shop	wine	it	Alcolici
+tourism	alpine_hut	it	Rifugio alpino
+tourism	artwork	it	Opera d'arte
+tourism	attraction	it	Attrazione turistica
+tourism	bed_and_breakfast	it	Bed and Breakfast
+tourism	cabin	it	Cabina
+tourism	camp_site	it	Campeggio
+tourism	caravan_site	it	Area caravan e camper
+tourism	chalet	it	Casetta (chalet)
+tourism	guest_house	it	Guest House
+tourism	hostel	it	Ostello
+tourism	hotel	it	Hotel
+tourism	information	it	Informazioni
+tourism	motel	it	Motel
+tourism	museum	it	Museo
+tourism	picnic_site	it	Area picnic
+tourism	theme_park	it	Parco divertimenti
+tourism	valley	it	Valle
+tourism	viewpoint	it	Punto panoramico
+tourism	zoo	it	Zoo
+waterway	boatyard	it	Cantiere nautico
+waterway	canal	it	Canale
+waterway	connector	it	Canale connettore
+waterway	dam	it	Diga
+waterway	derelict_canal	it	Canale in disuso
+waterway	ditch	it	Fosso
+waterway	dock	it	Bacino chiuso
+waterway	drain	it	Fognatura/Canale di scolo
+waterway	lock	it	Chiusa
+waterway	lock_gate	it	Chiusa
+waterway	mineral_spring	it	Sorgente di acqua minerale
+waterway	mooring	it	Ormeggio
+waterway	rapids	it	Rapide
+waterway	river	it	Fiume
+waterway	riverbank	it	Argine/Banchina
+waterway	stream	it	Ruscello
+waterway	wadi	it	Uadì
+waterway	waterfall	it	Cascata
+waterway	water_point	it	Punto di ristoro
+waterway	weir	it	Sbarramento idrico

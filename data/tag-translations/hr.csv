@@ -1,0 +1,420 @@
+amenity	airport	hr	Zračna luka
+amenity	arts_centre	hr	Umjetnički centar
+amenity	atm	hr	Bankomat
+amenity	auditorium	hr	Auditorij
+amenity	bank	hr	Banka
+amenity	bar	hr	Bar
+amenity	bench	hr	Klupa
+amenity	bicycle_parking	hr	Biciklistički parking
+amenity	bicycle_rental	hr	Rent a bicikl
+amenity	brothel	hr	Bordel
+amenity	bureau_de_change	hr	Mjenjačnica
+amenity	bus_station	hr	Autobusni kolodvor
+amenity	cafe	hr	Caffe bar
+amenity	car_rental	hr	Rent-a-car
+amenity	car_sharing	hr	Carsharing
+amenity	car_wash	hr	Autopraonica
+amenity	casino	hr	Casino
+amenity	cinema	hr	Kino
+amenity	clinic	hr	Klinika
+amenity	club	hr	Klub
+amenity	college	hr	Fakultet
+amenity	community_centre	hr	Društveni centar
+amenity	courthouse	hr	Sud
+amenity	crematorium	hr	Krematorij
+amenity	dentist	hr	Zubar
+amenity	doctors	hr	Doktor
+amenity	dormitory	hr	Studentski dom
+amenity	drinking_water	hr	Pitka voda
+amenity	driving_school	hr	Autoškola
+amenity	embassy	hr	Veleposlanstvo
+amenity	emergency_phone	hr	Telefon (S.O.S)
+amenity	fast_food	hr	Fast food
+amenity	ferry_terminal	hr	Trajektni terminal
+amenity	fire_hydrant	hr	Hidrant
+amenity	fire_station	hr	Vatrogasna postaja
+amenity	fountain	hr	Fontana
+amenity	fuel	hr	Benzinska
+amenity	grave_yard	hr	Groblje
+amenity	gym	hr	Fitness centar
+amenity	hall	hr	Hala
+amenity	health_centre	hr	Zdravstveni centar
+amenity	hospital	hr	Bolnica
+amenity	hotel	hr	Hotel
+amenity	hunting_stand	hr	Čeka
+amenity	ice_cream	hr	Slastičarna
+amenity	kindergarten	hr	Dječji vrtić
+amenity	library	hr	Knjižnica
+amenity	market	hr	Tržnica
+amenity	marketplace	hr	Tržnica
+amenity	mountain_rescue	hr	GSS - Gorska služba spašavanja
+amenity	nightclub	hr	Noćni klub
+amenity	nursery	hr	Čuvanje djece
+amenity	nursing_home	hr	Starački dom
+amenity	office	hr	Kancelarija
+amenity	park	hr	Park
+amenity	parking	hr	Parking
+amenity	pharmacy	hr	Ljekarna
+amenity	place_of_worship	hr	Crkva
+amenity	police	hr	Policija
+amenity	post_box	hr	Poštanski sandučić
+amenity	post_office	hr	Pošta
+amenity	preschool	hr	Predškolska ustanova
+amenity	prison	hr	Zatvor
+amenity	pub	hr	Pub
+amenity	public_building	hr	Ustanova
+amenity	public_market	hr	Javna tržnica
+amenity	reception_area	hr	Recepcija
+amenity	recycling	hr	Reciklažna točka
+amenity	restaurant	hr	Restoran
+amenity	retirement_home	hr	Dom za starije osobe
+amenity	sauna	hr	Sauna
+amenity	school	hr	Škola
+amenity	shelter	hr	Sklonište
+amenity	shop	hr	Trgovina
+amenity	shopping	hr	Trgovački centar
+amenity	social_club	hr	Društveni klub
+amenity	studio	hr	Studio
+amenity	supermarket	hr	Supermarket
+amenity	taxi	hr	Taxi
+amenity	telephone	hr	Telefonska govornica
+amenity	theatre	hr	Kazalište
+amenity	toilets	hr	WC
+amenity	townhall	hr	Gradsko poglavarstvo
+amenity	university	hr	Sveučilište
+amenity	vending_machine	hr	Automat
+amenity	veterinary	hr	Veterinar
+amenity	village_hall	hr	Seoski Dom
+amenity	waste_basket	hr	Kanta za otpatke
+amenity	wifi	hr	WiFi pristupna točka
+amenity	youth_centre	hr	Centar za mladež
+boundary	administrative	hr	Administrativna granica
+building	apartments	hr	Stambeni blok
+building	block	hr	Blok zgrada
+building	bunker	hr	Bunker
+building	chapel	hr	Kapelica
+building	church	hr	Crkva
+building	city_hall	hr	Gradska vjećnica
+building	commercial	hr	Poslovna zgrada
+building	dormitory	hr	Studentski dom
+building	entrance	hr	Ulaz
+building	faculty	hr	Zgrada fakulteta
+building	farm	hr	Farma (zgrada)
+building	flats	hr	Stanovi
+building	garage	hr	Garaža
+building	hall	hr	Dvorana
+building	hospital	hr	Bolnica
+building	hotel	hr	Hotel
+building	house	hr	Kuća
+building	industrial	hr	Industrijska zgrada
+building	office	hr	Uredska zgrada
+building	public	hr	Javna zgrada
+building	residential	hr	Stambena zgrada
+building	retail	hr	Maloprodajna zgrada
+building	school	hr	Školska zgrada
+building	shop	hr	Trgovina
+building	stadium	hr	Stadion
+building	store	hr	Trgovina
+building	terrace	hr	Terasa
+building	tower	hr	Toranj
+building	train_station	hr	Željeznički kolodvor
+building	university	hr	Zgrada Sveučilišta
+highway	bridleway	hr	Konjička staza
+highway	bus_guideway	hr	Autobusna traka
+highway	bus_stop	hr	Autobusno stajalište
+highway	byway	hr	Prečica
+highway	construction	hr	Autocesta u izgradnji
+highway	cycleway	hr	Biciklistička staza
+highway	distance_marker	hr	Oznaka km
+highway	emergency_access_point	hr	S.O.S. točka
+highway	footway	hr	Pješačka staza
+highway	ford	hr	Ford
+highway	gate	hr	Kapija
+highway	living_street	hr	Ulica smirenog prometa
+highway	minor	hr	Drugorazredna cesta
+highway	motorway	hr	Autocesta
+highway	motorway_junction	hr	Čvor (autoputa)
+highway	motorway_link	hr	Autocesta (pristupna cesta)
+highway	path	hr	Staza
+highway	pedestrian	hr	Pješački put
+highway	platform	hr	Platforma
+highway	primary	hr	Državna cesta
+highway	primary_link	hr	Državna cesta
+highway	raceway	hr	Trkalište
+highway	residential	hr	Ulica
+highway	road	hr	Cesta
+highway	secondary	hr	Županijska cesta
+highway	secondary_link	hr	Županijska cesta
+highway	service	hr	Servisna cesta
+highway	services	hr	Autocesta - usluge
+highway	steps	hr	Stepenice
+highway	stile	hr	Prijelaz preko ograde
+highway	tertiary	hr	Lokalna cesta
+highway	track	hr	Makadam
+highway	trail	hr	Staza
+highway	trunk	hr	Cesta rezervirana za motorna vozila
+highway	trunk_link	hr	Cesta rezrevirana za mot. voz. - prilazna cesta
+highway	unclassified	hr	Nerazvrstana cesta
+highway	unsurfaced	hr	Neasfaltirana cesta
+historic	archaeological_site	hr	Arheološko nalazište
+historic	battlefield	hr	Bojno polje
+historic	boundary_stone	hr	Granični kamen
+historic	building	hr	Zgrada
+historic	castle	hr	Dvorac
+historic	church	hr	Crkva
+historic	house	hr	Kuća
+historic	icon	hr	Ikona
+historic	manor	hr	Zamak
+historic	memorial	hr	Spomen dom
+historic	mine	hr	Rudnik
+historic	monument	hr	Spomenik
+historic	museum	hr	Muzej
+historic	ruins	hr	Ruševine
+historic	tower	hr	Toranj
+historic	wayside_cross	hr	Krajputaš
+historic	wayside_shrine	hr	Usputno svetište
+historic	wreck	hr	Olupina
+landuse	allotments	hr	Vrtovi
+landuse	basin	hr	Bazen
+landuse	brownfield	hr	Zemljište za prenamjenu
+landuse	cemetery	hr	Groblje
+landuse	commercial	hr	Poslovno područje
+landuse	conservation	hr	Zaštićeno područje
+landuse	construction	hr	Gradilište
+landuse	farm	hr	Farma
+landuse	farmland	hr	Polje
+landuse	farmyard	hr	Farma
+landuse	forest	hr	Šuma
+landuse	grass	hr	Trava
+landuse	greenfield	hr	Greenfield zemljište
+landuse	industrial	hr	Industrijsko područje
+landuse	landfill	hr	Deponija
+landuse	meadow	hr	Livada
+landuse	military	hr	Vojno područje
+landuse	mine	hr	Rudnik
+landuse	mountain	hr	Planina
+landuse	nature_reserve	hr	Rezervat prirode
+landuse	park	hr	Park
+landuse	piste	hr	Pista
+landuse	plaza	hr	Plaza
+landuse	quarry	hr	Kamenolom
+landuse	railway	hr	Željeznica
+landuse	recreation_ground	hr	Rekreacijsko područje
+landuse	reservoir	hr	Rezervoar
+landuse	residential	hr	Stambeno područje
+landuse	retail	hr	Trgovina
+landuse	village_green	hr	Seoski travnjak
+landuse	vineyard	hr	Vinograd
+landuse	wetland	hr	Močvara
+landuse	wood	hr	Šuma
+leisure	beach_resort	hr	Plaža
+leisure	common	hr	Općinsko zemljište
+leisure	fishing	hr	Ribičko područje
+leisure	garden	hr	Vrt
+leisure	golf_course	hr	Golf igralište
+leisure	ice_rink	hr	Klizalište
+leisure	marina	hr	Marina
+leisure	miniature_golf	hr	Minigolf
+leisure	nature_reserve	hr	Rezervat prirode
+leisure	park	hr	Park
+leisure	pitch	hr	Sportski teren
+leisure	playground	hr	Igralište
+leisure	recreation_ground	hr	Rekreacijski teren
+leisure	slipway	hr	Navoz
+leisure	sports_centre	hr	Sportski centar
+leisure	stadium	hr	Stadion
+leisure	swimming_pool	hr	Bazen
+leisure	track	hr	Staza za trčanje
+leisure	water_park	hr	Vodeni park
+natural	bay	hr	Zaljev
+natural	beach	hr	Plaža
+natural	cape	hr	Rt
+natural	cave_entrance	hr	Pećina (ulaz)
+natural	channel	hr	Kanal
+natural	cliff	hr	Litica
+natural	coastline	hr	Obala
+natural	crater	hr	Krater
+natural	feature	hr	Obilježje
+natural	fell	hr	Brdo
+natural	fjord	hr	Fjord
+natural	geyser	hr	Gejzir
+natural	glacier	hr	Glečer
+natural	heath	hr	Ravnica
+natural	hill	hr	Brdo
+natural	island	hr	Otok
+natural	land	hr	Zemlja
+natural	marsh	hr	Močvara
+natural	moor	hr	Močvara
+natural	mud	hr	Blato
+natural	peak	hr	Vrh
+natural	point	hr	Točka
+natural	reef	hr	Greben
+natural	ridge	hr	Greben
+natural	river	hr	Rijeka
+natural	rock	hr	Stijena
+natural	scree	hr	Šljunak
+natural	scrub	hr	Guštara
+natural	shoal	hr	Sprud
+natural	spring	hr	Izvor
+natural	strait	hr	Tjesnac
+natural	tree	hr	Drvo
+natural	valley	hr	Dolina
+natural	volcano	hr	Vulkan
+natural	water	hr	Voda
+natural	wetland	hr	Močvara
+natural	wetlands	hr	Močvara
+natural	wood	hr	Šuma
+place	airport	hr	Zračna luka
+place	city	hr	Grad
+place	country	hr	Država
+place	county	hr	Županija/grofovija
+place	farm	hr	Farma
+place	hamlet	hr	Zaseok
+place	house	hr	Kuća
+place	houses	hr	Kuće
+place	island	hr	Otok
+place	islet	hr	Otočić
+place	locality	hr	Lokalitet
+place	moor	hr	Močvara
+place	municipality	hr	Općina
+place	postcode	hr	Poštanski broj
+place	region	hr	Područje
+place	sea	hr	More
+place	state	hr	Pokrajina / država (USA)
+place	subdivision	hr	Podgrupa
+place	suburb	hr	Predgrađe
+place	town	hr	grad
+place	unincorporated_area	hr	Slobodna zemlja
+place	village	hr	Selo
+railway	abandoned	hr	Napuštena pruga
+railway	construction	hr	Pruga u izgradnji
+railway	disused	hr	Napuštena pruga
+railway	disused_station	hr	Željeznička stanica (nije u upotrebi)
+railway	funicular	hr	Uspinjača
+railway	halt	hr	Željeznička stanica
+railway	historic_station	hr	Povijesna željeznička stanica
+railway	junction	hr	Željeznički čvor
+railway	level_crossing	hr	Pružni prijelaz
+railway	light_rail	hr	Laka željeznica
+railway	monorail	hr	Jednotračna pruga
+railway	narrow_gauge	hr	Uskotračna pruga
+railway	platform	hr	Željeznička platforma
+railway	preserved	hr	Sačuvana pruga
+railway	spur	hr	Pruga
+railway	station	hr	Željeznički kolodvor
+railway	subway	hr	Podzemna - stanica
+railway	subway_entrance	hr	Podzemna - ulaz
+railway	switch	hr	Skretnica
+railway	tram	hr	Tramvaj
+railway	tram_stop	hr	Tramvajska stanica
+railway	yard	hr	Ranžirni kolodvor
+shop	alcohol	hr	Trgovina pićem
+shop	apparel	hr	Trgovina odjećom
+shop	art	hr	Atelje
+shop	bakery	hr	Pekara
+shop	beauty	hr	Parfumerija
+shop	beverages	hr	Trgovina pićem
+shop	bicycle	hr	Trgovina biciklima
+shop	books	hr	Knjižara
+shop	butcher	hr	Mesnica
+shop	car	hr	Autokuća
+shop	car_dealer	hr	Autokuća
+shop	car_parts	hr	Autodijelovi
+shop	carpet	hr	Trgovina tepisima
+shop	car_repair	hr	Autoservis
+shop	charity	hr	Dobrotvorna trgovina
+shop	chemist	hr	Ljekarna
+shop	clothes	hr	Butik
+shop	computer	hr	Computer Shop
+shop	confectionery	hr	Delikatesa
+shop	convenience	hr	Minimarket
+shop	copyshop	hr	Kopiraona
+shop	cosmetics	hr	Parfumerija
+shop	department_store	hr	Robna kuća
+shop	discount	hr	Diskont
+shop	doityourself	hr	Uradi sam
+shop	drugstore	hr	Drogerija
+shop	dry_cleaning	hr	Kemijska čistionica
+shop	electronics	hr	Trgovina elektronikom
+shop	estate_agent	hr	Agencija za nekretnine
+shop	farm	hr	Poljo-apoteka
+shop	fashion	hr	Modna trgovina
+shop	fish	hr	Ribarnica
+shop	florist	hr	Cvjećarnica
+shop	food	hr	Trgovina prehranom
+shop	funeral_directors	hr	Pogrebno poduzeće
+shop	furniture	hr	Namještaj
+shop	gallery	hr	Galerija
+shop	garden_centre	hr	Vrtni centar
+shop	general	hr	Trgovina mješovitom robom
+shop	gift	hr	Poklon trgovina
+shop	greengrocer	hr	Voćarna
+shop	grocery	hr	Trgovina prehranom
+shop	hairdresser	hr	Frizer
+shop	hardware	hr	Željezar
+shop	hifi	hr	Hi-Fi
+shop	insurance	hr	Osiguranje
+shop	jewelry	hr	Zlatarna
+shop	kiosk	hr	Kiosk
+shop	laundry	hr	Praonica rublja
+shop	mall	hr	Trgovački centar
+shop	market	hr	Tržnica
+shop	mobile_phone	hr	Trgovina mobitelima
+shop	motorcycle	hr	Moto Shop
+shop	music	hr	Trgovina glazbom
+shop	newsagent	hr	Novinar
+shop	optician	hr	Optičar
+shop	organic	hr	Trgovina zdrave hrane
+shop	outdoor	hr	Trgovina za slobodno vrijeme
+shop	pet	hr	Trgovina za kućne ljubimce
+shop	photo	hr	Fotograf
+shop	salon	hr	Salon
+shop	shoes	hr	Trgovina obućom
+shop	shopping_centre	hr	Trgovački centar
+shop	sports	hr	Trgovina sportskom opremom
+shop	stationery	hr	Papirnica
+shop	supermarket	hr	Supermarket
+shop	toys	hr	Trgovina igračkama
+shop	travel_agency	hr	Putnička agencija
+shop	video	hr	Videoteka
+shop	wine	hr	Vinoteka
+tourism	alpine_hut	hr	Alpska kuća
+tourism	artwork	hr	Umjetničko djelo
+tourism	attraction	hr	Atrakcija
+tourism	bed_and_breakfast	hr	Noćenje i doručak
+tourism	cabin	hr	Koliba
+tourism	camp_site	hr	Kamp
+tourism	caravan_site	hr	Kamp-kućice (mjesto)
+tourism	chalet	hr	Planinska kuća
+tourism	guest_house	hr	Apartman
+tourism	hostel	hr	Hostel
+tourism	hotel	hr	Hotel
+tourism	information	hr	Informacije
+tourism	lean_to	hr	Lean to
+tourism	motel	hr	Motel
+tourism	museum	hr	Muzej
+tourism	picnic_site	hr	Piknik-mjesto
+tourism	theme_park	hr	Tematski park
+tourism	valley	hr	Dolina
+tourism	viewpoint	hr	Vidikovac
+tourism	zoo	hr	Zoo
+waterway	boatyard	hr	Brodogradilište
+waterway	canal	hr	Kanal
+waterway	connector	hr	Spoj vodnih puteva
+waterway	dam	hr	Brana
+waterway	derelict_canal	hr	Zanemaren kanal
+waterway	ditch	hr	Jarak
+waterway	dock	hr	Dok
+waterway	drain	hr	Odvod
+waterway	lock	hr	Ustava
+waterway	lock_gate	hr	Ustava
+waterway	mineral_spring	hr	Mineralni izvor
+waterway	mooring	hr	Sidrište
+waterway	rapids	hr	Brzaci
+waterway	river	hr	Rijeka
+waterway	riverbank	hr	Riječna obala
+waterway	stream	hr	Potok
+waterway	wadi	hr	Suho korito rijeke
+waterway	waterfall	hr	Vodopad
+waterway	water_point	hr	Točka vodotoka
+waterway	weir	hr	Brana

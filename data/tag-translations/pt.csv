@@ -1,0 +1,147 @@
+amenity	airport	pt	Aeroporto
+amenity	bank	pt	Banco
+amenity	bar	pt	Bar
+amenity	cafe	pt	Café
+amenity	casino	pt	Casino
+amenity	college	pt	Colégio
+amenity	dentist	pt	Dentista
+amenity	doctors	pt	Médicos
+amenity	emergency_phone	pt	Telefone de Emergência
+amenity	fast_food	pt	Fast Food
+amenity	fountain	pt	Fonte
+amenity	fuel	pt	Combustível
+amenity	grave_yard	pt	Cemitério
+amenity	hospital	pt	Hospital
+amenity	hotel	pt	Hotel
+amenity	library	pt	Biblioteca
+amenity	market	pt	Mercado
+amenity	office	pt	Escritório
+amenity	pharmacy	pt	Farmácia
+amenity	police	pt	Polícia
+amenity	prison	pt	Prisão
+amenity	restaurant	pt	Restaurante
+amenity	sauna	pt	Sauna
+amenity	school	pt	Escola
+amenity	shop	pt	Loja
+amenity	studio	pt	Estúdio
+amenity	supermarket	pt	Supermercado
+amenity	taxi	pt	Táxi
+amenity	telephone	pt	Telefone público
+amenity	theatre	pt	Teatro
+amenity	university	pt	Universidade
+amenity	wifi	pt	Acesso WiFi
+building	apartments	pt	Bloco de apartamentos
+building	chapel	pt	Capela
+building	church	pt	Igreja
+building	city_hall	pt	Câmara Municipal
+building	garage	pt	Garagem
+building	hotel	pt	Hotel
+building	house	pt	Casa
+building	shop	pt	Loja
+building	stadium	pt	Estádio
+building	store	pt	Loja
+building	terrace	pt	Terraço
+building	tower	pt	Torre
+highway	gate	pt	Porta
+highway	road	pt	Estrada
+highway	secondary_link	pt	Estrada Secundária
+highway	steps	pt	Passos
+highway	stile	pt	Escada
+highway	trail	pt	Trilha
+historic	castle	pt	Castelo
+historic	church	pt	Igreja
+historic	house	pt	Casa
+historic	memorial	pt	Memorial
+historic	mine	pt	Mina
+historic	monument	pt	Monumento
+historic	museum	pt	Museu
+historic	ruins	pt	Ruínas
+historic	tower	pt	Torre
+landuse	allotments	pt	Lotes
+landuse	cemetery	pt	Cemitério
+landuse	commercial	pt	Área comercial
+landuse	conservation	pt	Conservação
+landuse	forest	pt	Floresta
+landuse	grass	pt	Erva
+landuse	meadow	pt	Pradaria
+landuse	military	pt	Área militar
+landuse	mine	pt	Mina
+landuse	mountain	pt	Montanha
+landuse	park	pt	Parque
+leisure	fishing	pt	Área de Pesca
+leisure	garden	pt	Jardim
+leisure	golf_course	pt	Campo de golf
+leisure	marina	pt	Marina
+leisure	miniature_golf	pt	Mini-Golf
+leisure	nature_reserve	pt	Reserva Natural
+leisure	park	pt	Parque
+leisure	playground	pt	Parque
+leisure	sports_centre	pt	Centro Desportivo
+leisure	stadium	pt	Estádio
+leisure	swimming_pool	pt	Piscina
+leisure	water_park	pt	Parque aquático
+natural	bay	pt	Baía
+natural	beach	pt	Praia
+natural	cape	pt	Cabo
+natural	cave_entrance	pt	Entrada de gruta
+natural	channel	pt	Canal
+natural	coastline	pt	Litoral
+natural	geyser	pt	Geiser
+natural	island	pt	Ilha
+natural	land	pt	Terra
+natural	marsh	pt	Pântano
+natural	peak	pt	Pico
+natural	point	pt	Ponto
+natural	reef	pt	Recife
+natural	river	pt	Rio
+natural	tree	pt	Árvore
+natural	valley	pt	Vale
+natural	volcano	pt	Vulcão
+natural	water	pt	Água
+place	airport	pt	Aeroporto
+place	city	pt	Cidade
+place	country	pt	País
+place	county	pt	Município
+place	farm	pt	Fazenda
+place	hamlet	pt	Aldeia
+place	house	pt	Casa
+place	houses	pt	Casas
+place	island	pt	Ilha
+place	islet	pt	Ilhota
+place	locality	pt	Localidade
+place	region	pt	Região
+place	sea	pt	Mar
+place	state	pt	Estado
+place	subdivision	pt	Subdivisão
+place	suburb	pt	Subúrbio
+place	town	pt	Cidade
+place	village	pt	Vila
+railway	funicular	pt	Funicular
+shop	bakery	pt	Padaria
+shop	books	pt	Livraria
+shop	car	pt	Oficina
+shop	car_repair	pt	Oficina
+shop	computer	pt	Loja de informática
+shop	cosmetics	pt	Loja de cosméticos
+shop	electronics	pt	Loja de electrónica
+shop	florist	pt	Florista
+shop	hifi	pt	Hi-Fi
+shop	jewelry	pt	Joalharia
+shop	laundry	pt	Lavandaria
+shop	music	pt	Loja de música
+shop	pet	pt	Loja de animais
+shop	shopping_centre	pt	Centro Comercial
+shop	supermarket	pt	Supermercado
+tourism	attraction	pt	Atracção
+tourism	cabin	pt	Cabana
+tourism	chalet	pt	Chalé
+tourism	hotel	pt	Hotel
+tourism	information	pt	Informação
+tourism	motel	pt	Motel
+tourism	museum	pt	Museu
+tourism	theme_park	pt	Parque temático
+tourism	valley	pt	Vale
+tourism	zoo	pt	Jardim zoológico
+waterway	canal	pt	Canal
+waterway	dock	pt	Doca
+waterway	river	pt	Rio

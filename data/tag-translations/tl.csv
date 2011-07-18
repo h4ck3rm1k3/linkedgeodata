@@ -1,0 +1,420 @@
+amenity	airport	tl	Paliparan
+amenity	arts_centre	tl	Lunduyan ng Sining
+amenity	atm	tl	ATM
+amenity	auditorium	tl	Awditoryum
+amenity	bank	tl	Bangko
+amenity	bar	tl	Tindahang Inuman ng Alak
+amenity	bench	tl	Bangko
+amenity	bicycle_parking	tl	Paradahan ng Bisikleta
+amenity	bicycle_rental	tl	Arkilahan ng Bisikleta
+amenity	brothel	tl	Bahay-aliwan
+amenity	bureau_de_change	tl	Tanggapang Palitan ng Pera
+amenity	bus_station	tl	Himpilan ng Bus
+amenity	cafe	tl	Kapihan
+amenity	car_rental	tl	Arkilahan ng Kotse
+amenity	car_sharing	tl	Paghihiraman ng Kotse
+amenity	car_wash	tl	Paliguan ng Kotse
+amenity	casino	tl	Bahay-pasugalan
+amenity	cinema	tl	Sinehan
+amenity	clinic	tl	Klinika
+amenity	club	tl	Kapisanan
+amenity	college	tl	Dalubhasaan
+amenity	community_centre	tl	Lunduyan ng Pamayanan
+amenity	courthouse	tl	Gusali ng Hukuman
+amenity	crematorium	tl	Krematoryum
+amenity	dentist	tl	Dentista
+amenity	doctors	tl	Mga manggagamot
+amenity	dormitory	tl	Dormitoryo
+amenity	drinking_water	tl	Naiinom na Tubig
+amenity	driving_school	tl	Paaralan ng Pagmamaneho
+amenity	embassy	tl	Embahada
+amenity	emergency_phone	tl	Teleponong Pangsakuna
+amenity	fast_food	tl	Kainang Pangmabilisan
+amenity	ferry_terminal	tl	Himpilan ng Barkong Pangtawid
+amenity	fire_hydrant	tl	Panubig ng Bumbero
+amenity	fire_station	tl	Himpilan ng Bumbero
+amenity	fountain	tl	Bukal
+amenity	fuel	tl	Panggatong
+amenity	grave_yard	tl	Sementeryo
+amenity	gym	tl	Lunduyang Pangkalusugan / Himnasyo
+amenity	hall	tl	Bulwagan
+amenity	health_centre	tl	Lunduyan ng Kalusugan
+amenity	hospital	tl	Ospital
+amenity	hotel	tl	Otel
+amenity	hunting_stand	tl	Pook-tayuan na Pangpangangaso
+amenity	ice_cream	tl	Sorbetes
+amenity	kindergarten	tl	Kindergarten
+amenity	library	tl	Aklatan
+amenity	market	tl	Pamilihan
+amenity	marketplace	tl	Palengke
+amenity	mountain_rescue	tl	Pagliligtas na Pangbundok
+amenity	nightclub	tl	Alibangbang
+amenity	nursery	tl	Alagaan ng mga Bata
+amenity	nursing_home	tl	Alagaan ng mga Matatanda
+amenity	office	tl	Tanggapan
+amenity	park	tl	Liwasan
+amenity	parking	tl	Paradahan
+amenity	pharmacy	tl	Botika
+amenity	place_of_worship	tl	Sambahan
+amenity	police	tl	Pulis
+amenity	post_box	tl	Kahon ng Liham
+amenity	post_office	tl	Tanggapan ng Sulat
+amenity	preschool	tl	Paunang Paghahanda para sa Paaralan
+amenity	prison	tl	Bilangguan
+amenity	pub	tl	Pangmadlang Bahay
+amenity	public_building	tl	Pangmadlang Gusali
+amenity	public_market	tl	Pangmadlang Pamilihan
+amenity	reception_area	tl	Tanggapang Pook
+amenity	recycling	tl	Pook ng Muling Paggamit
+amenity	restaurant	tl	Kainan
+amenity	retirement_home	tl	Tahanan ng Pagreretiro
+amenity	sauna	tl	Silid-suuban
+amenity	school	tl	Paaralan
+amenity	shelter	tl	Kanlungan
+amenity	shop	tl	Tindahan
+amenity	shopping	tl	Pamimili
+amenity	social_club	tl	Kapisanang Panglipunan
+amenity	studio	tl	Istudyo
+amenity	supermarket	tl	Malaking Pamilihan
+amenity	taxi	tl	Taksi
+amenity	telephone	tl	Teleponong Pangmadla
+amenity	theatre	tl	Tanghalan
+amenity	toilets	tl	Mga banyo
+amenity	townhall	tl	Bulwagan ng Bayan
+amenity	university	tl	Pamantasan
+amenity	vending_machine	tl	Makinang Nagbebenta
+amenity	veterinary	tl	Paninistis na Pangbeterinarya
+amenity	village_hall	tl	Bulwagan ng Nayon
+amenity	waste_basket	tl	Basurahan
+amenity	wifi	tl	Puntahang WiFi
+amenity	youth_centre	tl	Lunduyan ng Kabataan
+boundary	administrative	tl	Hangganang Pampangangasiwa
+building	apartments	tl	Bloke ng Apartamento
+building	block	tl	Bloke ng Gusali
+building	bunker	tl	Hukay na Pangsundalo
+building	chapel	tl	Kapilya
+building	church	tl	Simbahan
+building	city_hall	tl	Gusaling Panglungsod
+building	commercial	tl	Gusaling Pangkalakal
+building	dormitory	tl	Dormitoryo
+building	entrance	tl	Pasukan ng Gusali
+building	faculty	tl	Gusali ng mga Guro
+building	farm	tl	Gusaling Pambukid
+building	flats	tl	Mga bahay-latagan
+building	garage	tl	Garahe
+building	hall	tl	Bulwagan
+building	hospital	tl	Gusali ng Hospital
+building	hotel	tl	Otel
+building	house	tl	Bahay
+building	industrial	tl	Gusaling Pang-industriya
+building	office	tl	Gusaling Tanggapan
+building	public	tl	Pangmadlang Gusali
+building	residential	tl	Gusaling Tirahan
+building	retail	tl	Gusaling Tingian
+building	school	tl	Gusali ng Paaralan
+building	shop	tl	Tindahan
+building	stadium	tl	Istadyum
+building	store	tl	Bilihan
+building	terrace	tl	Balkonahe
+building	tower	tl	Tore
+building	train_station	tl	Himpilan ng Tren
+building	university	tl	Gusali ng Pamantasan
+highway	bridleway	tl	Daanan ng Kabayo
+highway	bus_guideway	tl	Daanan ng Ginagabayang Bus
+highway	bus_stop	tl	Hintuan ng Bus
+highway	byway	tl	Landas na Hindi Madaanan
+highway	construction	tl	Ginagawang Punong Lansangan
+highway	cycleway	tl	Daanan ng Bisikleta
+highway	distance_marker	tl	Pananda ng Layo
+highway	emergency_access_point	tl	Tuldok na Puntahan na Pangsakuna
+highway	footway	tl	Makitid na Lakaran ng Tao
+highway	ford	tl	Bagtasan ng Tao
+highway	gate	tl	Tarangkahan
+highway	living_street	tl	Buhay na Lansangan
+highway	minor	tl	Kalsadang Hindi Pangunahin
+highway	motorway	tl	Daanan ng Sasakyang De-motor
+highway	motorway_junction	tl	Sugpungan ng Daanan ng Sasakyang De-motor
+highway	motorway_link	tl	Lansangang Daanan ng Sasakyang De-motor
+highway	path	tl	Landas
+highway	pedestrian	tl	Tawiran ng Taong Naglalakad
+highway	platform	tl	Palapag
+highway	primary	tl	Pangunahing Kalsada
+highway	primary_link	tl	Pangunahing Kalsada
+highway	raceway	tl	Kanal na Daluyan ng Tubig
+highway	residential	tl	Pamahayan
+highway	road	tl	Lansangan
+highway	secondary	tl	Pampangalawang Lansangan
+highway	secondary_link	tl	Pampangalawang Lansangan
+highway	service	tl	Kalyeng Pampalingkuran
+highway	services	tl	Mga Palingkuran sa Daanan ng Sasakyang De-motor
+highway	steps	tl	Mga hakbang
+highway	stile	tl	Hagdanan ng Bakod
+highway	tertiary	tl	Pampangatlong Kalsada
+highway	track	tl	Pinak
+highway	trail	tl	Bulaos
+highway	trunk	tl	Pangunahing Ruta
+highway	trunk_link	tl	Pangunahing Ruta
+highway	unclassified	tl	Kalsadang Walang Kaurian
+highway	unsurfaced	tl	Kalsadang Hindi Patag
+historic	archaeological_site	tl	Pook na Pang-arkeolohiya
+historic	battlefield	tl	Pook ng Labanan
+historic	boundary_stone	tl	Bato ng Hangganan
+historic	building	tl	Gusali
+historic	castle	tl	Kastilyo
+historic	church	tl	Simbahan
+historic	house	tl	Bahay
+historic	icon	tl	Kinatawang Larawan
+historic	manor	tl	Manor
+historic	memorial	tl	Muog na Pang-alaala
+historic	mine	tl	Minahan
+historic	monument	tl	Bantayog
+historic	museum	tl	Museo
+historic	ruins	tl	Mga Guho
+historic	tower	tl	Tore
+historic	wayside_cross	tl	Krus sa Gilid ng Kalsada
+historic	wayside_shrine	tl	Dambana sa Gilid ng Kalsada
+historic	wreck	tl	Wasak na Sasakyan
+landuse	allotments	tl	Mga Laang Bahagi
+landuse	basin	tl	Lunas ng Ilog
+landuse	brownfield	tl	Lupain ng Kayumangging Bukirin
+landuse	cemetery	tl	Libingan
+landuse	commercial	tl	Pook na Pangkalakalan
+landuse	conservation	tl	Lupaing Iniligtas
+landuse	construction	tl	Konstruksyon
+landuse	farm	tl	Bukid
+landuse	farmland	tl	Lupaing Sakahan
+landuse	farmyard	tl	Bakuran ng Bahay sa Bukid
+landuse	forest	tl	Gubat
+landuse	grass	tl	Damo
+landuse	greenfield	tl	Lupain ng Lunting Bukirin
+landuse	industrial	tl	Pook na Pang-industriya
+landuse	landfill	tl	Tabon na Lupain
+landuse	meadow	tl	Kaparangan
+landuse	military	tl	Pook ng Militar
+landuse	mine	tl	Minahan
+landuse	mountain	tl	Bundok
+landuse	nature_reserve	tl	Lupaing Laan sa Kalikasan
+landuse	park	tl	Liwasan
+landuse	piste	tl	Piste ng Iski
+landuse	plaza	tl	Plasa
+landuse	quarry	tl	Hukay na Tibagan
+landuse	railway	tl	Daambakal
+landuse	recreation_ground	tl	Lupaing Libangan
+landuse	reservoir	tl	Tinggalan ng Tubig
+landuse	residential	tl	Pook na Panirahan
+landuse	retail	tl	Tingi
+landuse	village_green	tl	Nayong Lunti
+landuse	vineyard	tl	Ubasan
+landuse	wetland	tl	Babad na Lupain
+landuse	wood	tl	Kahoy
+leisure	beach_resort	tl	Liwaliwang Dalampasigan
+leisure	common	tl	Karaniwang Lupain
+leisure	fishing	tl	Pook na Palaisdaan
+leisure	garden	tl	Halamanan
+leisure	golf_course	tl	Kurso ng Golp
+leisure	ice_rink	tl	Pook Pang-iskeyting
+leisure	marina	tl	Marina
+leisure	miniature_golf	tl	Munting Golp
+leisure	nature_reserve	tl	Lupaing Laan sa Kalikasan
+leisure	park	tl	Liwasan
+leisure	pitch	tl	Hagisang Pampalakasan
+leisure	playground	tl	Palaruan
+leisure	recreation_ground	tl	Lupaing Libangan
+leisure	slipway	tl	Andamyong Pagawaan ng Barko
+leisure	sports_centre	tl	Lunduyang Pampalakasan
+leisure	stadium	tl	Istadyum
+leisure	swimming_pool	tl	Palanguyan
+leisure	track	tl	Landas na Takbuhan
+leisure	water_park	tl	Liwasang Tubigan
+natural	bay	tl	Look
+natural	beach	tl	Dalampasigan
+natural	cape	tl	Tangway
+natural	cave_entrance	tl	Pasukan ng Yungib
+natural	channel	tl	Bambang
+natural	cliff	tl	Bangin
+natural	coastline	tl	Baybay-dagat
+natural	crater	tl	Uka
+natural	feature	tl	Tampok
+natural	fell	tl	Pulak
+natural	fjord	tl	Tubigang Mabangin
+natural	geyser	tl	Geyser
+natural	glacier	tl	Tipak ng Yelong Bundok
+natural	heath	tl	Lupain ng Halamang Erika
+natural	hill	tl	Burol
+natural	island	tl	Pulo
+natural	land	tl	Lupain
+natural	marsh	tl	Latian
+natural	moor	tl	Lupang Pugalan ng Tubig
+natural	mud	tl	Putik
+natural	peak	tl	Tugatog
+natural	point	tl	Tuldok
+natural	reef	tl	Bahura
+natural	ridge	tl	Tagaytay
+natural	river	tl	Ilog
+natural	rock	tl	Bato
+natural	scree	tl	Batuhang Buhaghag
+natural	scrub	tl	Palumpong
+natural	shoal	tl	Banlik
+natural	spring	tl	Bukal
+natural	strait	tl	Kipot
+natural	tree	tl	Puno
+natural	valley	tl	Lambak
+natural	volcano	tl	Bulkan
+natural	water	tl	Tubig
+natural	wetland	tl	Babad na Lupain
+natural	wetlands	tl	Mga Babad na Lupain
+natural	wood	tl	Kahoy
+place	airport	tl	Paliparan
+place	city	tl	Lungsod
+place	country	tl	Bansa
+place	county	tl	Kondehan
+place	farm	tl	Bukid
+place	hamlet	tl	Maliit na Nayon
+place	house	tl	Bahay
+place	houses	tl	Mga Bahay
+place	island	tl	Pulo
+place	islet	tl	Munting Pulo
+place	locality	tl	Lokalidad
+place	moor	tl	Lupang Pugalan ng Tubig
+place	municipality	tl	Munisipalidad
+place	postcode	tl	Kodigo ng Koreo
+place	region	tl	Rehiyon
+place	sea	tl	Dagat
+place	state	tl	Estado
+place	subdivision	tl	Kabahaging kahatian
+place	suburb	tl	Kanugnog ng lungsod
+place	town	tl	Bayan
+place	unincorporated_area	tl	Pook na hindi pa kasanib
+place	village	tl	Nayon
+railway	abandoned	tl	Pinabayaang daambakal
+railway	construction	tl	Kinukumpuning Daambakal
+railway	disused	tl	Hindi Ginagamit na Daambakal
+railway	disused_station	tl	Hindi Ginagamit na Himpilan ng Daambakal
+railway	funicular	tl	Daambakal sa Matarik na Lupa
+railway	halt	tl	Hintuan ng Tren
+railway	historic_station	tl	Makasaysayang Himpilan ng Daambakal
+railway	junction	tl	Panulukan ng Daambakal
+railway	level_crossing	tl	Patag na Tawiran
+railway	light_rail	tl	Banayad na Riles
+railway	monorail	tl	Isahang Riles
+railway	narrow_gauge	tl	Daambakal na may Makitid na Luwang
+railway	platform	tl	Plataporma ng Daambakal
+railway	preserved	tl	Pinangangalagaang Daambakal
+railway	spur	tl	Tahid ng Daambakal
+railway	station	tl	Himpilan ng Daambakal
+railway	subway	tl	Himpilan ng Pang-ilalim na Daambakal
+railway	subway_entrance	tl	Pasukan sa Pang-ilalim na Daambakal
+railway	switch	tl	Mga Tuldok na Pangdaambakal
+railway	tram	tl	Riles ng Trambya
+railway	tram_stop	tl	Hintuan ng Trambya
+railway	yard	tl	Bakuran ng Daambakal
+shop	alcohol	tl	Wala sa Lisensiya
+shop	apparel	tl	Tindahan ng Kasuotan
+shop	art	tl	Tindahan ng Sining
+shop	bakery	tl	Panaderya
+shop	beauty	tl	Tindahan ng Pampaganda
+shop	beverages	tl	Tindahan ng mga Inumin
+shop	bicycle	tl	Tindahan ng Bisikleta
+shop	books	tl	Tindahan ng Aklat
+shop	butcher	tl	Mangangatay
+shop	car	tl	Tindahan ng Kotse
+shop	car_dealer	tl	Mangangalakal ng Kotse
+shop	car_parts	tl	Mga Bahagi ng Kotse
+shop	carpet	tl	Tindahan ng Karpet
+shop	car_repair	tl	Kumpunihan ng Kotse
+shop	charity	tl	Tindahang Pangkawanggawa
+shop	chemist	tl	Kimiko
+shop	clothes	tl	Tindahan ng mga Damit
+shop	computer	tl	Tindahan ng Kompyuter
+shop	confectionery	tl	Tindahan ng Kendi
+shop	convenience	tl	Tindahang Maginhawa
+shop	copyshop	tl	Tindahang Kopyahan
+shop	cosmetics	tl	Tindahan ng mga Pampaganda
+shop	department_store	tl	Tindahang Kagawaran
+shop	discount	tl	Tindahan ng mga Bagay na may Bawas-Presyo
+shop	doityourself	tl	Gawin ng Sarili Mo
+shop	drugstore	tl	Tindahan ng Gamot
+shop	dry_cleaning	tl	Paglilinis na Tuyo
+shop	electronics	tl	Tindahan ng Elektroniks
+shop	estate_agent	tl	Ahente ng Lupain
+shop	farm	tl	Tindahang Pambukid
+shop	fashion	tl	Tindahan ng Moda
+shop	fish	tl	Tindahan ng Isda
+shop	florist	tl	Nagtitinda ng Bulaklak
+shop	food	tl	Tindahan ng Pagkain
+shop	funeral_directors	tl	Mga Direktor ng Punerarya
+shop	furniture	tl	Muwebles
+shop	gallery	tl	Galeriya
+shop	garden_centre	tl	Lunduyang Halamanan
+shop	general	tl	Tindahang Panglahat
+shop	gift	tl	Tindahan ng Regalo
+shop	greengrocer	tl	Tagapagtinda ng Prutas at Gulay
+shop	grocery	tl	Tindahan ng Groserya
+shop	hairdresser	tl	Tagapag-ayos ng Buhok
+shop	hardware	tl	Tindahan ng Hardwer
+shop	hifi	tl	Hi-Fi
+shop	insurance	tl	Seguro
+shop	jewelry	tl	Tindahan ng Alahas
+shop	kiosk	tl	Tindahan ng Kubol
+shop	laundry	tl	Labahan
+shop	mall	tl	Pasyalang Pangmadla
+shop	market	tl	Pamilihan
+shop	mobile_phone	tl	Tindahan ng Teleponong Selular
+shop	motorcycle	tl	Tindahan ng Motorsiklo
+shop	music	tl	Tindahan ng Tugtugin
+shop	newsagent	tl	Ahente ng Balita
+shop	optician	tl	Optiko
+shop	organic	tl	Tindahan ng Pagkaing Organiko
+shop	outdoor	tl	Tindahang Panlabas
+shop	pet	tl	Tindahan ng Alagang Hayop
+shop	photo	tl	Tindahan ng Litrato
+shop	salon	tl	Salon
+shop	shoes	tl	Tindahan ng Sapatos
+shop	shopping_centre	tl	Lunduyang Pamilihan
+shop	sports	tl	Tindahang Pampalakasan
+shop	stationery	tl	Tindahan ng Papel
+shop	supermarket	tl	Malaking Pamilihan
+shop	toys	tl	Tindahan ng Laruan
+shop	travel_agency	tl	Ahensiya ng Paglalakbay
+shop	video	tl	Tindahan ng Bidyo
+shop	wine	tl	Wala sa Lisensiya
+tourism	alpine_hut	tl	Kubong Pambundok
+tourism	artwork	tl	Likhang Sining
+tourism	attraction	tl	Pang-akit
+tourism	bed_and_breakfast	tl	Kama at Almusal
+tourism	cabin	tl	Dampa
+tourism	camp_site	tl	Pook ng Kampo
+tourism	caravan_site	tl	Lugar ng Karabana
+tourism	chalet	tl	Kubo ng Pastol
+tourism	guest_house	tl	Bahay na Pampanauhin
+tourism	hostel	tl	Hostel
+tourism	hotel	tl	Otel
+tourism	information	tl	Kabatiran
+tourism	lean_to	tl	Sibi
+tourism	motel	tl	Motel
+tourism	museum	tl	Museo
+tourism	picnic_site	tl	Pook na Pampiknik
+tourism	theme_park	tl	Liwasang may Tema
+tourism	valley	tl	Lambak
+tourism	viewpoint	tl	Tuldok ng pananaw
+tourism	zoo	tl	Hayupan
+waterway	boatyard	tl	Bakuran ng bangka
+waterway	canal	tl	Paralanan
+waterway	connector	tl	Pandugtong sa Daanan ng Tubig
+waterway	dam	tl	Saplad
+waterway	derelict_canal	tl	Pinabayaang Paralanan
+waterway	ditch	tl	Bambang
+waterway	dock	tl	Pantalan
+waterway	drain	tl	Limasan
+waterway	lock	tl	Kandado
+waterway	lock_gate	tl	Tarangkahan ng Kandado
+waterway	mineral_spring	tl	Balong na Mineral
+waterway	mooring	tl	Pugalan
+waterway	rapids	tl	Mga lagaslasan
+waterway	river	tl	Ilog
+waterway	riverbank	tl	Pampang ng Ilog
+waterway	stream	tl	Batis
+waterway	wadi	tl	Tuyot na Ilog
+waterway	waterfall	tl	Talon
+waterway	water_point	tl	Tuldok ng Tubigan
+waterway	weir	tl	Pilapil

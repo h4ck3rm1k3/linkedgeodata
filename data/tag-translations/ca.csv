@@ -1,0 +1,289 @@
+amenity	airport	ca	Aeroport
+amenity	arts_centre	ca	Centre d'Art
+amenity	atm	ca	Caixer automàtic
+amenity	auditorium	ca	Auditori
+amenity	bank	ca	Banc
+amenity	bar	ca	Bar
+amenity	bench	ca	Banc
+amenity	bicycle_parking	ca	Aparcament de Bicicletes
+amenity	bicycle_rental	ca	Lloguer de bicicletes
+amenity	brothel	ca	Prostíbul
+amenity	bureau_de_change	ca	Oficina de canvi
+amenity	bus_station	ca	Estació d'autobusos
+amenity	cafe	ca	Cafè
+amenity	car_rental	ca	Lloguer de cotxes
+amenity	car_sharing	ca	Per Compartir Cotxe
+amenity	car_wash	ca	Rentat de Cotxes
+amenity	casino	ca	Casino
+amenity	cinema	ca	Cinema
+amenity	clinic	ca	Clínica
+amenity	club	ca	Club
+amenity	college	ca	Institut
+amenity	community_centre	ca	Centre Comunitari / Centre Cívic
+amenity	courthouse	ca	Jutjat
+amenity	crematorium	ca	Crematori
+amenity	dentist	ca	Dentista
+amenity	doctors	ca	Metges
+amenity	dormitory	ca	Residència Universitària
+amenity	drinking_water	ca	Aigua potable
+amenity	driving_school	ca	Autoescola
+amenity	embassy	ca	Ambaixada
+amenity	emergency_phone	ca	Telèfon d'emergència
+amenity	fast_food	ca	Menjar ràpid
+amenity	ferry_terminal	ca	Terminal de Ferry
+amenity	fire_hydrant	ca	Boca d'incendi
+amenity	fire_station	ca	Parc de bombers
+amenity	fountain	ca	Font
+amenity	fuel	ca	Gasolinera
+amenity	grave_yard	ca	Cementiri
+amenity	gym	ca	Gimnàs
+amenity	hall	ca	Ajuntament
+amenity	health_centre	ca	Centre de Salut
+amenity	hospital	ca	Hospital
+amenity	hotel	ca	Hotel
+amenity	hunting_stand	ca	Club de caça
+amenity	ice_cream	ca	Gelat
+amenity	kindergarten	ca	Jardí d'infància
+amenity	library	ca	Biblioteca
+amenity	market	ca	Mercat
+amenity	marketplace	ca	Mercat
+amenity	mountain_rescue	ca	Rescat de Muntanya
+amenity	nightclub	ca	Club nocturn
+amenity	nursery	ca	Infantil
+amenity	nursing_home	ca	Llar d'Avis
+amenity	office	ca	Oficina
+amenity	park	ca	Parc
+amenity	parking	ca	Pàrquing
+amenity	pharmacy	ca	Farmàcia
+amenity	place_of_worship	ca	Lloc de culte
+amenity	police	ca	Policia
+amenity	post_box	ca	Bustia
+amenity	post_office	ca	Oficina de correus
+amenity	preschool	ca	Pre-Escola
+amenity	prison	ca	Presó
+amenity	pub	ca	Pub
+amenity	public_building	ca	Edifici públic
+amenity	public_market	ca	Mercat Públic
+amenity	reception_area	ca	Àrea de recepció
+amenity	recycling	ca	Punt de reciclatge
+amenity	restaurant	ca	Restaurant
+amenity	retirement_home	ca	Casa de Retirament
+amenity	sauna	ca	Sauna
+amenity	school	ca	Escola
+amenity	shelter	ca	Refugi
+amenity	shop	ca	Botiga
+amenity	shopping	ca	Botigues
+amenity	social_club	ca	Club social
+amenity	studio	ca	Estudi
+amenity	supermarket	ca	Supermercat
+amenity	taxi	ca	Taxi
+amenity	telephone	ca	Telèfon públic
+amenity	theatre	ca	Teatre
+amenity	toilets	ca	Banys
+amenity	townhall	ca	Ajuntament
+amenity	university	ca	Universitat
+amenity	vending_machine	ca	Màquina expenedora
+amenity	veterinary	ca	Veterinari
+amenity	village_hall	ca	Casa de la Vila
+amenity	waste_basket	ca	Cistella de Residus
+amenity	wifi	ca	Accés a internet WiFi
+amenity	youth_centre	ca	Centre juvenil
+boundary	administrative	ca	Administració de Fronteres
+building	apartments	ca	Bloc d'apartaments
+building	block	ca	Edifici en construcció
+building	bunker	ca	Búnker
+building	chapel	ca	Capella
+building	church	ca	Església
+building	city_hall	ca	Ajuntament
+building	commercial	ca	Edifici comercial
+building	dormitory	ca	Residència Universitària
+building	entrance	ca	Entrada de l'Edifici
+building	faculty	ca	Edifici facultatiu
+building	farm	ca	Instal·lacions agrícoles
+building	flats	ca	Pisos
+building	garage	ca	Garatge
+building	hall	ca	Ajuntament
+building	hospital	ca	Edifici hospitalari
+building	hotel	ca	Hotel
+building	house	ca	Casa
+building	industrial	ca	Edifici industrial
+building	office	ca	Edifici d'oficines
+building	public	ca	Edifici públic
+building	residential	ca	Edifici residencial
+building	retail	ca	Edifici de Venda al detall
+building	school	ca	Edifici escolar
+building	shop	ca	Botiga
+building	stadium	ca	Estadi
+building	store	ca	Magatzem
+building	terrace	ca	Terrassa
+building	tower	ca	Torre
+building	train_station	ca	Estació de tren
+building	university	ca	Edifici universitari
+highway	bridleway	ca	Ferradura
+highway	bus_guideway	ca	Carril Bus
+highway	bus_stop	ca	Parada d'autobús
+highway	byway	ca	Ruta segregada
+highway	construction	ca	Autopista en construcció
+highway	cycleway	ca	Ruta per a bicicletes
+highway	distance_marker	ca	Marcador de Distància
+highway	emergency_access_point	ca	Accés d'emergència
+highway	footway	ca	Sendera
+highway	ford	ca	Fiord
+highway	gate	ca	Porta
+highway	path	ca	Camí
+highway	primary_link	ca	Carretera principal
+highway	residential	ca	Residencial
+highway	road	ca	Carretera
+highway	secondary	ca	Carretera secundària
+highway	secondary_link	ca	Carretera secundària
+highway	steps	ca	Graons
+highway	stile	ca	Escala per a travessar reixats
+highway	tertiary	ca	Carretera terciària
+highway	trail	ca	Sendera
+highway	unclassified	ca	Carretera sense classificar
+historic	archaeological_site	ca	Lloc arqueològic
+historic	battlefield	ca	Camp de batalla
+historic	building	ca	Edifici
+historic	castle	ca	Castell
+historic	church	ca	Església
+historic	house	ca	Casa
+historic	icon	ca	Icona
+historic	memorial	ca	Memorial
+historic	mine	ca	Mina
+historic	monument	ca	Monument
+historic	museum	ca	Museu
+historic	ruins	ca	Ruïnes
+historic	tower	ca	Torre
+landuse	cemetery	ca	Cementiri
+landuse	commercial	ca	Zona comercial
+landuse	construction	ca	Construcció
+landuse	farm	ca	Granja
+landuse	forest	ca	Bosc
+landuse	industrial	ca	Zona industrial
+landuse	mine	ca	Mina
+landuse	mountain	ca	Muntanya
+landuse	park	ca	Parc
+landuse	plaza	ca	Plaça
+landuse	quarry	ca	Pedrera
+landuse	residential	ca	Àrea residencial
+landuse	wetland	ca	Aiguamoll
+landuse	wood	ca	Fusta
+leisure	fishing	ca	Àrea de pesca
+leisure	garden	ca	Jardí
+leisure	golf_course	ca	Camp de golf
+leisure	ice_rink	ca	Pista de patinatge sobre gel
+leisure	marina	ca	Port esportiu
+leisure	miniature_golf	ca	Minigolf
+leisure	nature_reserve	ca	Reserva natural
+leisure	park	ca	Parc
+leisure	sports_centre	ca	Centre esportiu
+leisure	stadium	ca	Estadi
+leisure	swimming_pool	ca	Piscina
+leisure	water_park	ca	Parc aquàtic
+natural	bay	ca	Badia
+natural	beach	ca	Platja
+natural	cape	ca	Cap
+natural	cave_entrance	ca	Entrada a cova
+natural	channel	ca	Canal
+natural	cliff	ca	Cingle
+natural	coastline	ca	Litoral
+natural	crater	ca	Cràter
+natural	fell	ca	Forest
+natural	fjord	ca	Fiord
+natural	geyser	ca	Guèiser
+natural	glacier	ca	Glacera
+natural	heath	ca	Bruguerar
+natural	hill	ca	Pujol
+natural	island	ca	Illa
+natural	moor	ca	Amarratge
+natural	mud	ca	Llot
+natural	peak	ca	Pic
+natural	point	ca	Punt
+natural	reef	ca	Escull
+natural	ridge	ca	Cresta
+natural	river	ca	Riu
+natural	rock	ca	Roca
+natural	scree	ca	Pedregar
+natural	shoal	ca	Banc
+natural	spring	ca	Deu
+natural	strait	ca	Estret
+natural	tree	ca	Arbre
+natural	valley	ca	Vall
+natural	volcano	ca	Volcà
+natural	water	ca	Aigua
+natural	wetland	ca	Aiguamoll
+natural	wetlands	ca	Aiguamolls
+natural	wood	ca	Bosc
+place	airport	ca	Aeroport
+place	city	ca	Ciutat
+place	country	ca	País
+place	county	ca	Comtat
+place	farm	ca	Granja
+place	hamlet	ca	Aldea
+place	house	ca	Casa
+place	houses	ca	Cases
+place	island	ca	Illa
+place	islet	ca	Illot
+place	locality	ca	Localitat
+place	moor	ca	Amarrador
+place	municipality	ca	Municipi
+place	postcode	ca	Codi postal
+place	region	ca	Regió
+place	sea	ca	Mar
+place	state	ca	Estat o província
+place	subdivision	ca	Subdivisió
+place	suburb	ca	Suburbi
+place	town	ca	Poble
+place	village	ca	Aldea
+railway	level_crossing	ca	Pas a nivell
+railway	monorail	ca	Monorail
+railway	subway	ca	Estació de metro
+railway	tram	ca	Tramvia
+railway	tram_stop	ca	Parada de tramvia
+shop	bakery	ca	Fleca
+shop	bicycle	ca	Tenda de bicicletes
+shop	books	ca	Llibreria
+shop	butcher	ca	Carnisseria
+shop	car_repair	ca	Reparació d'automòbils
+shop	chemist	ca	Farmàcia
+shop	fish	ca	Peixateria
+shop	florist	ca	Floristeria
+shop	gift	ca	Botiga de regals
+shop	hairdresser	ca	Perruqueria o barberia
+shop	jewelry	ca	Joieria
+shop	laundry	ca	Bugaderia
+shop	mall	ca	Centre comercial
+shop	market	ca	Mercat
+shop	optician	ca	Òptica
+shop	shoes	ca	Sabateria
+shop	supermarket	ca	Supermercat
+shop	toys	ca	Botiga de joguines
+shop	travel_agency	ca	Agència de viatges
+tourism	alpine_hut	ca	Cabanya alpina
+tourism	artwork	ca	Il·lustració
+tourism	attraction	ca	Atracció
+tourism	bed_and_breakfast	ca	Llist i esmorzar (B&B)
+tourism	cabin	ca	Cabanya
+tourism	camp_site	ca	Campament
+tourism	caravan_site	ca	Càmping per a caravanes
+tourism	chalet	ca	Xalet
+tourism	guest_house	ca	Alberg
+tourism	hostel	ca	Hostal
+tourism	hotel	ca	Hotel
+tourism	information	ca	Informació
+tourism	lean_to	ca	Nau
+tourism	motel	ca	Motel
+tourism	museum	ca	Museu
+tourism	picnic_site	ca	Àrea de pícnic
+tourism	theme_park	ca	Parc temàtic
+tourism	valley	ca	Vall
+tourism	viewpoint	ca	Mirador
+tourism	zoo	ca	Zoològic
+waterway	canal	ca	Canal
+waterway	ditch	ca	Séquia
+waterway	mooring	ca	Amarradors
+waterway	rapids	ca	Ràpids
+waterway	river	ca	Riu
+waterway	wadi	ca	Torrent
+waterway	waterfall	ca	Cascada
+waterway	water_point	ca	Punt d'aigua

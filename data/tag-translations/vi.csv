@@ -1,0 +1,405 @@
+amenity	airport	vi	Sân bay
+amenity	arts_centre	vi	Trung tâm Nghệ thuật
+amenity	atm	vi	Máy Rút tiền Tự động
+amenity	auditorium	vi	Phòng hội họp
+amenity	bank	vi	Ngân hàng
+amenity	bar	vi	Quán Rượu
+amenity	bench	vi	Ghế
+amenity	bicycle_parking	vi	Chỗ Đậu Xe đạp
+amenity	bicycle_rental	vi	Chỗ Mướn Xe đạp
+amenity	brothel	vi	Nhà chứa
+amenity	bureau_de_change	vi	Tiệm Đổi tiền
+amenity	bus_station	vi	Trạm Xe buýt
+amenity	cafe	vi	Quán Cà phê
+amenity	car_rental	vi	Chỗ Mướn Xe
+amenity	car_sharing	vi	Chia sẻ Xe cộ
+amenity	car_wash	vi	Tiệm Rửa Xe
+amenity	casino	vi	Sòng bạc
+amenity	cinema	vi	Rạp phim
+amenity	clinic	vi	Phòng khám
+amenity	club	vi	Câu lạc bộ
+amenity	college	vi	Trường Cao đẳng
+amenity	community_centre	vi	Trung tâm Cộng đồng
+amenity	courthouse	vi	Tòa
+amenity	crematorium	vi	Lò Hỏa táng
+amenity	dentist	vi	Nha sĩ
+amenity	doctors	vi	Bác sĩ
+amenity	dormitory	vi	Ký túc xá
+amenity	drinking_water	vi	Vòi Nước uống
+amenity	driving_school	vi	Trường Lái xe
+amenity	embassy	vi	Tòa Đại sứ
+amenity	emergency_phone	vi	Điện thoại Khẩn cấp
+amenity	fast_food	vi	Nhà hàng Ăn nhanh
+amenity	ferry_terminal	vi	Trạm Phà
+amenity	fire_hydrant	vi	Vòi nước Máy
+amenity	fire_station	vi	Trạm Cứu hỏa
+amenity	fountain	vi	Vòi nước
+amenity	fuel	vi	Cây xăng
+amenity	grave_yard	vi	Nghĩa địa
+amenity	gym	vi	Nhà Thể dục
+amenity	hall	vi	Hội trường
+amenity	health_centre	vi	Trung tâm Y tế
+amenity	hospital	vi	Bệnh viện
+amenity	hotel	vi	Khách sạn
+amenity	ice_cream	vi	Tiệm Kem
+amenity	kindergarten	vi	Tiểu học
+amenity	library	vi	Thư viện
+amenity	market	vi	Chợ
+amenity	marketplace	vi	Chợ phiên
+amenity	mountain_rescue	vi	Đội Cứu nạn Núi
+amenity	nightclub	vi	Câu lạc bộ Đêm
+amenity	nursery	vi	Nhà trẻ
+amenity	nursing_home	vi	Viện Dưỡng lão
+amenity	office	vi	Văn phòng
+amenity	park	vi	Công viên
+amenity	parking	vi	Chỗ Đậu xe
+amenity	pharmacy	vi	Nhà thuốc
+amenity	place_of_worship	vi	Nơi Thờ phụng
+amenity	police	vi	Cảnh sát
+amenity	post_box	vi	Hòm thư
+amenity	post_office	vi	Bưu điện
+amenity	preschool	vi	Trường Mầm non
+amenity	prison	vi	Nhà tù
+amenity	pub	vi	Quán rượu
+amenity	public_building	vi	Tòa nhà Công cộng
+amenity	public_market	vi	Chợ phiên
+amenity	reception_area	vi	Phòng Tiếp khách
+amenity	restaurant	vi	Nhà hàng
+amenity	retirement_home	vi	Nhà về hưu
+amenity	sauna	vi	Nhà Tắm hơi
+amenity	school	vi	Trường học
+amenity	shelter	vi	Nơi Trú ẩn
+amenity	shop	vi	Tiệm
+amenity	shopping	vi	Tiệm
+amenity	studio	vi	Studio
+amenity	supermarket	vi	Siêu thị
+amenity	taxi	vi	Taxi
+amenity	telephone	vi	Điện thoại Công cộng
+amenity	theatre	vi	Nhà hát
+amenity	toilets	vi	Vệ sinh
+amenity	townhall	vi	Thị sảnh
+amenity	university	vi	Trường Đại học
+amenity	vending_machine	vi	Máy Bán hàng
+amenity	village_hall	vi	Trụ sở Làng
+amenity	waste_basket	vi	Thùng rác
+amenity	wifi	vi	Điểm Truy cập Không dây
+amenity	youth_centre	vi	Trung tâm Thanh niên
+boundary	administrative	vi	Biên giới Hành chính
+building	apartments	vi	Khối Căn hộ
+building	block	vi	Khối cao ốc
+building	bunker	vi	Boong ke
+building	chapel	vi	Nhà nguyện
+building	church	vi	Nhà thờ
+building	city_hall	vi	Trụ sở Thành phố
+building	commercial	vi	Tòa nhà Thương mại
+building	dormitory	vi	Ký túc xá
+building	entrance	vi	Cửa vào
+building	faculty	vi	Tòa nhà Trường học
+building	farm	vi	Công trình Nông trại
+building	garage	vi	Ga ra
+building	hall	vi	Hội trường
+building	hospital	vi	Tòa nhà Bệnh viện
+building	hotel	vi	Khách sạn
+building	house	vi	Nhà ở
+building	industrial	vi	Tòa nhà Công nghiệp
+building	office	vi	Tòa nhà Văn phòng
+building	public	vi	Tòa nhà Công cộng
+building	residential	vi	Nhà ở
+building	retail	vi	Tòa nhà Cửa hàng
+building	school	vi	Nhà trường
+building	shop	vi	Tiệm
+building	stadium	vi	Sân vận động
+building	store	vi	Tiệm
+building	terrace	vi	Thềm
+building	tower	vi	Tháp
+building	train_station	vi	Nhà ga
+building	university	vi	Tòa nhà Đại học
+highway	bridleway	vi	Đường Cưỡi ngựa
+highway	bus_guideway	vi	Làn đường Dẫn Xe buýt
+highway	bus_stop	vi	Chỗ Đậu Xe buýt
+highway	byway	vi	Đường mòn Đa mốt
+highway	construction	vi	Đường Đang Xây
+highway	cycleway	vi	Đường Xe đạp
+highway	distance_marker	vi	Cây số
+highway	emergency_access_point	vi	Địa điểm Truy nhập Khẩn cấp
+highway	footway	vi	Đường bộ
+highway	ford	vi	Khúc Sông Cạn
+highway	gate	vi	Cổng
+highway	living_street	vi	Đường Hàng xóm
+highway	minor	vi	Đường Nhỏ
+highway	motorway	vi	Đường Cao tốc
+highway	motorway_junction	vi	Ngã tư Đường Cao tốc
+highway	motorway_link	vi	Đường Cao tốc
+highway	path	vi	Lối
+highway	pedestrian	vi	Đường bộ Lớn
+highway	platform	vi	Sân ga
+highway	primary	vi	Đường Chính
+highway	primary_link	vi	Đường Chính
+highway	raceway	vi	Đường đua
+highway	residential	vi	Đường Nhà ở
+highway	road	vi	Đường
+highway	secondary	vi	Đường Lớn
+highway	secondary_link	vi	Đường Lớn
+highway	service	vi	Đường phụ
+highway	services	vi	Dịch vụ Dọc đường Cao tốc
+highway	steps	vi	Cầu thang
+highway	stile	vi	Cửa xoay
+highway	tertiary	vi	Đường Lớn
+highway	track	vi	Đường mòn
+highway	trail	vi	Đường mòn
+highway	trunk	vi	Xa lộ
+highway	trunk_link	vi	Xa lộ
+highway	unclassified	vi	Đường Không Phân loại
+highway	unsurfaced	vi	Đường Không Lát
+historic	archaeological_site	vi	Khu vực Khảo cổ
+historic	battlefield	vi	Chiến trường
+historic	boundary_stone	vi	Mốc Biên giới
+historic	building	vi	Tòa nhà
+historic	castle	vi	Lâu đài
+historic	church	vi	Nhà thờ
+historic	house	vi	Nhà ở
+historic	icon	vi	Thánh tượng
+historic	manor	vi	Trang viên
+historic	memorial	vi	Đài Tưởng niệm
+historic	mine	vi	Mỏ
+historic	monument	vi	Đài Kỷ niệm
+historic	museum	vi	Bảo tàng
+historic	ruins	vi	Tàn tích
+historic	tower	vi	Tháp
+historic	wayside_cross	vi	Thánh Giá Dọc đường
+historic	wayside_shrine	vi	Đền thánh Dọc đường
+historic	wreck	vi	Xác Tàu Đắm
+landuse	allotments	vi	Khu Vườn Gia đình
+landuse	basin	vi	Lưu vực
+landuse	cemetery	vi	Nghĩa địa
+landuse	commercial	vi	Khu vực Thương mại
+landuse	conservation	vi	Bảo tồn
+landuse	construction	vi	Công trường Xây dựng
+landuse	farm	vi	Trại
+landuse	farmland	vi	Trại
+landuse	farmyard	vi	Sân Trại
+landuse	forest	vi	Rừng Trồng Cây
+landuse	grass	vi	Cỏ
+landuse	industrial	vi	Khu vực Công nghiệp
+landuse	landfill	vi	Nơi Đổ Rác
+landuse	meadow	vi	Đồng cỏ
+landuse	military	vi	Khu vực Quân sự
+landuse	mine	vi	Mỏ
+landuse	mountain	vi	Núi
+landuse	nature_reserve	vi	Khu Bảo tồn Thiên niên
+landuse	park	vi	Công viên
+landuse	piste	vi	Đường Trượt tuyết
+landuse	plaza	vi	Quảng trường
+landuse	quarry	vi	Mỏ Đá
+landuse	railway	vi	Đường sắt
+landuse	recreation_ground	vi	Sân chơi
+landuse	reservoir	vi	Bể nước
+landuse	residential	vi	Khu vực Nhà ở
+landuse	retail	vi	Khu vực Buôn bán
+landuse	vineyard	vi	Vườn Nho
+landuse	wetland	vi	Đầm lầy
+landuse	wood	vi	Rừng
+leisure	beach_resort	vi	Khu Nghỉ mát Ven biển
+leisure	common	vi	Đất Công
+leisure	fishing	vi	Hồ Đánh cá
+leisure	garden	vi	Vườn
+leisure	golf_course	vi	Sân Golf
+leisure	ice_rink	vi	Sân băng
+leisure	marina	vi	Bến tàu
+leisure	miniature_golf	vi	Golf Nhỏ
+leisure	nature_reserve	vi	Khu Bảo tồn Thiên niên
+leisure	park	vi	Công viên
+leisure	pitch	vi	Bãi Thể thao
+leisure	playground	vi	Sân chơi
+leisure	recreation_ground	vi	Sân Giải trí
+leisure	slipway	vi	Bến tàu
+leisure	sports_centre	vi	Trung tâm Thể thao
+leisure	stadium	vi	Sân vận động
+leisure	swimming_pool	vi	Hồ Bơi
+leisure	track	vi	Đường Chạy
+leisure	water_park	vi	Công viên Nước
+natural	bay	vi	Vịnh
+natural	beach	vi	Bãi biển
+natural	cape	vi	Mũi đất
+natural	cave_entrance	vi	Cửa vào Hang
+natural	channel	vi	Eo biển
+natural	cliff	vi	Vách đá
+natural	coastline	vi	Bờ biển
+natural	crater	vi	Miệng Núi
+natural	fell	vi	Đồi đá
+natural	fjord	vi	Vịnh hẹp
+natural	geyser	vi	Mạch nước Phun
+natural	glacier	vi	Sông băng
+natural	heath	vi	Bãi Hoang
+natural	hill	vi	Đồi
+natural	island	vi	Đảo
+natural	land	vi	Đất
+natural	marsh	vi	Đầm lầy
+natural	moor	vi	Truông
+natural	mud	vi	Bùn
+natural	peak	vi	Đỉnh
+natural	point	vi	Mũi đất
+natural	reef	vi	Rạn san hô
+natural	ridge	vi	Luống đất
+natural	river	vi	Sông
+natural	rock	vi	Đá
+natural	scree	vi	Bãi Đá
+natural	scrub	vi	Đất Bụi rậm
+natural	shoal	vi	Bãi cạn
+natural	spring	vi	Suối
+natural	strait	vi	Eo biển
+natural	tree	vi	Cây
+natural	valley	vi	Thung lũng
+natural	volcano	vi	Núi lửa
+natural	water	vi	Nước
+natural	wetland	vi	Đầm lầy
+natural	wetlands	vi	Đầm lầy
+natural	wood	vi	Rừng
+place	airport	vi	Sân bay
+place	city	vi	Thành phố
+place	country	vi	Quốc gia
+place	county	vi	Quận hạt
+place	farm	vi	Trại
+place	hamlet	vi	Xóm
+place	house	vi	Nhà ở
+place	houses	vi	Dãy Nhà
+place	island	vi	Đảo
+place	islet	vi	Đảo Nhỏ
+place	locality	vi	Địa phương
+place	moor	vi	Truông
+place	municipality	vi	Đô thị
+place	postcode	vi	Mã Bưu chính
+place	region	vi	Miền
+place	sea	vi	Biển
+place	state	vi	Tỉnh bang
+place	subdivision	vi	Hàng xóm
+place	suburb	vi	Ngoại ô
+place	town	vi	Thị xã/trấn
+place	unincorporated_area	vi	Khu Chưa Hợp nhất
+place	village	vi	Làng
+railway	abandoned	vi	Đường sắt bị Bỏ rơi
+railway	construction	vi	Đường sắt Đang Xây
+railway	disused	vi	Đường sắt Ngừng hoạt động
+railway	disused_station	vi	Nhà ga Đóng cửa
+railway	funicular	vi	Đường sắt Leo núi
+railway	halt	vi	Ga Xép
+railway	historic_station	vi	Nhà ga Lịch sử
+railway	junction	vi	Ga Đầu mối
+railway	level_crossing	vi	Điểm giao Đường sắt
+railway	light_rail	vi	Đường sắt Nhẹ
+railway	monorail	vi	Đường Một Ray
+railway	narrow_gauge	vi	Đường sắt Khổ hẹp
+railway	platform	vi	Ke ga
+railway	preserved	vi	Đường sắt được Bảo tồn
+railway	spur	vi	Đường sắt Phụ
+railway	station	vi	Nhà ga
+railway	subway	vi	Trạm Xe điện Ngầm
+railway	subway_entrance	vi	Cửa vào Nhà ga Xe điện ngầm
+railway	switch	vi	Ghi Đường sắt
+railway	tram	vi	Đường Xe điện
+railway	tram_stop	vi	Ga Xép Điện
+railway	yard	vi	Sân ga
+shop	alcohol	vi	Tiệm Rượu
+shop	apparel	vi	Tiệm May mặc
+shop	art	vi	Tiệm Nghệ phẩm
+shop	bakery	vi	Tiệm Bánh
+shop	beauty	vi	Tiệm Mỹ phẩm
+shop	beverages	vi	Tiệm Đồ uống
+shop	bicycle	vi	Tiệm Xe đạp
+shop	books	vi	Tiệm Sách
+shop	butcher	vi	Tiệm Thịt
+shop	car	vi	Tiệm Xe hơi
+shop	car_dealer	vi	Cửa hàng Xe hơi
+shop	car_parts	vi	Phụ tùng Xe hơi
+shop	carpet	vi	Tiệm Thảm
+shop	car_repair	vi	Tiệm Sửa Xe
+shop	charity	vi	Cửa hàng Từ thiện
+shop	chemist	vi	Nhà thuốc
+shop	clothes	vi	Tiệm Quần áo
+shop	computer	vi	Tiệm Máy tính
+shop	confectionery	vi	Tiệm Kẹo
+shop	convenience	vi	Tiệm Tập hóa
+shop	copyshop	vi	Tiệm In ấn
+shop	cosmetics	vi	Tiệm Mỹ phẩm
+shop	department_store	vi	Cửa hàng Bách hóa
+shop	discount	vi	Cửa hàng Giảm giá
+shop	doityourself	vi	Tiệm Ngũ kim
+shop	drugstore	vi	Nhà thuốc
+shop	dry_cleaning	vi	Hấp tẩy
+shop	electronics	vi	Tiệm Thiết bị Điện tử
+shop	estate_agent	vi	Văn phòng Bất động sản
+shop	farm	vi	Tiệm Nông cụ
+shop	fashion	vi	Tiệm Thời trang
+shop	fish	vi	Tiệm Cá
+shop	florist	vi	Tiệm Hoa
+shop	food	vi	Tiệm Thực phẩm
+shop	funeral_directors	vi	Nhà tang lễ
+shop	furniture	vi	Tiệm Đồ đạc
+shop	gallery	vi	Thư viện Ảnh
+shop	garden_centre	vi	Trung tâm Làm vườn
+shop	general	vi	Tiệm Đồ
+shop	gift	vi	Tiệm Quà tặng
+shop	greengrocer	vi	Tiệm Rau
+shop	grocery	vi	Tiệm Tạp phẩm
+shop	hairdresser	vi	Tiệm Làm tóc
+shop	hardware	vi	Tiệm Ngũ kim
+shop	insurance	vi	Bảo hiểm
+shop	jewelry	vi	Tiệm Kim hoàn
+shop	laundry	vi	Tiệm Giặt Quần áo
+shop	mall	vi	Trung tâm Mua sắm
+shop	market	vi	Chợ
+shop	mobile_phone	vi	Tiệm Điện thoại Di động
+shop	motorcycle	vi	Cửa hàng Xe mô tô
+shop	music	vi	Tiệm Nhạc
+shop	newsagent	vi	Tiệm Báo
+shop	optician	vi	Tiệm Kính mắt
+shop	organic	vi	Tiệm Thực phẩm Hữu cơ
+shop	pet	vi	Tiệm Vật nuôi
+shop	photo	vi	Tiệm Rửa Hình
+shop	salon	vi	Tiệm Làm tóc
+shop	shoes	vi	Tiệm Giày
+shop	shopping_centre	vi	Trung tâm Mua sắm
+shop	sports	vi	Tiệm Thể thao
+shop	stationery	vi	Tiệm Văn phòng phẩm
+shop	supermarket	vi	Siêu thị
+shop	toys	vi	Tiệm Đồ chơi
+shop	travel_agency	vi	Văn phòng Du lịch
+shop	video	vi	Tiệm Phim
+shop	wine	vi	Tiệm Rượu
+tourism	alpine_hut	vi	Túp lều Trên Núi
+tourism	artwork	vi	Tác phẩm Nghệ thuật
+tourism	attraction	vi	Nơi Du lịch
+tourism	bed_and_breakfast	vi	Nhà trọ
+tourism	cabin	vi	Túp lều
+tourism	camp_site	vi	Nơi Cắm trại
+tourism	chalet	vi	Nhà ván
+tourism	guest_house	vi	Nhà khách
+tourism	hostel	vi	Nhà trọ
+tourism	hotel	vi	Khách sạn
+tourism	information	vi	Thông tin
+tourism	lean_to	vi	Nhà chái
+tourism	motel	vi	Khách sạn Dọc đường
+tourism	museum	vi	Bảo tàng
+tourism	picnic_site	vi	Bàn ăn Ngoài trời
+tourism	theme_park	vi	Công viên Giải trí
+tourism	valley	vi	Thung lũng
+tourism	viewpoint	vi	Thắng cảnh
+tourism	zoo	vi	Vườn thú
+waterway	boatyard	vi	Bãi Thuyền
+waterway	canal	vi	Kênh
+waterway	connector	vi	Đường thủy Nối
+waterway	dam	vi	Đập
+waterway	derelict_canal	vi	Kênh Bỏ rơi
+waterway	ditch	vi	Mương
+waterway	dock	vi	Vũng tàu
+waterway	drain	vi	Cống
+waterway	lock	vi	Âu tàu
+waterway	mineral_spring	vi	Suối Nước khoáng
+waterway	rapids	vi	Thác ghềnh
+waterway	river	vi	Sông
+waterway	riverbank	vi	Bờ sông
+waterway	stream	vi	Dòng suối
+waterway	wadi	vi	Dòng sông Vào mùa
+waterway	waterfall	vi	Thác
+waterway	water_point	vi	Máy bơm nước
+waterway	weir	vi	Đập Cột nước Thấp

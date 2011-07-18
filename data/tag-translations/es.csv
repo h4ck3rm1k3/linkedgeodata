@@ -1,0 +1,420 @@
+amenity	airport	es	Aeropuerto
+amenity	arts_centre	es	Centro artístico
+amenity	atm	es	Cajero automático
+amenity	auditorium	es	Auditorio
+amenity	bank	es	Banco
+amenity	bar	es	Bar
+amenity	bench	es	Banco
+amenity	bicycle_parking	es	Aparcamiento de bibicletas
+amenity	bicycle_rental	es	Alquiler de bicicletas
+amenity	brothel	es	Burdel
+amenity	bureau_de_change	es	Casa de cambio
+amenity	bus_station	es	Estación de autobuses
+amenity	cafe	es	Cafetería
+amenity	car_rental	es	Alquiler de vehículos
+amenity	car_sharing	es	Vehículo compartido
+amenity	car_wash	es	Autolavado
+amenity	casino	es	Casino
+amenity	cinema	es	Cine
+amenity	clinic	es	Clínica
+amenity	club	es	Club
+amenity	college	es	Universidad o instituto
+amenity	community_centre	es	Centro comunitario
+amenity	courthouse	es	Juzgado
+amenity	crematorium	es	Crematorio
+amenity	dentist	es	Dentista
+amenity	doctors	es	Consultorio médico
+amenity	dormitory	es	Residencia de estudiantes
+amenity	drinking_water	es	Agua potable
+amenity	driving_school	es	Autoescuela
+amenity	embassy	es	Embajada
+amenity	emergency_phone	es	Teléfono de emergencia
+amenity	fast_food	es	Comida rápida
+amenity	ferry_terminal	es	Terminal de ferrys
+amenity	fire_hydrant	es	Hidrante
+amenity	fire_station	es	Parque de bomberos
+amenity	fountain	es	Fuente
+amenity	fuel	es	Gasolinera
+amenity	grave_yard	es	Cementerio
+amenity	gym	es	Gimnasio
+amenity	hall	es	Salón
+amenity	health_centre	es	Centro de salud
+amenity	hospital	es	Hospital
+amenity	hotel	es	Hotel
+amenity	hunting_stand	es	Apostadero de caza
+amenity	ice_cream	es	Heladería
+amenity	kindergarten	es	Jardín de infancia
+amenity	library	es	Biblioteca
+amenity	market	es	Mercado
+amenity	marketplace	es	Mercado
+amenity	mountain_rescue	es	Rescate de montaña
+amenity	nightclub	es	Club nocturno
+amenity	nursery	es	Enfermería
+amenity	nursing_home	es	Residencia para la tercera edad
+amenity	office	es	Oficina
+amenity	park	es	Parque
+amenity	parking	es	Aparcamiento
+amenity	pharmacy	es	Farmacia
+amenity	place_of_worship	es	Templo
+amenity	police	es	Policía
+amenity	post_box	es	Buzón de correos
+amenity	post_office	es	Oficina de correos
+amenity	preschool	es	Preescolar
+amenity	prison	es	Prisión
+amenity	pub	es	Pub
+amenity	public_building	es	Edificio público
+amenity	public_market	es	Mercado público
+amenity	reception_area	es	Área de recepción
+amenity	recycling	es	Punto de reciclaje
+amenity	restaurant	es	Restaurante
+amenity	retirement_home	es	Residencia de jubilados
+amenity	sauna	es	Sauna
+amenity	school	es	Escuela
+amenity	shelter	es	Refugio
+amenity	shop	es	Tienda
+amenity	shopping	es	Compras
+amenity	social_club	es	Club social
+amenity	studio	es	Estudio
+amenity	supermarket	es	Supermercado
+amenity	taxi	es	Taxi
+amenity	telephone	es	Teléfono público
+amenity	theatre	es	Teatro
+amenity	toilets	es	Aseos
+amenity	townhall	es	Ayuntamiento
+amenity	university	es	Universidad
+amenity	vending_machine	es	Máquina expendedora
+amenity	veterinary	es	Clínica veterinaria
+amenity	village_hall	es	Sala del pueblo
+amenity	waste_basket	es	Papelera
+amenity	wifi	es	Acceso a Internet inalámbrico
+amenity	youth_centre	es	Centro juvenil
+boundary	administrative	es	Frontera administrativa
+building	apartments	es	Bloque de apartamentos
+building	block	es	Bloque de edificios
+building	bunker	es	Búnker
+building	chapel	es	Capilla
+building	church	es	Iglesia
+building	city_hall	es	Ayuntamiento
+building	commercial	es	Edificio comercial
+building	dormitory	es	Residencia de estudiantes, colegio mayor
+building	entrance	es	Entrada a edificio
+building	faculty	es	Edificio de facultad
+building	farm	es	Granja
+building	flats	es	Apartamentos
+building	garage	es	Garaje
+building	hall	es	Mansión
+building	hospital	es	Edificio hospitalario
+building	hotel	es	Hotel
+building	house	es	Casa
+building	industrial	es	Edificio industrial
+building	office	es	Edificio de oficinas
+building	public	es	Edificio público
+building	residential	es	Edificio residencial
+building	retail	es	Edificio comercial
+building	school	es	Edificio escolar
+building	shop	es	Tienda
+building	stadium	es	Estadio
+building	store	es	Almacén
+building	terrace	es	Terraza
+building	tower	es	Torre
+building	train_station	es	Estación de tren
+building	university	es	Edificio universitario
+highway	bridleway	es	Camino prioritario para peatones y caballos
+highway	bus_guideway	es	Canal guiado de autobuses
+highway	bus_stop	es	Parada de autobuses
+highway	byway	es	Camino
+highway	construction	es	Vía en construcción
+highway	cycleway	es	Carril bici
+highway	distance_marker	es	Hito kilométrico
+highway	emergency_access_point	es	Acceso de emergencia
+highway	footway	es	Sendero
+highway	ford	es	Vado
+highway	gate	es	Puerta
+highway	living_street	es	Calle residencial
+highway	minor	es	Carretera secundaria
+highway	motorway	es	Autovía
+highway	motorway_junction	es	Cruce de autovías
+highway	motorway_link	es	Enlace de autovía
+highway	path	es	Camino
+highway	pedestrian	es	Vía peatonal
+highway	platform	es	Plataforma
+highway	primary	es	Carretera primaria
+highway	primary_link	es	Enlace de carretera principal
+highway	raceway	es	Pista de carreras
+highway	residential	es	Calle
+highway	road	es	Carretera
+highway	secondary	es	Carretera secundaria
+highway	secondary_link	es	Enlace de carretera secundaria
+highway	service	es	Vía de servicio
+highway	services	es	Vía de servicio
+highway	steps	es	Escaleras
+highway	stile	es	Escalera para atravesar verjas
+highway	tertiary	es	Carretera terciaria
+highway	track	es	Pista
+highway	trail	es	Sendero
+highway	trunk	es	Vía rápida
+highway	trunk_link	es	Enlace de vía rápida
+highway	unclassified	es	Carretera sin clasificar
+highway	unsurfaced	es	Vía no pavimentada
+historic	archaeological_site	es	Yacimiento arqueológico
+historic	battlefield	es	Campo de batalla
+historic	boundary_stone	es	Mojón
+historic	building	es	Edificio histórico
+historic	castle	es	Castillo
+historic	church	es	Iglesia
+historic	house	es	Casa
+historic	icon	es	Icono
+historic	manor	es	Casa señorial
+historic	memorial	es	Memorial
+historic	mine	es	Mina
+historic	monument	es	Monumento
+historic	museum	es	Museo
+historic	ruins	es	Ruinas
+historic	tower	es	Torre
+historic	wayside_cross	es	Cruz de término
+historic	wayside_shrine	es	Sepulcro
+historic	wreck	es	Pecio
+landuse	allotments	es	Huertos
+landuse	basin	es	Cuenca
+landuse	brownfield	es	Terreno baldío
+landuse	cemetery	es	Cementerio
+landuse	commercial	es	Área de oficinas
+landuse	conservation	es	Terreno protegido
+landuse	construction	es	Construcción
+landuse	farm	es	Granja
+landuse	farmland	es	Tierra de labranza
+landuse	farmyard	es	Corral
+landuse	forest	es	Bosque
+landuse	grass	es	Césped
+landuse	greenfield	es	Terreno urbanizable
+landuse	industrial	es	Zona industrial
+landuse	landfill	es	Basurero, vertedero
+landuse	meadow	es	Pradera
+landuse	military	es	Zona militar
+landuse	mine	es	Mina
+landuse	mountain	es	Montaña
+landuse	nature_reserve	es	Reserva natural
+landuse	park	es	Parque
+landuse	piste	es	Pista de esquí
+landuse	plaza	es	Plaza
+landuse	quarry	es	Cantera
+landuse	railway	es	Vía de ferrocarril
+landuse	recreation_ground	es	Área recreacional
+landuse	reservoir	es	Embalse
+landuse	residential	es	Área residencial
+landuse	retail	es	Zona comercial
+landuse	village_green	es	Parque municipal
+landuse	vineyard	es	Viñedo
+landuse	wetland	es	Pantano
+landuse	wood	es	Madera
+leisure	beach_resort	es	Complejo en la playa
+leisure	common	es	Terreno común
+leisure	fishing	es	Área de pesca
+leisure	garden	es	Jardín
+leisure	golf_course	es	Campo de golf
+leisure	ice_rink	es	Pista de patinaje sobre hielo
+leisure	marina	es	Puerto deportivo
+leisure	miniature_golf	es	Minigolf
+leisure	nature_reserve	es	Reserva natural
+leisure	park	es	Parque
+leisure	pitch	es	Cancha deportiva
+leisure	playground	es	Área de juegos
+leisure	recreation_ground	es	Área recreativa
+leisure	slipway	es	Grada
+leisure	sports_centre	es	Centro deportivo
+leisure	stadium	es	Estadio
+leisure	swimming_pool	es	Piscina
+leisure	track	es	Pista de carreras
+leisure	water_park	es	Parque acuático
+natural	bay	es	Bahía
+natural	beach	es	Playa
+natural	cape	es	Cabo
+natural	cave_entrance	es	Entrada a cueva
+natural	channel	es	Canal
+natural	cliff	es	Acantilado
+natural	coastline	es	Costa
+natural	crater	es	Cráter
+natural	feature	es	Característica
+natural	fell	es	Monte
+natural	fjord	es	Fiordo
+natural	geyser	es	Géiser
+natural	glacier	es	Glaciar
+natural	heath	es	Brezal
+natural	hill	es	Colina
+natural	island	es	Isla
+natural	land	es	Tierra
+natural	marsh	es	Marisma
+natural	moor	es	Páramo
+natural	mud	es	Lodo
+natural	peak	es	Pico
+natural	point	es	Punto
+natural	reef	es	Arrecife
+natural	ridge	es	Cresta
+natural	river	es	Río
+natural	rock	es	Roca
+natural	scree	es	Pedregal
+natural	scrub	es	Matorrales
+natural	shoal	es	Banco de arena
+natural	spring	es	Manantial
+natural	strait	es	Estrecho
+natural	tree	es	Árbol
+natural	valley	es	Valle
+natural	volcano	es	Volcán
+natural	water	es	Agua
+natural	wetland	es	Pantano
+natural	wetlands	es	Pantano
+natural	wood	es	Bosque
+place	airport	es	Aeropuerto
+place	city	es	Ciudad
+place	country	es	País
+place	county	es	Condado
+place	farm	es	Granja
+place	hamlet	es	Aldea
+place	house	es	Casa
+place	houses	es	Casas
+place	island	es	Isla
+place	islet	es	Islote
+place	locality	es	Localidad
+place	moor	es	Páramo
+place	municipality	es	Municipio
+place	postcode	es	Código postal
+place	region	es	Región
+place	sea	es	Mar
+place	state	es	Estado o provincia
+place	subdivision	es	Subdivisión
+place	suburb	es	Suburbio
+place	town	es	Pueblo
+place	unincorporated_area	es	Área no incorporada
+place	village	es	Villa
+railway	abandoned	es	Vía de tren abandonada
+railway	construction	es	Vía ferroviaria en construcción
+railway	disused	es	Vía ferroviaria en desuso
+railway	disused_station	es	Estación de tren en desuso
+railway	funicular	es	Vía de funicular
+railway	halt	es	Apeadero
+railway	historic_station	es	Estación de tren histórica
+railway	junction	es	Encrucijada de vías ferroviarias
+railway	level_crossing	es	Paso a nivel
+railway	light_rail	es	Metro ligero
+railway	monorail	es	Monorail
+railway	narrow_gauge	es	Ferrocarril de vía estrecha
+railway	platform	es	Andén
+railway	preserved	es	Vía ferroviaria preservada
+railway	spur	es	Ramal ferroviario
+railway	station	es	Estación de trenes
+railway	subway	es	Estación de metro
+railway	subway_entrance	es	Boca de metro
+railway	switch	es	Aguja de ferrocarril
+railway	tram	es	Ruta de tranvía
+railway	tram_stop	es	Parada de tranvía
+railway	yard	es	Estación de clasificación
+shop	alcohol	es	Licorería
+shop	apparel	es	Tienda de ropa
+shop	art	es	Tienda de artículos de arte
+shop	bakery	es	Panadería
+shop	beauty	es	Tienda de productos de belleza
+shop	beverages	es	Tienda de bebidas
+shop	bicycle	es	Tienda de bicicletas
+shop	books	es	Librería
+shop	butcher	es	Carnicería
+shop	car	es	Concesionario
+shop	car_dealer	es	Concesionario de automóviles
+shop	car_parts	es	Repuestos automotrices
+shop	carpet	es	Tienda de alfombras
+shop	car_repair	es	Taller mecánico
+shop	charity	es	Tienda benéfica
+shop	chemist	es	Droguería
+shop	clothes	es	Tienda de ropa
+shop	computer	es	Tienda de informática
+shop	confectionery	es	Dulcería
+shop	convenience	es	Pequeño supermercado
+shop	copyshop	es	Copistería
+shop	cosmetics	es	Tienda de cosmética
+shop	department_store	es	Grandes almacenes
+shop	discount	es	Tienda de descuento
+shop	doityourself	es	Tienda de bricolaje
+shop	drugstore	es	Parafarmacia
+shop	dry_cleaning	es	Tintorería
+shop	electronics	es	Tienda de electrónica
+shop	estate_agent	es	Inmobiliaria
+shop	farm	es	Tienda de productos agrícolas
+shop	fashion	es	Tienda de moda
+shop	fish	es	Tienda de artículos de pesca
+shop	florist	es	Floristería
+shop	food	es	Tienda de alimentación
+shop	funeral_directors	es	Funeraria
+shop	furniture	es	Tienda de muebles
+shop	gallery	es	Galería
+shop	garden_centre	es	Vivero
+shop	general	es	Tienda de artículos generales
+shop	gift	es	Tienda de regalos
+shop	greengrocer	es	Frutería
+shop	grocery	es	Tienda de alimentación
+shop	hairdresser	es	Peluquería
+shop	hardware	es	Ferretería
+shop	hifi	es	Hi-Fi
+shop	insurance	es	Aseguradora
+shop	jewelry	es	Joyería
+shop	kiosk	es	Kiosko
+shop	laundry	es	Lavandería
+shop	mall	es	Centro comercial
+shop	market	es	Mercado
+shop	mobile_phone	es	Tienda de telefonía
+shop	motorcycle	es	Tienda de motocicletas
+shop	music	es	Tienda de música
+shop	newsagent	es	Kiosko de prensa
+shop	optician	es	Óptica
+shop	organic	es	Tienda de alimentos orgánicos
+shop	outdoor	es	Tienda de deportes de aventura
+shop	pet	es	Tienda de mascotas
+shop	photo	es	Tienda fotográfica
+shop	salon	es	Salón de belleza
+shop	shoes	es	Zapatería
+shop	shopping_centre	es	Centro comercial
+shop	sports	es	Tienda de artículos deportivos
+shop	stationery	es	Papelería
+shop	supermarket	es	Supermercado
+shop	toys	es	Juguetería
+shop	travel_agency	es	Agencia de viajes
+shop	video	es	Videotienda
+shop	wine	es	Licorería
+tourism	alpine_hut	es	Cabaña alpina
+tourism	artwork	es	Obra de arte
+tourism	attraction	es	Atracción
+tourism	bed_and_breakfast	es	Cama y desayuno (B&B)
+tourism	cabin	es	Cabaña
+tourism	camp_site	es	Campamento
+tourism	caravan_site	es	Camping para caravanas
+tourism	chalet	es	Chalet
+tourism	guest_house	es	Albergue
+tourism	hostel	es	Hostal
+tourism	hotel	es	Hotel
+tourism	information	es	Información
+tourism	lean_to	es	Refugio
+tourism	motel	es	Motel
+tourism	museum	es	Museo
+tourism	picnic_site	es	Área de picnic
+tourism	theme_park	es	Parque temático
+tourism	valley	es	Valle
+tourism	viewpoint	es	Mirador
+tourism	zoo	es	Zoológico
+waterway	boatyard	es	Astillero
+waterway	canal	es	Canal
+waterway	connector	es	Esclusa
+waterway	dam	es	Presa
+waterway	derelict_canal	es	Canal abandonado
+waterway	ditch	es	Acequia
+waterway	dock	es	Muelle
+waterway	drain	es	Desagüe
+waterway	lock	es	Esclusa
+waterway	lock_gate	es	Compuerta de esclusa
+waterway	mineral_spring	es	Fuente mineral
+waterway	mooring	es	Amarradero
+waterway	rapids	es	Rápidos
+waterway	river	es	Río
+waterway	riverbank	es	Ribera
+waterway	stream	es	Arroyo
+waterway	wadi	es	Rambla
+waterway	waterfall	es	Cascada
+waterway	water_point	es	Punto de agua
+waterway	weir	es	Represa

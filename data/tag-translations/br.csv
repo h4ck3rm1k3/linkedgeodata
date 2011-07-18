@@ -1,0 +1,420 @@
+amenity	airport	br	Aerborzh
+amenity	arts_centre	br	Kreizenn arz
+amenity	atm	br	Bilhedaouer
+amenity	auditorium	br	Selaouva
+amenity	bank	br	Ti-bank
+amenity	bar	br	Tavarn
+amenity	bench	br	Skaoñ
+amenity	bicycle_parking	br	Parklec'h evit ar beloioù
+amenity	bicycle_rental	br	Feurmiñ beloioù
+amenity	brothel	br	Bordel
+amenity	bureau_de_change	br	Burev eskemm
+amenity	bus_station	br	Arsav bus
+amenity	cafe	br	Kafedi
+amenity	car_rental	br	Feurmiñ kirri
+amenity	car_sharing	br	Leur genweturañ
+amenity	car_wash	br	Gwalc'hiñ kirri
+amenity	casino	br	Kazino
+amenity	cinema	br	Sinema
+amenity	clinic	br	Klinikenn
+amenity	club	br	Klub
+amenity	college	br	Skol-veur pe skol-uhel
+amenity	community_centre	br	Sal liezimplij
+amenity	courthouse	br	Lez-varn
+amenity	crematorium	br	Krematoriom
+amenity	dentist	br	Dentour
+amenity	doctors	br	Mezeien
+amenity	dormitory	br	Kouskva
+amenity	drinking_water	br	Dour mat da evañ
+amenity	driving_school	br	Skol bleinañ
+amenity	embassy	br	Kannati
+amenity	emergency_phone	br	Pellgomzer evit an trummadoù
+amenity	fast_food	br	Fast Food
+amenity	ferry_terminal	br	Porzh karrlistri
+amenity	fire_hydrant	br	Dour evit an tan
+amenity	fire_station	br	Kazarn pomperien
+amenity	fountain	br	Feunteun
+amenity	fuel	br	Trelosk
+amenity	grave_yard	br	Bered
+amenity	gym	br	Fitness/embregerezh-korf
+amenity	hall	br	Sal
+amenity	health_centre	br	Kreizenn yec'hed
+amenity	hospital	br	Ospital
+amenity	hotel	br	Leti
+amenity	hunting_stand	br	Stand tennañ
+amenity	ice_cream	br	Dienn skorn
+amenity	kindergarten	br	Liorzh ar vugale
+amenity	library	br	Levraoueg
+amenity	market	br	Marc'had
+amenity	marketplace	br	Marc'hallac'h
+amenity	mountain_rescue	br	Sikourioù er menezioù
+amenity	nightclub	br	Klub-noz
+amenity	nursery	br	Spluseg
+amenity	nursing_home	br	Ti yec'hed
+amenity	office	br	Burev
+amenity	park	br	Park
+amenity	parking	br	Parklec'h
+amenity	pharmacy	br	Apotikerezh
+amenity	place_of_worship	br	Lec'h azeuliñ
+amenity	police	br	Polis
+amenity	post_box	br	Boest-lizheroù
+amenity	post_office	br	Ti-post
+amenity	preschool	br	Rakskol
+amenity	prison	br	Toull-bac'h
+amenity	pub	br	Tavarn
+amenity	public_building	br	Savadur foran
+amenity	public_market	br	Marc'had foran
+amenity	reception_area	br	Takad degemer
+amenity	recycling	br	Lec'h adaozañ
+amenity	restaurant	br	Preti
+amenity	retirement_home	br	Ti-retredidi
+amenity	sauna	br	Saona
+amenity	school	br	Skol
+amenity	shelter	br	Gwasked
+amenity	shop	br	Stal
+amenity	shopping	br	Prenadennoù
+amenity	social_club	br	Klub sokial
+amenity	studio	br	Studio
+amenity	supermarket	br	Gourmarc'had
+amenity	taxi	br	Taksi
+amenity	telephone	br	Pellgomzer foran
+amenity	theatre	br	C'hoariva
+amenity	toilets	br	Privezioù
+amenity	townhall	br	Ti-kêr
+amenity	university	br	Skol-veur
+amenity	vending_machine	br	Ingaler emgefre
+amenity	veterinary	br	Surjianerezh evit al loened
+amenity	village_hall	br	Sal ar gumun
+amenity	waste_basket	br	Pod-lastez
+amenity	wifi	br	Moned WiFi
+amenity	youth_centre	br	Kreizenn evit ar re yaouank
+boundary	administrative	br	Bevennoù melestradurel
+building	apartments	br	Kendi
+building	block	br	Kendi
+building	bunker	br	Bunker
+building	chapel	br	Chapel
+building	church	br	Iliz
+building	city_hall	br	Ti-kêr
+building	commercial	br	Savadur kenwerzhel
+building	dormitory	br	Kouskva
+building	entrance	br	Antre ar savadur
+building	faculty	br	Kevrenn skol-veur
+building	farm	br	Ti feurm
+building	flats	br	Ranndioù
+building	garage	br	Karrdi
+building	hall	br	Sal
+building	hospital	br	Savadur ospital
+building	hotel	br	Leti
+building	house	br	Ti
+building	industrial	br	Savadur greantel
+building	office	br	Savadur burevioù
+building	public	br	Savadur foran
+building	residential	br	Savadur annez
+building	retail	br	Stal
+building	school	br	Savadur skol
+building	shop	br	Stal
+building	stadium	br	Stad
+building	store	br	Stal
+building	terrace	br	Savenn
+building	tower	br	Tour
+building	train_station	br	Porzh-houarn
+building	university	br	Savadur Skol-Veur
+highway	bridleway	br	Hent evit ar varc'hegerien
+highway	bus_guideway	br	Roudenn vus heñchet
+highway	bus_stop	br	Arsav bus
+highway	byway	br	Hent eil renk
+highway	construction	br	Chanter gourhent
+highway	cycleway	br	Roudenn divrodegoù
+highway	distance_marker	br	Bonn kilometrek
+highway	emergency_access_point	br	Poent moned trummadoù
+highway	footway	br	Gwenodenn evit an droadeien
+highway	ford	br	Roudour
+highway	gate	br	Dor
+highway	living_street	br	Straed annez
+highway	minor	br	Hent dister
+highway	motorway	br	Gourhent
+highway	motorway_junction	br	Kengej gourhent
+highway	motorway_link	br	Gourhent
+highway	path	br	Gwenodenn
+highway	pedestrian	br	Hent evit an droadeien
+highway	platform	br	Leurenn
+highway	primary	br	Hent kentañ renk
+highway	primary_link	br	Pennhent
+highway	raceway	br	Redva
+highway	residential	br	Takad annezet
+highway	road	br	Hent
+highway	secondary	br	Hent eil renk
+highway	secondary_link	br	Hent a eil renk
+highway	service	br	Hent servij
+highway	services	br	Servijoù gourhent
+highway	steps	br	Diri
+highway	stile	br	Skalier
+highway	tertiary	br	Hent trede renk
+highway	track	br	Roudenn
+highway	trail	br	Roudenn
+highway	trunk	br	Hent-tizh
+highway	trunk_link	br	Hent-tizh
+highway	unclassified	br	Hent dirumm
+highway	unsurfaced	br	Hent dizolo
+historic	archaeological_site	br	Lec'hienn henoniel
+historic	battlefield	br	Tachenn emgann
+historic	boundary_stone	br	Bonn harzoù
+historic	building	br	Savadur
+historic	castle	br	Kastell
+historic	church	br	Iliz
+historic	house	br	Ti
+historic	icon	br	Arlun
+historic	manor	br	Maner
+historic	memorial	br	Kounlec'h
+historic	mine	br	Mengleuz
+historic	monument	br	Monumant
+historic	museum	br	Mirdi
+historic	ruins	br	Dismantroù
+historic	tower	br	Tour
+historic	wayside_cross	br	Kroaz
+historic	wayside_shrine	br	Ti-pediñ
+historic	wreck	br	Peñse
+landuse	allotments	br	Liorzhoù familh
+landuse	basin	br	Poull
+landuse	brownfield	br	Tachenn rezet
+landuse	cemetery	br	Bered
+landuse	commercial	br	Takad kenwerzh
+landuse	conservation	br	Takad gwarezet
+landuse	construction	br	Savadur
+landuse	farm	br	Atant
+landuse	farmland	br	Douaroù-labour
+landuse	farmyard	br	Mereuri
+landuse	forest	br	Koadeg
+landuse	grass	br	Geot
+landuse	greenfield	br	Tachenn da sevel tiez
+landuse	industrial	br	Takad greantel
+landuse	landfill	br	Diskarg
+landuse	meadow	br	Prad
+landuse	military	br	Takad milourel
+landuse	mine	br	Mengleuz
+landuse	mountain	br	Menez
+landuse	nature_reserve	br	Gwarezva natur
+landuse	park	br	Park
+landuse	piste	br	Roudenn
+landuse	plaza	br	Plasenn
+landuse	quarry	br	Mengleuz
+landuse	railway	br	Hent-houarn
+landuse	recreation_ground	br	Leur c'hoari
+landuse	reservoir	br	Mirlenn
+landuse	residential	br	Takad annez
+landuse	retail	br	Kenwerzhioù
+landuse	village_green	br	Takad natur foran
+landuse	vineyard	br	Gwinieg
+landuse	wetland	br	Takad gleborek
+landuse	wood	br	Koad
+leisure	beach_resort	br	Kêr-gouronkañ
+leisure	common	br	Tachennoù foran
+leisure	fishing	br	Takad pesketa
+leisure	garden	br	Liorzh
+leisure	golf_course	br	Tachenn golf
+leisure	ice_rink	br	Poull-ruzikat
+leisure	marina	br	Porzh-bageal
+leisure	miniature_golf	br	Golfig
+leisure	nature_reserve	br	Gwarezva Natur
+leisure	park	br	Park
+leisure	pitch	br	Tachenn sport
+leisure	playground	br	Tachenn c'hoari
+leisure	recreation_ground	br	Tachenn c'hoari
+leisure	slipway	br	Kal
+leisure	sports_centre	br	Kreizenn sport
+leisure	stadium	br	Stad
+leisure	swimming_pool	br	Poull-neuial
+leisure	track	br	Roudenn redek
+leisure	water_park	br	Kreizenn dour
+natural	bay	br	Bae
+natural	beach	br	Traezhenn
+natural	cape	br	Kab
+natural	cave_entrance	br	Treuzoù mougev
+natural	channel	br	Kanol
+natural	cliff	br	Tornaod
+natural	coastline	br	Arvor
+natural	crater	br	Krater
+natural	feature	br	Elfenn
+natural	fell	br	Fell
+natural	fjord	br	Fjord
+natural	geyser	br	Geiser
+natural	glacier	br	Skorneg
+natural	heath	br	Brug
+natural	hill	br	Torgenn
+natural	island	br	Enez
+natural	land	br	Douar
+natural	marsh	br	Geun
+natural	moor	br	Lanneier
+natural	mud	br	Fank
+natural	peak	br	Pikern
+natural	point	br	Poent
+natural	reef	br	Karreg
+natural	ridge	br	Kribenn
+natural	river	br	Stêr
+natural	rock	br	Roc'h
+natural	scree	br	Disac'hadur
+natural	scrub	br	Strouezh
+natural	shoal	br	Klosenn
+natural	spring	br	Lamm-dour
+natural	strait	br	Strizh-mor
+natural	tree	br	Gwezenn
+natural	valley	br	Traoñienn
+natural	volcano	br	Menez-tan
+natural	water	br	Dour
+natural	wetland	br	Takad gleborek
+natural	wetlands	br	Takadoù gleborek
+natural	wood	br	Koad
+place	airport	br	Aerborzh
+place	city	br	Meurgêr
+place	country	br	Bro
+place	county	br	Kontelezh
+place	farm	br	Atant
+place	hamlet	br	Pennkêr
+place	house	br	Ti
+place	houses	br	Tiez
+place	island	br	Enez
+place	islet	br	Enezennig
+place	locality	br	Kêr
+place	moor	br	Lanneg
+place	municipality	br	Kumun
+place	postcode	br	Kod post
+place	region	br	Rannvro
+place	sea	br	Mor
+place	state	br	Stad
+place	subdivision	br	Isrann
+place	suburb	br	Karter
+place	town	br	Kêr
+place	unincorporated_area	br	Takad diaoz
+place	village	br	Kêriadenn
+railway	abandoned	br	Hent-houarn dilezet
+railway	construction	br	Hent-houarn war sevel
+railway	disused	br	Hent-houarn dilezet
+railway	disused_station	br	Porzh-houarn dilezet
+railway	funicular	br	Hent-houarn fundren
+railway	halt	br	Arsav tren
+railway	historic_station	br	Arsav tren istorel
+railway	junction	br	Kej hent-houarn
+railway	level_crossing	br	Treuzenn hent-houarn
+railway	light_rail	br	Hent-houarn bihan
+railway	monorail	br	Hent-houarn unroud
+railway	narrow_gauge	br	Hent-houarn strizh
+railway	platform	br	Savenn hent-houarn
+railway	preserved	br	Hent-houarn miret
+railway	spur	br	Hent-houarn kevreañ
+railway	station	br	Porzh-houarn
+railway	subway	br	Arsav metro
+railway	subway_entrance	br	Antre metro
+railway	switch	br	Hentoù-houarn heñchañ
+railway	tram	br	Tramgarr
+railway	tram_stop	br	Arsav tramgarr
+railway	yard	br	Gar-dibab
+shop	alcohol	br	Gwezher alkool
+shop	apparel	br	Stal dilhad
+shop	art	br	Stal arz
+shop	bakery	br	Baraerezh
+shop	beauty	br	Stal produioù kened
+shop	beverages	br	Stal evajoù
+shop	bicycle	br	Stal marc'hoù-houarn
+shop	books	br	Levrdi
+shop	butcher	br	Kiger
+shop	car	br	Stal girri
+shop	car_dealer	br	Gwerzher kirri
+shop	car_parts	br	Pezhioù evit ar c'hirri
+shop	carpet	br	Stal pallennoù
+shop	car_repair	br	Dresañ kirri
+shop	charity	br	Stal garitez
+shop	chemist	br	Stal produioù yec'hederezh
+shop	clothes	br	Stal dilhad
+shop	computer	br	Stal urzhiataerioù
+shop	confectionery	br	Koñfizerezh
+shop	convenience	br	Ispiserezh
+shop	copyshop	br	Stal luc'heilañ
+shop	cosmetics	br	Stal produioù kened
+shop	department_store	br	Gourstal
+shop	discount	br	Stal discount
+shop	doityourself	br	Stal bitellat
+shop	drugstore	br	Apotikerezh
+shop	dry_cleaning	br	Naetaat ent sec'h
+shop	electronics	br	Stal traoù eletronek
+shop	estate_agent	br	Kourater tiez
+shop	farm	br	Stal evit al labour-douar
+shop	fashion	br	Stal gizioù
+shop	fish	br	Stal besked
+shop	florist	br	Bokedour
+shop	food	br	Stal voued
+shop	funeral_directors	br	Kañvlidoù
+shop	furniture	br	Stal arrebeuri
+shop	gallery	br	Palier
+shop	garden_centre	br	Stal liorzhañ
+shop	general	br	Stal hollek
+shop	gift	br	Stal profoù
+shop	greengrocer	br	Gwerzher frouezh ha legumaj
+shop	grocery	br	Ispiserezh
+shop	hairdresser	br	Perukenner
+shop	hardware	br	Stal urzhiataerezh
+shop	hifi	br	Stal Hi-Fi
+shop	insurance	br	Asurañs
+shop	jewelry	br	Bravigerezh
+shop	kiosk	br	Kiosk
+shop	laundry	br	Kanndi
+shop	mall	br	Palier kenwerzh
+shop	market	br	Marc'had
+shop	mobile_phone	br	Stal pellgomzerioù hezoug
+shop	motorcycle	br	Stal marc'hoù-tan
+shop	music	br	Stal sonerezh
+shop	newsagent	br	Gwerzher kazetennoù
+shop	optician	br	Luneder
+shop	organic	br	Stal boued bio
+shop	outdoor	br	Stal oberiantizoù diavaez
+shop	pet	br	Stal loened
+shop	photo	br	Stal luc'hskeudenniñ
+shop	salon	br	Saloñs
+shop	shoes	br	Stal voteier
+shop	shopping_centre	br	Kreizenn-genwerzh
+shop	sports	br	Stal sport
+shop	stationery	br	Paperaerezh
+shop	supermarket	br	Gourmarc'had
+shop	toys	br	Stal c'hoarielloù
+shop	travel_agency	br	Ajañs-veaj
+shop	video	br	Stal videoioù
+shop	wine	br	Kavour gwin
+tourism	alpine_hut	br	Bod menez
+tourism	artwork	br	Oberenn arz
+tourism	attraction	br	Tra zedennus
+tourism	bed_and_breakfast	br	Bod ha boued
+tourism	cabin	br	Kabanenn
+tourism	camp_site	br	Tachenn gampiñ
+tourism	caravan_site	br	Tachenn karavanennoù
+tourism	chalet	br	Ti-menez
+tourism	guest_house	br	Ti herberc'h
+tourism	hostel	br	Herberc'h
+tourism	hotel	br	Leti
+tourism	information	br	Titouroù
+tourism	lean_to	br	Stand
+tourism	motel	br	Motel
+tourism	museum	br	Mirdi
+tourism	picnic_site	br	Lec'hienn biknikañ
+tourism	theme_park	br	Park tematek
+tourism	valley	br	Traoñienn
+tourism	viewpoint	br	Gwelva
+tourism	zoo	br	Zoo
+waterway	boatyard	br	Chanter bigi
+waterway	canal	br	Kanol
+waterway	connector	br	Kevreadur dourredennoù
+waterway	dam	br	Chaoser
+waterway	derelict_canal	br	Kanol dilezet
+waterway	ditch	br	Foz
+waterway	dock	br	Dok
+waterway	drain	br	Dizourer
+waterway	lock	br	Skluz
+waterway	lock_gate	br	Skluz
+waterway	mineral_spring	br	Mammenn dour melar
+waterway	mooring	br	Fes
+waterway	rapids	br	Taranoù
+waterway	river	br	Stêr
+waterway	riverbank	br	Naoz
+waterway	stream	br	Gwazh-dour
+waterway	wadi	br	Oued
+waterway	waterfall	br	Lamm-dour
+waterway	water_point	br	Doureg
+waterway	weir	br	Stankell

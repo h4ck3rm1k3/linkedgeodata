@@ -1,0 +1,420 @@
+amenity	airport	mk	Аеродром
+amenity	arts_centre	mk	Дом на уметности
+amenity	atm	mk	Банкомат
+amenity	auditorium	mk	Аудиториум
+amenity	bank	mk	Банка
+amenity	bar	mk	Бар
+amenity	bench	mk	Клупа
+amenity	bicycle_parking	mk	Велосипедско паркирање
+amenity	bicycle_rental	mk	Изнајмување велосипеди
+amenity	brothel	mk	Бордел
+amenity	bureau_de_change	mk	Менувачница
+amenity	bus_station	mk	Автобуска станица
+amenity	cafe	mk	Кафуле
+amenity	car_rental	mk	Рент-а-кар
+amenity	car_sharing	mk	Изнајмување автомобил
+amenity	car_wash	mk	Автоперална
+amenity	casino	mk	Казино
+amenity	cinema	mk	Кино
+amenity	clinic	mk	Клиника
+amenity	club	mk	Клуб
+amenity	college	mk	Колеџ
+amenity	community_centre	mk	Центар на заедница
+amenity	courthouse	mk	Суд
+amenity	crematorium	mk	Крематориум
+amenity	dentist	mk	Забар
+amenity	doctors	mk	Доктори
+amenity	dormitory	mk	Студентски дом
+amenity	drinking_water	mk	Питка вода
+amenity	driving_school	mk	Автошкола
+amenity	embassy	mk	Амбасада
+amenity	emergency_phone	mk	Итен телефон
+amenity	fast_food	mk	Брза храна
+amenity	ferry_terminal	mk	Ферибот-терминал
+amenity	fire_hydrant	mk	Противпожарен хидрант
+amenity	fire_station	mk	Пожарна
+amenity	fountain	mk	Фонтана
+amenity	fuel	mk	Гориво
+amenity	grave_yard	mk	Гробишта
+amenity	gym	mk	Теретана / фитнес
+amenity	hall	mk	Соборна сала
+amenity	health_centre	mk	Здравствен центар
+amenity	hospital	mk	Болница
+amenity	hotel	mk	Хотел
+amenity	hunting_stand	mk	Ловечка кула
+amenity	ice_cream	mk	Сладолед
+amenity	kindergarten	mk	Градинка
+amenity	library	mk	Библиотека
+amenity	market	mk	Пазар
+amenity	marketplace	mk	Пазар
+amenity	mountain_rescue	mk	Планинарско спасување
+amenity	nightclub	mk	Ноќен клуб
+amenity	nursery	mk	Јасли
+amenity	nursing_home	mk	Старечки дом
+amenity	office	mk	Канцеларија
+amenity	park	mk	Парк
+amenity	parking	mk	Паркинг
+amenity	pharmacy	mk	Аптека
+amenity	place_of_worship	mk	Верски објект
+amenity	police	mk	Полиција
+amenity	post_box	mk	Поштенско сандаче
+amenity	post_office	mk	Пошта
+amenity	preschool	mk	Претшколска установа
+amenity	prison	mk	Затвор
+amenity	pub	mk	Пивница
+amenity	public_building	mk	Јавен објект
+amenity	public_market	mk	Градски пазар
+amenity	reception_area	mk	Рецепција
+amenity	recycling	mk	Рециклирање
+amenity	restaurant	mk	Ресторан
+amenity	retirement_home	mk	Старечки дом
+amenity	sauna	mk	Сауна
+amenity	school	mk	Училиште
+amenity	shelter	mk	Засолниште
+amenity	shop	mk	Дуќан
+amenity	shopping	mk	Дуќани
+amenity	social_club	mk	Друштвен клуб
+amenity	studio	mk	Студио
+amenity	supermarket	mk	Супермаркет
+amenity	taxi	mk	Такси
+amenity	telephone	mk	Телефонска говорница
+amenity	theatre	mk	Театар
+amenity	toilets	mk	Тоалет
+amenity	townhall	mk	Градски дом
+amenity	university	mk	Универзитет
+amenity	vending_machine	mk	Вендинг-машина
+amenity	veterinary	mk	Ветеринарна клиника
+amenity	village_hall	mk	Месна заедница
+amenity	waste_basket	mk	Корпа за отпадоци
+amenity	wifi	mk	Безжичен интернет
+amenity	youth_centre	mk	Младински центар
+boundary	administrative	mk	Административна граница
+building	apartments	mk	Станбен блок
+building	block	mk	Блок згради
+building	bunker	mk	Бункер
+building	chapel	mk	Капела
+building	church	mk	Црква
+building	city_hall	mk	Градски дом
+building	commercial	mk	Комерцијална зграда
+building	dormitory	mk	Студентски дом
+building	entrance	mk	Влез во зграда
+building	faculty	mk	Факултетски објект
+building	farm	mk	Земјоделски објект
+building	flats	mk	Станови
+building	garage	mk	Гаража
+building	hall	mk	Сала
+building	hospital	mk	Болничка зграда
+building	hotel	mk	Хотел
+building	house	mk	Куќа
+building	industrial	mk	Индустриски објект
+building	office	mk	Деловна зграда
+building	public	mk	Јавен објект
+building	residential	mk	Станбена зграда
+building	retail	mk	Продажен објект
+building	school	mk	Школско здание
+building	shop	mk	Дуќан
+building	stadium	mk	Стадион
+building	store	mk	Продавница
+building	terrace	mk	Тераса
+building	tower	mk	Кула
+building	train_station	mk	Железничка станица
+building	university	mk	Универзитетска зграда
+highway	bridleway	mk	Коњски пат
+highway	bus_guideway	mk	Автобуски шини
+highway	bus_stop	mk	Автобуска постојка
+highway	byway	mk	Спореден пат
+highway	construction	mk	Автопат во изградба
+highway	cycleway	mk	Велосипедска патека
+highway	distance_marker	mk	Бележник на растојание
+highway	emergency_access_point	mk	Прва помош
+highway	footway	mk	Тротоар
+highway	ford	mk	Брод
+highway	gate	mk	Порта
+highway	living_street	mk	Маалска улица
+highway	minor	mk	Помал спореден пат
+highway	motorway	mk	Автопат
+highway	motorway_junction	mk	Клучка
+highway	motorway_link	mk	Приклучен пат
+highway	path	mk	Патека
+highway	pedestrian	mk	Пешачка патека
+highway	platform	mk	Платформа
+highway	primary	mk	Главен пат
+highway	primary_link	mk	Главен пат
+highway	raceway	mk	Тркачка патека
+highway	residential	mk	Станбен
+highway	road	mk	Пат
+highway	secondary	mk	Спореден пат
+highway	secondary_link	mk	Спореден пат
+highway	service	mk	Помошен пат
+highway	services	mk	Крајпатен сервис
+highway	steps	mk	Скалила
+highway	stile	mk	Тарабен премин
+highway	tertiary	mk	Третостепен пат
+highway	track	mk	Полски пат
+highway	trail	mk	Патека
+highway	trunk	mk	Магистрала
+highway	trunk_link	mk	Магистрала
+highway	unclassified	mk	Некласификуван пат
+highway	unsurfaced	mk	Неасфалтиран пат
+historic	archaeological_site	mk	Археолошки локалитет
+historic	battlefield	mk	Бојно поле
+historic	boundary_stone	mk	Граничен камен
+historic	building	mk	Градба
+historic	castle	mk	Замок
+historic	church	mk	Црква
+historic	house	mk	Куќа
+historic	icon	mk	Икона
+historic	manor	mk	Велепоседнички дом
+historic	memorial	mk	Споменик
+historic	mine	mk	Рудник
+historic	monument	mk	Споменик
+historic	museum	mk	Музеј
+historic	ruins	mk	Рушевини
+historic	tower	mk	Кула
+historic	wayside_cross	mk	Крајпатен крст
+historic	wayside_shrine	mk	Параклис
+historic	wreck	mk	Бродолом
+landuse	allotments	mk	Парцели
+landuse	basin	mk	Басен
+landuse	brownfield	mk	Угар
+landuse	cemetery	mk	Гробишта
+landuse	commercial	mk	Комерцијално подрачје
+landuse	conservation	mk	Заштитено земјиште
+landuse	construction	mk	Градилиште
+landuse	farm	mk	Фарма
+landuse	farmland	mk	Обработливо земјиште
+landuse	farmyard	mk	Земјоделски двор
+landuse	forest	mk	Шума
+landuse	grass	mk	Трева
+landuse	greenfield	mk	Неискористено земјиште
+landuse	industrial	mk	Индустриско подрачје
+landuse	landfill	mk	Депонија
+landuse	meadow	mk	Ливада
+landuse	military	mk	Воено подрачје
+landuse	mine	mk	Рудник
+landuse	mountain	mk	Планина
+landuse	nature_reserve	mk	Природен резерват
+landuse	park	mk	Парк
+landuse	piste	mk	Писта
+landuse	plaza	mk	Плоштадче
+landuse	quarry	mk	Каменолом
+landuse	railway	mk	Железница
+landuse	recreation_ground	mk	Рекреативен терен
+landuse	reservoir	mk	Резервоар
+landuse	residential	mk	Станбено подрачје
+landuse	retail	mk	Дуќани
+landuse	village_green	mk	Селско зеленило
+landuse	vineyard	mk	Лозници
+landuse	wetland	mk	Мочуриште
+landuse	wood	mk	Шума
+leisure	beach_resort	mk	Крајбрежно одморалиште
+leisure	common	mk	Општествена земја
+leisure	fishing	mk	Рибарење
+leisure	garden	mk	Градина
+leisure	golf_course	mk	Голф-терен
+leisure	ice_rink	mk	Лизгалиште
+leisure	marina	mk	Марина
+leisure	miniature_golf	mk	Миниголф
+leisure	nature_reserve	mk	Природен резерват
+leisure	park	mk	Парк
+leisure	pitch	mk	Спортски терен
+leisure	playground	mk	Детско игралиште
+leisure	recreation_ground	mk	Разонодно место
+leisure	slipway	mk	Испуст
+leisure	sports_centre	mk	Спортски центар
+leisure	stadium	mk	Стадион
+leisure	swimming_pool	mk	Базен
+leisure	track	mk	Спортска патека
+leisure	water_park	mk	Аквапарк
+natural	bay	mk	Залив
+natural	beach	mk	Плажа
+natural	cape	mk	‘Рт
+natural	cave_entrance	mk	Влез во пештера
+natural	channel	mk	Канал
+natural	cliff	mk	Гребен
+natural	coastline	mk	Крајбрежје
+natural	crater	mk	Кратер
+natural	feature	mk	Елемент
+natural	fell	mk	Фел
+natural	fjord	mk	Фјорд
+natural	geyser	mk	Гејзер
+natural	glacier	mk	Глечер
+natural	heath	mk	Голет
+natural	hill	mk	Рид
+natural	island	mk	Остров
+natural	land	mk	Земја
+natural	marsh	mk	Бара
+natural	moor	mk	Пустара
+natural	mud	mk	Кал
+natural	peak	mk	Врв
+natural	point	mk	Точка
+natural	reef	mk	Гребен
+natural	ridge	mk	Срт
+natural	river	mk	Река
+natural	rock	mk	Карпа
+natural	scree	mk	Сип
+natural	scrub	mk	Честак
+natural	shoal	mk	Плитко место
+natural	spring	mk	Извор
+natural	strait	mk	Проток
+natural	tree	mk	Дрво
+natural	valley	mk	Долина
+natural	volcano	mk	Вулкан
+natural	water	mk	Вода
+natural	wetland	mk	Мочуриште
+natural	wetlands	mk	Мочуриште
+natural	wood	mk	Шума
+place	airport	mk	Аеродром
+place	city	mk	Град
+place	country	mk	Земја
+place	county	mk	Грофовија
+place	farm	mk	Фарма
+place	hamlet	mk	Селце
+place	house	mk	Куќа
+place	houses	mk	Куќи
+place	island	mk	Остров
+place	islet	mk	Островче
+place	locality	mk	Месност
+place	moor	mk	Пустара
+place	municipality	mk	Општина
+place	postcode	mk	Поштенски број
+place	region	mk	Регион
+place	sea	mk	Море
+place	state	mk	Покраина
+place	subdivision	mk	Админ. подрачје
+place	suburb	mk	Населба
+place	town	mk	Град
+place	unincorporated_area	mk	Нездружено подрачје
+place	village	mk	Село
+railway	abandoned	mk	Напуштена железничка линија
+railway	construction	mk	Железничка линија во изградба
+railway	disused	mk	Напуштена железничка линија
+railway	disused_station	mk	Напуштена железничка станица
+railway	funicular	mk	Жичена железница
+railway	halt	mk	Железничка постојка
+railway	historic_station	mk	Историска железничка станица
+railway	junction	mk	Железнички јазол
+railway	level_crossing	mk	Надвозник
+railway	light_rail	mk	Лека железница
+railway	monorail	mk	Едношинска линија
+railway	narrow_gauge	mk	Теснолинејка
+railway	platform	mk	Железнички перон
+railway	preserved	mk	Зачувана железничка линија
+railway	spur	mk	Железнички огранок
+railway	station	mk	Железничка станица
+railway	subway	mk	Метро станица
+railway	subway_entrance	mk	Влез во метро
+railway	switch	mk	Железнички пунктови
+railway	tram	mk	Трамвајска линија
+railway	tram_stop	mk	Трамвајска постојка
+railway	yard	mk	Железничко депо
+shop	alcohol	mk	Алкохол на црно
+shop	apparel	mk	Облека
+shop	art	mk	Уметнички дуќан
+shop	bakery	mk	Пекара
+shop	beauty	mk	Козметика
+shop	beverages	mk	Пијалоци
+shop	bicycle	mk	Продавница за велосипеди
+shop	books	mk	Книжарница
+shop	butcher	mk	Месарница
+shop	car	mk	Автосалон
+shop	car_dealer	mk	Автосалон
+shop	car_parts	mk	Автоделови
+shop	carpet	mk	Дуќан за теписи
+shop	car_repair	mk	Автосервис
+shop	charity	mk	Добротворна продавница
+shop	chemist	mk	Аптека
+shop	clothes	mk	Дуќан за облека
+shop	computer	mk	Продавница за сметачи
+shop	confectionery	mk	Слаткарница
+shop	convenience	mk	Бакалница
+shop	copyshop	mk	Фотокопир
+shop	cosmetics	mk	Козметика
+shop	department_store	mk	Стоковна куќа
+shop	discount	mk	Распродажен дуќан
+shop	doityourself	mk	Направи-сам
+shop	drugstore	mk	Аптека
+shop	dry_cleaning	mk	Хемиско чистење
+shop	electronics	mk	Електронска опрема
+shop	estate_agent	mk	Недвижности
+shop	farm	mk	Земјоделски дуќан
+shop	fashion	mk	Бутик
+shop	fish	mk	Рибарница
+shop	florist	mk	Цвеќара
+shop	food	mk	Продавница за храна
+shop	funeral_directors	mk	Погребална служба
+shop	furniture	mk	Мебел
+shop	gallery	mk	Галерија
+shop	garden_centre	mk	Градинарски центар
+shop	general	mk	Колонијал
+shop	gift	mk	Дуќан за подароци
+shop	greengrocer	mk	Пиљара
+shop	grocery	mk	Бакалница
+shop	hairdresser	mk	Фризер
+shop	hardware	mk	Алат и опрема
+shop	hifi	mk	Аудиосистеми
+shop	insurance	mk	Осигурително
+shop	jewelry	mk	Јувелир
+shop	kiosk	mk	Трафика
+shop	laundry	mk	Пералница
+shop	mall	mk	Трговски центар
+shop	market	mk	Пазар
+shop	mobile_phone	mk	Мобилни телефони
+shop	motorcycle	mk	Моторцикли
+shop	music	mk	Музички дуќан
+shop	newsagent	mk	Весникара
+shop	optician	mk	Оптичар
+shop	organic	mk	Здрава храна
+shop	outdoor	mk	Дуќан на отворено
+shop	pet	mk	Домашни миленици
+shop	photo	mk	Фотографски дуќан
+shop	salon	mk	Салон
+shop	shoes	mk	Обувки
+shop	shopping_centre	mk	Трговски центар
+shop	sports	mk	Спортски дуќан
+shop	stationery	mk	Прибор и репроматеријали
+shop	supermarket	mk	Супермаркет
+shop	toys	mk	Продавница за играчки
+shop	travel_agency	mk	Туристичка агенција
+shop	video	mk	Видеотека
+shop	wine	mk	Алкохолни пијалоци
+tourism	alpine_hut	mk	Планинска куќарка
+tourism	artwork	mk	Уметничко дело
+tourism	attraction	mk	Атракција
+tourism	bed_and_breakfast	mk	Полупансион
+tourism	cabin	mk	Колиба
+tourism	camp_site	mk	Камп
+tourism	caravan_site	mk	Автокамп
+tourism	chalet	mk	Брвнара
+tourism	guest_house	mk	Пансион
+tourism	hostel	mk	Хостел
+tourism	hotel	mk	Хотел
+tourism	information	mk	Информации
+tourism	lean_to	mk	Прилепена стреа
+tourism	motel	mk	Мотел
+tourism	museum	mk	Музеј
+tourism	picnic_site	mk	Излетничко место
+tourism	theme_park	mk	Забавен парк
+tourism	valley	mk	Долина
+tourism	viewpoint	mk	Видиковец
+tourism	zoo	mk	Зоолошка
+waterway	boatyard	mk	Чамцоградилиште
+waterway	canal	mk	Канал
+waterway	connector	mk	Слив
+waterway	dam	mk	Брана
+waterway	derelict_canal	mk	Запуштен канал
+waterway	ditch	mk	Канач
+waterway	dock	mk	Док
+waterway	drain	mk	Одвод
+waterway	lock	mk	Каналска брана
+waterway	lock_gate	mk	Каналска капија
+waterway	mineral_spring	mk	Минерален извор
+waterway	mooring	mk	Сидриште
+waterway	rapids	mk	Брзак
+waterway	river	mk	Река
+waterway	riverbank	mk	Кеј
+waterway	stream	mk	Поток
+waterway	wadi	mk	Вади
+waterway	waterfall	mk	Водопад
+waterway	water_point	mk	Пристап до вода
+waterway	weir	mk	Јаз

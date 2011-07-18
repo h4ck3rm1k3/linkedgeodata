@@ -27723,4 +27723,13 @@
     <property>http://www.w3.org/2000/01/rdf-schema#label</property>
     <isOSMEntity>false</isOSMEntity>
   </org.linkedgeodata.osm.mapping.impl.RegexTextTagMapper>
+  <org.linkedgeodata.osm.mapping.impl.RegexTextTagMapper>
+    <keyPattern>
+      <pattern>official_name:([^:]+)</pattern>
+      <flags>0</flags>
+    </keyPattern>
+    <property>http://linkedgeodata.org/ontology/officialName</property>
+    <isOSMEntity>false</isOSMEntity>
+  </org.linkedgeodata.osm.mapping.impl.RegexTextTagMapper>
+
 </list>

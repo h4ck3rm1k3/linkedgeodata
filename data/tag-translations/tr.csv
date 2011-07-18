@@ -1,0 +1,378 @@
+amenity	airport	tr	Havaalanı
+amenity	arts_centre	tr	Sanat Merkezi
+amenity	atm	tr	Bankamatik
+amenity	auditorium	tr	Oditoryum
+amenity	bank	tr	Banka
+amenity	bar	tr	Bar
+amenity	bench	tr	Bank
+amenity	bicycle_parking	tr	Bisiklet Parkı
+amenity	bicycle_rental	tr	Bisiklet kiralama
+amenity	brothel	tr	Genelev
+amenity	bureau_de_change	tr	Döviz bürosu
+amenity	bus_station	tr	Otogar
+amenity	cafe	tr	Cafe
+amenity	car_rental	tr	Araba Kiralama
+amenity	car_sharing	tr	Araç Paylaşımı
+amenity	car_wash	tr	Oto Yıkama
+amenity	casino	tr	Kasino
+amenity	cinema	tr	Sinema
+amenity	clinic	tr	Klinik
+amenity	club	tr	Kulüp
+amenity	college	tr	Lise
+amenity	courthouse	tr	Adliye
+amenity	crematorium	tr	Krematoryum
+amenity	dentist	tr	Diş hekimi
+amenity	doctors	tr	Doktorlar
+amenity	dormitory	tr	Yurt
+amenity	drinking_water	tr	İçme Suyu
+amenity	driving_school	tr	Sürücü Kursu
+amenity	embassy	tr	Elçilik
+amenity	emergency_phone	tr	Acil Telefon
+amenity	fast_food	tr	Büfe / Fast Food
+amenity	ferry_terminal	tr	Feribot Terminali
+amenity	fire_hydrant	tr	Yangın musluğu
+amenity	fire_station	tr	Itfaiye
+amenity	fountain	tr	Fıskiye
+amenity	fuel	tr	Petrol ofisi
+amenity	grave_yard	tr	Mezarlık
+amenity	gym	tr	Fitness Merkezi / Spor Salonu
+amenity	hall	tr	Toplantı salonu
+amenity	health_centre	tr	Sağlık Merkezi
+amenity	hospital	tr	Hastane
+amenity	hotel	tr	Hotel
+amenity	hunting_stand	tr	Avcılık Standı
+amenity	ice_cream	tr	Dondurma
+amenity	kindergarten	tr	Kreş
+amenity	library	tr	Kütüphane
+amenity	market	tr	Pazar yeri
+amenity	marketplace	tr	Pazar yeri
+amenity	nightclub	tr	Gece Kulübü
+amenity	nursery	tr	Kreş
+amenity	nursing_home	tr	Huzurevi
+amenity	office	tr	Ofis
+amenity	park	tr	Park
+amenity	parking	tr	Otopark
+amenity	pharmacy	tr	Eczane
+amenity	place_of_worship	tr	İbadethane / Tapınak
+amenity	police	tr	Polis
+amenity	post_box	tr	Posta kutusu
+amenity	post_office	tr	Postane
+amenity	preschool	tr	Anaokulu
+amenity	prison	tr	Cezaevi
+amenity	pub	tr	Birahane
+amenity	public_building	tr	Kamu Binası
+amenity	public_market	tr	Halk Pazarı
+amenity	reception_area	tr	Resepsiyon Alanı
+amenity	recycling	tr	Geri dönüşüm noktası
+amenity	restaurant	tr	Restoran
+amenity	retirement_home	tr	Bakımevi
+amenity	sauna	tr	Hamam / Sauna
+amenity	school	tr	Okul
+amenity	shelter	tr	Korunak
+amenity	shop	tr	Dükkan
+amenity	shopping	tr	Alışveriş Merkezi
+amenity	social_club	tr	Sosyal kulübü
+amenity	studio	tr	Stüdyo
+amenity	supermarket	tr	Süpermarket
+amenity	taxi	tr	Taksi
+amenity	telephone	tr	Telefon
+amenity	theatre	tr	Tiyatro
+amenity	toilets	tr	Tuvalet
+amenity	townhall	tr	Belediye binası
+amenity	university	tr	Üniversite
+amenity	vending_machine	tr	Satış makinesi
+amenity	veterinary	tr	Veteriner
+amenity	village_hall	tr	Köy odası
+amenity	waste_basket	tr	Çöp sepeti
+amenity	wifi	tr	WiFi erisim noktası
+amenity	youth_centre	tr	Gençlik Merkezi
+boundary	administrative	tr	İdari Sınır
+building	apartments	tr	Apartman
+building	chapel	tr	Şapel
+building	church	tr	Kilise
+building	city_hall	tr	Belediye binası
+building	dormitory	tr	Yurt
+building	entrance	tr	Bina Girişi
+building	faculty	tr	Fakülte Binası
+building	farm	tr	Çiftlik Binası
+building	flats	tr	Daire
+building	garage	tr	Garaj
+building	hall	tr	Toplantı Merkezi
+building	hospital	tr	Hastane Binası
+building	hotel	tr	Hotel
+building	house	tr	Ev
+building	industrial	tr	Sınai Bina
+building	office	tr	Ofis Binası
+building	public	tr	Kamu Binası
+building	school	tr	Okul Binası
+building	shop	tr	Dükkan
+building	stadium	tr	Stadyum
+building	store	tr	Mağaza
+building	terrace	tr	Teras
+building	tower	tr	Kule
+building	train_station	tr	Gar
+building	university	tr	Üniversite Binası
+highway	bridleway	tr	At yürüyüş yolu
+highway	bus_guideway	tr	Güdümlü otobüs yolu
+highway	bus_stop	tr	Otobüs durağı
+highway	byway	tr	Yan yolu
+highway	construction	tr	İnşaa halinde yolu
+highway	cycleway	tr	Bisiklet Yolu
+highway	distance_marker	tr	Mil taşı
+highway	emergency_access_point	tr	Acil Erişim Noktası
+highway	footway	tr	Yaya yolu
+highway	ford	tr	Akarsu geçidi
+highway	gate	tr	Kapı
+highway	living_street	tr	Yaşam sokağı
+highway	minor	tr	Ufak yol
+highway	motorway	tr	Otoyol
+highway	motorway_junction	tr	Otoyol Kavşağı
+highway	motorway_link	tr	Otoyol bağlantısı
+highway	path	tr	Patika
+highway	pedestrian	tr	Trafiğe kapalı yolu
+highway	platform	tr	Peron
+highway	primary	tr	Devlet Yolu
+highway	primary_link	tr	Devlet Yolu bağlantısı
+highway	raceway	tr	Koşu yolu
+highway	residential	tr	Sokak
+highway	road	tr	Yol
+highway	secondary	tr	İl yolu
+highway	secondary_link	tr	İl yolunun bağlantısı
+highway	service	tr	Servis Yolu
+highway	services	tr	Dinleme Tesisi
+highway	steps	tr	Merdiven
+highway	stile	tr	Çit basamağı
+highway	tertiary	tr	Köy arası yolu
+highway	track	tr	Toprak yolu
+highway	trail	tr	İz
+highway	trunk	tr	Bölünmüş anayol
+highway	trunk_link	tr	Bölünmüş anayol bağlantısı
+highway	unclassified	tr	Sınıflandırılmamış yolu
+highway	unsurfaced	tr	Ham yolu
+historic	archaeological_site	tr	Arkeolojik Alan
+historic	battlefield	tr	Savaş alanı
+historic	boundary_stone	tr	Sınır Taşı
+historic	building	tr	Bina
+historic	castle	tr	Kale
+historic	church	tr	Kilise
+historic	house	tr	Tarihi Konak
+historic	icon	tr	Simge
+historic	memorial	tr	Anıt
+historic	mine	tr	Maden Ocağı
+historic	monument	tr	Anıt
+historic	museum	tr	Müze
+historic	ruins	tr	Harabe
+historic	tower	tr	Kule
+historic	wreck	tr	Batık Gemi
+landuse	allotments	tr	Bostan
+landuse	basin	tr	Havuz
+landuse	brownfield	tr	Nadas
+landuse	cemetery	tr	Mezarlık
+landuse	commercial	tr	Ticari Bölge
+landuse	construction	tr	İnşaat
+landuse	farm	tr	Çiftlik
+landuse	farmland	tr	Tarım arazisi
+landuse	farmyard	tr	Çiftlik avlusu
+landuse	forest	tr	Orman
+landuse	grass	tr	Çim
+landuse	industrial	tr	Sanayi
+landuse	landfill	tr	Çöplük
+landuse	meadow	tr	Çayır
+landuse	military	tr	Askeri Bölge
+landuse	mine	tr	Maden Ocağı
+landuse	mountain	tr	Dağ
+landuse	nature_reserve	tr	Doğa Koruma Alanı
+landuse	park	tr	Park
+landuse	plaza	tr	Meydan
+landuse	quarry	tr	Ocak
+landuse	railway	tr	Demiryolu
+landuse	recreation_ground	tr	Eğlence Parkı
+landuse	reservoir	tr	Baraj Gölü
+landuse	residential	tr	Yerleşim Bölgesi
+landuse	retail	tr	Esnaf
+landuse	village_green	tr	Kırsal Yeşillik
+landuse	vineyard	tr	Bağ
+landuse	wetland	tr	Sulak Alan
+landuse	wood	tr	Orman
+leisure	beach_resort	tr	Plajlı tatilköyü
+leisure	fishing	tr	Balıkçılık alanı
+leisure	garden	tr	Bahçe
+leisure	golf_course	tr	Golf Sahası
+leisure	ice_rink	tr	Buz pateni
+leisure	marina	tr	Marina
+leisure	miniature_golf	tr	Minyatür Golf
+leisure	nature_reserve	tr	Doğa Koruma Alanı
+leisure	park	tr	Park
+leisure	pitch	tr	Spor sahası
+leisure	playground	tr	Çocuk parkı
+leisure	recreation_ground	tr	Eğlence parkı
+leisure	slipway	tr	Kızak yolu
+leisure	sports_centre	tr	Spor Merkezi
+leisure	stadium	tr	Stadyum
+leisure	swimming_pool	tr	Yüzme Havuzu
+leisure	track	tr	Koşuş yolu
+leisure	water_park	tr	Su Parkı
+natural	bay	tr	Koy / körfez
+natural	beach	tr	Plaj
+natural	cape	tr	Burun
+natural	cave_entrance	tr	Mağara girişi
+natural	channel	tr	Kanal
+natural	cliff	tr	Uçurum
+natural	coastline	tr	Sahil şeridi
+natural	crater	tr	Krater
+natural	feature	tr	Özelliği
+natural	fell	tr	Ağaçsız tepe
+natural	fjord	tr	Haliç
+natural	geyser	tr	Gayzer
+natural	glacier	tr	Buzul
+natural	heath	tr	Fundalık
+natural	hill	tr	Tepe
+natural	island	tr	Ada
+natural	land	tr	Kara
+natural	marsh	tr	Bataklık
+natural	moor	tr	Bataklık
+natural	mud	tr	Balçık
+natural	peak	tr	Tepe / zirve
+natural	point	tr	Nokta
+natural	reef	tr	Resif
+natural	ridge	tr	Sırt
+natural	river	tr	Nehir
+natural	rock	tr	Kayaç
+natural	scree	tr	Kayşat
+natural	scrub	tr	Çalılık
+natural	shoal	tr	Sığlık
+natural	spring	tr	Pınar
+natural	strait	tr	Boğaz
+natural	tree	tr	Ağaç
+natural	valley	tr	Dere/vadi
+natural	volcano	tr	Yanardağ
+natural	water	tr	Su
+natural	wetland	tr	Sulak alan
+natural	wetlands	tr	Sulak Alanlar
+natural	wood	tr	Orman
+place	airport	tr	Havaalanı
+place	city	tr	Büyükşehir / il merkezi
+place	country	tr	Ülke
+place	county	tr	İlçe
+place	farm	tr	Tarla
+place	hamlet	tr	Mezra
+place	house	tr	Ev
+place	houses	tr	Evler
+place	island	tr	Ada
+place	islet	tr	Adacık
+place	locality	tr	Yer/mevkii
+place	moor	tr	Bataklık
+place	municipality	tr	Belediye
+place	postcode	tr	Posta kodu
+place	region	tr	Bölge
+place	sea	tr	Deniz
+place	state	tr	İl
+place	subdivision	tr	Alt bölümü
+place	suburb	tr	Mahalle / Banliyö
+place	town	tr	Şehir / ilçe merkezi
+place	unincorporated_area	tr	Arazi
+place	village	tr	Köy
+railway	abandoned	tr	Terkedilmiş Demiryolu
+railway	construction	tr	Yapım aşamasında Demiryolu
+railway	disused	tr	Kullanılmayan Demiryolu
+railway	disused_station	tr	Kullanılmayan Tren İstasyonu
+railway	funicular	tr	Füniküler hattı
+railway	halt	tr	Tren Durağı
+railway	historic_station	tr	Tarihi tren istasyonu
+railway	junction	tr	Demiryolu Kavşağı
+railway	level_crossing	tr	Demiryolu Geçidi
+railway	light_rail	tr	Dar raylı demiryolu
+railway	platform	tr	Peron
+railway	station	tr	Tren istasyonu
+railway	subway	tr	Metro istasyonu
+railway	subway_entrance	tr	Metro Giriş
+railway	switch	tr	Demiryolu makası
+railway	tram	tr	Tramvay
+railway	tram_stop	tr	Tramvay Durağı
+shop	alcohol	tr	Tekel bayii
+shop	art	tr	Sanat Galerisi
+shop	bakery	tr	Fırın
+shop	beauty	tr	Güzellik Salonu
+shop	bicycle	tr	Bisikletçi
+shop	books	tr	Kitap Evi
+shop	butcher	tr	Kasap
+shop	car	tr	Araba Galerisi
+shop	car_dealer	tr	Araba Satıcısı
+shop	car_parts	tr	Araba Parçası Dükkanı
+shop	carpet	tr	Halı Dükkanı
+shop	car_repair	tr	Oto tamir
+shop	chemist	tr	Eczacı
+shop	clothes	tr	Giysi Dükkanı
+shop	computer	tr	Bilgisayar Mağazası
+shop	copyshop	tr	Fotokopi Merkezi
+shop	cosmetics	tr	Kozmetik Mağazası
+shop	discount	tr	İndirimli Ürünler Mağazası
+shop	drugstore	tr	Eczane
+shop	dry_cleaning	tr	Kuru Temizleme
+shop	electronics	tr	Elektronik Mağazası
+shop	estate_agent	tr	Emlakçı
+shop	farm	tr	Tarım Ürünleri Dükkanı
+shop	fish	tr	Balık Dükkanı
+shop	florist	tr	Çiçekçi
+shop	food	tr	Yiyecek Dükkanı
+shop	furniture	tr	Mobilya
+shop	gallery	tr	Galeri
+shop	garden_centre	tr	Bahçe Merkezi
+shop	gift	tr	Hediye eşya
+shop	greengrocer	tr	Manav
+shop	hairdresser	tr	Kuaför
+shop	hardware	tr	Hırdavatçı
+shop	insurance	tr	Sigorta
+shop	jewelry	tr	Kuyumcu
+shop	laundry	tr	Çamaşırhane
+shop	mall	tr	Alışveriş merkezi
+shop	market	tr	Market
+shop	mobile_phone	tr	Cep Telefonu Dükkanı
+shop	motorcycle	tr	Motosiklet Dükkanı
+shop	music	tr	Müzik Mağazası
+shop	newsagent	tr	Gazete bayii
+shop	optician	tr	Gözlükçü
+shop	organic	tr	Organik Yiyecek Dükkanı
+shop	outdoor	tr	Outdoor Sporları Mağazası
+shop	pet	tr	Hayvan Mağazası
+shop	photo	tr	Fotoğrafçı
+shop	salon	tr	Kuaför
+shop	shoes	tr	Ayakkabı Dükkanı
+shop	shopping_centre	tr	Alışveriş Merkezi
+shop	sports	tr	Spor Malzemeleri Mağazası
+shop	supermarket	tr	Süpermarket
+shop	toys	tr	Oyuncakçı
+shop	travel_agency	tr	Seyahat Acentası
+shop	video	tr	Video-CD Dükkanı
+shop	wine	tr	Şarap evi
+tourism	alpine_hut	tr	Dağ evi
+tourism	artwork	tr	Sanat eseri
+tourism	attraction	tr	Gezelim görelim yeri
+tourism	bed_and_breakfast	tr	Oda Kahvaltı
+tourism	cabin	tr	Dam
+tourism	camp_site	tr	Kamp yeri
+tourism	caravan_site	tr	Karavan yeri
+tourism	chalet	tr	Yayla evi
+tourism	guest_house	tr	Konuk Evi
+tourism	hostel	tr	Hostel
+tourism	hotel	tr	Hotel
+tourism	information	tr	Turist Enformasyon
+tourism	lean_to	tr	Ek binası
+tourism	motel	tr	Motel
+tourism	museum	tr	Müze
+tourism	picnic_site	tr	Piknik yeri
+tourism	theme_park	tr	Lunapark
+tourism	valley	tr	Dere/vadi
+tourism	viewpoint	tr	Panoramik view
+tourism	zoo	tr	Hayvanat bahçesi
+waterway	canal	tr	Kanal
+waterway	dam	tr	Baraj
+waterway	ditch	tr	Sulama kanalı
+waterway	dock	tr	İskele
+waterway	drain	tr	Atık su kanalı
+waterway	mineral_spring	tr	Maden Suyu
+waterway	river	tr	Nehir
+waterway	riverbank	tr	Irmak kenarı
+waterway	stream	tr	Çay
+waterway	wadi	tr	Vadi
+waterway	waterfall	tr	Şelale

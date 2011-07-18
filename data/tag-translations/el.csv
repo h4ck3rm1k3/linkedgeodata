@@ -1,0 +1,193 @@
+amenity	airport	el	Αεροδρόμιο
+amenity	arts_centre	el	Κέντρο Τεχνών
+amenity	auditorium	el	Αμφιθέατρο
+amenity	bank	el	Τράπεζα
+amenity	bar	el	Μπαρ
+amenity	bench	el	Πάγκος
+amenity	brothel	el	Πορνείο
+amenity	bus_station	el	Σταθμός Λεωφορείου
+amenity	cafe	el	Καφετέρια
+amenity	car_rental	el	Ενοικίαση αυτοκινήτου
+amenity	car_wash	el	Πλύσιμο Αυτοκινήτων
+amenity	casino	el	Καζίνο
+amenity	cinema	el	Κινηματογράφος
+amenity	clinic	el	Κλινική
+amenity	club	el	Club
+amenity	college	el	Κολέγιο
+amenity	courthouse	el	Δικαστήριο
+amenity	crematorium	el	Κρεματόριο
+amenity	dentist	el	Οδοντίατρος
+amenity	doctors	el	Ιατροί
+amenity	drinking_water	el	Πόσιμο Νερό
+amenity	driving_school	el	Σχολή Οδηγών
+amenity	embassy	el	Πρεσβεία
+amenity	emergency_phone	el	Τηλέφωνο Έκτακτης Ανάγκης
+amenity	fast_food	el	Ταχυφαγείο
+amenity	fountain	el	Συντριβάνι
+amenity	fuel	el	Καύσιμα
+amenity	grave_yard	el	Νεκροταφείο
+amenity	gym	el	Γυμναστήριο
+amenity	hospital	el	Νοσοκομείο
+amenity	hotel	el	Ξενοδοχείο
+amenity	ice_cream	el	Παγωτό
+amenity	kindergarten	el	Νηπιαγωγείο
+amenity	library	el	Βιβλιοθήκη
+amenity	market	el	Αγορά
+amenity	marketplace	el	Αγορά
+amenity	nightclub	el	Night Club
+amenity	office	el	Γραφείο
+amenity	park	el	Πάρκο
+amenity	police	el	Αστυνομία
+amenity	post_box	el	Ταχυδρομική Θυρίδα
+amenity	post_office	el	Ταχυδρομείο
+amenity	preschool	el	Προσχολική Εκπαίδευση
+amenity	prison	el	Φυλακή
+amenity	pub	el	Παμπ
+amenity	reception_area	el	Χώρος Υποδοχής
+amenity	restaurant	el	Εστιατόριο
+amenity	sauna	el	Σάουνα
+amenity	school	el	Σχολείο
+amenity	shop	el	Κατάστημα
+amenity	studio	el	Στούντιο
+amenity	supermarket	el	Σουπερμάρκετ
+amenity	taxi	el	Ταξί
+amenity	theatre	el	Θέατρο
+amenity	toilets	el	Τουαλέτες
+amenity	townhall	el	Δημαρχείο
+amenity	university	el	Πανεπιστήμιο
+amenity	veterinary	el	Κτηνιατρική Χειρουργική
+amenity	wifi	el	Πρόσβαση WiFi
+amenity	youth_centre	el	Πολύκεντρο Νεολαίας
+building	bunker	el	Οχυρό
+building	chapel	el	Παρεκκλήσι
+building	church	el	Εκκλησία
+building	dormitory	el	Κοιτώνας
+building	flats	el	Διαμερίσματα
+building	garage	el	Γκαράζ
+building	hotel	el	Ξενοδοχείο
+building	house	el	Σπίτι
+building	residential	el	Πολυκατοικία
+building	stadium	el	Στάδιο
+building	tower	el	Πύργος
+building	train_station	el	Σιδηροδρομικός Σταθμός
+highway	bridleway	el	Μονοπάτι για άλογα
+highway	bus_stop	el	Στάση Λεωφορείου
+highway	footway	el	Μονοπάτι
+highway	gate	el	Πύλη
+highway	path	el	Διαδρομή
+highway	pedestrian	el	Πεζόδρομιο
+highway	residential	el	Κατοικίες
+highway	road	el	Δρόμος
+highway	trail	el	Διαδρομή
+historic	archaeological_site	el	Αρχαιολογικός Χώρος
+historic	building	el	Κτίριο
+historic	memorial	el	Μνημόσυνο
+historic	mine	el	Ορυχείο
+historic	monument	el	Μνημείο
+historic	museum	el	Μουσείο
+landuse	basin	el	Λεκανοπέδιο
+landuse	cemetery	el	Κοιμητήριο
+landuse	commercial	el	Εμπορική Περιοχή
+landuse	farm	el	Αγρόκτημα
+landuse	farmland	el	Αγρόκτημα
+landuse	farmyard	el	Αγρόκτημα
+landuse	forest	el	Δάσος
+landuse	grass	el	Γρασίδι
+landuse	military	el	Στρατιωτική Περιοχή
+landuse	mine	el	Ορυχείο
+landuse	mountain	el	Βουνό
+landuse	park	el	Πάρκο
+landuse	plaza	el	Πλατεία
+landuse	quarry	el	Λατομείο
+landuse	railway	el	Σιδηρόδρομος
+landuse	residential	el	Κατοικημένη Περιοχή
+landuse	vineyard	el	Αμπέλι
+landuse	wood	el	Μη προσεγμένο δάσος
+leisure	fishing	el	Αλιευτική Περιοχή
+leisure	garden	el	Κήπος
+leisure	golf_course	el	Γήπεδο Γκολφ
+leisure	ice_rink	el	Παγοδρόμιο
+leisure	miniature_golf	el	Μίνι Γκολφ
+leisure	park	el	Πάρκο
+leisure	playground	el	Παιδική Χαρά
+leisure	sports_centre	el	Αθλητικό Κέντρο
+leisure	stadium	el	Στάδιο
+leisure	swimming_pool	el	Πισίνα
+natural	beach	el	Παραλία
+natural	cape	el	Ακρωτήριο
+natural	cave_entrance	el	Είσοδος Σπηλιάς
+natural	channel	el	Κανάλι
+natural	cliff	el	Γκρεμός
+natural	crater	el	Κρατήρας
+natural	feature	el	Χαρακτηριστικό
+natural	fjord	el	Φιόρδ
+natural	glacier	el	Παγετώνας
+natural	hill	el	Λόφος
+natural	island	el	Νησί
+natural	marsh	el	Βάλτος
+natural	mud	el	Λάσπη
+natural	peak	el	Κορυφή
+natural	reef	el	Ύφαλος
+natural	river	el	Ποτάμι
+natural	rock	el	Βράχος
+natural	strait	el	Πορθμός
+natural	tree	el	Δέντρο
+natural	valley	el	Κοιλάδα
+natural	volcano	el	Ηφαίστειο
+natural	water	el	Νερό
+natural	wetlands	el	Υγρότοποι
+natural	wood	el	Μη προσεγμένο δάσος
+place	airport	el	Αεροδρόμιο
+place	city	el	Πόλη
+place	country	el	Χώρα
+place	county	el	Κομητεία
+place	farm	el	Αγρόκτημα
+place	hamlet	el	Χωριουδάκι
+place	house	el	Σπίτι
+place	houses	el	Σπίτια
+place	island	el	Νησί
+place	islet	el	Νησίδα
+place	locality	el	Τοποθεσία
+place	municipality	el	Δήμος
+place	postcode	el	Ταχυδρομικός Κώδικας
+place	region	el	Περιοχή
+place	sea	el	Θάλασσα
+place	state	el	Πολιτεία
+place	subdivision	el	Υποδιαίρεση
+place	suburb	el	Προάστιο
+place	town	el	Μικρή Πόλη
+place	village	el	Χωριό
+railway	abandoned	el	Εγκαταλελειμμένος Σιδηρόδρομος
+railway	construction	el	Σιδηρόδρομος Υπό Κατασκευή
+railway	disused	el	Σιδηρόδρομος Εκτός Χρήσης
+railway	disused_station	el	Σιδηροδρομικός Σταθμός Εκτός Χρήσης
+railway	historic_station	el	Ιστορική Σιδηροδρομικός Σταθμός
+railway	station	el	Σιδηροδρομικός Σταθμός
+railway	subway	el	Σταθμός Μετρό
+railway	subway_entrance	el	Είσοδος Στο Μετρό
+railway	tram_stop	el	Στάση Τραμ
+shop	bakery	el	Φούρνος
+shop	books	el	Βιβλιοπωλείο
+shop	butcher	el	Κρεοπωλείο
+shop	car_parts	el	Εξαρτήματα Αυτοκινήτου
+shop	confectionery	el	Ζαχαροπλαστική
+shop	drugstore	el	Φαρμακείο
+shop	dry_cleaning	el	Στεγνό Καθάρισμα
+shop	fish	el	Ιχθυοπωλείο
+shop	florist	el	Ανθοκομείο
+shop	greengrocer	el	Μανάβης
+shop	hairdresser	el	Κομμωτήριο
+shop	insurance	el	Ασφαλιστική
+shop	jewelry	el	Κοσμηματοπωλείο
+shop	kiosk	el	Περίπτερο
+shop	mall	el	Εμπορικό Κέντρο
+shop	sports	el	Κατάστημα Αθλητικών
+shop	supermarket	el	Σουπερμάρκετ
+shop	travel_agency	el	Ταξιδιωτικό Πρακτορείο
+tourism	hotel	el	Ξενοδοχείο
+tourism	museum	el	Μουσείο
+waterway	boatyard	el	Ναυπηγείο
+waterway	dam	el	Φράγμα
+waterway	ditch	el	Χαντάκι
+waterway	river	el	Ποτάμι
+waterway	waterfall	el	Καταράχτης

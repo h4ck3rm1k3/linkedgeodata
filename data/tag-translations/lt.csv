@@ -1,0 +1,379 @@
+amenity	airport	lt	Oro uostas
+amenity	arts_centre	lt	Menų centras
+amenity	atm	lt	Bankomatas
+amenity	auditorium	lt	Auditorija
+amenity	bank	lt	Bankas
+amenity	bar	lt	Baras
+amenity	bench	lt	Suoliukas
+amenity	bicycle_parking	lt	Dviračių stovėjimo aikštelė
+amenity	bicycle_rental	lt	Dviračių nuoma
+amenity	brothel	lt	Viešieji namai
+amenity	bureau_de_change	lt	Valiutos keitimo punktas
+amenity	bus_station	lt	Autobusų stotis
+amenity	cafe	lt	Kavinė
+amenity	car_rental	lt	Mašinų nuoma
+amenity	car_sharing	lt	Dalinimosi automobiliu paslauga
+amenity	car_wash	lt	Automobilių plovykla
+amenity	casino	lt	Kazino
+amenity	cinema	lt	Kino teatras
+amenity	clinic	lt	Klinika
+amenity	club	lt	Klubas
+amenity	college	lt	Koledžas
+amenity	community_centre	lt	Bendruomenės centras
+amenity	courthouse	lt	Teismo pastatas
+amenity	crematorium	lt	Krematoriumas
+amenity	dentist	lt	Dantistas
+amenity	doctors	lt	Gydytojai
+amenity	dormitory	lt	Bendrabutis
+amenity	drinking_water	lt	Geriamas vanduo
+amenity	driving_school	lt	Vairavimo mokykla
+amenity	embassy	lt	Ambasada
+amenity	emergency_phone	lt	Pagalbos telefonas
+amenity	fast_food	lt	Greitas maistas
+amenity	ferry_terminal	lt	Keltų terminalas
+amenity	fire_hydrant	lt	Hidrantas
+amenity	fire_station	lt	Gaisrinė
+amenity	fountain	lt	Fontanas
+amenity	fuel	lt	Degalinė
+amenity	grave_yard	lt	Kapinės
+amenity	gym	lt	Sveikatingumo centras / sporto salė
+amenity	hall	lt	Salė
+amenity	health_centre	lt	Sveikatingumo centras
+amenity	hospital	lt	Ligoninė
+amenity	hotel	lt	Viešbutis
+amenity	hunting_stand	lt	Medžiotojų bokštelis
+amenity	ice_cream	lt	Ledai
+amenity	kindergarten	lt	Vaikų darželis
+amenity	library	lt	Biblioteka
+amenity	market	lt	Turgus
+amenity	marketplace	lt	Turgavietė
+amenity	mountain_rescue	lt	Pagalba kalnuose
+amenity	nightclub	lt	Naktinis klubas
+amenity	nursing_home	lt	Slaugos namai
+amenity	office	lt	Biuras
+amenity	park	lt	Parkas
+amenity	parking	lt	Stovėjimo aikštelė
+amenity	pharmacy	lt	Vaistinė
+amenity	place_of_worship	lt	Maldos namai
+amenity	police	lt	Policija
+amenity	post_box	lt	Pašto dėžutė
+amenity	post_office	lt	Paštas
+amenity	preschool	lt	Ikimokyklinis ugdymas
+amenity	prison	lt	Kalėjimas
+amenity	pub	lt	Aludė
+amenity	public_building	lt	Visuomeninis pastatas
+amenity	public_market	lt	Visuomeninis turgus
+amenity	reception_area	lt	Priėmimo zona
+amenity	recycling	lt	Perdirbimo punktas
+amenity	restaurant	lt	Restoranas
+amenity	retirement_home	lt	Senelių namai
+amenity	sauna	lt	Sauna
+amenity	school	lt	Mokykla
+amenity	shelter	lt	Pastogė
+amenity	shop	lt	Parduotuvė
+amenity	shopping	lt	Apsipirkimo vieta
+amenity	social_club	lt	Socialinių reikalų klubas
+amenity	studio	lt	Studija
+amenity	supermarket	lt	Prekybos centras
+amenity	taxi	lt	Taksi
+amenity	telephone	lt	Viešas telefonas
+amenity	theatre	lt	Teatras
+amenity	toilets	lt	Tualetas
+amenity	townhall	lt	Rotušė
+amenity	university	lt	Universitetas
+amenity	vending_machine	lt	Vendingas
+amenity	veterinary	lt	Veterinarijos chirurgija
+amenity	village_hall	lt	Nedidelio miestelio valdžios būstinė
+amenity	waste_basket	lt	Atliekų krepšelis
+amenity	wifi	lt	WiFi prieiga
+amenity	youth_centre	lt	Jaunimo centras
+boundary	administrative	lt	Administracinė riba
+building	apartments	lt	Gyvenamasis kvartalas
+building	block	lt	Pastatų blokas
+building	bunker	lt	Bunkeris
+building	chapel	lt	Koplyčia
+building	church	lt	Bažnyčia
+building	city_hall	lt	Rotušė
+building	commercial	lt	Komercinės paskirties pastatas
+building	dormitory	lt	Bendrabutis
+building	entrance	lt	Įėjimas į pastatą
+building	farm	lt	Ūkio pastatas
+building	flats	lt	Butai
+building	garage	lt	Garažas
+building	hall	lt	Salė
+building	hospital	lt	Ligoninės pastatas
+building	hotel	lt	Viešbutis
+building	house	lt	Namas
+building	industrial	lt	Pramoninis pastatas
+building	office	lt	Biurų pastatas
+building	public	lt	Visuomeninis pastatas
+building	residential	lt	Gyvenamasis pastatas
+building	retail	lt	Mažmeninės prekybos pastatas
+building	school	lt	Mokyklos pastatas
+building	shop	lt	Parduotuvė
+building	stadium	lt	Stadionas
+building	store	lt	Parduotuvė
+building	terrace	lt	Terasa
+building	tower	lt	Bokštas
+building	train_station	lt	Geležinkelio stotis
+building	university	lt	Universiteto pastatas
+highway	bridleway	lt	Žirgų kelias
+highway	bus_guideway	lt	Bėginio autobuso linija
+highway	bus_stop	lt	Autobusų stotelė
+highway	byway	lt	Keliukas
+highway	construction	lt	Statomas greitkelis
+highway	cycleway	lt	Dviračių takas
+highway	distance_marker	lt	Nuotolio žymeklis
+highway	emergency_access_point	lt	Skubios prieigos punktas
+highway	footway	lt	Pėsčiųjų takelis
+highway	ford	lt	Brasta
+highway	gate	lt	Vartai
+highway	living_street	lt	Gyvenamoji gatvė
+highway	minor	lt	Šalutinis kelias
+highway	motorway	lt	Automagistralė
+highway	motorway_junction	lt	Automagistralės rampa
+highway	motorway_link	lt	Automagistralinis kelias
+highway	path	lt	Takelis
+highway	pedestrian	lt	Pėsčiųjų kelias
+highway	platform	lt	Platforma
+highway	primary	lt	Pirmosios reikšmės kelias
+highway	primary_link	lt	Pirmosios reikšmės kelias
+highway	raceway	lt	Lenktynių trasa
+highway	residential	lt	Gyvenamasis (-oji)
+highway	road	lt	Kelias
+highway	secondary	lt	Antros reikšmės kelias
+highway	secondary_link	lt	Antros reikšmės kelias
+highway	service	lt	Privažiuojamasis kelias
+highway	services	lt	Automagistralės paslaugos
+highway	steps	lt	Laiptai
+highway	stile	lt	Kopynė
+highway	tertiary	lt	Trečios reikšmės kelias
+highway	track	lt	Vėžės
+highway	trail	lt	Takas
+highway	trunk	lt	Magistralinis kelias
+highway	trunk_link	lt	Magistralinis kelias
+highway	unclassified	lt	Neklasifikuotas kelias
+highway	unsurfaced	lt	Kelias be dangos
+historic	archaeological_site	lt	Archeologinė vieta
+historic	battlefield	lt	Mūšio vieta
+historic	boundary_stone	lt	Ribos akmuo
+historic	building	lt	Pastatas
+historic	castle	lt	Pilis
+historic	church	lt	Bažnyčia
+historic	house	lt	Namas
+historic	icon	lt	Ikona
+historic	manor	lt	Dvaras
+historic	memorial	lt	Memorialas
+historic	mine	lt	Kasykla
+historic	monument	lt	Paminklas
+historic	museum	lt	Muziejus
+historic	ruins	lt	Griuvėsiai
+historic	tower	lt	Bokštas
+historic	wayside_cross	lt	Pakelės kryžius
+historic	wayside_shrine	lt	Koplytstulpis
+historic	wreck	lt	Paskendęs laivas
+landuse	allotments	lt	Sodai
+landuse	basin	lt	Baseinas
+landuse	cemetery	lt	Kapinės
+landuse	commercial	lt	Komercinis plotas
+landuse	conservation	lt	Apsaugos zona
+landuse	construction	lt	Statyba
+landuse	farm	lt	Ūkis
+landuse	farmyard	lt	Ferma
+landuse	forest	lt	Miškas
+landuse	grass	lt	Žolė
+landuse	industrial	lt	Pramoninė zona
+landuse	landfill	lt	Sąvartynas
+landuse	meadow	lt	Pieva
+landuse	military	lt	Karinė zona
+landuse	mine	lt	Kasykla
+landuse	mountain	lt	Kalnas
+landuse	nature_reserve	lt	Gamtos draustinis
+landuse	park	lt	Parkas
+landuse	piste	lt	Slidinėjimo trasa
+landuse	quarry	lt	Karjeras
+landuse	railway	lt	Geležinkelis
+landuse	recreation_ground	lt	Rekreacinė zona
+landuse	reservoir	lt	Rezervuaras
+landuse	residential	lt	Gyvenamasis rajonas
+landuse	retail	lt	Mažmeninė prekyba
+landuse	vineyard	lt	Vynuogynas
+landuse	wetland	lt	Pelkė
+landuse	wood	lt	Medžiai
+leisure	beach_resort	lt	Pajūrio kurortas
+leisure	common	lt	Bendra žemė
+leisure	fishing	lt	Žvejybos zona
+leisure	garden	lt	Sodas
+leisure	golf_course	lt	Golfo laukas
+leisure	ice_rink	lt	Slidinėjimo vieta (paklojant užšąlantį vandenį)
+leisure	marina	lt	Valčių ir nedidelių laivų prieplauka
+leisure	miniature_golf	lt	Mini golfas
+leisure	nature_reserve	lt	Gamtos draustinis
+leisure	park	lt	Parkas
+leisure	pitch	lt	Sporto aikštė
+leisure	playground	lt	Žaidimų aikštelė
+leisure	recreation_ground	lt	Rekreacinis plotas
+leisure	slipway	lt	Slipas
+leisure	sports_centre	lt	Sporto centras
+leisure	stadium	lt	Stadionas
+leisure	swimming_pool	lt	Plaukiojimo baseinas
+leisure	track	lt	Bėgimo takelis
+leisure	water_park	lt	Vandens parkas
+natural	bay	lt	Įlanka
+natural	beach	lt	Paplūdimys
+natural	cave_entrance	lt	Įėjimas į urvą
+natural	channel	lt	Kanalas
+natural	cliff	lt	Uola
+natural	coastline	lt	Pakrantė
+natural	crater	lt	Krateris
+natural	feature	lt	Ypatybė
+natural	fjord	lt	Fiordas
+natural	geyser	lt	Geizeris
+natural	glacier	lt	Ledynas
+natural	hill	lt	Kalva
+natural	island	lt	Sala
+natural	land	lt	Žemė
+natural	marsh	lt	Pelkė
+natural	moor	lt	Dažnai užliejama vieta
+natural	mud	lt	Purvas
+natural	peak	lt	Viršūnė
+natural	point	lt	Taškas
+natural	reef	lt	Rifas
+natural	ridge	lt	Ketera
+natural	river	lt	Upė
+natural	rock	lt	Uola
+natural	scree	lt	Skardis
+natural	scrub	lt	Krūmai
+natural	shoal	lt	Rėva
+natural	spring	lt	Šaltinis
+natural	strait	lt	Sąsiauris
+natural	tree	lt	Medis
+natural	valley	lt	Slėnis
+natural	volcano	lt	Ugnikalnis
+natural	water	lt	Vanduo
+natural	wetland	lt	Pelkė
+natural	wetlands	lt	Pelkės
+natural	wood	lt	Medžiai
+place	airport	lt	Oro uostas
+place	city	lt	Miestas
+place	country	lt	Šalis
+place	county	lt	Apskritis
+place	farm	lt	Ūkis
+place	hamlet	lt	Kaimelis (Vienkiemis)
+place	house	lt	Namas
+place	houses	lt	Namai
+place	island	lt	Sala
+place	islet	lt	Salelė
+place	locality	lt	Vietovė
+place	moor	lt	Dažnai užliejama vieta
+place	municipality	lt	Savivaldybė
+place	postcode	lt	Pašto kodas
+place	region	lt	Regionas
+place	sea	lt	Jūra
+place	state	lt	Valstija
+place	subdivision	lt	Subdivizija
+place	suburb	lt	Priemiestis
+place	town	lt	Miestas
+place	unincorporated_area	lt	Neįregistruota erdvė
+place	village	lt	Kaimas
+railway	abandoned	lt	Apleistas geležinkelis
+railway	construction	lt	Statomas geležinkelis
+railway	disused	lt	Nebenaudojamas geležinkelis
+railway	disused_station	lt	Nebenaudojama geležinkelio stotis
+railway	funicular	lt	Funikulierius
+railway	halt	lt	Traukinio Stotelė
+railway	historic_station	lt	Istorinė geležinkelio stotis
+railway	junction	lt	Geležinkelio mazgas
+railway	level_crossing	lt	Pervaža
+railway	light_rail	lt	Lengvasis geležinkelis
+railway	monorail	lt	Vienbėgis
+railway	narrow_gauge	lt	Siaurukas
+railway	platform	lt	Geležinkelio platforma
+railway	preserved	lt	Paveldo geležinkelis
+railway	station	lt	Geležinkelio stotis
+railway	subway	lt	Metro stotis
+railway	subway_entrance	lt	Įėjimas į metro
+railway	tram	lt	Tramvajus
+railway	tram_stop	lt	Tramvajaus stotelė
+shop	apparel	lt	Drabužių parduotuvė
+shop	art	lt	Meno parduotuvė
+shop	bakery	lt	Kepykla
+shop	beauty	lt	Grožio salonas
+shop	beverages	lt	Gėrimų parduotuvė
+shop	bicycle	lt	Dviračių parduotuvė
+shop	books	lt	Knygynas
+shop	butcher	lt	Mėsininkas
+shop	car	lt	Automobilių parduotuvė
+shop	car_dealer	lt	Prekiautojas automobiliais
+shop	car_parts	lt	Automobilių dalys
+shop	carpet	lt	Kilimų parduotuvė
+shop	car_repair	lt	Automobilių remontas
+shop	charity	lt	Labdaros parduotuvė
+shop	chemist	lt	Chemikas
+shop	clothes	lt	Drabužių parduotuvė
+shop	computer	lt	Kompiuterių parduotuvė
+shop	confectionery	lt	Konditerijos parduotuvė
+shop	convenience	lt	Parduotuvė
+shop	cosmetics	lt	Kosmetikos parduotuvė
+shop	department_store	lt	Universalinė parduotuvė
+shop	discount	lt	Nukainotų prekių parduotuvė
+shop	doityourself	lt	Pasidaryk pats
+shop	drugstore	lt	Vaistinė
+shop	dry_cleaning	lt	Sausasis valymas
+shop	electronics	lt	Elektronikos parduotuvė
+shop	estate_agent	lt	Nekilnojamojo turto agentas
+shop	farm	lt	Ūkio parduotuvė
+shop	fashion	lt	Mados parduotuvė
+shop	fish	lt	Žuvies parduotuvė
+shop	florist	lt	Gėlininkas
+shop	food	lt	Maisto parduotuvė
+shop	furniture	lt	Baldai
+shop	gallery	lt	Galerija
+shop	garden_centre	lt	Sodo prekės
+shop	gift	lt	Dovanų parduotuvė
+shop	greengrocer	lt	Daržovių ir vaisių pardavėjas
+shop	grocery	lt	Gastronomas
+shop	hairdresser	lt	Kirpykla
+shop	hardware	lt	Aparatūros parduotuvė
+shop	hifi	lt	Hi-Fi
+shop	insurance	lt	Draudimas
+shop	jewelry	lt	Juvelyrikos parduotuvė
+shop	kiosk	lt	Kioskas
+shop	laundry	lt	Skalbykla
+shop	mall	lt	Prekybos centras
+shop	mobile_phone	lt	Mobiliųjų telefonų parduotuvė
+shop	motorcycle	lt	Motociklų parduotuvė
+shop	music	lt	Muzikos prekių parduotuvė
+shop	organic	lt	Ekologiškų maisto produktų parduotuvė
+shop	pet	lt	Naminių gyvūnėlių parduotuvė
+shop	photo	lt	Foto prekių parduotuvė
+shop	salon	lt	Salonas
+shop	shoes	lt	Batų parduotuvė
+shop	shopping_centre	lt	Prekybos centras
+shop	sports	lt	Sporto prekių parduotuvė
+shop	supermarket	lt	Prekybos centras
+shop	toys	lt	Žaislų parduotuvė
+shop	travel_agency	lt	Kelionių agentūra
+tourism	attraction	lt	Lankytina vieta
+tourism	camp_site	lt	Stovyklavietė
+tourism	caravan_site	lt	Kemperių aikštelė
+tourism	chalet	lt	Trobelė
+tourism	guest_house	lt	Svečių namai
+tourism	hostel	lt	Hostelis
+tourism	hotel	lt	Viešbutis
+tourism	information	lt	Informacija
+tourism	motel	lt	Motelis
+tourism	museum	lt	Muziejus
+tourism	picnic_site	lt	Poilsiavietė
+tourism	valley	lt	Slėnis
+tourism	viewpoint	lt	Apžvalgos aikštelė
+tourism	zoo	lt	Zoologijos sodas
+waterway	canal	lt	Kanalas
+waterway	dam	lt	Užtvanka
+waterway	ditch	lt	Griovys
+waterway	dock	lt	Dokas
+waterway	drain	lt	Drenažo griovys
+waterway	river	lt	Upė
+waterway	riverbank	lt	Upės krantas
+waterway	stream	lt	Upeliukas
+waterway	waterfall	lt	Krioklys

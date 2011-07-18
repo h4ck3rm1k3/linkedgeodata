@@ -1,0 +1,420 @@
+amenity	airport	gl	Aeroporto
+amenity	arts_centre	gl	Centro artístico
+amenity	atm	gl	Caixeiro automático
+amenity	auditorium	gl	Auditorio
+amenity	bank	gl	Banco
+amenity	bar	gl	Bar
+amenity	bench	gl	Banco
+amenity	bicycle_parking	gl	Aparcadoiro de bicicletas
+amenity	bicycle_rental	gl	Aluguer de bicicletas
+amenity	brothel	gl	Prostíbulo
+amenity	bureau_de_change	gl	Casa de cambio
+amenity	bus_station	gl	Estación de autobuses
+amenity	cafe	gl	Cafetaría
+amenity	car_rental	gl	Aluguer de automóbiles
+amenity	car_sharing	gl	Aluguer de automóbiles
+amenity	car_wash	gl	Lavadoiro de coches
+amenity	casino	gl	Casino
+amenity	cinema	gl	Cine
+amenity	clinic	gl	Clínica
+amenity	club	gl	Club
+amenity	college	gl	Instituto
+amenity	community_centre	gl	Centro comunitario
+amenity	courthouse	gl	Xulgado
+amenity	crematorium	gl	Crematorio
+amenity	dentist	gl	Dentista
+amenity	doctors	gl	Médicos
+amenity	dormitory	gl	Residencia universitaria
+amenity	drinking_water	gl	Auga potable
+amenity	driving_school	gl	Escola de condución
+amenity	embassy	gl	Embaixada
+amenity	emergency_phone	gl	Teléfono de emerxencia
+amenity	fast_food	gl	Comida rápida
+amenity	ferry_terminal	gl	Terminal de transbordadores
+amenity	fire_hydrant	gl	Boca de incendios
+amenity	fire_station	gl	Parque de bombeiros
+amenity	fountain	gl	Fonte
+amenity	fuel	gl	Combustible
+amenity	grave_yard	gl	Cemiterio
+amenity	gym	gl	Ximnasio
+amenity	hall	gl	Sala de reunións
+amenity	health_centre	gl	Centro de saúde
+amenity	hospital	gl	Hospital
+amenity	hotel	gl	Hotel
+amenity	hunting_stand	gl	Lugar de caza
+amenity	ice_cream	gl	Xeadaría
+amenity	kindergarten	gl	Xardín de infancia
+amenity	library	gl	Biblioteca
+amenity	market	gl	Mercado
+amenity	marketplace	gl	Praza de mercado
+amenity	mountain_rescue	gl	Rescate de montaña
+amenity	nightclub	gl	Club nocturno
+amenity	nursery	gl	Parvulario
+amenity	nursing_home	gl	Residencia para a terceira idade
+amenity	office	gl	Oficina
+amenity	park	gl	Parque
+amenity	parking	gl	Aparcadoiro
+amenity	pharmacy	gl	Farmacia
+amenity	place_of_worship	gl	Lugar de culto
+amenity	police	gl	Policía
+amenity	post_box	gl	Caixa de correos
+amenity	post_office	gl	Oficina de correos
+amenity	preschool	gl	Preescolar
+amenity	prison	gl	Prisión
+amenity	pub	gl	Pub
+amenity	public_building	gl	Edificio público
+amenity	public_market	gl	Mercado público
+amenity	reception_area	gl	Zona de recepción
+amenity	recycling	gl	Punto de reciclaxe
+amenity	restaurant	gl	Restaurante
+amenity	retirement_home	gl	Residencia de xubilados
+amenity	sauna	gl	Sauna
+amenity	school	gl	Escola
+amenity	shelter	gl	Abeiro
+amenity	shop	gl	Tenda
+amenity	shopping	gl	Comercio
+amenity	social_club	gl	Club social
+amenity	studio	gl	Estudio
+amenity	supermarket	gl	Supermercado
+amenity	taxi	gl	Taxi
+amenity	telephone	gl	Teléfono público
+amenity	theatre	gl	Teatro
+amenity	toilets	gl	Aseos
+amenity	townhall	gl	Concello
+amenity	university	gl	Universidade
+amenity	vending_machine	gl	Máquina expendedora
+amenity	veterinary	gl	Clínica veterinaria
+amenity	village_hall	gl	Concello
+amenity	waste_basket	gl	Cesto do lixo
+amenity	wifi	gl	Acceso WiFi
+amenity	youth_centre	gl	Casa da xuventude
+boundary	administrative	gl	Límite administrativo
+building	apartments	gl	Bloque de apartamentos
+building	block	gl	Bloque de edificios
+building	bunker	gl	Búnker
+building	chapel	gl	Capela
+building	church	gl	Igrexa
+building	city_hall	gl	Concello
+building	commercial	gl	Edificio comercial
+building	dormitory	gl	Residencia universitaria
+building	entrance	gl	Entrada do edificio
+building	faculty	gl	Edificio de facultade
+building	farm	gl	Granxa
+building	flats	gl	Apartamentos
+building	garage	gl	Garaxe
+building	hall	gl	Sala de reunións
+building	hospital	gl	Edificio hospitalario
+building	hotel	gl	Hotel
+building	house	gl	Casa
+building	industrial	gl	Edificio industrial
+building	office	gl	Edificio de oficinas
+building	public	gl	Edificio público
+building	residential	gl	Edificio residencial
+building	retail	gl	Edificio comercial
+building	school	gl	Edificio escolar
+building	shop	gl	Tenda
+building	stadium	gl	Estadio
+building	store	gl	Comercio
+building	terrace	gl	Terraza
+building	tower	gl	Torre
+building	train_station	gl	Estación de ferrocarril
+building	university	gl	Complexo universitario
+highway	bridleway	gl	Pista de cabalos
+highway	bus_guideway	gl	Liña de autobuses guiados
+highway	bus_stop	gl	Parada de autobús
+highway	byway	gl	Camiño secundario
+highway	construction	gl	Autoestrada en construción
+highway	cycleway	gl	Pista de bicicletas
+highway	distance_marker	gl	Indicador quilométrico
+highway	emergency_access_point	gl	Punto de acceso de emerxencia
+highway	footway	gl	Carreiro
+highway	ford	gl	Vao
+highway	gate	gl	Porta
+highway	living_street	gl	Rúa residencial
+highway	minor	gl	Estrada lateral
+highway	motorway	gl	Autoestrada
+highway	motorway_junction	gl	Cruzamento de autovías
+highway	motorway_link	gl	Enlace de autoestrada
+highway	path	gl	Camiño
+highway	pedestrian	gl	Camiño peonil
+highway	platform	gl	Plataforma
+highway	primary	gl	Estrada principal
+highway	primary_link	gl	Estrada principal
+highway	raceway	gl	Circuíto
+highway	residential	gl	Residencial
+highway	road	gl	Estrada
+highway	secondary	gl	Estrada secundaria
+highway	secondary_link	gl	Estrada secundaria
+highway	service	gl	Estrada de servizo
+highway	services	gl	Área de servizo
+highway	steps	gl	Chanzos
+highway	stile	gl	Escada
+highway	tertiary	gl	Estrada terciaria
+highway	track	gl	Pista
+highway	trail	gl	Pista
+highway	trunk	gl	Estrada nacional
+highway	trunk_link	gl	Estrada nacional
+highway	unclassified	gl	Estrada sen clasificar
+highway	unsurfaced	gl	Estrada non pavimentada
+historic	archaeological_site	gl	Xacemento arqueolóxico
+historic	battlefield	gl	Campo de batalla
+historic	boundary_stone	gl	Marco
+historic	building	gl	Construción
+historic	castle	gl	Castelo
+historic	church	gl	Igrexa
+historic	house	gl	Casa
+historic	icon	gl	Icona
+historic	manor	gl	Casa señorial
+historic	memorial	gl	Memorial
+historic	mine	gl	Mina
+historic	monument	gl	Monumento
+historic	museum	gl	Museo
+historic	ruins	gl	Ruínas
+historic	tower	gl	Torre
+historic	wayside_cross	gl	Cruce de camiños
+historic	wayside_shrine	gl	Santuario no camiño
+historic	wreck	gl	Pecio
+landuse	allotments	gl	Hortas
+landuse	basin	gl	Cunca
+landuse	brownfield	gl	Terreo baldío
+landuse	cemetery	gl	Cemiterio
+landuse	commercial	gl	Zona comercial
+landuse	conservation	gl	Conservación
+landuse	construction	gl	Construción
+landuse	farm	gl	Granxa
+landuse	farmland	gl	Terra de labranza
+landuse	farmyard	gl	Curral
+landuse	forest	gl	Bosque
+landuse	grass	gl	Herba
+landuse	greenfield	gl	Terreo verde
+landuse	industrial	gl	Zona industrial
+landuse	landfill	gl	Recheo
+landuse	meadow	gl	Pradaría
+landuse	military	gl	Zona militar
+landuse	mine	gl	Mina
+landuse	mountain	gl	Montaña
+landuse	nature_reserve	gl	Reserva natural
+landuse	park	gl	Parque
+landuse	piste	gl	Pista
+landuse	plaza	gl	Praza
+landuse	quarry	gl	Canteira
+landuse	railway	gl	Ferrocarril
+landuse	recreation_ground	gl	Área recreativa
+landuse	reservoir	gl	Encoro
+landuse	residential	gl	Zona residencial
+landuse	retail	gl	Zona comercial
+landuse	village_green	gl	Parque municipal
+landuse	vineyard	gl	Viñedo
+landuse	wetland	gl	Pantano
+landuse	wood	gl	Madeira
+leisure	beach_resort	gl	Balneario
+leisure	common	gl	Terreo común
+leisure	fishing	gl	Área de pesca
+leisure	garden	gl	Xardín
+leisure	golf_course	gl	Campo de golf
+leisure	ice_rink	gl	Pista de patinaxe sobre xeo
+leisure	marina	gl	Porto deportivo
+leisure	miniature_golf	gl	Minigolf
+leisure	nature_reserve	gl	Reserva natural
+leisure	park	gl	Parque
+leisure	pitch	gl	Cancha deportiva
+leisure	playground	gl	Patio de recreo
+leisure	recreation_ground	gl	Área recreativa
+leisure	slipway	gl	Varadoiro
+leisure	sports_centre	gl	Centro deportivo
+leisure	stadium	gl	Estadio
+leisure	swimming_pool	gl	Piscina
+leisure	track	gl	Pista de carreiras
+leisure	water_park	gl	Parque acuático
+natural	bay	gl	Baía
+natural	beach	gl	Praia
+natural	cape	gl	Cabo
+natural	cave_entrance	gl	Entrada de cova
+natural	channel	gl	Canal
+natural	cliff	gl	Cantil
+natural	coastline	gl	Litoral
+natural	crater	gl	Cráter
+natural	feature	gl	Elemento
+natural	fell	gl	Brañal
+natural	fjord	gl	Fiorde
+natural	geyser	gl	Géiser
+natural	glacier	gl	Glaciar
+natural	heath	gl	Breixeira
+natural	hill	gl	Outeiro
+natural	island	gl	Illa
+natural	land	gl	Terra
+natural	marsh	gl	Marisma
+natural	moor	gl	Páramo
+natural	mud	gl	Lama
+natural	peak	gl	Pico
+natural	point	gl	Punto
+natural	reef	gl	Arrecife
+natural	ridge	gl	Crista
+natural	river	gl	Río
+natural	rock	gl	Rocha
+natural	scree	gl	Pedregal
+natural	scrub	gl	Matogueira
+natural	shoal	gl	Cardume
+natural	spring	gl	Primavera
+natural	strait	gl	Estreito
+natural	tree	gl	Árbore
+natural	valley	gl	Val
+natural	volcano	gl	Volcán
+natural	water	gl	Auga
+natural	wetland	gl	Pantano
+natural	wetlands	gl	Pantano
+natural	wood	gl	Bosque
+place	airport	gl	Aeroporto
+place	city	gl	Cidade
+place	country	gl	País
+place	county	gl	Condado
+place	farm	gl	Granxa
+place	hamlet	gl	Aldea
+place	house	gl	Casa
+place	houses	gl	Casas
+place	island	gl	Illa
+place	islet	gl	Illote
+place	locality	gl	Localidade
+place	moor	gl	Páramo
+place	municipality	gl	Municipio
+place	postcode	gl	Código postal
+place	region	gl	Rexión
+place	sea	gl	Mar
+place	state	gl	Estado/Provincia
+place	subdivision	gl	Subdivisión
+place	suburb	gl	Barrio
+place	town	gl	Cidade
+place	unincorporated_area	gl	Área non incorporada
+place	village	gl	Vila
+railway	abandoned	gl	Vía de tren abandonada
+railway	construction	gl	Vía ferroviaria en construción
+railway	disused	gl	Vía ferroviaria en desuso
+railway	disused_station	gl	Estación de trens en desuso
+railway	funicular	gl	Vía de funicular
+railway	halt	gl	Parada de trens
+railway	historic_station	gl	Estación de trens histórica
+railway	junction	gl	Unión de vías ferroviarias
+railway	level_crossing	gl	Paso a nivel
+railway	light_rail	gl	Metro lixeiro
+railway	monorail	gl	Monorraíl
+railway	narrow_gauge	gl	Vía ferroviaria estreita
+railway	platform	gl	Plataforma ferroviaria
+railway	preserved	gl	Vía ferroviaria conservada
+railway	spur	gl	Vía ramificada
+railway	station	gl	Estación de ferrocarril
+railway	subway	gl	Estación de metro
+railway	subway_entrance	gl	Boca de metro
+railway	switch	gl	Puntos de cambio de vía
+railway	tram	gl	Vía de tranvías
+railway	tram_stop	gl	Parada de tranvías
+railway	yard	gl	Estación de clasificación
+shop	alcohol	gl	Tenda de licores
+shop	apparel	gl	Tenda de roupa
+shop	art	gl	Tenda de arte
+shop	bakery	gl	Panadaría
+shop	beauty	gl	Tenda de produtos de beleza
+shop	beverages	gl	Tenda de bebidas
+shop	bicycle	gl	Tenda de bicicletas
+shop	books	gl	Libraría
+shop	butcher	gl	Carnizaría
+shop	car	gl	Concesionario
+shop	car_dealer	gl	Concesionario de automóbiles
+shop	car_parts	gl	Recambios de automóbil
+shop	carpet	gl	Tenda de alfombras
+shop	car_repair	gl	Taller mecánico
+shop	charity	gl	Tenda benéfica
+shop	chemist	gl	Farmacia
+shop	clothes	gl	Tenda de roupa
+shop	computer	gl	Tenda informática
+shop	confectionery	gl	Pastelaría
+shop	convenience	gl	Tenda 24 horas
+shop	copyshop	gl	Tenda de fotocopias
+shop	cosmetics	gl	Tenda de cosméticos
+shop	department_store	gl	Gran almacén
+shop	discount	gl	Tenda de descontos
+shop	doityourself	gl	Tenda de bricolaxe
+shop	drugstore	gl	Farmacia
+shop	dry_cleaning	gl	Limpeza en seco
+shop	electronics	gl	Tenda de electrónica
+shop	estate_agent	gl	Axencia inmobiliaria
+shop	farm	gl	Tenda de produtos agrícolas
+shop	fashion	gl	Tenda de moda
+shop	fish	gl	Peixaría
+shop	florist	gl	Floraría
+shop	food	gl	Tenda de alimentación
+shop	funeral_directors	gl	Tanatorio
+shop	furniture	gl	Mobiliario
+shop	gallery	gl	Galería
+shop	garden_centre	gl	Centro de xardinaría
+shop	general	gl	Tenda de ultramarinos
+shop	gift	gl	Tenda de agasallos
+shop	greengrocer	gl	Froitaría
+shop	grocery	gl	Tenda de alimentación
+shop	hairdresser	gl	Perrucaría
+shop	hardware	gl	Ferraxaría
+shop	hifi	gl	Hi-Fi
+shop	insurance	gl	Aseguradora
+shop	jewelry	gl	Xoiaría
+shop	kiosk	gl	Quiosco
+shop	laundry	gl	Lavandaría
+shop	mall	gl	Centro comercial
+shop	market	gl	Mercado
+shop	mobile_phone	gl	Tenda de telefonía móbil
+shop	motorcycle	gl	Tenda de motocicletas
+shop	music	gl	Tenda de música
+shop	newsagent	gl	Quiosco
+shop	optician	gl	Oftalmólogo
+shop	organic	gl	Tenda de alimentos orgánicos
+shop	outdoor	gl	Tenda de deportes ao aire libre
+shop	pet	gl	Tenda de mascotas
+shop	photo	gl	Tenda de fotografía
+shop	salon	gl	Salón de beleza
+shop	shoes	gl	Zapataría
+shop	shopping_centre	gl	Centro comercial
+shop	sports	gl	Tenda de deportes
+shop	stationery	gl	Papelaría
+shop	supermarket	gl	Supermercado
+shop	toys	gl	Xoguetaría
+shop	travel_agency	gl	Axencia de viaxes
+shop	video	gl	Tenda de vídeos
+shop	wine	gl	Tenda de licores
+tourism	alpine_hut	gl	Cabana alpina
+tourism	artwork	gl	Obra de arte
+tourism	attraction	gl	Atracción
+tourism	bed_and_breakfast	gl	Cama e almorzo
+tourism	cabin	gl	Cabana
+tourism	camp_site	gl	Campamento
+tourism	caravan_site	gl	Sitio de caravanas
+tourism	chalet	gl	Chalé
+tourism	guest_house	gl	Albergue
+tourism	hostel	gl	Hostal
+tourism	hotel	gl	Hotel
+tourism	information	gl	Información
+tourism	lean_to	gl	Caseta
+tourism	motel	gl	Motel
+tourism	museum	gl	Museo
+tourism	picnic_site	gl	Sitio de pícnic
+tourism	theme_park	gl	Parque temático
+tourism	valley	gl	Val
+tourism	viewpoint	gl	Miradoiro
+tourism	zoo	gl	Zoolóxico
+waterway	boatyard	gl	Estaleiro
+waterway	canal	gl	Canal
+waterway	connector	gl	Conexión de vía de auga
+waterway	dam	gl	Encoro
+waterway	derelict_canal	gl	Canal abandonado
+waterway	ditch	gl	Cuneta
+waterway	dock	gl	Peirao
+waterway	drain	gl	Sumidoiro
+waterway	lock	gl	Esclusa
+waterway	lock_gate	gl	Esclusa
+waterway	mineral_spring	gl	Fonte mineral
+waterway	mooring	gl	Atraque
+waterway	rapids	gl	Rápidos
+waterway	river	gl	Río
+waterway	riverbank	gl	Beira do río
+waterway	stream	gl	Arroio
+waterway	wadi	gl	Uadi
+waterway	waterfall	gl	Fervenza
+waterway	water_point	gl	Punto de auga
+waterway	weir	gl	Vaira

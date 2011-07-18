@@ -1,0 +1,420 @@
+amenity	airport	ar	مطار
+amenity	arts_centre	ar	مركز فني/ثقافي
+amenity	atm	ar	صراف آلي
+amenity	auditorium	ar	قاعة محاضرات
+amenity	bank	ar	مصرف
+amenity	bar	ar	حانة
+amenity	bench	ar	مقعد
+amenity	bicycle_parking	ar	موقف دراجات
+amenity	bicycle_rental	ar	تأجير دراجة
+amenity	brothel	ar	بيت دعارة
+amenity	bureau_de_change	ar	مكتب صرافة
+amenity	bus_station	ar	محطة حافلات
+amenity	cafe	ar	مقهى
+amenity	car_rental	ar	تأجير سيارات
+amenity	car_sharing	ar	مشاركة سيارات
+amenity	car_wash	ar	غسيل سيارات
+amenity	casino	ar	نادي قمار
+amenity	cinema	ar	سينما
+amenity	clinic	ar	عيادة
+amenity	club	ar	نادي
+amenity	college	ar	كلّية
+amenity	community_centre	ar	مركز اجتماع
+amenity	courthouse	ar	محكمة
+amenity	crematorium	ar	محرقة جثث
+amenity	dentist	ar	طبيب أسنان
+amenity	doctors	ar	أطباء
+amenity	dormitory	ar	عنبر نوم
+amenity	drinking_water	ar	مياه عذبة
+amenity	driving_school	ar	مدرسة تعليم قيادة
+amenity	embassy	ar	سفارة
+amenity	emergency_phone	ar	هاتف طوارئ
+amenity	fast_food	ar	وجبات سريعة
+amenity	ferry_terminal	ar	مرسى عبّارة
+amenity	fire_hydrant	ar	مواد مكافحة حرائق
+amenity	fire_station	ar	فوج إطفاء
+amenity	fountain	ar	نافورة
+amenity	fuel	ar	وقود
+amenity	grave_yard	ar	مقبرة
+amenity	gym	ar	مركز للرشاقة/الرياضة
+amenity	hall	ar	قاعة
+amenity	health_centre	ar	مركز صحي
+amenity	hospital	ar	مستشفى
+amenity	hotel	ar	فندق
+amenity	hunting_stand	ar	مربط للصيد
+amenity	ice_cream	ar	مثلجات
+amenity	kindergarten	ar	حضانة أطفال
+amenity	library	ar	مكتبة
+amenity	market	ar	سوق
+amenity	marketplace	ar	سوق
+amenity	mountain_rescue	ar	للإنقاذ في الجبل
+amenity	nightclub	ar	نادي ليلي
+amenity	nursery	ar	رعاية تمريضية
+amenity	nursing_home	ar	دار رعاية مسنين/معاقين
+amenity	office	ar	مكتب
+amenity	park	ar	منتزه
+amenity	parking	ar	موقف سيارات
+amenity	pharmacy	ar	صيدلية
+amenity	place_of_worship	ar	معبد
+amenity	police	ar	شرطة
+amenity	post_box	ar	صندوق بريد
+amenity	post_office	ar	مكتب بريد
+amenity	preschool	ar	روضة أطفال
+amenity	prison	ar	سجن
+amenity	pub	ar	حانة
+amenity	public_building	ar	مبنى عام
+amenity	public_market	ar	سوق عمومي
+amenity	reception_area	ar	منطقة استقبال
+amenity	recycling	ar	نقطة إعادة تصنيع
+amenity	restaurant	ar	مطعم
+amenity	retirement_home	ar	بيت مسنين
+amenity	sauna	ar	حمّام بخاري حار
+amenity	school	ar	مدرسة
+amenity	shelter	ar	ملجأ
+amenity	shop	ar	متجر/دكان/حانوت
+amenity	shopping	ar	التسوق
+amenity	social_club	ar	نادي اجتماعي
+amenity	studio	ar	ستوديو
+amenity	supermarket	ar	سوبرماركت
+amenity	taxi	ar	سيارة أجرة
+amenity	telephone	ar	هاتف عمومي
+amenity	theatre	ar	مسرح
+amenity	toilets	ar	مراحيض
+amenity	townhall	ar	مبنى بلدية
+amenity	university	ar	جامعة
+amenity	vending_machine	ar	آلة بيع
+amenity	veterinary	ar	جراحة بيطرية
+amenity	village_hall	ar	مبنى/دار القرية
+amenity	waste_basket	ar	سلة نفايات
+amenity	wifi	ar	نقطة اتصال لاسلكية واي فاي
+amenity	youth_centre	ar	مركز نشاطات للشباب
+boundary	administrative	ar	حدود إدارية
+building	apartments	ar	مجموعة شقق
+building	block	ar	مجمع مباني
+building	bunker	ar	ملجأ محصن
+building	chapel	ar	معبد/مصلى
+building	church	ar	كنيسة
+building	city_hall	ar	دار/قاعة البلدية
+building	commercial	ar	مبنى تجاري
+building	dormitory	ar	عنبر نوم
+building	entrance	ar	مدخل مبنى
+building	faculty	ar	مبنى كلية
+building	farm	ar	مبنى مزرعة
+building	flats	ar	شقق
+building	garage	ar	مرآب
+building	hall	ar	قاعة
+building	hospital	ar	مبنى مستشفى
+building	hotel	ar	فندق
+building	house	ar	منزل
+building	industrial	ar	مبنى صناعي
+building	office	ar	مبنى مكتب
+building	public	ar	مبنى عام
+building	residential	ar	مبنى سكني
+building	retail	ar	مبنى بيع بالمفرق
+building	school	ar	مبنى مدرسة
+building	shop	ar	متجر
+building	stadium	ar	مدرج ألعاب رياضية
+building	store	ar	مخزن
+building	terrace	ar	صف منازل
+building	tower	ar	برج
+building	train_station	ar	محطة قطار
+building	university	ar	مبنى جامعة
+highway	bridleway	ar	مسلك خيول
+highway	bus_guideway	ar	مسار خاص للحافلات
+highway	bus_stop	ar	موقف حافلات
+highway	byway	ar	طريق فرعي
+highway	construction	ar	طريق سريع قيد الإنشاء
+highway	cycleway	ar	مسار دراجات
+highway	distance_marker	ar	إشارة مسافة
+highway	emergency_access_point	ar	نقطة دخول طوارئ
+highway	footway	ar	ممر للمشاة
+highway	ford	ar	مخاضة
+highway	gate	ar	بوّابة
+highway	living_street	ar	شارع سكني
+highway	minor	ar	طريق غير هام
+highway	motorway	ar	طريق سريع
+highway	motorway_junction	ar	تقاطع طرقات سريعة
+highway	motorway_link	ar	طريق سريع
+highway	path	ar	مسار
+highway	pedestrian	ar	طريق للمشاة
+highway	platform	ar	منصة
+highway	primary	ar	طريق أولي
+highway	primary_link	ar	طريق أولي
+highway	raceway	ar	حلبة سباق
+highway	residential	ar	طريق سكني
+highway	road	ar	طريق
+highway	secondary	ar	طريق ثانوي
+highway	secondary_link	ar	طريق ثانوي
+highway	service	ar	طريق خدمة
+highway	services	ar	خدمات الطرق السريعة
+highway	steps	ar	درج
+highway	stile	ar	مرقى لعبور جدار
+highway	tertiary	ar	طريق فرعي
+highway	track	ar	مسار
+highway	trail	ar	درب
+highway	trunk	ar	طريق رئيسي
+highway	trunk_link	ar	طريق رئيسي
+highway	unclassified	ar	طريق غير مصنّف
+highway	unsurfaced	ar	طريق غير معبد
+historic	archaeological_site	ar	موقع أثري
+historic	battlefield	ar	ساحة معركة
+historic	boundary_stone	ar	حجر/صخرة تعليم حدود
+historic	building	ar	مبنى
+historic	castle	ar	قلعة
+historic	church	ar	كنيسة
+historic	house	ar	منزل
+historic	icon	ar	أيقونة
+historic	manor	ar	عزبة
+historic	memorial	ar	نصب تذكاري
+historic	mine	ar	منجم
+historic	monument	ar	ضريح
+historic	museum	ar	متحف
+historic	ruins	ar	أطلال
+historic	tower	ar	برج
+historic	wayside_cross	ar	صليب تذكاري
+historic	wayside_shrine	ar	مزار جانب طريق
+historic	wreck	ar	حطام
+landuse	allotments	ar	حصص سكنية
+landuse	basin	ar	حوض
+landuse	brownfield	ar	أرض مخلفات
+landuse	cemetery	ar	مقبرة
+landuse	commercial	ar	منطقة تجارية
+landuse	conservation	ar	محمية طبيعية
+landuse	construction	ar	ورشة بناء
+landuse	farm	ar	مزرعة
+landuse	farmland	ar	أرض زراعية
+landuse	farmyard	ar	فناء مزرعة
+landuse	forest	ar	غابة
+landuse	grass	ar	عشب
+landuse	greenfield	ar	حقول خضراء
+landuse	industrial	ar	منطقة صناعية
+landuse	landfill	ar	مكب نفايات
+landuse	meadow	ar	مرج
+landuse	military	ar	منطقة عسكرية
+landuse	mine	ar	منجم
+landuse	mountain	ar	جبل
+landuse	nature_reserve	ar	محمية طبيعية
+landuse	park	ar	منتزه
+landuse	piste	ar	منطقة تزحلق
+landuse	plaza	ar	ساحة
+landuse	quarry	ar	كسّارة
+landuse	railway	ar	سكة حديدية
+landuse	recreation_ground	ar	ميدان ألعاب
+landuse	reservoir	ar	خزان
+landuse	residential	ar	منطقة سكنية
+landuse	retail	ar	بيع بالمفرق
+landuse	village_green	ar	أرض خضراء
+landuse	vineyard	ar	كرم عنب
+landuse	wetland	ar	أرض رطبة
+landuse	wood	ar	حرج
+leisure	beach_resort	ar	شاطئ منتجع
+leisure	common	ar	أرض مشاع
+leisure	fishing	ar	منطقة صيد سمك
+leisure	garden	ar	حديقة
+leisure	golf_course	ar	ملعب غولف
+leisure	ice_rink	ar	حلبة تزلج على الجليد
+leisure	marina	ar	مارينا
+leisure	miniature_golf	ar	جولف مصغر
+leisure	nature_reserve	ar	محمية طبيعية
+leisure	park	ar	منتزه
+leisure	pitch	ar	ملعب رياضي
+leisure	playground	ar	ملعب
+leisure	recreation_ground	ar	ميدان ألعاب
+leisure	slipway	ar	مزلقة
+leisure	sports_centre	ar	مركز رياضي
+leisure	stadium	ar	مدرج ألعاب رياضية
+leisure	swimming_pool	ar	بركة سباحة
+leisure	track	ar	مضمار سباق
+leisure	water_park	ar	منتزه ألعاب مائية
+natural	bay	ar	خليج
+natural	beach	ar	شاطئ
+natural	cape	ar	رأس (أرض داخلة في البحر(
+natural	cave_entrance	ar	مدخل كهف
+natural	channel	ar	قناة
+natural	cliff	ar	جرف
+natural	coastline	ar	خط ساحلي
+natural	crater	ar	فوهة بركان
+natural	feature	ar	ميزة
+natural	fell	ar	منحدر
+natural	fjord	ar	مضيق بحري
+natural	geyser	ar	نافورة ماء حار
+natural	glacier	ar	نهر/بحر جليدي
+natural	heath	ar	أرض بور
+natural	hill	ar	تلة
+natural	island	ar	جزيرة
+natural	land	ar	أرض
+natural	marsh	ar	سبخة
+natural	moor	ar	أرض جرداء
+natural	mud	ar	وحل
+natural	peak	ar	ذروة
+natural	point	ar	نقطة
+natural	reef	ar	سلسلة صخور قرب سطح الماء
+natural	ridge	ar	أرض مرتفعة
+natural	river	ar	نهر
+natural	rock	ar	صخرة
+natural	scree	ar	أرض حصاة
+natural	scrub	ar	أشجار منخفضة
+natural	shoal	ar	مياه ضحلة
+natural	spring	ar	نبع
+natural	strait	ar	مضيق جبلي
+natural	tree	ar	شجرة
+natural	valley	ar	وادي
+natural	volcano	ar	بركان
+natural	water	ar	ماء
+natural	wetland	ar	أرض رطبة
+natural	wetlands	ar	أراضي رطبة
+natural	wood	ar	حرج
+place	airport	ar	مطار
+place	city	ar	مدينة
+place	country	ar	دولة
+place	county	ar	مقاطعة
+place	farm	ar	مزرعة
+place	hamlet	ar	كفر
+place	house	ar	منزل
+place	houses	ar	منازل
+place	island	ar	جزيرة
+place	islet	ar	جزيرة صغيرة
+place	locality	ar	محلة
+place	moor	ar	أرض جرداء
+place	municipality	ar	بلدية
+place	postcode	ar	الرمز البريدي
+place	region	ar	منطقة
+place	sea	ar	بحر
+place	state	ar	ولاية
+place	subdivision	ar	التقسيم الفرعي
+place	suburb	ar	ضاحية
+place	town	ar	بلدة
+place	unincorporated_area	ar	منطقة فردية
+place	village	ar	قرية
+railway	abandoned	ar	سكة حديد مهجورة
+railway	construction	ar	سكة حديدية تحت الإنشاء
+railway	disused	ar	سكة حديد مهجورة
+railway	disused_station	ar	محطة سكة حديد مهجورة
+railway	funicular	ar	سكة حديدية معلقة
+railway	halt	ar	موقف قطار
+railway	historic_station	ar	محطة سكة حديد تاريخية
+railway	junction	ar	تقاطع سكك حديدية
+railway	level_crossing	ar	تقاطع سكك حديدية
+railway	light_rail	ar	قطار خفيف
+railway	monorail	ar	قطار ذات سكة حديد واحدة
+railway	narrow_gauge	ar	سكة حديد ضيقة
+railway	platform	ar	رصيف محطة قطار
+railway	preserved	ar	سكة حديدية تراثية
+railway	spur	ar	خط تفرع سكة حديدية
+railway	station	ar	محطة قطار
+railway	subway	ar	محطة مترو الأنفاق
+railway	subway_entrance	ar	مدخل مترو
+railway	switch	ar	مبدل السكة الحديدية
+railway	tram	ar	سكة ترام
+railway	tram_stop	ar	موقف ترام
+railway	yard	ar	فناء سكة حديد
+shop	alcohol	ar	متجر كحول للبيع الخارجي
+shop	apparel	ar	متجر ملابس
+shop	art	ar	متجر فن
+shop	bakery	ar	مخبز
+shop	beauty	ar	صالون تجميل
+shop	beverages	ar	متجر مشروبات
+shop	bicycle	ar	متجر دراجات
+shop	books	ar	متجر كتب
+shop	butcher	ar	جزار
+shop	car	ar	متجر سيارات
+shop	car_dealer	ar	تاجر سيارات
+shop	car_parts	ar	قطع غيار سيارات
+shop	carpet	ar	معرض سجاد
+shop	car_repair	ar	مرآب سيارات
+shop	charity	ar	متجر جمعية خيرية
+shop	chemist	ar	صيدلي
+shop	clothes	ar	متجر ألبسة
+shop	computer	ar	متجر كمبيوتر
+shop	confectionery	ar	متجر الحلويات
+shop	convenience	ar	متجر للأغراض اليومية
+shop	copyshop	ar	محل تصوير مستندات
+shop	cosmetics	ar	بائع مستحضرات تجميل
+shop	department_store	ar	متجر متعدد الأقسام
+shop	discount	ar	محل رخصة
+shop	doityourself	ar	براعة منزلية
+shop	drugstore	ar	صيدلية
+shop	dry_cleaning	ar	تنظيف جاف
+shop	electronics	ar	متجر إلكترونيات
+shop	estate_agent	ar	وكيل عقاري
+shop	farm	ar	متجر منتوجات زراعية
+shop	fashion	ar	متجر أزياء
+shop	fish	ar	متجر أسماك
+shop	florist	ar	بائع زهور
+shop	food	ar	دكان مأكولات
+shop	funeral_directors	ar	وكلاء ترتيبات جنازة
+shop	furniture	ar	أثاث
+shop	gallery	ar	معرض
+shop	garden_centre	ar	متجر للسلع الزراعية
+shop	general	ar	متجر عام
+shop	gift	ar	متجر هدايا
+shop	greengrocer	ar	محل خضروات
+shop	grocery	ar	بقالة
+shop	hairdresser	ar	مزين/مصفف شعر
+shop	hardware	ar	متجر عتاد
+shop	hifi	ar	متجر هاي فاي
+shop	insurance	ar	بوليصات تأمين
+shop	jewelry	ar	متجر مجوهرات
+shop	kiosk	ar	كشك
+shop	laundry	ar	مصبغة
+shop	mall	ar	مركز تسوق
+shop	market	ar	سوق
+shop	mobile_phone	ar	متجر هواتف محمولة
+shop	motorcycle	ar	متجر دراجات نارية
+shop	music	ar	متجر موسيقى
+shop	newsagent	ar	وكالة أنباء
+shop	optician	ar	نظاراتي
+shop	organic	ar	متجر أغذية عضوية
+shop	outdoor	ar	متجر للنشاطات الخارجية
+shop	pet	ar	متجر حيوانات أليفة
+shop	photo	ar	متجر صور
+shop	salon	ar	صالون
+shop	shoes	ar	متجر أحذية
+shop	shopping_centre	ar	مركز التسوق
+shop	sports	ar	متجر رياضة
+shop	stationery	ar	محل قرطاسية
+shop	supermarket	ar	سوبرماركت
+shop	toys	ar	متجر ألعاب
+shop	travel_agency	ar	وكالة سفر
+shop	video	ar	متجر فيديو
+shop	wine	ar	متجر نبيذ للبيع الخارجي
+tourism	alpine_hut	ar	كوخ جبلي
+tourism	artwork	ar	عمل فني
+tourism	attraction	ar	معلم سياحي
+tourism	bed_and_breakfast	ar	سرير وفطار
+tourism	cabin	ar	حُجرة أو مقصورة
+tourism	camp_site	ar	موقع تخييم
+tourism	caravan_site	ar	موقع قافلة
+tourism	chalet	ar	شاليه
+tourism	guest_house	ar	بيت ضيافة
+tourism	hostel	ar	سكن شباب
+tourism	hotel	ar	فندق
+tourism	information	ar	معلومات
+tourism	lean_to	ar	كوخ منحدر
+tourism	motel	ar	نُزل
+tourism	museum	ar	متحف
+tourism	picnic_site	ar	موقع بيك نيك
+tourism	theme_park	ar	حديقة ملاهي
+tourism	valley	ar	وادي
+tourism	viewpoint	ar	موقع كاشف
+tourism	zoo	ar	حديقة حيوانات
+waterway	boatyard	ar	حوض سفن
+waterway	canal	ar	قناة
+waterway	connector	ar	قناة مائية
+waterway	dam	ar	سدّ
+waterway	derelict_canal	ar	قناة مهجورة
+waterway	ditch	ar	خندق
+waterway	dock	ar	مرسى
+waterway	drain	ar	مسرب
+waterway	lock	ar	قفل
+waterway	lock_gate	ar	هويس
+waterway	mineral_spring	ar	نبع مياه معدنية
+waterway	mooring	ar	مرسى
+waterway	rapids	ar	منحدرات نهرية
+waterway	river	ar	نهر
+waterway	riverbank	ar	ضفة نهر
+waterway	stream	ar	جدول
+waterway	wadi	ar	وادي
+waterway	waterfall	ar	شلال
+waterway	water_point	ar	نقطة ماء شفة
+waterway	weir	ar	هدار (سدّ منخفض)

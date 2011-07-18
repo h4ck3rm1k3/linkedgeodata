@@ -1,0 +1,420 @@
+amenity	airport	fr	Aéroport
+amenity	arts_centre	fr	Centre artistique
+amenity	atm	fr	Distributeur automatique de billets
+amenity	auditorium	fr	Auditorium
+amenity	bank	fr	Banque
+amenity	bar	fr	Bar
+amenity	bench	fr	Banc
+amenity	bicycle_parking	fr	Parking à vélos
+amenity	bicycle_rental	fr	Location de vélos
+amenity	brothel	fr	Bordel
+amenity	bureau_de_change	fr	Bureau de change
+amenity	bus_station	fr	Arrêt de bus
+amenity	cafe	fr	Café
+amenity	car_rental	fr	Location de voiture
+amenity	car_sharing	fr	Covoiturage
+amenity	car_wash	fr	Lavage de voiture
+amenity	casino	fr	Casino
+amenity	cinema	fr	Cinéma
+amenity	clinic	fr	Clinique
+amenity	club	fr	Club
+amenity	college	fr	Établissement d'enseignement supérieur
+amenity	community_centre	fr	Salle polyvalente
+amenity	courthouse	fr	Palais de justice
+amenity	crematorium	fr	Crématorium
+amenity	dentist	fr	Dentiste
+amenity	doctors	fr	Docteurs
+amenity	dormitory	fr	Dortoir
+amenity	drinking_water	fr	Eau potable
+amenity	driving_school	fr	École de conduite
+amenity	embassy	fr	Ambassade
+amenity	emergency_phone	fr	Téléphone d'urgence
+amenity	fast_food	fr	Restauration rapide
+amenity	ferry_terminal	fr	Terminal de ferry
+amenity	fire_hydrant	fr	Bouche d'incendie
+amenity	fire_station	fr	Caserne des pompiers
+amenity	fountain	fr	Fontaine
+amenity	fuel	fr	Carburant
+amenity	grave_yard	fr	Cimetière
+amenity	gym	fr	Fitness /gymnastique
+amenity	hall	fr	Salle
+amenity	health_centre	fr	Centre de santé
+amenity	hospital	fr	Hôpital
+amenity	hotel	fr	Hôtel
+amenity	hunting_stand	fr	Stand de tir
+amenity	ice_cream	fr	Crème glacée
+amenity	kindergarten	fr	Jardin d'enfant
+amenity	library	fr	Bibliothèque
+amenity	market	fr	Marché
+amenity	marketplace	fr	Place de marché
+amenity	mountain_rescue	fr	Secours en montagne
+amenity	nightclub	fr	Boîte de nuit
+amenity	nursery	fr	Nurserie
+amenity	nursing_home	fr	Maison de santé
+amenity	office	fr	Bureau
+amenity	park	fr	Parc
+amenity	parking	fr	Parking
+amenity	pharmacy	fr	Pharmacie
+amenity	place_of_worship	fr	Lieu de culte
+amenity	police	fr	Police
+amenity	post_box	fr	Boîte aux lettres
+amenity	post_office	fr	Bureau de poste
+amenity	preschool	fr	Préscolaire
+amenity	prison	fr	Prison
+amenity	pub	fr	Bar
+amenity	public_building	fr	Bâtiment public
+amenity	public_market	fr	Marché public
+amenity	reception_area	fr	Zone de réception
+amenity	recycling	fr	Point de recyclage
+amenity	restaurant	fr	Restaurant
+amenity	retirement_home	fr	Maison de retraite
+amenity	sauna	fr	Sauna
+amenity	school	fr	École
+amenity	shelter	fr	Refuge
+amenity	shop	fr	Magasin
+amenity	shopping	fr	Commerce
+amenity	social_club	fr	Club social
+amenity	studio	fr	Studio
+amenity	supermarket	fr	Supermarché
+amenity	taxi	fr	Taxi
+amenity	telephone	fr	Téléphone public
+amenity	theatre	fr	Théâtre
+amenity	toilets	fr	Toilettes
+amenity	townhall	fr	Hôtel de ville
+amenity	university	fr	Université
+amenity	vending_machine	fr	Distributeur automatique
+amenity	veterinary	fr	Chirurgie vétérinaire
+amenity	village_hall	fr	Salle communale
+amenity	waste_basket	fr	Corbeille
+amenity	wifi	fr	Accès WiFi
+amenity	youth_centre	fr	Centre pour la jeunesse
+boundary	administrative	fr	Limite administrative
+building	apartments	fr	Immeuble
+building	block	fr	Immeuble
+building	bunker	fr	Bunker
+building	chapel	fr	Chapelle
+building	church	fr	Église
+building	city_hall	fr	Hôtel de ville
+building	commercial	fr	Bâtiment de bureaux
+building	dormitory	fr	Dortoir
+building	entrance	fr	Entrée de bâtiment
+building	faculty	fr	Bâtiment de faculté
+building	farm	fr	Bâtiment de ferme
+building	flats	fr	Appartements
+building	garage	fr	Garage
+building	hall	fr	Salle
+building	hospital	fr	Bâtiment hospitalier
+building	hotel	fr	Hôtel
+building	house	fr	Maison
+building	industrial	fr	Bâtiment industriel
+building	office	fr	Bâtiment de bureaux
+building	public	fr	Bâtiment public
+building	residential	fr	Bâtiment résidentiel
+building	retail	fr	Magasin
+building	school	fr	Bâtiment d'école
+building	shop	fr	Magasin
+building	stadium	fr	Stade
+building	store	fr	Magasin
+building	terrace	fr	Terrasse
+building	tower	fr	Tour
+building	train_station	fr	Gare ferroviaire
+building	university	fr	Bâtiment d'université
+highway	bridleway	fr	Chemin pour cavaliers
+highway	bus_guideway	fr	Voie de bus guidée
+highway	bus_stop	fr	Arrêt de bus
+highway	byway	fr	Route secondaire
+highway	construction	fr	Autoroute en construction
+highway	cycleway	fr	Piste cyclable
+highway	distance_marker	fr	Borne kilométrique
+highway	emergency_access_point	fr	Point d'accès d'urgence
+highway	footway	fr	Chemin piéton
+highway	ford	fr	Gué
+highway	gate	fr	Porte
+highway	living_street	fr	Rue résidentielle
+highway	minor	fr	Route mineure
+highway	motorway	fr	Autoroute
+highway	motorway_junction	fr	Jonction d'autoroute
+highway	motorway_link	fr	Route autoroutière
+highway	path	fr	Chemin
+highway	pedestrian	fr	Chemin piéton
+highway	platform	fr	Plateforme
+highway	primary	fr	Route principale
+highway	primary_link	fr	Route principale
+highway	raceway	fr	Circuit
+highway	residential	fr	Résidentiel
+highway	road	fr	Route
+highway	secondary	fr	Route secondaire
+highway	secondary_link	fr	Route secondaire
+highway	service	fr	Route de service
+highway	services	fr	Services autoroutiers
+highway	steps	fr	Escalier
+highway	stile	fr	Échalier
+highway	tertiary	fr	Route tertiaire
+highway	track	fr	Piste
+highway	trail	fr	Piste
+highway	trunk	fr	Voie express
+highway	trunk_link	fr	Voie express
+highway	unclassified	fr	Route mineure
+highway	unsurfaced	fr	Route non revêtue
+historic	archaeological_site	fr	Site archéologique
+historic	battlefield	fr	Champ de bataille
+historic	boundary_stone	fr	Borne frontière
+historic	building	fr	Bâtiment
+historic	castle	fr	Château
+historic	church	fr	Église
+historic	house	fr	Maison
+historic	icon	fr	Icône
+historic	manor	fr	Manoir
+historic	memorial	fr	Mémorial
+historic	mine	fr	Mine
+historic	monument	fr	Monument
+historic	museum	fr	Musée
+historic	ruins	fr	Ruines
+historic	tower	fr	Tour
+historic	wayside_cross	fr	Croix de chemin
+historic	wayside_shrine	fr	Oratoire
+historic	wreck	fr	Épave
+landuse	allotments	fr	Jardins familiaux
+landuse	basin	fr	Bassin
+landuse	brownfield	fr	Terrain rasé
+landuse	cemetery	fr	Cimetière
+landuse	commercial	fr	Zone tertiaire
+landuse	conservation	fr	Zone protégée
+landuse	construction	fr	Construction
+landuse	farm	fr	Zone agricole
+landuse	farmland	fr	Terrains agricoles
+landuse	farmyard	fr	Bâtiments de ferme
+landuse	forest	fr	Forêt
+landuse	grass	fr	Herbe
+landuse	greenfield	fr	Zone de construction future
+landuse	industrial	fr	Zone industrielle
+landuse	landfill	fr	Décharge
+landuse	meadow	fr	Prairie
+landuse	military	fr	Zone militaire
+landuse	mine	fr	Mine
+landuse	mountain	fr	Montagne
+landuse	nature_reserve	fr	Réserve naturelle
+landuse	park	fr	Parc
+landuse	piste	fr	Piste
+landuse	plaza	fr	Plaza
+landuse	quarry	fr	Carrière
+landuse	railway	fr	Voie ferrée
+landuse	recreation_ground	fr	Aire de jeux
+landuse	reservoir	fr	Réservoir
+landuse	residential	fr	Zone résidentielle
+landuse	retail	fr	Zone commerciale
+landuse	village_green	fr	Zone publique herborée
+landuse	vineyard	fr	Vignoble
+landuse	wetland	fr	Zone humide
+landuse	wood	fr	Bois
+leisure	beach_resort	fr	Station balnéaire
+leisure	common	fr	Terrains communaux
+leisure	fishing	fr	Zone de pêche
+leisure	garden	fr	Jardin
+leisure	golf_course	fr	Terrain de golf
+leisure	ice_rink	fr	Patinoire
+leisure	marina	fr	Port de plaisance
+leisure	miniature_golf	fr	Golf miniature
+leisure	nature_reserve	fr	Réserve naturelle
+leisure	park	fr	Parc
+leisure	pitch	fr	Terrain de sport
+leisure	playground	fr	Aire de jeux
+leisure	recreation_ground	fr	Terrain de jeux
+leisure	slipway	fr	Cale de lancement
+leisure	sports_centre	fr	Centre sportif
+leisure	stadium	fr	Stade
+leisure	swimming_pool	fr	Piscine
+leisure	track	fr	Piste
+leisure	water_park	fr	Parc aquatique
+natural	bay	fr	Baie
+natural	beach	fr	Plage
+natural	cape	fr	Cap
+natural	cave_entrance	fr	Entrée de grotte
+natural	channel	fr	Canal
+natural	cliff	fr	Falaise
+natural	coastline	fr	Littoral
+natural	crater	fr	Cratère
+natural	feature	fr	Élément
+natural	fell	fr	Lande
+natural	fjord	fr	Fjord
+natural	geyser	fr	Geyser
+natural	glacier	fr	Glacier
+natural	heath	fr	Bruyère
+natural	hill	fr	Colline
+natural	island	fr	Île
+natural	land	fr	Terre
+natural	marsh	fr	Marécage
+natural	moor	fr	Maure
+natural	mud	fr	Boue
+natural	peak	fr	Pic
+natural	point	fr	Pointe
+natural	reef	fr	Récif
+natural	ridge	fr	Crête
+natural	river	fr	Rivière
+natural	rock	fr	Roche
+natural	scree	fr	Éboulis
+natural	scrub	fr	Broussailles
+natural	shoal	fr	Haut-fond
+natural	spring	fr	Source
+natural	strait	fr	Détroit
+natural	tree	fr	Arbre
+natural	valley	fr	Vallée
+natural	volcano	fr	Volcan
+natural	water	fr	Eau
+natural	wetland	fr	Zone humide
+natural	wetlands	fr	Zones humides
+natural	wood	fr	Forêt
+place	airport	fr	Aéroport
+place	city	fr	Ville
+place	country	fr	Pays
+place	county	fr	Comté
+place	farm	fr	Ferme
+place	hamlet	fr	Hameau
+place	house	fr	Maison
+place	houses	fr	Maisons
+place	island	fr	Île
+place	islet	fr	Îlot
+place	locality	fr	Localité
+place	moor	fr	Maure
+place	municipality	fr	Municipalité
+place	postcode	fr	Code postal
+place	region	fr	Région
+place	sea	fr	Mer
+place	state	fr	État / province
+place	subdivision	fr	Subdivision
+place	suburb	fr	Quartier
+place	town	fr	Ville
+place	unincorporated_area	fr	Lieu non organisé
+place	village	fr	Village
+railway	abandoned	fr	Voie ferrée abandonnée
+railway	construction	fr	Voie ferrée en construction
+railway	disused	fr	Voie ferrée désaffectée
+railway	disused_station	fr	Gare désaffectée
+railway	funicular	fr	Voie de funiculaire
+railway	halt	fr	Arrêt de train
+railway	historic_station	fr	Arrêt de train historique
+railway	junction	fr	Jonction ferroviaire
+railway	level_crossing	fr	Passage à niveau
+railway	light_rail	fr	Petite voie ferrée
+railway	monorail	fr	Monorail
+railway	narrow_gauge	fr	Chemin de fer à voie étroite
+railway	platform	fr	Plateforme ferroviaire
+railway	preserved	fr	Voie ferrée conservée
+railway	spur	fr	Voie de connexion
+railway	station	fr	Gare ferroviaire
+railway	subway	fr	Station de métro
+railway	subway_entrance	fr	Bouche de métro
+railway	switch	fr	Aiguillage
+railway	tram	fr	Tramway
+railway	tram_stop	fr	Arrêt de tram
+railway	yard	fr	Voie de triage
+shop	alcohol	fr	Magasin officiel d'alcool
+shop	apparel	fr	Magasin d'habillement
+shop	art	fr	Boutique d'art
+shop	bakery	fr	Boulangerie
+shop	beauty	fr	Magasin de produits de beauté
+shop	beverages	fr	Magasin de boissons
+shop	bicycle	fr	Magasin de vélos
+shop	books	fr	Librairie
+shop	butcher	fr	Boucher
+shop	car	fr	Magasin de voitures
+shop	car_dealer	fr	Vendeur de voitures
+shop	car_parts	fr	Pièces d'automobile
+shop	carpet	fr	Magasin de tapis
+shop	car_repair	fr	Réparation de voitures
+shop	charity	fr	Magasin de bienfaisance
+shop	chemist	fr	Magasin de produits d'hygiène
+shop	clothes	fr	Magasin de vêtements
+shop	computer	fr	Magasin informatique
+shop	confectionery	fr	Confiserie
+shop	convenience	fr	Épicerie
+shop	copyshop	fr	Magasin de photocopies
+shop	cosmetics	fr	Magasin de cosmétiques
+shop	department_store	fr	Grand magasin
+shop	discount	fr	Magasin discount
+shop	doityourself	fr	Magasin de bricolage
+shop	drugstore	fr	Pharmacie
+shop	dry_cleaning	fr	Nettoyage à sec
+shop	electronics	fr	Magasin d'électronique
+shop	estate_agent	fr	Agent immobilier
+shop	farm	fr	Magasin de produits agricoles
+shop	fashion	fr	Magasin de mode
+shop	fish	fr	Poissonnerie
+shop	florist	fr	Fleuriste
+shop	food	fr	Magasin d'alimentation
+shop	funeral_directors	fr	Pompes funèbres
+shop	furniture	fr	Ameublement
+shop	gallery	fr	Galerie
+shop	garden_centre	fr	Jardinerie
+shop	general	fr	Magasin généraliste
+shop	gift	fr	Boutique de cadeaux
+shop	greengrocer	fr	Marchand de fruits et légumes
+shop	grocery	fr	Épicerie
+shop	hairdresser	fr	Coiffeur
+shop	hardware	fr	Quincaillerie
+shop	hifi	fr	Magasin Hi-Fi
+shop	insurance	fr	Assurance
+shop	jewelry	fr	Bijouterie
+shop	kiosk	fr	Kiosque
+shop	laundry	fr	Blanchisserie
+shop	mall	fr	Galerie marchande
+shop	market	fr	Marché
+shop	mobile_phone	fr	Magasin de téléphones mobiles
+shop	motorcycle	fr	Magasin de moto
+shop	music	fr	Magasin de musique
+shop	newsagent	fr	Marchand de journaux
+shop	optician	fr	Opticien
+shop	organic	fr	Magasin bio
+shop	outdoor	fr	Magasin d'activités de plein air
+shop	pet	fr	Magasin d'animaux
+shop	photo	fr	Magasin de photographie
+shop	salon	fr	Salon
+shop	shoes	fr	Magasin de chaussures
+shop	shopping_centre	fr	Centre commercial
+shop	sports	fr	Magasin de sport
+shop	stationery	fr	Papeterie
+shop	supermarket	fr	Supermarché
+shop	toys	fr	Magasin de jouets
+shop	travel_agency	fr	Agence de voyage
+shop	video	fr	Magasin de vidéos
+shop	wine	fr	Caviste
+tourism	alpine_hut	fr	Refuge
+tourism	artwork	fr	Œuvre d’art
+tourism	attraction	fr	Attraction
+tourism	bed_and_breakfast	fr	Gîte
+tourism	cabin	fr	Hutte
+tourism	camp_site	fr	Camping
+tourism	caravan_site	fr	Site de caravane
+tourism	chalet	fr	Chalet
+tourism	guest_house	fr	Maison d'hôte
+tourism	hostel	fr	Auberge
+tourism	hotel	fr	Hôtel
+tourism	information	fr	Informations
+tourism	lean_to	fr	Stand
+tourism	motel	fr	Motel
+tourism	museum	fr	Musée
+tourism	picnic_site	fr	Site de pique-nique
+tourism	theme_park	fr	Parc à thème
+tourism	valley	fr	Vallée
+tourism	viewpoint	fr	Point de vue
+tourism	zoo	fr	Zoo
+waterway	boatyard	fr	Chantier naval
+waterway	canal	fr	Canal
+waterway	connector	fr	Connexion hydrographique
+waterway	dam	fr	Digue
+waterway	derelict_canal	fr	Canal de délaissement
+waterway	ditch	fr	Fossé
+waterway	dock	fr	Dock
+waterway	drain	fr	Drain
+waterway	lock	fr	Écluse
+waterway	lock_gate	fr	Porte d'écluse
+waterway	mineral_spring	fr	Source d'eau minérale
+waterway	mooring	fr	Mouillage
+waterway	rapids	fr	Rapides
+waterway	river	fr	Rivière
+waterway	riverbank	fr	Lit de rivière
+waterway	stream	fr	Ruisseau
+waterway	wadi	fr	Oued
+waterway	waterfall	fr	Chute d'eau
+waterway	water_point	fr	Point d'eau
+waterway	weir	fr	Barrage

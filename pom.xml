@@ -41,24 +41,23 @@
 		</plugins>
 	</build>
 	<repositories>
-		<repository>
-			<id>http://prod1.aksw.org/archiva/repository/internal/</id>
-			<name>University Leipzig, AKSW Maven2 Internal Repository</name>
-			<url>http://prod1.aksw.org:8081/archiva/repository/internal/</url>
-		</repository>
 
-		<repository>
-			<id>http://prod1.aksw.org/archiva/repository/snapshots/</id>
-			<name>University Leipzig, AKSW Maven2 Snaphshot Repository</name>
-			<url>http://prod1.aksw.org:8081/archiva/repository/snapshots/</url>
-		</repository>
 
 		<!-- Repository for hibernate -->
-		<repository>
-			<id>repository.jboss.org</id>
-			<url>http://repository.jboss.com/maven2</url>
-		</repository>
 
+		<repository>
+			<id>maven.aksw.org</id>
+			<name>University Leipzig, AKSW Maven2 Repository</name>
+			<url>http://maven.aksw.org/repository/internal</url>
+			<releases>
+				<updatePolicy>daily</updatePolicy>
+				<checksumPolicy>ignore</checksumPolicy>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</snapshots>
+		</repository>
 	</repositories>
 
 	<dependencies>
@@ -79,17 +78,24 @@
 		</dependency>
 		<dependency>
 			<groupId>org.aksw.commons</groupId>
+			<artifactId>model</artifactId>
+			<version>1.0-SNAPSHOT</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.aksw.commons</groupId>
 			<artifactId>collections</artifactId>
 			<version>1.0-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
+	<!--
 		<dependency>
 			<groupId>org.aksw.commons</groupId>
 			<artifactId>model</artifactId>
 			<version>1.0-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
-
+  -->
 		<dependency>
 			<groupId>com.jamonapi</groupId>
 			<artifactId>jamon</artifactId>
@@ -194,14 +200,13 @@
 		</dependency>
 
 		<!-- [Begin Osmosis Stuff] - would be nice if we got a repo working for 
-			that -->
-		<dependency>
-			<groupId>org.openstreetmap.osmosis</groupId>
-			<artifactId>osmosis</artifactId>
-			<version>0.34</version>
-			<scope>compile</scope>
-		</dependency>
-		<!-- [End Osmosis Stuff] -->
+			that --> 
+ <dependency>
+      <groupId>org.openstreetmap</groupId>
+      <artifactId>osmosis</artifactId>
+      <version>0.34</version>
+    </dependency>
+    		<!-- [End Osmosis Stuff] -->
 
 
 		<!-- <dependency> <groupId>org.slf4j</groupId> <artifactId>slf4j-log4j12</artifactId> 

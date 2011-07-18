@@ -1,0 +1,420 @@
+amenity	airport	cs	Letiště
+amenity	arts_centre	cs	Kulturní centrum
+amenity	atm	cs	Bankomat
+amenity	auditorium	cs	Posluchárna
+amenity	bank	cs	Banka
+amenity	bar	cs	Bar
+amenity	bench	cs	Lavička
+amenity	bicycle_parking	cs	Parkoviště pro kola
+amenity	bicycle_rental	cs	Půjčovna kol
+amenity	brothel	cs	Nevěstinec
+amenity	bureau_de_change	cs	Směnárna
+amenity	bus_station	cs	Autobusové nádraží
+amenity	cafe	cs	Kavárna
+amenity	car_rental	cs	Půjčovna aut
+amenity	car_sharing	cs	Sdílení aut
+amenity	car_wash	cs	Automyčka
+amenity	casino	cs	Kasino
+amenity	cinema	cs	Kino
+amenity	clinic	cs	Klinika
+amenity	club	cs	Klub
+amenity	college	cs	Vysoká škola
+amenity	community_centre	cs	Komunitní centrum
+amenity	courthouse	cs	Soud
+amenity	crematorium	cs	Krematorium
+amenity	dentist	cs	Zubař
+amenity	doctors	cs	Lékař
+amenity	dormitory	cs	Kolej
+amenity	drinking_water	cs	Pitná voda
+amenity	driving_school	cs	Autoškola
+amenity	embassy	cs	Velvyslanectví
+amenity	emergency_phone	cs	Nouzový telefon
+amenity	fast_food	cs	Rychlé občerstvení
+amenity	ferry_terminal	cs	Přístaviště přívozu
+amenity	fire_hydrant	cs	Požární hydrant
+amenity	fire_station	cs	Hasičská stanice
+amenity	fountain	cs	Fontána
+amenity	fuel	cs	Čerpací stanice
+amenity	grave_yard	cs	Hřbitov
+amenity	gym	cs	Fitness centrum / tělocvična
+amenity	hall	cs	Sál
+amenity	health_centre	cs	Zdravotní středisko
+amenity	hospital	cs	Nemocnice
+amenity	hotel	cs	Hotel
+amenity	hunting_stand	cs	Posed
+amenity	ice_cream	cs	Zmrzlinárna
+amenity	kindergarten	cs	Mateřská škola
+amenity	library	cs	Knihovna
+amenity	market	cs	Obchod
+amenity	marketplace	cs	Tržiště
+amenity	mountain_rescue	cs	Horská služba
+amenity	nightclub	cs	Noční klub
+amenity	nursery	cs	Jesle
+amenity	nursing_home	cs	Pečovatelský dům
+amenity	office	cs	Úřad
+amenity	park	cs	Park
+amenity	parking	cs	Parkoviště
+amenity	pharmacy	cs	Lékárna
+amenity	place_of_worship	cs	Náboženský objekt
+amenity	police	cs	Policie
+amenity	post_box	cs	Poštovní schránka
+amenity	post_office	cs	Pošta
+amenity	preschool	cs	Mateřská škola
+amenity	prison	cs	Věznice
+amenity	pub	cs	Hospoda
+amenity	public_building	cs	Veřejná budova
+amenity	public_market	cs	Veřejný trh
+amenity	reception_area	cs	Recepce
+amenity	recycling	cs	Tříděný odpad
+amenity	restaurant	cs	Restaurace
+amenity	retirement_home	cs	Domov důchodců
+amenity	sauna	cs	Sauna
+amenity	school	cs	Škola
+amenity	shelter	cs	Přístřeší
+amenity	shop	cs	Obchod
+amenity	shopping	cs	Nákupní centrum
+amenity	social_club	cs	Společenský klub
+amenity	studio	cs	Studio
+amenity	supermarket	cs	Supermarket
+amenity	taxi	cs	Taxi
+amenity	telephone	cs	Telefonní automat
+amenity	theatre	cs	Divadlo
+amenity	toilets	cs	Toalety
+amenity	townhall	cs	Radnice
+amenity	university	cs	Univerzita
+amenity	vending_machine	cs	Prodejní automat
+amenity	veterinary	cs	Veterinární ordinace
+amenity	village_hall	cs	Společenský sál
+amenity	waste_basket	cs	Odpadkový koš
+amenity	wifi	cs	Přístupový bod WiFi
+amenity	youth_centre	cs	Centrum pro mládež
+boundary	administrative	cs	Administrativní hranice
+building	apartments	cs	Bytový dům
+building	block	cs	Blok budov
+building	bunker	cs	Bunkr
+building	chapel	cs	Kaple
+building	church	cs	Kostel
+building	city_hall	cs	Radnice
+building	commercial	cs	Komerční budova
+building	dormitory	cs	Kolej
+building	entrance	cs	Vstup do objektu
+building	faculty	cs	Fakultní budova
+building	farm	cs	Hospodářská budova
+building	flats	cs	Byty
+building	garage	cs	Garáž
+building	hall	cs	Sál
+building	hospital	cs	Nemocniční budova
+building	hotel	cs	Hotel
+building	house	cs	Dům
+building	industrial	cs	Průmyslová budova
+building	office	cs	Kancelářská budova
+building	public	cs	Veřejná budova
+building	residential	cs	Obytná budova
+building	retail	cs	Maloobchodní budova
+building	school	cs	Školní budova
+building	shop	cs	Obchod
+building	stadium	cs	Stadion
+building	store	cs	Obchodní dům
+building	terrace	cs	Řadová zástavba
+building	tower	cs	Věž
+building	train_station	cs	Železniční stanice
+building	university	cs	Univerzitní budova
+highway	bridleway	cs	Koňská stezka
+highway	bus_guideway	cs	Autobusová dráha
+highway	bus_stop	cs	Autobusová zastávka
+highway	byway	cs	Účelová komunikace
+highway	construction	cs	Silnice ve výstavbě
+highway	cycleway	cs	Cyklostezka
+highway	distance_marker	cs	Kilometrovník
+highway	emergency_access_point	cs	Nouzový lokalizační bod
+highway	footway	cs	Chodník
+highway	ford	cs	Brod
+highway	gate	cs	Brána
+highway	living_street	cs	Obytná zóna
+highway	minor	cs	Vedlejší silnice
+highway	motorway	cs	Dálnice
+highway	motorway_junction	cs	Dálniční křižovatka
+highway	motorway_link	cs	Dálnice
+highway	path	cs	Pěšina
+highway	pedestrian	cs	Pěší zóna
+highway	platform	cs	Nástupiště
+highway	primary	cs	Silnice první třídy
+highway	primary_link	cs	Silnice první třídy
+highway	raceway	cs	Závodní dráha
+highway	residential	cs	Ulice
+highway	road	cs	Cesta
+highway	secondary	cs	Silnice druhé třídy
+highway	secondary_link	cs	Silnice druhé třídy
+highway	service	cs	Účelová komunikace
+highway	services	cs	Dálniční odpočívadlo
+highway	steps	cs	Schody
+highway	stile	cs	Schůdky přes ohradu
+highway	tertiary	cs	Silnice třetí třídy
+highway	track	cs	Cesta
+highway	trail	cs	Stezka
+highway	trunk	cs	Významná silnice
+highway	trunk_link	cs	Významná silnice
+highway	unclassified	cs	Silnice
+highway	unsurfaced	cs	Nezpevněná cesta
+historic	archaeological_site	cs	Archeologické naleziště
+historic	battlefield	cs	Bojiště
+historic	boundary_stone	cs	Hraniční kámen
+historic	building	cs	Budova
+historic	castle	cs	Hrad
+historic	church	cs	Kostel
+historic	house	cs	Dům
+historic	icon	cs	Ikona
+historic	manor	cs	Panství
+historic	memorial	cs	Památník
+historic	mine	cs	Důl
+historic	monument	cs	Pomník
+historic	museum	cs	Muzeum
+historic	ruins	cs	Zřícenina
+historic	tower	cs	Věž
+historic	wayside_cross	cs	Boží muka
+historic	wayside_shrine	cs	Boží muka
+historic	wreck	cs	Vrak
+landuse	allotments	cs	Zahrádkářská kolonie
+landuse	basin	cs	Vodní nádrž
+landuse	brownfield	cs	Brownfield
+landuse	cemetery	cs	Hřbitov
+landuse	commercial	cs	Komerční zóna
+landuse	conservation	cs	Chráněné území
+landuse	construction	cs	Staveniště
+landuse	farm	cs	Farma
+landuse	farmland	cs	Zemědělská půda
+landuse	farmyard	cs	Dvůr
+landuse	forest	cs	Les
+landuse	grass	cs	Trávník
+landuse	greenfield	cs	Zelená plocha pro výstavbu
+landuse	industrial	cs	Průmyslová zóna
+landuse	landfill	cs	Skládka
+landuse	meadow	cs	Louka
+landuse	military	cs	Vojenský prostor
+landuse	mine	cs	Důl
+landuse	mountain	cs	Hory
+landuse	nature_reserve	cs	Přírodní rezervace
+landuse	park	cs	Park
+landuse	piste	cs	Sjezdovka
+landuse	plaza	cs	Náměstí
+landuse	quarry	cs	Lom
+landuse	railway	cs	Železnice
+landuse	recreation_ground	cs	Rekreační oblast
+landuse	reservoir	cs	Zásobník na vodu
+landuse	residential	cs	Rezidenční oblast
+landuse	retail	cs	Maloobchody
+landuse	village_green	cs	Náves
+landuse	vineyard	cs	Vinice
+landuse	wetland	cs	Mokřad
+landuse	wood	cs	Neudržovaný les
+leisure	beach_resort	cs	Pobřežní letovisko
+leisure	common	cs	Obecní půda
+leisure	fishing	cs	Rybářská oblast
+leisure	garden	cs	Zahrada
+leisure	golf_course	cs	Golfové hřiště
+leisure	ice_rink	cs	Kluziště
+leisure	marina	cs	Přístav
+leisure	miniature_golf	cs	Minigolf
+leisure	nature_reserve	cs	Přírodní rezervace
+leisure	park	cs	Park
+leisure	pitch	cs	Hřiště
+leisure	playground	cs	Dětské hřiště
+leisure	recreation_ground	cs	Rekreační oblast
+leisure	slipway	cs	Skluzavka
+leisure	sports_centre	cs	Sportovní centrum
+leisure	stadium	cs	Stadion
+leisure	swimming_pool	cs	Bazén
+leisure	track	cs	Běžecká dráha
+leisure	water_park	cs	Aquapark
+natural	bay	cs	Záliv
+natural	beach	cs	Pláž
+natural	cape	cs	Mys
+natural	cave_entrance	cs	Vstup do jeskyně
+natural	channel	cs	Kanál
+natural	cliff	cs	Útes
+natural	coastline	cs	Pobřežní čára
+natural	crater	cs	Kráter
+natural	feature	cs	Prvek
+natural	fell	cs	See http://wiki.openstreetmap.org/wiki/Tag:natural=fell
+natural	fjord	cs	Fjord
+natural	geyser	cs	Gejzír
+natural	glacier	cs	Ledovec
+natural	heath	cs	Vřesoviště
+natural	hill	cs	Kopec
+natural	island	cs	Ostrov
+natural	land	cs	Země
+natural	marsh	cs	Mokřina
+natural	moor	cs	Vřesoviště
+natural	mud	cs	Bahno
+natural	peak	cs	Vrchol
+natural	point	cs	Bod
+natural	reef	cs	Útes
+natural	ridge	cs	Hřeben
+natural	river	cs	Řeka
+natural	rock	cs	Skalisko
+natural	scree	cs	Osyp
+natural	scrub	cs	Rumiště
+natural	shoal	cs	Mělčina
+natural	spring	cs	Pramen
+natural	strait	cs	Úžina
+natural	tree	cs	Strom
+natural	valley	cs	Údolí
+natural	volcano	cs	Sopka
+natural	water	cs	Vodní plocha
+natural	wetland	cs	Mokřad
+natural	wetlands	cs	Mokřad
+natural	wood	cs	Neudržovaný les
+place	airport	cs	Letiště
+place	city	cs	Velkoměsto
+place	country	cs	Stát
+place	county	cs	Hrabství
+place	farm	cs	Farma
+place	hamlet	cs	Osada
+place	house	cs	Dům
+place	houses	cs	Budovy
+place	island	cs	Ostrov
+place	islet	cs	Ostrůvek
+place	locality	cs	Oblast
+place	moor	cs	Bažina
+place	municipality	cs	Obecní úřad
+place	postcode	cs	PSČ
+place	region	cs	Region
+place	sea	cs	Moře
+place	state	cs	Stát
+place	subdivision	cs	Parcely
+place	suburb	cs	Městská část
+place	town	cs	Město
+place	unincorporated_area	cs	Nezařazená oblast
+place	village	cs	Vesnice
+railway	abandoned	cs	Zrušená železniční trať
+railway	construction	cs	Železnice ve výstavbě
+railway	disused	cs	Nepoužívaná železniční trať
+railway	disused_station	cs	Nepoužívaná železniční stanice
+railway	funicular	cs	Lanová dráha
+railway	halt	cs	Železniční zastávka
+railway	historic_station	cs	Nádraží historické železnice
+railway	junction	cs	Kolejové rozvětvení
+railway	level_crossing	cs	Železniční přejezd
+railway	light_rail	cs	Rychlodráha
+railway	monorail	cs	Monorail
+railway	narrow_gauge	cs	Úzkorozchodná dráha
+railway	platform	cs	Železniční nástupiště
+railway	preserved	cs	Historická železnice
+railway	spur	cs	Železniční vlečka
+railway	station	cs	Železniční stanice
+railway	subway	cs	Stanice metra
+railway	subway_entrance	cs	Vstup do metra
+railway	switch	cs	Výhybka
+railway	tram	cs	Tramvajová trať
+railway	tram_stop	cs	Tramvajová zastávka
+railway	yard	cs	Přednádraží
+shop	alcohol	cs	Prodej alkoholu
+shop	apparel	cs	Prodej oděvů
+shop	art	cs	Prodej umění
+shop	bakery	cs	Pekařství
+shop	beauty	cs	Salón krásy
+shop	beverages	cs	Prodej nápojů
+shop	bicycle	cs	Cykloobchod
+shop	books	cs	Knihkupectví
+shop	butcher	cs	Řeznictví
+shop	car	cs	Prodej automobilů
+shop	car_dealer	cs	Prodej automobilů
+shop	car_parts	cs	Prodej autodílů
+shop	carpet	cs	Obchod s koberci
+shop	car_repair	cs	Autoservis
+shop	charity	cs	Charitativní obchod
+shop	chemist	cs	Drogerie
+shop	clothes	cs	Prodej oděvů
+shop	computer	cs	Prodej počítačů
+shop	confectionery	cs	Cukrárna
+shop	convenience	cs	Smíšené zboží
+shop	copyshop	cs	Copycentrum
+shop	cosmetics	cs	Parfumerie
+shop	department_store	cs	Obchodní dům
+shop	discount	cs	Diskontní prodejna
+shop	doityourself	cs	Obchod pro kutily
+shop	drugstore	cs	Lékárna
+shop	dry_cleaning	cs	Chemická čistírna
+shop	electronics	cs	Prodej elektroniky
+shop	estate_agent	cs	Realitní kancelář
+shop	farm	cs	Prodej zemědělských výrobků
+shop	fashion	cs	Módní salón
+shop	fish	cs	Rybárna
+shop	florist	cs	Květinářství
+shop	food	cs	Potraviny
+shop	funeral_directors	cs	Pohřební služba
+shop	furniture	cs	Prodej nábytku
+shop	gallery	cs	Galerie
+shop	garden_centre	cs	Zahradnictví
+shop	general	cs	Smíšení zboží
+shop	gift	cs	Dárkové zboží, suvenýry
+shop	greengrocer	cs	Ovoce–zelenina
+shop	grocery	cs	Prodej potravin
+shop	hairdresser	cs	Kadeřnictví
+shop	hardware	cs	Železářství
+shop	hifi	cs	Prodej Hi-Fi elektroniky
+shop	insurance	cs	Pojišťovna
+shop	jewelry	cs	Klenotnictví
+shop	kiosk	cs	Kiosek
+shop	laundry	cs	Prádelna
+shop	mall	cs	Nákupní centrum
+shop	market	cs	Obchod
+shop	mobile_phone	cs	Prodej mobilních telefonů
+shop	motorcycle	cs	Prodej motocyklů
+shop	music	cs	Prodej hudby
+shop	newsagent	cs	Novinový stánek
+shop	optician	cs	Oční optika
+shop	organic	cs	Prodej biopotravin
+shop	outdoor	cs	Outdoorový obchod
+shop	pet	cs	Prodejna pro chovatele
+shop	photo	cs	Prodejna foto
+shop	salon	cs	Salón
+shop	shoes	cs	Obuvnictví
+shop	shopping_centre	cs	Nákupní centrum
+shop	sports	cs	Prodejna pro sportovce
+shop	stationery	cs	Papírnictví
+shop	supermarket	cs	Supermarket
+shop	toys	cs	Hračkářství
+shop	travel_agency	cs	Cestovní kancelář
+shop	video	cs	Videopůjčovna, prodej DVD
+shop	wine	cs	Vinárna
+tourism	alpine_hut	cs	Vysokohorská chata
+tourism	artwork	cs	Umělecké dílo
+tourism	attraction	cs	Turistická atrakce
+tourism	bed_and_breakfast	cs	Ubytování Bed & Breakfast
+tourism	cabin	cs	Chatka
+tourism	camp_site	cs	Tábořiště, kemp
+tourism	caravan_site	cs	Autokemping
+tourism	chalet	cs	Chalupa
+tourism	guest_house	cs	Penzion
+tourism	hostel	cs	Hostel
+tourism	hotel	cs	Hotel
+tourism	information	cs	Turistické informace
+tourism	lean_to	cs	Přístřešek
+tourism	motel	cs	Motel
+tourism	museum	cs	Muzeum
+tourism	picnic_site	cs	Piknikové místo
+tourism	theme_park	cs	Zábavní park
+tourism	valley	cs	Údolí
+tourism	viewpoint	cs	Místo s dobrým výhledem
+tourism	zoo	cs	Zoo
+waterway	boatyard	cs	Loděnice
+waterway	canal	cs	Kanál
+waterway	connector	cs	Propojení vodních cest
+waterway	dam	cs	Přehrada
+waterway	derelict_canal	cs	Opuštěný kanál
+waterway	ditch	cs	Meliorační kanál
+waterway	dock	cs	Dok
+waterway	drain	cs	Odvodňovací kanál
+waterway	lock	cs	Zdymadlo
+waterway	lock_gate	cs	Vrata plavební komory
+waterway	mineral_spring	cs	Minerální pramen
+waterway	mooring	cs	Kotviště
+waterway	rapids	cs	Peřeje
+waterway	river	cs	Řeka
+waterway	riverbank	cs	Břeh řeky
+waterway	stream	cs	Potok
+waterway	wadi	cs	Vádí
+waterway	waterfall	cs	Vodopád
+waterway	water_point	cs	Vodní bod
+waterway	weir	cs	Jez

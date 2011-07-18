@@ -1,0 +1,132 @@
+amenity	airport	ka	აეროპორტი
+amenity	arts_centre	ka	ხელოვნების ცენტრი
+amenity	atm	ka	ბანკომატი
+amenity	auditorium	ka	აუდიტორია
+amenity	bank	ka	ბანკი
+amenity	bar	ka	ბარი
+amenity	bench	ka	დასაჯდომი
+amenity	bicycle_parking	ka	ველოსიპედების სადგომი
+amenity	bicycle_rental	ka	ველოსიპედების გაქირავება
+amenity	brothel	ka	საროსკიპო
+amenity	bureau_de_change	ka	ვალუტის გადაცვლა
+amenity	bus_station	ka	ავტობუსის გაჩერება
+amenity	cafe	ka	კაფე
+amenity	car_rental	ka	მანქანის გაქირავება
+amenity	car_wash	ka	ავტოსამრეცხაო
+amenity	casino	ka	სამორინე
+amenity	cinema	ka	კინოთეატრი
+amenity	clinic	ka	პოლიკლინიკა
+amenity	club	ka	კლუბი
+amenity	college	ka	კოლეჯი
+amenity	community_centre	ka	საზოგადოებრივი ცენტრი
+amenity	courthouse	ka	სასამართლო
+amenity	crematorium	ka	კრემატორიუმი
+amenity	dentist	ka	დანტისტი
+amenity	doctors	ka	ექიმი
+amenity	dormitory	ka	საერთო საცხოვრებელი
+amenity	drinking_water	ka	სასმელი წყალი
+amenity	driving_school	ka	ავტოსკოლა
+amenity	embassy	ka	საელჩო
+amenity	emergency_phone	ka	საგანგებო სიტუაციების სამსახურის ტელეფონი
+amenity	fast_food	ka	სწრაფი კვება
+amenity	ferry_terminal	ka	ბორანის სადგური
+amenity	fire_hydrant	ka	სახანძრო ჰიდრანტი
+amenity	fire_station	ka	სახანძრო განყოფილება
+amenity	fountain	ka	შადრევანი
+amenity	fuel	ka	საწვავი
+amenity	grave_yard	ka	საფლავი
+amenity	gym	ka	ფიტნეს ცენტრი / სავარჯიშო დარბაზი
+amenity	hall	ka	დარბაზი
+amenity	health_centre	ka	ჯანმრთელობის ცენტრი
+amenity	hospital	ka	საავადმყოფო
+amenity	hotel	ka	სასტუმრო
+amenity	hunting_stand	ka	სანადირო კოშკურა
+amenity	ice_cream	ka	ნაყინი
+amenity	kindergarten	ka	საბავშვო ბაღი
+amenity	library	ka	ბიბლიოთეკა
+amenity	market	ka	მაღაზია
+amenity	marketplace	ka	ბაზარი
+amenity	mountain_rescue	ka	სამთო–სამაშველო სამსახური
+amenity	nightclub	ka	ღამის კლუბი
+amenity	nursery	ka	პანსიონატი
+amenity	nursing_home	ka	მოხუცებულთა თავშესაფარი
+amenity	office	ka	ოფისი
+amenity	park	ka	პარკი
+amenity	parking	ka	ავტოსადგომი
+amenity	pharmacy	ka	აფთიაქი
+amenity	place_of_worship	ka	რელიგიური ადგილი
+amenity	police	ka	პოლიცია
+amenity	post_box	ka	საფოსტო ყუთი
+amenity	post_office	ka	ფოსტა
+amenity	preschool	ka	სკოლამდელი დაწესებულება
+amenity	prison	ka	ციხე
+amenity	pub	ka	პაბი
+amenity	public_building	ka	საჯარო შენობა
+amenity	public_market	ka	ბაზრობა
+amenity	reception_area	ka	მიმღები
+amenity	recycling	ka	ნაგავსაყრელი
+amenity	restaurant	ka	რესტორანი
+amenity	retirement_home	ka	მოხუცებულთა თავშესაფარი
+amenity	sauna	ka	საუნა
+amenity	school	ka	სკოლა
+amenity	shelter	ka	თავშესაფარი
+amenity	shop	ka	მაღაზია
+amenity	shopping	ka	სავაჭრო ცენტრი
+amenity	social_club	ka	საზოგადოებრივი თავშეყრის ადგილი
+amenity	studio	ka	სტუდია
+amenity	supermarket	ka	სუპერმარკეტი
+amenity	taxi	ka	ტაქსი
+amenity	telephone	ka	საზოგადოებრივი ტელეფონი
+amenity	theatre	ka	თეატრი
+amenity	toilets	ka	ტუალეტი
+amenity	townhall	ka	ქალაქის ადმინისტრაცია
+amenity	university	ka	უნივერსიტეტი
+amenity	vending_machine	ka	სავაჭრო ავტომატი
+amenity	veterinary	ka	ვეტერინარული კლინიკა
+amenity	waste_basket	ka	ნაგვის ურნა
+amenity	wifi	ka	WiFi წერტილი
+amenity	youth_centre	ka	ახალგაზრდული ცენტრი
+boundary	administrative	ka	ადმინისტრაციული საზღვარი
+building	apartments	ka	მრავალბინიანი კორპუსი
+building	bunker	ka	ბუნკერი
+building	chapel	ka	სამლოცველო
+building	church	ka	ეკლესია
+building	city_hall	ka	ქალაქის მერია
+building	commercial	ka	კომერციული შენობა
+building	dormitory	ka	საერთო საცხოვრებელი
+building	entrance	ka	შენობის შესასვლელი
+building	farm	ka	ფერმა
+building	flats	ka	ბინები
+building	garage	ka	ავტოფარეხი
+building	hall	ka	დარბაზი
+building	hospital	ka	საავადმყოფოს შენობა
+building	hotel	ka	სასტუმრო
+building	house	ka	სახლი
+building	industrial	ka	სამრეწველო ნაგებობა
+building	office	ka	საოფისე ნაგებობა
+building	public	ka	საზოგადოებრივი შენობა
+building	residential	ka	საცხოვრებელი სახლი
+building	retail	ka	გასაყიდი ნაგებობა
+building	school	ka	სკოლა
+building	shop	ka	მაღაზია
+building	stadium	ka	სტადიონი
+building	store	ka	მაღაზია
+building	tower	ka	კოშკი
+building	train_station	ka	რკინიგზის სადგური
+building	university	ka	უნივერსიტეტი
+highway	bridleway	ka	საცხენოსნო გზა
+highway	bus_stop	ka	ავტობუსის გაჩერება
+highway	construction	ka	გზის სარემონტო სამუშაოები
+highway	cycleway	ka	ველოსიპედის გზა
+highway	emergency_access_point	ka	სასწრაფო დახმარების პუნქტი
+highway	footway	ka	ტროტუარი
+highway	gate	ka	გასასვლელი
+highway	living_street	ka	საცხოვრებელი ქუჩა
+highway	minor	ka	მეორადი გზა
+highway	motorway	ka	ავტომაგისტრალი
+highway	motorway_junction	ka	გზაჯვარედინი
+highway	path	ka	ბილიკი
+highway	pedestrian	ka	საფეხმავლო გზა
+highway	platform	ka	ბაქანი
+highway	primary	ka	მთავარი გზა
+highway	primary_link	ka	მთავარი გზა

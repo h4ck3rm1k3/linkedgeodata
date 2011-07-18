@@ -1,0 +1,420 @@
+amenity	airport	pl	Lonisko
+amenity	arts_centre	pl	Centrum sztuki
+amenity	atm	pl	Bankomat
+amenity	auditorium	pl	Audytorium
+amenity	bank	pl	Bank
+amenity	bar	pl	Bar
+amenity	bench	pl	Ławka
+amenity	bicycle_parking	pl	Parking rowerowy
+amenity	bicycle_rental	pl	Wypożyczalnia rowerów
+amenity	brothel	pl	Dom publiczny
+amenity	bureau_de_change	pl	Kantor
+amenity	bus_station	pl	Stacja autobusowa
+amenity	cafe	pl	Kawiarnia
+amenity	car_rental	pl	Wynajem samochodów
+amenity	car_sharing	pl	Dzielenie się samochodami
+amenity	car_wash	pl	Myjnia samochodowa
+amenity	casino	pl	Kasyno
+amenity	cinema	pl	Kino
+amenity	clinic	pl	Przychodnia
+amenity	club	pl	Klub
+amenity	college	pl	Uczelnia
+amenity	community_centre	pl	Centrum społeczności
+amenity	courthouse	pl	Sąd
+amenity	crematorium	pl	Krematorium
+amenity	dentist	pl	Gabinet dentystyczny
+amenity	doctors	pl	Lekarze
+amenity	dormitory	pl	Bursa
+amenity	drinking_water	pl	Źródło wody pitnej
+amenity	driving_school	pl	Nauka jazdy
+amenity	embassy	pl	Ambasada
+amenity	emergency_phone	pl	Telefon alarmowy
+amenity	fast_food	pl	Fast Food
+amenity	ferry_terminal	pl	Terminal promowy
+amenity	fire_hydrant	pl	Hydrant
+amenity	fire_station	pl	Remiza strażacka
+amenity	fountain	pl	Fontanna
+amenity	fuel	pl	Stacja benzynowa
+amenity	grave_yard	pl	Mniejszy cmentarz
+amenity	gym	pl	Centrum Fitness / Sala Gimnastyczna
+amenity	hall	pl	Hala
+amenity	health_centre	pl	Ośrodek zdrowia
+amenity	hospital	pl	Szpital
+amenity	hotel	pl	Hotel
+amenity	hunting_stand	pl	Ambona myśliwska
+amenity	ice_cream	pl	Lodziarnia
+amenity	kindergarten	pl	Przedszkole
+amenity	library	pl	Biblioteka
+amenity	market	pl	Targowisko
+amenity	marketplace	pl	Plac targowy
+amenity	mountain_rescue	pl	Ratownictwo górskie
+amenity	nightclub	pl	Klub nocny
+amenity	nursery	pl	Żłobek
+amenity	nursing_home	pl	Dom opieki
+amenity	office	pl	Biuro
+amenity	park	pl	Park
+amenity	parking	pl	Parking
+amenity	pharmacy	pl	Apteka
+amenity	place_of_worship	pl	Miejsce kultu
+amenity	police	pl	Posterunek policji
+amenity	post_box	pl	Skrzynka pocztowa
+amenity	post_office	pl	Poczta
+amenity	preschool	pl	Przedszkole
+amenity	prison	pl	Więzienie
+amenity	pub	pl	Pub
+amenity	public_building	pl	Budynek publiczny
+amenity	public_market	pl	Rynek publiczny
+amenity	reception_area	pl	Recepcja
+amenity	recycling	pl	Miejsce recyklingu
+amenity	restaurant	pl	Restauracja
+amenity	retirement_home	pl	Dom starców
+amenity	sauna	pl	Sauna
+amenity	school	pl	Szkoła
+amenity	shelter	pl	Schron
+amenity	shop	pl	Sklep
+amenity	shopping	pl	Zakupy
+amenity	social_club	pl	Klub towarzyski
+amenity	studio	pl	Studio
+amenity	supermarket	pl	Supermarket
+amenity	taxi	pl	Postój taksówek
+amenity	telephone	pl	Budka telefoniczna
+amenity	theatre	pl	Teatr
+amenity	toilets	pl	Toaleta publiczna
+amenity	townhall	pl	Urząd miejski
+amenity	university	pl	Uniwersytet
+amenity	vending_machine	pl	Automat do sprzedaży
+amenity	veterinary	pl	Chirurgia weterynaryjna
+amenity	village_hall	pl	Urząd gminy
+amenity	waste_basket	pl	Kosz na śmieci
+amenity	wifi	pl	Dostęp do WiFi
+amenity	youth_centre	pl	Centrum młodzieżowe
+boundary	administrative	pl	Granica administracyjna
+building	apartments	pl	Blok mieszkalny
+building	block	pl	Budynek bloku
+building	bunker	pl	Bunkier
+building	chapel	pl	Kaplica
+building	church	pl	Kościół
+building	city_hall	pl	Ratusz
+building	commercial	pl	Budynek handlowy
+building	dormitory	pl	Bursa
+building	entrance	pl	Wejście do budynku
+building	faculty	pl	Budynek prawny
+building	farm	pl	Budynek gospodarczy
+building	flats	pl	Mieszkania
+building	garage	pl	Garaż
+building	hall	pl	Hala
+building	hospital	pl	Budynek szpitala
+building	hotel	pl	Hotel
+building	house	pl	Dom
+building	industrial	pl	Budynek przemysłowy
+building	office	pl	Budynek biurowy
+building	public	pl	Budynek publiczny
+building	residential	pl	Budynek mieszkalny
+building	retail	pl	Budynek detaliczny
+building	school	pl	Budynek szkoły
+building	shop	pl	Sklep
+building	stadium	pl	Stadion
+building	store	pl	Składnica
+building	terrace	pl	Taras
+building	tower	pl	Wieża
+building	train_station	pl	Stacja kolejowa
+building	university	pl	Budynek uniwersytetu
+highway	bridleway	pl	Droga dla koni
+highway	bus_guideway	pl	Droga dla autobusów
+highway	bus_stop	pl	Przystanek autobusowy
+highway	byway	pl	Boczna droga
+highway	construction	pl	Droga budowana
+highway	cycleway	pl	Ścieżka rowerowa
+highway	distance_marker	pl	Znak odległości
+highway	emergency_access_point	pl	Punkt awaryjny
+highway	footway	pl	Chodnik
+highway	ford	pl	Bród
+highway	gate	pl	Bramka
+highway	living_street	pl	Strefa zamieszkania
+highway	minor	pl	Drobna droga
+highway	motorway	pl	Autostrada
+highway	motorway_junction	pl	Skrzyżowanie autostrad
+highway	motorway_link	pl	Autostrada – dojazd
+highway	path	pl	Ścieżka
+highway	pedestrian	pl	Droga dla pieszych
+highway	platform	pl	Podwyższenie
+highway	primary	pl	Droga krajowa
+highway	primary_link	pl	Droga krajowa – dojazd
+highway	raceway	pl	Tor wyścigowy
+highway	residential	pl	Droga osiedlowa
+highway	road	pl	Droga
+highway	secondary	pl	Droga wojewódzka
+highway	secondary_link	pl	Droga wojewódzka – dojazd
+highway	service	pl	Droga serwisowa
+highway	services	pl	Usługi autostrady
+highway	steps	pl	Schody
+highway	stile	pl	Przełaz
+highway	tertiary	pl	Droga powiatowa
+highway	track	pl	Droga gruntowa
+highway	trail	pl	Szlak
+highway	trunk	pl	Droga ekspresowa
+highway	trunk_link	pl	Droga ekspresowa – dojazd
+highway	unclassified	pl	Droga gminna
+highway	unsurfaced	pl	Nierówna droga
+historic	archaeological_site	pl	Wykopaliska archeologiczne
+historic	battlefield	pl	Miejsce historycznej bitwy
+historic	boundary_stone	pl	Graniczny głaz
+historic	building	pl	Budynek
+historic	castle	pl	Zamek
+historic	church	pl	Kościół
+historic	house	pl	Dom
+historic	icon	pl	Ikona
+historic	manor	pl	Dwór
+historic	memorial	pl	Mniejszy pomnik
+historic	mine	pl	Kopalnia
+historic	monument	pl	Pomnik
+historic	museum	pl	Muzeum
+historic	ruins	pl	Ruiny
+historic	tower	pl	Wieża
+historic	wayside_cross	pl	Przydrożny krzyż
+historic	wayside_shrine	pl	Przydrożna kaplica
+historic	wreck	pl	Wrak
+landuse	allotments	pl	Ogródki działkowe
+landuse	basin	pl	Dorzecze
+landuse	brownfield	pl	Grunty poprzemysłowe
+landuse	cemetery	pl	Cmentarz
+landuse	commercial	pl	Obszar handlowo-usługowy
+landuse	conservation	pl	Konserwacja
+landuse	construction	pl	Teren budowy
+landuse	farm	pl	Farma
+landuse	farmland	pl	Grunty rolne
+landuse	farmyard	pl	Podwórze gospodarskie
+landuse	forest	pl	Las
+landuse	grass	pl	Trawa
+landuse	greenfield	pl	Tereny niezagospodarowane
+landuse	industrial	pl	Teren przemysłowy
+landuse	landfill	pl	Wysypisko śmieci
+landuse	meadow	pl	Łąka
+landuse	military	pl	Teren wojskowy
+landuse	mine	pl	Kopalnia
+landuse	mountain	pl	Góra
+landuse	nature_reserve	pl	Rezerwat przyrody
+landuse	park	pl	Park
+landuse	piste	pl	Trasa
+landuse	plaza	pl	Plac
+landuse	quarry	pl	Kamieniołom
+landuse	railway	pl	Teren kolejowy
+landuse	recreation_ground	pl	Ziemia rekreacyjna
+landuse	reservoir	pl	Sztuczny zbiornik wodny
+landuse	residential	pl	Zabudowa mieszkaniowa
+landuse	retail	pl	Handel detaliczny
+landuse	village_green	pl	Park miejski
+landuse	vineyard	pl	Winnica
+landuse	wetland	pl	Tereny podmokłe
+landuse	wood	pl	Puszcza
+leisure	beach_resort	pl	Strzeżona plaża
+leisure	common	pl	Błonie
+leisure	fishing	pl	Łowisko
+leisure	garden	pl	Ogród
+leisure	golf_course	pl	Pole golfowe
+leisure	ice_rink	pl	Lodowisko
+leisure	marina	pl	Marina
+leisure	miniature_golf	pl	Pole do miniaturowego golfa
+leisure	nature_reserve	pl	Rezerwat naturalny
+leisure	park	pl	Park
+leisure	pitch	pl	Boisko sportowe
+leisure	playground	pl	Plac zabaw
+leisure	recreation_ground	pl	Pole rekreacyjne
+leisure	slipway	pl	Pochylnia
+leisure	sports_centre	pl	Centrum sportowe
+leisure	stadium	pl	Stadion
+leisure	swimming_pool	pl	Basen
+leisure	track	pl	Bieżnia
+leisure	water_park	pl	Park wodny
+natural	bay	pl	Zatoka
+natural	beach	pl	Plaża
+natural	cape	pl	Przylądek
+natural	cave_entrance	pl	Wejście do jaskini
+natural	channel	pl	Kanał
+natural	cliff	pl	Urwisko
+natural	coastline	pl	Linia brzegowa
+natural	crater	pl	Krater
+natural	feature	pl	Obiekt
+natural	fell	pl	Hale górskie
+natural	fjord	pl	Fiord
+natural	geyser	pl	Gejzer
+natural	glacier	pl	Lodowiec
+natural	heath	pl	Wrzosowisko
+natural	hill	pl	Wzgórze
+natural	island	pl	Wyspa
+natural	land	pl	Ląd
+natural	marsh	pl	Bagno
+natural	moor	pl	Torfowisko
+natural	mud	pl	Muł
+natural	peak	pl	Szczyt
+natural	point	pl	Punkt
+natural	reef	pl	Rafa
+natural	ridge	pl	Grzbiet
+natural	river	pl	Rzeka
+natural	rock	pl	Skała
+natural	scree	pl	Zsypisko
+natural	scrub	pl	Zagajnik
+natural	shoal	pl	Mielizna
+natural	spring	pl	Źródło
+natural	strait	pl	Cieśnina
+natural	tree	pl	Drzewo
+natural	valley	pl	Dolina
+natural	volcano	pl	Wulkan
+natural	water	pl	Woda
+natural	wetland	pl	Obszar podmokły
+natural	wetlands	pl	Obszary podmokłe
+natural	wood	pl	Puszcza
+place	airport	pl	Lotnisko
+place	city	pl	Miasto
+place	country	pl	Kraj
+place	county	pl	Powiat
+place	farm	pl	Farma
+place	hamlet	pl	Osada
+place	house	pl	Dom
+place	houses	pl	Zabudowanie
+place	island	pl	Wyspa
+place	islet	pl	Wysepka
+place	locality	pl	Rejon
+place	moor	pl	Torfowisko
+place	municipality	pl	Gmina
+place	postcode	pl	Kod pocztowy
+place	region	pl	Rejon
+place	sea	pl	Morze
+place	state	pl	Stan
+place	subdivision	pl	Dzielnica
+place	suburb	pl	Osiedle
+place	town	pl	Miasteczko
+place	unincorporated_area	pl	Obszar poza miejscowościami
+place	village	pl	Wieś
+railway	abandoned	pl	Dawna linia kolejowa
+railway	construction	pl	Budowana linia kolejowa
+railway	disused	pl	Nieczynna trasa kolejowa
+railway	disused_station	pl	Nieużywana stacja kolejowa
+railway	funicular	pl	Kolejka linowa
+railway	halt	pl	Przystanek kolejowy
+railway	historic_station	pl	Historyczna stacja kolejowa
+railway	junction	pl	Węzeł kolejowy
+railway	level_crossing	pl	Przejazd kolejowy
+railway	light_rail	pl	Lekka kolej
+railway	monorail	pl	Kolej jednoszynowa
+railway	narrow_gauge	pl	Kolej wąskotorowa
+railway	platform	pl	Peron
+railway	preserved	pl	Kolej zabytkowa
+railway	spur	pl	Bocznica kolejowa
+railway	station	pl	Stacja kolejowa
+railway	subway	pl	Stacja metra
+railway	subway_entrance	pl	Wejście na stację metra
+railway	switch	pl	Zwrotnica
+railway	tram	pl	Linia tramwajowa
+railway	tram_stop	pl	Przystanek tramwajowy
+railway	yard	pl	Stacja postojowa, lokomotywownia
+shop	alcohol	pl	Sklep monopolowy
+shop	apparel	pl	Sklep odzieżowy
+shop	art	pl	Sklep z dziełami sztuki
+shop	bakery	pl	Piekarnia
+shop	beauty	pl	Salon kosmetyczny
+shop	beverages	pl	Sklep z napojami
+shop	bicycle	pl	Sklep rowerowy
+shop	books	pl	Księgarnia
+shop	butcher	pl	Rzeźnik
+shop	car	pl	Sklep samochodowy
+shop	car_dealer	pl	Salon samochodowy
+shop	car_parts	pl	Sklep z częściami samochodowymi
+shop	carpet	pl	Sklep z dywanami
+shop	car_repair	pl	Naprawa samochodów
+shop	charity	pl	Sklep charytatywny
+shop	chemist	pl	Drogeria
+shop	clothes	pl	Sklep odzieżowy
+shop	computer	pl	Sklep komputerowy
+shop	confectionery	pl	Cukiernia
+shop	convenience	pl	Mały sklep wielobranżowy
+shop	copyshop	pl	Ksero
+shop	cosmetics	pl	Sklep kosmetyczny
+shop	department_store	pl	Dom towarowy
+shop	discount	pl	Sklep z produktami po obniżce
+shop	doityourself	pl	Sklep budowlany
+shop	drugstore	pl	Drogeria
+shop	dry_cleaning	pl	Pralnia chemiczna
+shop	electronics	pl	Sklep elektroniczny
+shop	estate_agent	pl	Biuro nieruchomości
+shop	farm	pl	Sklep gospodarski
+shop	fashion	pl	Sklep modelarski
+shop	fish	pl	Sklep rybny
+shop	florist	pl	Kwiaciarnia
+shop	food	pl	Sklep spożywczy
+shop	funeral_directors	pl	Zakłady pogrzebowe
+shop	furniture	pl	Sklep meblowy
+shop	gallery	pl	Galeria
+shop	garden_centre	pl	Centrum ogrodnicze
+shop	general	pl	Sklep ogólny
+shop	gift	pl	Sklep z pamiątkami
+shop	greengrocer	pl	Warzywniak
+shop	grocery	pl	Sklep spożywczy
+shop	hairdresser	pl	Fryzjernia
+shop	hardware	pl	Sklep ze sprzętem
+shop	hifi	pl	Hi-Fi
+shop	insurance	pl	Agent ubezpieczeniowy
+shop	jewelry	pl	Sklep z biżuterią
+shop	kiosk	pl	Kiosk
+shop	laundry	pl	Pralnia
+shop	mall	pl	Centrum handlowe
+shop	market	pl	Targowisko
+shop	mobile_phone	pl	Sklep z telefonami komórkowymi
+shop	motorcycle	pl	Sklep z motocyklami
+shop	music	pl	Sklep muzyczny
+shop	newsagent	pl	Kiosk
+shop	optician	pl	Optyk
+shop	organic	pl	Sklep z produktami organicznymi
+shop	outdoor	pl	Sklep turystyczny
+shop	pet	pl	Sklep ze zwierzętami
+shop	photo	pl	Sklep fotograficzny
+shop	salon	pl	Salon
+shop	shoes	pl	Sklep obuwniczy
+shop	shopping_centre	pl	Centrum handlowe
+shop	sports	pl	Sklep sportowy
+shop	stationery	pl	Sklep papierniczy
+shop	supermarket	pl	Supermarket
+shop	toys	pl	Sklep z zabawkami
+shop	travel_agency	pl	Biuro podróży
+shop	video	pl	Sklep filmowy
+shop	wine	pl	Winiarnia
+tourism	alpine_hut	pl	Chata alpejska
+tourism	artwork	pl	Sztuka
+tourism	attraction	pl	Atrakcja turystyczna
+tourism	bed_and_breakfast	pl	Bed and Breakfast
+tourism	cabin	pl	Kabina
+tourism	camp_site	pl	Kemping
+tourism	caravan_site	pl	Miejsce na przyczepę campingową
+tourism	chalet	pl	Schronisko
+tourism	guest_house	pl	Pensjonat
+tourism	hostel	pl	Hostel
+tourism	hotel	pl	Hotel
+tourism	information	pl	Informacja turystyczna
+tourism	lean_to	pl	Nachylenie
+tourism	motel	pl	Motel
+tourism	museum	pl	Muzeum
+tourism	picnic_site	pl	Miejsce na piknik
+tourism	theme_park	pl	Park tematyczny
+tourism	valley	pl	Dolina
+tourism	viewpoint	pl	Punkt widokowy
+tourism	zoo	pl	Zoo
+waterway	boatyard	pl	Stocznia
+waterway	canal	pl	Kanał
+waterway	connector	pl	Złącze dróg wodnych
+waterway	dam	pl	Tama
+waterway	derelict_canal	pl	Opuszczony kanał
+waterway	ditch	pl	Rów
+waterway	dock	pl	Basen portowy
+waterway	drain	pl	Rów odpływowy
+waterway	lock	pl	Zastawka
+waterway	lock_gate	pl	Śluza
+waterway	mineral_spring	pl	Źródło mineralne
+waterway	mooring	pl	Kotwicowisko
+waterway	rapids	pl	Katarakty
+waterway	river	pl	Rzeka
+waterway	riverbank	pl	Brzeg rzeki
+waterway	stream	pl	Strumień
+waterway	wadi	pl	Starorzecze
+waterway	waterfall	pl	Wodospad
+waterway	water_point	pl	Punkt wodny
+waterway	weir	pl	Jaz

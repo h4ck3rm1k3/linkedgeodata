@@ -1,0 +1,390 @@
+amenity	airport	sk	Letisko
+amenity	arts_centre	sk	Kultúrne stredisko
+amenity	atm	sk	Bankomat
+amenity	bank	sk	Banka
+amenity	bar	sk	Bar
+amenity	bench	sk	Lavička
+amenity	bicycle_parking	sk	Parkovisko bicyklov
+amenity	bicycle_rental	sk	Požičovňa bicyklov
+amenity	brothel	sk	Nevestinec
+amenity	bureau_de_change	sk	Zmenáreň
+amenity	bus_station	sk	Autobusová stanica
+amenity	cafe	sk	Kaviareň
+amenity	car_rental	sk	Požičovňa áut
+amenity	car_sharing	sk	Autopožičovňa
+amenity	car_wash	sk	Autoumývareň
+amenity	casino	sk	Kasíno
+amenity	cinema	sk	Kino
+amenity	clinic	sk	Poliklinika
+amenity	club	sk	Klub
+amenity	college	sk	Vysoká škola
+amenity	community_centre	sk	Kultúrne stredisko
+amenity	courthouse	sk	Súd
+amenity	crematorium	sk	Krematórium
+amenity	dentist	sk	Zubár
+amenity	doctors	sk	Lekár
+amenity	dormitory	sk	Študentský domov
+amenity	drinking_water	sk	Pitná voda
+amenity	driving_school	sk	Autoškola
+amenity	embassy	sk	Veľvyslanectvo
+amenity	emergency_phone	sk	Núdzový telefón
+amenity	fast_food	sk	Rýchle občerstvenie
+amenity	ferry_terminal	sk	Terminál trajektu
+amenity	fire_hydrant	sk	Požiarny hydrant
+amenity	fire_station	sk	Požiarna stanica
+amenity	fountain	sk	Fontána
+amenity	fuel	sk	Benzínová pumpa
+amenity	grave_yard	sk	Cintorín
+amenity	gym	sk	Fitnes centrum / telocvičňa
+amenity	health_centre	sk	Zdravotné stredisko
+amenity	hospital	sk	Nemocnica
+amenity	hotel	sk	Hotel
+amenity	hunting_stand	sk	Poľovnícky posed
+amenity	ice_cream	sk	Zmrzlina
+amenity	kindergarten	sk	Materská škola
+amenity	library	sk	Knižnica
+amenity	market	sk	Obchod
+amenity	marketplace	sk	Tržnica
+amenity	mountain_rescue	sk	Horská služba
+amenity	nightclub	sk	Nočný klub
+amenity	nursery	sk	Jasle
+amenity	nursing_home	sk	Sanatórium
+amenity	office	sk	Úrad
+amenity	park	sk	Park
+amenity	parking	sk	Parkovisko
+amenity	pharmacy	sk	lekáreň
+amenity	place_of_worship	sk	Kostol
+amenity	police	sk	Polícia
+amenity	post_box	sk	Poštová schránka
+amenity	post_office	sk	Pošta
+amenity	preschool	sk	Škôlka
+amenity	prison	sk	Väzenie
+amenity	pub	sk	Krčma
+amenity	public_building	sk	Verejná budova
+amenity	recycling	sk	Recyklačké miesto
+amenity	restaurant	sk	Reštaurácia
+amenity	retirement_home	sk	Domov dôchodcov
+amenity	sauna	sk	Sauna
+amenity	school	sk	Škola
+amenity	shelter	sk	Altánok
+amenity	shop	sk	Obchod
+amenity	social_club	sk	Spoločenský klub
+amenity	studio	sk	Ateliér
+amenity	supermarket	sk	Supermarket
+amenity	taxi	sk	Taxi
+amenity	telephone	sk	Verejný telefón
+amenity	theatre	sk	Divadlo
+amenity	toilets	sk	WC
+amenity	townhall	sk	Radnica
+amenity	university	sk	Univerzita
+amenity	vending_machine	sk	Predajný automat
+amenity	veterinary	sk	Veterinárna ordinácia
+amenity	waste_basket	sk	Odpadkový kôš
+amenity	wifi	sk	Prístup Wi-Fi
+amenity	youth_centre	sk	Mládežnícke centrum
+boundary	administrative	sk	Administratívne hranice
+building	apartments	sk	Bytový dom
+building	bunker	sk	Bunker
+building	chapel	sk	Kaplnka
+building	church	sk	Kostol,cirkev
+building	city_hall	sk	Radnica,magistrát
+building	commercial	sk	Komerčné budovy
+building	dormitory	sk	Študentský domov
+building	faculty	sk	Budovy fakulty
+building	farm	sk	Hospodárska budova
+building	flats	sk	Byty
+building	garage	sk	Garáž
+building	hall	sk	Sála
+building	hospital	sk	Nemocničné budovy
+building	hotel	sk	Hotel
+building	house	sk	Dom
+building	industrial	sk	Priemyselné budovy
+building	office	sk	Administratívna budova
+building	public	sk	Verejná budova
+building	residential	sk	Obytné budovy
+building	retail	sk	Maloobchodné budovy
+building	school	sk	Škola
+building	shop	sk	Obchod
+building	stadium	sk	Štadión
+building	store	sk	Obchod
+building	terrace	sk	Radová zástavba
+building	tower	sk	Veža
+building	train_station	sk	Železničná stanica
+building	university	sk	Univerzitné budovy
+highway	bridleway	sk	Cesta pre kone
+highway	bus_guideway	sk	Bus so sprievodcom
+highway	bus_stop	sk	Zastávka autobusu
+highway	byway	sk	Byway (súkromná cesta)
+highway	construction	sk	Cesta vo výstavbe
+highway	cycleway	sk	Cyklistický chodník
+highway	distance_marker	sk	Distance Marker (kilometrovník)
+highway	emergency_access_point	sk	Stanica prvej pomoci
+highway	footway	sk	Chodník
+highway	ford	sk	Brod
+highway	gate	sk	Brána
+highway	living_street	sk	Obytná zóna
+highway	minor	sk	Vedľajšia cesta
+highway	motorway	sk	Diaľnica
+highway	motorway_junction	sk	Motorway Junction (Diaľničná križovatka)
+highway	motorway_link	sk	Diaľnica
+highway	path	sk	Cesta
+highway	pedestrian	sk	Chodník pre chodcov
+highway	platform	sk	Nástupište
+highway	primary	sk	Cesta I. triedy
+highway	primary_link	sk	Cesta I. triedy
+highway	residential	sk	Residential(Obytný)
+highway	road	sk	Cesta
+highway	secondary	sk	Cesta II. triedy
+highway	secondary_link	sk	Cesta II. triedy
+highway	service	sk	Service Road (prístupová komunikácia)
+highway	steps	sk	Schody
+highway	stile	sk	Schodíky cez ohradu
+highway	tertiary	sk	Cesta III. triedy
+highway	track	sk	Nespevnené cesty
+highway	trunk	sk	Cesta pre motorové vozidlá
+highway	trunk_link	sk	Cesta pre motorové vozidlá
+highway	unclassified	sk	Neklasifikovaná cesta
+highway	unsurfaced	sk	Nespevnená cesta
+historic	archaeological_site	sk	Archeologické nálezisko
+historic	battlefield	sk	Bojisko
+historic	boundary_stone	sk	Hraničný kameň
+historic	building	sk	Budova
+historic	castle	sk	Hrad
+historic	church	sk	Kostol
+historic	house	sk	Dom
+historic	icon	sk	Ikona
+historic	manor	sk	Šľachtické sídlo
+historic	memorial	sk	Pomník
+historic	mine	sk	Baňa
+historic	monument	sk	Pamätník
+historic	museum	sk	Múzeum
+historic	ruins	sk	Ruina
+historic	tower	sk	Veža
+historic	wayside_cross	sk	Božie muky
+historic	wayside_shrine	sk	Malá kaplnka pri ceste
+historic	wreck	sk	Zrúcanina
+landuse	allotments	sk	Záhradkárske osady
+landuse	basin	sk	Basin (Vodná nádrž)
+landuse	cemetery	sk	Cintorín
+landuse	commercial	sk	Obchodná štvrť
+landuse	construction	sk	Stavba
+landuse	farm	sk	Farma
+landuse	farmyard	sk	Dvor
+landuse	forest	sk	Les
+landuse	grass	sk	Tráva
+landuse	industrial	sk	Priemyslová oblasť
+landuse	landfill	sk	Skládka odpadu
+landuse	meadow	sk	Lúka
+landuse	military	sk	Vojenský priestor
+landuse	mine	sk	Baňa
+landuse	mountain	sk	Hora
+landuse	nature_reserve	sk	Prírodná rezervácia
+landuse	park	sk	Park
+landuse	piste	sk	Zjazdovka
+landuse	plaza	sk	Námestie
+landuse	quarry	sk	Lom
+landuse	railway	sk	Železnica
+landuse	residential	sk	Residential Area (Obytná oblasť)
+landuse	retail	sk	Retail (Obchodná zóna)
+landuse	village_green	sk	Verejná zeleň
+landuse	vineyard	sk	Vinica
+landuse	wetland	sk	Mokrina
+landuse	wood	sk	Drevo
+leisure	common	sk	Verejné priestranstvo
+leisure	fishing	sk	Rybolov (športový)
+leisure	garden	sk	Záhrada
+leisure	golf_course	sk	Golfové ihrisko
+leisure	ice_rink	sk	Umelé klzisko
+leisure	marina	sk	Prístav pre jachty
+leisure	miniature_golf	sk	Mini golf
+leisure	nature_reserve	sk	Prírodná rezervácia
+leisure	park	sk	Park
+leisure	pitch	sk	Športové ihrisko
+leisure	playground	sk	Detské ihrisko
+leisure	recreation_ground	sk	Rekreačná oblasť
+leisure	slipway	sk	Lodný sklz
+leisure	sports_centre	sk	Športové stredisko
+leisure	stadium	sk	Štadión
+leisure	swimming_pool	sk	Plaváreň
+leisure	track	sk	Bežecká dráha
+leisure	water_park	sk	Aquapark
+natural	bay	sk	Zátoka, záliv
+natural	beach	sk	Pláž
+natural	cape	sk	Mys
+natural	cave_entrance	sk	Vstup do jaskyne
+natural	channel	sk	Kanál
+natural	cliff	sk	Útes, kamenná stena
+natural	coastline	sk	Pobrežie
+natural	crater	sk	Kráter
+natural	feature	sk	Vlastnosť
+natural	fell	sk	Horská pastvina
+natural	fjord	sk	Fjord
+natural	geyser	sk	Gejzír
+natural	glacier	sk	Ľadovec
+natural	heath	sk	Vresovisko
+natural	hill	sk	Kopec
+natural	island	sk	Ostrov
+natural	marsh	sk	Bažina
+natural	moor	sk	Močiar
+natural	mud	sk	Bahno
+natural	peak	sk	Vrchol
+natural	point	sk	Bod
+natural	reef	sk	Bradlo, Skalisko
+natural	ridge	sk	Hrebeň
+natural	river	sk	Rieka
+natural	rock	sk	Skala
+natural	scree	sk	Sutina
+natural	scrub	sk	Rúbanisko
+natural	shoal	sk	Plytčina
+natural	spring	sk	Prameň
+natural	strait	sk	Úžina
+natural	tree	sk	Strom
+natural	valley	sk	Dolina
+natural	volcano	sk	Sopka
+natural	water	sk	Voda
+natural	wetland	sk	Mokrina
+natural	wetlands	sk	Mokrina
+natural	wood	sk	Les
+place	airport	sk	Letisko
+place	city	sk	Mesto nad 100 tis.
+place	country	sk	Štát
+place	county	sk	Okres
+place	farm	sk	Farma
+place	hamlet	sk	Osada do 200
+place	house	sk	Budova
+place	houses	sk	Budovy
+place	island	sk	Ostrov
+place	islet	sk	Ostrovček
+place	locality	sk	Oblasť
+place	moor	sk	Močiar
+place	municipality	sk	Obecný úrad
+place	postcode	sk	PSČ
+place	region	sk	Región
+place	sea	sk	More
+place	state	sk	Štát
+place	subdivision	sk	Pododdelenie
+place	suburb	sk	Mestský obvod
+place	town	sk	Mesto 10 tis.-100 tis.
+place	unincorporated_area	sk	Nezaradená oblasť
+place	village	sk	Obec 200-10 tis.
+railway	abandoned	sk	Opustená železnica
+railway	construction	sk	Železnica vo výstavbe
+railway	disused	sk	Nepoužívaná železnica
+railway	disused_station	sk	Nepoužívaná železničná stanica
+railway	funicular	sk	Lanová dráha
+railway	halt	sk	Zastávka vlaku
+railway	historic_station	sk	Zastávka historickej železnice
+railway	junction	sk	Železničný uzol
+railway	level_crossing	sk	Železničný prejazd
+railway	light_rail	sk	Ľahká železnica
+railway	monorail	sk	Jednokoľajka
+railway	narrow_gauge	sk	Úzkokoľajná železnica
+railway	platform	sk	Železničné nástupište
+railway	preserved	sk	Historická železnica
+railway	spur	sk	Železničná vlečka
+railway	station	sk	Železničná stanica
+railway	subway	sk	Stanica metra
+railway	subway_entrance	sk	Vchod do metra
+railway	switch	sk	Železničná výhybka
+railway	tram	sk	Električka
+railway	tram_stop	sk	Zastávka električky
+railway	yard	sk	Železničné depo
+shop	alcohol	sk	Mimo povolenia
+shop	apparel	sk	Odevy
+shop	art	sk	Obchod s umením
+shop	bakery	sk	Pekáreň
+shop	beauty	sk	Salón krásy
+shop	beverages	sk	Občerstvenie
+shop	bicycle	sk	Obchod s bicylkami
+shop	books	sk	Kníhkupectvo
+shop	butcher	sk	Mäsiarstvo
+shop	car_dealer	sk	Obchod s autami
+shop	car_parts	sk	Mototechna
+shop	carpet	sk	Obchod s kobercami
+shop	car_repair	sk	Autoservis
+shop	charity	sk	Charitatívny obchod
+shop	chemist	sk	Lekáreň
+shop	clothes	sk	Obchod s konfekciou
+shop	computer	sk	Obchod s počítačmi
+shop	confectionery	sk	Cukráreň
+shop	department_store	sk	Obchodný dom
+shop	doityourself	sk	Urob si sám
+shop	drugstore	sk	Lekáreň
+shop	dry_cleaning	sk	Chemická čistiareň
+shop	electronics	sk	Elektro
+shop	estate_agent	sk	Realitná kancelária
+shop	farm	sk	Poľnonákup
+shop	fish	sk	Obchod s rybami
+shop	florist	sk	Kvetinárstvo
+shop	food	sk	Obchod s potravinami
+shop	funeral_directors	sk	Pohrebníctvo
+shop	furniture	sk	Nábytok
+shop	gallery	sk	Galéria
+shop	garden_centre	sk	Záhradnícke centrum
+shop	general	sk	Zmiešaný tovar
+shop	gift	sk	Suveníry
+shop	greengrocer	sk	Obchod so zeleninou
+shop	grocery	sk	Potraviny
+shop	hairdresser	sk	Kaderníctvo,holičstvo
+shop	hardware	sk	Železiarstvo
+shop	hifi	sk	Hi-Fi
+shop	insurance	sk	Poisťovňa
+shop	jewelry	sk	Zlatníctvo
+shop	kiosk	sk	Novinový stánok
+shop	laundry	sk	Práčovňa
+shop	mall	sk	Pešia zóna
+shop	mobile_phone	sk	Obchod s mobilnými telefónmi
+shop	motorcycle	sk	Motocyklový obchod
+shop	music	sk	Hudobniny
+shop	optician	sk	Očná optika
+shop	organic	sk	Obchod so zdravou výživou
+shop	outdoor	sk	Turistický obchod
+shop	pet	sk	Chovprodukt
+shop	photo	sk	Fotokino
+shop	salon	sk	Salón
+shop	shoes	sk	Obuva
+shop	shopping_centre	sk	Nákupné stredisko
+shop	sports	sk	Športový obchod
+shop	stationery	sk	Papierníctvo
+shop	supermarket	sk	Supermarket
+shop	toys	sk	Hračkárstvo
+shop	travel_agency	sk	Cestovná kancelária
+shop	wine	sk	Mimo povolenia
+tourism	alpine_hut	sk	Vysokohorská chata
+tourism	artwork	sk	Umelecké dielo
+tourism	attraction	sk	Atrakcia
+tourism	bed_and_breakfast	sk	Nocľah a raňajky
+tourism	cabin	sk	Malá chata
+tourism	camp_site	sk	Kemping
+tourism	caravan_site	sk	Autokemping
+tourism	chalet	sk	Veľká chata
+tourism	guest_house	sk	Penzión
+tourism	hostel	sk	Ubytovňa, internát
+tourism	hotel	sk	Hotel
+tourism	information	sk	Informácie
+tourism	lean_to	sk	Prístrešok
+tourism	motel	sk	Motel
+tourism	museum	sk	Múzeum
+tourism	picnic_site	sk	Výletné miesto
+tourism	theme_park	sk	Zábavný park
+tourism	valley	sk	Údolie
+tourism	viewpoint	sk	Rozhľadňa, výhliadka
+tourism	zoo	sk	Zoo
+waterway	boatyard	sk	Lodenica
+waterway	canal	sk	Kanál
+waterway	dam	sk	Priehrada,hrádza
+waterway	derelict_canal	sk	Opustený kanál
+waterway	ditch	sk	Priekopa
+waterway	dock	sk	Dok
+waterway	drain	sk	Odvodňovací kanál
+waterway	lock	sk	Plavebná komora
+waterway	lock_gate	sk	Brána plavebnej komory
+waterway	mineral_spring	sk	Minerálny prameň
+waterway	mooring	sk	Kotvisko
+waterway	river	sk	Rieka
+waterway	riverbank	sk	Breh rieky
+waterway	stream	sk	Potok
+waterway	wadi	sk	Občasné riečisko(Vádí)
+waterway	waterfall	sk	Vodopád
+waterway	water_point	sk	Vodný bod
+waterway	weir	sk	Splav

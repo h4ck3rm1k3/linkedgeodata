@@ -1,0 +1,420 @@
+amenity	airport	ru	Аэропорт
+amenity	arts_centre	ru	Дом искусств
+amenity	atm	ru	Банкомат
+amenity	auditorium	ru	Аудитория
+amenity	bank	ru	Банк
+amenity	bar	ru	Бар
+amenity	bench	ru	Скамья
+amenity	bicycle_parking	ru	Велопарковка
+amenity	bicycle_rental	ru	Прокат велосипедов
+amenity	brothel	ru	Бордель
+amenity	bureau_de_change	ru	Обмен валют
+amenity	bus_station	ru	Автобусная станция
+amenity	cafe	ru	Кафе
+amenity	car_rental	ru	Аренда автомобилей
+amenity	car_sharing	ru	Каршаринг
+amenity	car_wash	ru	Автомойка
+amenity	casino	ru	Казино
+amenity	cinema	ru	Кинотеатр
+amenity	clinic	ru	Поликлиника
+amenity	club	ru	Клуб
+amenity	college	ru	Колледж
+amenity	community_centre	ru	Общественный центр
+amenity	courthouse	ru	Помещение суда
+amenity	crematorium	ru	Крематоорий
+amenity	dentist	ru	Стоматология
+amenity	doctors	ru	Врач
+amenity	dormitory	ru	Общежитие
+amenity	drinking_water	ru	Питьевая вода
+amenity	driving_school	ru	Автошкола
+amenity	embassy	ru	Посольство
+amenity	emergency_phone	ru	Телефон экстренных служб
+amenity	fast_food	ru	Палатка с едой
+amenity	ferry_terminal	ru	Паромная станция
+amenity	fire_hydrant	ru	Пожарный гидрант
+amenity	fire_station	ru	Пожарная охрана
+amenity	fountain	ru	фонтан
+amenity	fuel	ru	Заправка
+amenity	grave_yard	ru	Место захоронения
+amenity	gym	ru	тренажерный зал
+amenity	hall	ru	Холл
+amenity	health_centre	ru	Оздоровительный центр
+amenity	hospital	ru	Госпиталь
+amenity	hotel	ru	Гостинница
+amenity	hunting_stand	ru	охотничья вышка
+amenity	ice_cream	ru	Мороженное
+amenity	kindergarten	ru	Детский сад
+amenity	library	ru	Библиотека
+amenity	market	ru	Магазин
+amenity	marketplace	ru	Рыночная площадь
+amenity	mountain_rescue	ru	Горная спасательная служба
+amenity	nightclub	ru	ночной клуб
+amenity	nursery	ru	Пансионат
+amenity	nursing_home	ru	Дом престарелых
+amenity	office	ru	Офис
+amenity	park	ru	Парк
+amenity	parking	ru	Стоянка
+amenity	pharmacy	ru	Аптека
+amenity	place_of_worship	ru	Место поклонения
+amenity	police	ru	Милиция
+amenity	post_box	ru	Почтовый ящик
+amenity	post_office	ru	Почтовое отделение
+amenity	preschool	ru	Дошкольное учреждение
+amenity	prison	ru	Тюрьма
+amenity	pub	ru	Паб
+amenity	public_building	ru	общественное здание
+amenity	public_market	ru	Городской рынок
+amenity	reception_area	ru	Приёмная
+amenity	recycling	ru	Место утилизации
+amenity	restaurant	ru	Ресторан
+amenity	retirement_home	ru	Дом престарелых
+amenity	sauna	ru	Сауна
+amenity	school	ru	школа
+amenity	shelter	ru	Укрытие
+amenity	shop	ru	Магазин
+amenity	shopping	ru	Торговый центр
+amenity	social_club	ru	Сообщество
+amenity	studio	ru	Студия
+amenity	supermarket	ru	Супермаркет
+amenity	taxi	ru	Такси
+amenity	telephone	ru	Телефон
+amenity	theatre	ru	Театр
+amenity	toilets	ru	Туалет
+amenity	townhall	ru	Городская администрация
+amenity	university	ru	Университет
+amenity	vending_machine	ru	торговый автомат
+amenity	veterinary	ru	Ветеринарная клиника
+amenity	village_hall	ru	Усадьба
+amenity	waste_basket	ru	Мусорка
+amenity	wifi	ru	Вай-Фай
+amenity	youth_centre	ru	Молодёжный центр
+boundary	administrative	ru	Административная граница
+building	apartments	ru	Многоквартирный дом
+building	block	ru	Ряд зданий
+building	bunker	ru	Бункер
+building	chapel	ru	Церковь
+building	church	ru	Церковь
+building	city_hall	ru	Мэрия
+building	commercial	ru	Офисное здание
+building	dormitory	ru	Общежитие
+building	entrance	ru	Вход в здание
+building	faculty	ru	Факультетское здание
+building	farm	ru	Ферма
+building	flats	ru	Квартиры
+building	garage	ru	Гараж
+building	hall	ru	Холл
+building	hospital	ru	Здание больницы
+building	hotel	ru	Гостиница
+building	house	ru	Дом
+building	industrial	ru	Промышленное здание
+building	office	ru	Офисное здание
+building	public	ru	Общественное здание
+building	residential	ru	Жилой дом
+building	retail	ru	Здание на продажу
+building	school	ru	Школа
+building	shop	ru	Магазин
+building	stadium	ru	Стадион
+building	store	ru	Магазин
+building	terrace	ru	Ряд жилых домов
+building	tower	ru	Башня
+building	train_station	ru	трамвайная остановка
+building	university	ru	Университет
+highway	bridleway	ru	Конный путь
+highway	bus_guideway	ru	Автобусная полоса-рельс
+highway	bus_stop	ru	Автобусная остановка
+highway	byway	ru	Закоулок
+highway	construction	ru	Ремонт дороги
+highway	cycleway	ru	Велодорожка
+highway	distance_marker	ru	Километровый столб
+highway	emergency_access_point	ru	Пункт первой помощи
+highway	footway	ru	Тротуар
+highway	ford	ru	Брод
+highway	gate	ru	Ворота
+highway	living_street	ru	Жилая улица
+highway	minor	ru	Второстепенная дорога
+highway	motorway	ru	Автомагистраль
+highway	motorway_junction	ru	Перекрёсток
+highway	motorway_link	ru	Развязка на автомагистрали
+highway	path	ru	Тропа
+highway	pedestrian	ru	Дорога для пешеходов
+highway	platform	ru	Платформа
+highway	primary	ru	Главная дорога
+highway	primary_link	ru	Главная дорога
+highway	raceway	ru	Гоночная трасса
+highway	residential	ru	Улица обычная
+highway	road	ru	Дорога
+highway	secondary	ru	Второстепенная дорога
+highway	secondary_link	ru	Примыкающая дорога
+highway	service	ru	Подъездная дорога
+highway	services	ru	Придорожный сервис
+highway	steps	ru	Ступеньки
+highway	stile	ru	Турникет
+highway	tertiary	ru	Дорога третьего класса
+highway	track	ru	Неофициальная грунтовка
+highway	trail	ru	Тропа
+highway	trunk	ru	Трасса
+highway	trunk_link	ru	Развязка
+highway	unclassified	ru	Дорога местная
+highway	unsurfaced	ru	Дорога без покрытия
+historic	archaeological_site	ru	Раскопки
+historic	battlefield	ru	Поле боя
+historic	boundary_stone	ru	Пограничный камень
+historic	building	ru	Здание
+historic	castle	ru	Крепость
+historic	church	ru	Церковь
+historic	house	ru	Дом
+historic	icon	ru	Икона
+historic	manor	ru	Поместье
+historic	memorial	ru	Памятник
+historic	mine	ru	Рудник
+historic	monument	ru	Памятник
+historic	museum	ru	Музей
+historic	ruins	ru	Развалины
+historic	tower	ru	Башня
+historic	wayside_cross	ru	Придорожный крест
+historic	wayside_shrine	ru	Придорожная святыня
+historic	wreck	ru	Остов судна
+landuse	allotments	ru	Сады-огороды
+landuse	basin	ru	Бассейн
+landuse	brownfield	ru	Заброшенная зона
+landuse	cemetery	ru	Кладбище
+landuse	commercial	ru	Офисная территория
+landuse	conservation	ru	Законсервированная зона
+landuse	construction	ru	Стройка
+landuse	farm	ru	Ферма
+landuse	farmland	ru	Сельхозугодья
+landuse	farmyard	ru	Сельхоздворы
+landuse	forest	ru	Дикий лес
+landuse	grass	ru	Трава
+landuse	greenfield	ru	Неосвоенная территория
+landuse	industrial	ru	Промзона
+landuse	landfill	ru	Свалка
+landuse	meadow	ru	Луг
+landuse	military	ru	Военная зона
+landuse	mine	ru	Шахта
+landuse	mountain	ru	Гора
+landuse	nature_reserve	ru	Заповедник
+landuse	park	ru	Парк
+landuse	piste	ru	Лыжня
+landuse	plaza	ru	Открытая площадка
+landuse	quarry	ru	Карьер
+landuse	railway	ru	Железная дорога
+landuse	recreation_ground	ru	Зона отдыха
+landuse	reservoir	ru	водохранилище
+landuse	residential	ru	Жилой район
+landuse	retail	ru	Торговая территория
+landuse	village_green	ru	Зелёная деревня
+landuse	vineyard	ru	Виноградник
+landuse	wetland	ru	Заболоченность
+landuse	wood	ru	Обслуживаемый лес
+leisure	beach_resort	ru	Пляж с насаждениями
+leisure	common	ru	Альменда
+leisure	fishing	ru	Рыбалка
+leisure	garden	ru	Сад
+leisure	golf_course	ru	Поле для гольфа
+leisure	ice_rink	ru	Каток
+leisure	marina	ru	Пристань для яхт
+leisure	miniature_golf	ru	Минигольф
+leisure	nature_reserve	ru	Заповедник
+leisure	park	ru	Парк
+leisure	pitch	ru	Спортивный газон
+leisure	playground	ru	Детская игровая площадка
+leisure	recreation_ground	ru	Зона отдыха
+leisure	slipway	ru	Эллинг
+leisure	sports_centre	ru	Спортивный центр
+leisure	stadium	ru	Стадион
+leisure	swimming_pool	ru	Бассейн
+leisure	track	ru	Спортивная дорожка
+leisure	water_park	ru	Аквапарк
+natural	bay	ru	Залив
+natural	beach	ru	Пляж
+natural	cape	ru	Мыс
+natural	cave_entrance	ru	Вход в пещеру
+natural	channel	ru	Канал
+natural	cliff	ru	обрыв
+natural	coastline	ru	Береговая линия
+natural	crater	ru	Кратер
+natural	feature	ru	Природный объект
+natural	fell	ru	Холм
+natural	fjord	ru	Фьорд
+natural	geyser	ru	Гейзер
+natural	glacier	ru	Ледник
+natural	heath	ru	Пустошь
+natural	hill	ru	Холм
+natural	island	ru	Остров
+natural	land	ru	Земля
+natural	marsh	ru	Болото
+natural	moor	ru	Торфяник
+natural	mud	ru	Грязь
+natural	peak	ru	Вершина горы
+natural	point	ru	Мыс
+natural	reef	ru	Риф
+natural	ridge	ru	Хребет
+natural	river	ru	Река
+natural	rock	ru	Скала
+natural	scree	ru	Осыпь камней
+natural	scrub	ru	Кустарник
+natural	shoal	ru	Мелководье
+natural	spring	ru	Родник
+natural	strait	ru	Пролив
+natural	tree	ru	Дерево
+natural	valley	ru	Долина
+natural	volcano	ru	Вулкан
+natural	water	ru	Водоём
+natural	wetland	ru	Заболоченная территория
+natural	wetlands	ru	Заболоченные земли
+natural	wood	ru	Естественный лес
+place	airport	ru	Аэропорт
+place	city	ru	Город
+place	country	ru	Страна
+place	county	ru	Уезд
+place	farm	ru	Ферма
+place	hamlet	ru	Посёлок
+place	house	ru	Дом
+place	houses	ru	Дома
+place	island	ru	Остров
+place	islet	ru	Маленький остров
+place	locality	ru	Населённый пункт
+place	moor	ru	Торфяник
+place	municipality	ru	Муниципалитет
+place	postcode	ru	Индекс
+place	region	ru	Регион
+place	sea	ru	Море
+place	state	ru	Область/Штат
+place	subdivision	ru	Подразделение
+place	suburb	ru	Пригород
+place	town	ru	Городок
+place	unincorporated_area	ru	Загородная зона
+place	village	ru	Деревня
+railway	abandoned	ru	Разобранные железнодорожные пути
+railway	construction	ru	Ремонт ж/д путей
+railway	disused	ru	Заброшеная ж/д ветка
+railway	disused_station	ru	Заброшеная ж/д станция
+railway	funicular	ru	Фуникулер
+railway	halt	ru	Станция ж/д
+railway	historic_station	ru	Историческая ж.д. станция
+railway	junction	ru	Стрелка ж/д
+railway	level_crossing	ru	Железнодорожный переезд
+railway	light_rail	ru	Легкорельсовый ж/д транспорт
+railway	monorail	ru	Монорельс
+railway	narrow_gauge	ru	Узкоколейка
+railway	platform	ru	Железнодорожная платформа
+railway	preserved	ru	Историческая ж/д
+railway	spur	ru	Ответвление ж/д пути
+railway	station	ru	Железнодорожная станция
+railway	subway	ru	Станция метро
+railway	subway_entrance	ru	Вход в метро
+railway	switch	ru	Железнодорожная стрелка
+railway	tram	ru	Трамвай
+railway	tram_stop	ru	Трамвайная остановка
+railway	yard	ru	Депо
+shop	alcohol	ru	Винный магазин
+shop	apparel	ru	Магазин одежды
+shop	art	ru	Художественный салон
+shop	bakery	ru	Булочная
+shop	beauty	ru	Салон красоты
+shop	beverages	ru	Магазин напитков
+shop	bicycle	ru	Веломагазин
+shop	books	ru	Книжный магазин
+shop	butcher	ru	Мясная лавка
+shop	car	ru	Автосалон
+shop	car_dealer	ru	Автомагазин
+shop	car_parts	ru	Автомагазин
+shop	carpet	ru	Ковры
+shop	car_repair	ru	Автомастерская
+shop	charity	ru	Секонд-хэнд
+shop	chemist	ru	м-н бытовой химии
+shop	clothes	ru	Магазин одежды
+shop	computer	ru	Компьютерный магазин
+shop	confectionery	ru	Кондитерская
+shop	convenience	ru	Ларёк
+shop	copyshop	ru	Услуги копирования
+shop	cosmetics	ru	Косметика
+shop	department_store	ru	Универсам
+shop	discount	ru	Магазин распродаж
+shop	doityourself	ru	Сделай-Сам
+shop	drugstore	ru	Аптека
+shop	dry_cleaning	ru	Химчистка
+shop	electronics	ru	Магазин электротоваров
+shop	estate_agent	ru	Продажа недвижимости
+shop	farm	ru	Сельпо
+shop	fashion	ru	Магазин модной одежды
+shop	fish	ru	Рыбный магазин
+shop	florist	ru	Цветочный магазин
+shop	food	ru	Продукты
+shop	funeral_directors	ru	Похоронное бюро
+shop	furniture	ru	Мебель
+shop	gallery	ru	Галерея
+shop	garden_centre	ru	Садовый центр
+shop	general	ru	Магазин
+shop	gift	ru	Магазин подарков
+shop	greengrocer	ru	Овощной магазин
+shop	grocery	ru	Бакалея
+shop	hairdresser	ru	Парикмахерская
+shop	hardware	ru	Хозяйственные магазины
+shop	hifi	ru	Магазин аудио/видео аппаратуры
+shop	insurance	ru	Страховая компания
+shop	jewelry	ru	Ювелирный магазин
+shop	kiosk	ru	Киоск
+shop	laundry	ru	Прачечная
+shop	mall	ru	Молл
+shop	market	ru	Рынок
+shop	mobile_phone	ru	Магазин мобильных телефонов
+shop	motorcycle	ru	Магазин по продаже мотоциклов
+shop	music	ru	Музыкальный магазин
+shop	newsagent	ru	Киоск
+shop	optician	ru	оптика
+shop	organic	ru	Продуктовый магазин
+shop	outdoor	ru	Открытый рынок
+shop	pet	ru	Зоомагазин
+shop	photo	ru	фотомагазин
+shop	salon	ru	Салон
+shop	shoes	ru	Обувной магазин
+shop	shopping_centre	ru	Торговый центр
+shop	sports	ru	Спортивный магазин
+shop	stationery	ru	Канцелярские товары
+shop	supermarket	ru	Супермаркет
+shop	toys	ru	Магазин игрушек
+shop	travel_agency	ru	Туристической агентство
+shop	video	ru	Магазин видеозаписей
+shop	wine	ru	Винный магазин
+tourism	alpine_hut	ru	Высокогорная гостиница
+tourism	artwork	ru	Произведения искусства
+tourism	attraction	ru	Аттракцион
+tourism	bed_and_breakfast	ru	Полупансион
+tourism	cabin	ru	Каюта
+tourism	camp_site	ru	Лагерь
+tourism	caravan_site	ru	Караван-сарай
+tourism	chalet	ru	Шале
+tourism	guest_house	ru	Домик для гостей
+tourism	hostel	ru	Хостел
+tourism	hotel	ru	Гостиница
+tourism	information	ru	Информация
+tourism	lean_to	ru	Наклон
+tourism	motel	ru	Мотель
+tourism	museum	ru	Музей
+tourism	picnic_site	ru	Место для пикника
+tourism	theme_park	ru	Аттракционы
+tourism	valley	ru	Долина
+tourism	viewpoint	ru	Смотровая площадка
+tourism	zoo	ru	Зоопарк
+waterway	boatyard	ru	Верфь
+waterway	canal	ru	Канал
+waterway	connector	ru	Слияние рек
+waterway	dam	ru	Дамба
+waterway	derelict_canal	ru	Пересохший канал
+waterway	ditch	ru	Водоотлив
+waterway	dock	ru	Док
+waterway	drain	ru	Сточная канава
+waterway	lock	ru	Шлюз
+waterway	lock_gate	ru	Шлюз
+waterway	mineral_spring	ru	Минеральный родник
+waterway	mooring	ru	Место швартовки
+waterway	rapids	ru	Речной порог
+waterway	river	ru	Река
+waterway	riverbank	ru	Берег реки
+waterway	stream	ru	Ручей
+waterway	wadi	ru	Высохшее русло
+waterway	waterfall	ru	Водопад
+waterway	water_point	ru	Пункт водоснабжения
+waterway	weir	ru	Плотина

@@ -1,0 +1,420 @@
+amenity	airport	uk	Аеропорт
+amenity	arts_centre	uk	Мистецький центр
+amenity	atm	uk	Банкомат
+amenity	auditorium	uk	Конференц-зала
+amenity	bank	uk	Банк
+amenity	bar	uk	Бар
+amenity	bench	uk	Лавка
+amenity	bicycle_parking	uk	Місце стоянки для велосипедів
+amenity	bicycle_rental	uk	Прокат велосипедів
+amenity	brothel	uk	Бордель
+amenity	bureau_de_change	uk	Обмін валют
+amenity	bus_station	uk	Автовокзал
+amenity	cafe	uk	Кафе
+amenity	car_rental	uk	Прокат автомобілів
+amenity	car_sharing	uk	Прокат авто
+amenity	car_wash	uk	Автомийка
+amenity	casino	uk	Казино
+amenity	cinema	uk	Кинотеатр
+amenity	clinic	uk	Клініка
+amenity	club	uk	Клуб
+amenity	college	uk	Коледж
+amenity	community_centre	uk	Громадський центр
+amenity	courthouse	uk	Суд
+amenity	crematorium	uk	Крематорій
+amenity	dentist	uk	Стоматологія
+amenity	doctors	uk	Лікарі
+amenity	dormitory	uk	Гуртожиток
+amenity	drinking_water	uk	Питна вода
+amenity	driving_school	uk	Автошкола
+amenity	embassy	uk	Амбасада
+amenity	emergency_phone	uk	Телефон для екстрених викликів
+amenity	fast_food	uk	Забігайлівка
+amenity	ferry_terminal	uk	Поромна станція
+amenity	fire_hydrant	uk	Пожежний гідрант
+amenity	fire_station	uk	Пожежна станція
+amenity	fountain	uk	Фонтан
+amenity	fuel	uk	Пальне
+amenity	grave_yard	uk	Цвинтар
+amenity	gym	uk	Тренажерний зал
+amenity	hall	uk	Зала
+amenity	health_centre	uk	Центр здоров'я
+amenity	hospital	uk	Лікарня
+amenity	hotel	uk	Готель
+amenity	hunting_stand	uk	Мисливська вежа
+amenity	ice_cream	uk	Морозиво
+amenity	kindergarten	uk	Дитячий садок
+amenity	library	uk	Бібліотека
+amenity	market	uk	Ринок
+amenity	marketplace	uk	Ринок
+amenity	mountain_rescue	uk	Гірські рятувальники
+amenity	nightclub	uk	Нічний клуб
+amenity	nursery	uk	Дитсадок
+amenity	nursing_home	uk	Будинок престарілих
+amenity	office	uk	Офіс
+amenity	park	uk	Парк
+amenity	parking	uk	Автостоянка
+amenity	pharmacy	uk	Аптека
+amenity	place_of_worship	uk	Культова споруда
+amenity	police	uk	Міліція (Поліція)
+amenity	post_box	uk	Поштова скриня
+amenity	post_office	uk	Пошта
+amenity	preschool	uk	Дошкільний заклад
+amenity	prison	uk	В'язниця
+amenity	pub	uk	Паб
+amenity	public_building	uk	Громадський заклад
+amenity	public_market	uk	Базар
+amenity	reception_area	uk	Зона прийому
+amenity	recycling	uk	Місце переробки відходів
+amenity	restaurant	uk	Ресторан
+amenity	retirement_home	uk	Будинки для людей похилого віку
+amenity	sauna	uk	Сауна
+amenity	school	uk	Школа
+amenity	shelter	uk	Укриття
+amenity	shop	uk	Магазин
+amenity	shopping	uk	Шопінг
+amenity	social_club	uk	Клуб за інтересами
+amenity	studio	uk	Студія
+amenity	supermarket	uk	Супермаркет
+amenity	taxi	uk	Таксі
+amenity	telephone	uk	Телефон
+amenity	theatre	uk	Театр
+amenity	toilets	uk	Туалет
+amenity	townhall	uk	Міськвиконком
+amenity	university	uk	Університет
+amenity	vending_machine	uk	Торговий автомат
+amenity	veterinary	uk	Ветлікарня
+amenity	village_hall	uk	Сільрада
+amenity	waste_basket	uk	Контейнер для сміття
+amenity	wifi	uk	WiFi-зона
+amenity	youth_centre	uk	Молодіжний центр
+boundary	administrative	uk	Адміністративний кордон
+building	apartments	uk	Житловий масив
+building	block	uk	Квартал
+building	bunker	uk	Бункер
+building	chapel	uk	Каплиця
+building	church	uk	Храм
+building	city_hall	uk	Мерія
+building	commercial	uk	Комерційна нерухомість
+building	dormitory	uk	Гуртожиток
+building	entrance	uk	Вхід у будівлю
+building	faculty	uk	Факультет
+building	farm	uk	Ферма
+building	flats	uk	Оселі
+building	garage	uk	Гараж
+building	hall	uk	Зала
+building	hospital	uk	Лікарня
+building	hotel	uk	Готель
+building	house	uk	Будинок
+building	industrial	uk	Промислова споруда
+building	office	uk	Офісний будинок
+building	public	uk	Суспільна будівля
+building	residential	uk	Житловий будинок
+building	retail	uk	Центр роздрібної торгівлі
+building	school	uk	Школа
+building	shop	uk	Магазин
+building	stadium	uk	Стадіон
+building	store	uk	Склад
+building	terrace	uk	Тераса
+building	tower	uk	Башта
+building	train_station	uk	Залізнична станція
+building	university	uk	Університет
+highway	bridleway	uk	Дорога для їзди верхи
+highway	bus_guideway	uk	Рейковий автобус
+highway	bus_stop	uk	Автобусна зупинка
+highway	byway	uk	Боковий шлях
+highway	construction	uk	Будівництво автомагітсралі
+highway	cycleway	uk	Велосипедна доріжка
+highway	distance_marker	uk	Верстовий камінь
+highway	emergency_access_point	uk	Пункт швидкої допомоги
+highway	footway	uk	Пішохідна доріжка
+highway	ford	uk	Броди
+highway	gate	uk	Ворота
+highway	living_street	uk	Житлова зона
+highway	minor	uk	Другорядна дорога
+highway	motorway	uk	Автомагістраль
+highway	motorway_junction	uk	В'їзд на автомагістраль
+highway	motorway_link	uk	З’єднання з автомагістраллю
+highway	path	uk	алея
+highway	pedestrian	uk	Пішохідна дорога
+highway	platform	uk	Платформа
+highway	primary	uk	Головна дорога
+highway	primary_link	uk	З’єднання з головною дорогою
+highway	raceway	uk	Гоночна траса
+highway	residential	uk	Жила вулиця
+highway	road	uk	Дорога
+highway	secondary	uk	Другорядна дорога
+highway	secondary_link	uk	З’єднання з другорядною дорогою
+highway	service	uk	Службова дорога
+highway	services	uk	Придорожній сервіс
+highway	steps	uk	Стежка
+highway	stile	uk	Турнікет
+highway	tertiary	uk	Третьорядна дорога
+highway	track	uk	Неасфальтований шлях.
+highway	trail	uk	Стежка
+highway	trunk	uk	Шосе
+highway	trunk_link	uk	З’їзд з/на шосе
+highway	unclassified	uk	Дорога без класифікації
+highway	unsurfaced	uk	Дорога без покриття
+historic	archaeological_site	uk	Археологічні дослідження
+historic	battlefield	uk	Поле битви
+historic	boundary_stone	uk	Прикордонний камінь
+historic	building	uk	Будівля
+historic	castle	uk	За́мок
+historic	church	uk	Храм
+historic	house	uk	Дім
+historic	icon	uk	Ікона
+historic	manor	uk	Маєток
+historic	memorial	uk	Меморіал
+historic	mine	uk	Копальня
+historic	monument	uk	Пам’ятник
+historic	museum	uk	Музей
+historic	ruins	uk	Руїни
+historic	tower	uk	Башта
+historic	wayside_cross	uk	Придорожній хрест
+historic	wayside_shrine	uk	Придорожній храм
+historic	wreck	uk	Місце катастрофи
+landuse	allotments	uk	Сади-городи
+landuse	basin	uk	Резервуар
+landuse	brownfield	uk	Очищена територія під забудову
+landuse	cemetery	uk	Кладовище
+landuse	commercial	uk	Торгівельно-офісна територія
+landuse	conservation	uk	Заповідник
+landuse	construction	uk	Будівництво
+landuse	farm	uk	Ферма
+landuse	farmland	uk	Ферма
+landuse	farmyard	uk	Фермерське подвір'я
+landuse	forest	uk	Ліс
+landuse	grass	uk	Трава
+landuse	greenfield	uk	Знесення під забудову
+landuse	industrial	uk	Промзона
+landuse	landfill	uk	Звалище
+landuse	meadow	uk	Луг
+landuse	military	uk	Військова зона
+landuse	mine	uk	Копальня
+landuse	mountain	uk	Гори
+landuse	nature_reserve	uk	Заповідник
+landuse	park	uk	Парк
+landuse	piste	uk	Лижня
+landuse	plaza	uk	Ринкова площа
+landuse	quarry	uk	Кар’єр
+landuse	railway	uk	Залізниця
+landuse	recreation_ground	uk	База відпочинку
+landuse	reservoir	uk	Водосховище
+landuse	residential	uk	Житловий квартал
+landuse	retail	uk	Роздрібна торгівля
+landuse	village_green	uk	Сільська галявина
+landuse	vineyard	uk	Виноградник
+landuse	wetland	uk	Болота
+landuse	wood	uk	Гай
+leisure	beach_resort	uk	Пляжний курорт
+leisure	common	uk	Громадська земля
+leisure	fishing	uk	Район риболовлі
+leisure	garden	uk	Сад
+leisure	golf_course	uk	Поле для гольфу
+leisure	ice_rink	uk	Ковзанка
+leisure	marina	uk	Гавань для екскурсійних суден
+leisure	miniature_golf	uk	Міні-гольф
+leisure	nature_reserve	uk	Заповідник
+leisure	park	uk	Парк
+leisure	pitch	uk	Спортмайданчик
+leisure	playground	uk	Дитячий майданчик
+leisure	recreation_ground	uk	База відпочинку
+leisure	slipway	uk	Сліп (спуск на воду)
+leisure	sports_centre	uk	Спортивний центр
+leisure	stadium	uk	Стадіон
+leisure	swimming_pool	uk	Басейн
+leisure	track	uk	Бігова доріжка
+leisure	water_park	uk	Аквапарку
+natural	bay	uk	Затока
+natural	beach	uk	Пляж
+natural	cape	uk	Мис
+natural	cave_entrance	uk	Входу в печеру
+natural	channel	uk	Канал
+natural	cliff	uk	Скеля
+natural	coastline	uk	Узбережжя
+natural	crater	uk	Кратер
+natural	feature	uk	Елемент
+natural	fell	uk	Вирубка
+natural	fjord	uk	Фіорд
+natural	geyser	uk	Гейзер
+natural	glacier	uk	Льодовик
+natural	heath	uk	Степ
+natural	hill	uk	Пагорб
+natural	island	uk	Острів
+natural	land	uk	Земля
+natural	marsh	uk	Болото
+natural	moor	uk	Торф
+natural	mud	uk	Грязюка
+natural	peak	uk	Пік
+natural	point	uk	Точка
+natural	reef	uk	Риф
+natural	ridge	uk	Гірський хребет
+natural	river	uk	Ріка
+natural	rock	uk	Скеля
+natural	scree	uk	Щебінь
+natural	scrub	uk	Чагарник
+natural	shoal	uk	Мілина
+natural	spring	uk	Джерело
+natural	strait	uk	Перешийок
+natural	tree	uk	Дерево
+natural	valley	uk	Долина
+natural	volcano	uk	Вулкан
+natural	water	uk	Вода
+natural	wetland	uk	Водно-болотні угіддя
+natural	wetlands	uk	Водно-болотні угіддя
+natural	wood	uk	Гай
+place	airport	uk	Аеропорт
+place	city	uk	Місто
+place	country	uk	Країна
+place	county	uk	Район
+place	farm	uk	Ферма
+place	hamlet	uk	Хутір
+place	house	uk	Будинок
+place	houses	uk	Дома
+place	island	uk	Острів
+place	islet	uk	Острівець
+place	locality	uk	Населений пункт
+place	moor	uk	Мур
+place	municipality	uk	Муніципалітет
+place	postcode	uk	Індекс
+place	region	uk	Район
+place	sea	uk	Море
+place	state	uk	Область/Штат
+place	subdivision	uk	Підрозділ
+place	suburb	uk	Передмістя
+place	town	uk	Місто
+place	unincorporated_area	uk	Неприєднанні території
+place	village	uk	Село
+railway	abandoned	uk	Кинуті колії
+railway	construction	uk	Будівництво колії
+railway	disused	uk	Покинута колія
+railway	disused_station	uk	Покинута залізнична станція
+railway	funicular	uk	Фунікулер
+railway	halt	uk	Зупинка поїзда
+railway	historic_station	uk	Історична залізнична станція
+railway	junction	uk	Переїзд
+railway	level_crossing	uk	Залізничний переїзд
+railway	light_rail	uk	Швидкісний трамвай
+railway	monorail	uk	Монорейка
+railway	narrow_gauge	uk	Вузькоколійка
+railway	platform	uk	Залізнична платформа
+railway	preserved	uk	Законсервовані колії
+railway	spur	uk	Залізнична гілка
+railway	station	uk	Залізнична станція
+railway	subway	uk	Станція метро
+railway	subway_entrance	uk	Вхід в метро
+railway	switch	uk	Стрілка
+railway	tram	uk	Трамвайні колії
+railway	tram_stop	uk	Трамвайна зупинка
+railway	yard	uk	Депо
+shop	alcohol	uk	Спритні напої
+shop	apparel	uk	Одяг
+shop	art	uk	Художній салон
+shop	bakery	uk	Хліб
+shop	beauty	uk	Салон краси
+shop	beverages	uk	Напої
+shop	bicycle	uk	Веломагазин
+shop	books	uk	Книгарня
+shop	butcher	uk	М’ясо
+shop	car	uk	Автомагазин
+shop	car_dealer	uk	Автосалон
+shop	car_parts	uk	Автозапчастини
+shop	carpet	uk	Килими
+shop	car_repair	uk	Авто майстерня
+shop	charity	uk	Соціальний магазин
+shop	chemist	uk	Хімтовари
+shop	clothes	uk	Одяг
+shop	computer	uk	Комп’ютерна крамниця
+shop	confectionery	uk	Кондитерська
+shop	convenience	uk	Мінімаркет
+shop	copyshop	uk	Послуги копіювання
+shop	cosmetics	uk	Магазин косметики
+shop	department_store	uk	Універмаг
+shop	discount	uk	Уцінені товари
+shop	doityourself	uk	Зроби сам
+shop	drugstore	uk	Аптека
+shop	dry_cleaning	uk	Хімчистка
+shop	electronics	uk	Магазин електроніки
+shop	estate_agent	uk	Агентство нерухомості
+shop	farm	uk	Сільпо
+shop	fashion	uk	Модний одяг
+shop	fish	uk	Риба
+shop	florist	uk	Квіти
+shop	food	uk	Продовольчі товари
+shop	funeral_directors	uk	Ритуальні послуги
+shop	furniture	uk	Меблі
+shop	gallery	uk	Галерея
+shop	garden_centre	uk	Сад та город
+shop	general	uk	Універсам
+shop	gift	uk	Подарунки
+shop	greengrocer	uk	Овочі, фрукти
+shop	grocery	uk	Бакалія
+shop	hairdresser	uk	Перукар
+shop	hardware	uk	Хозтовари
+shop	hifi	uk	Аудіо-техніка
+shop	insurance	uk	Страхування
+shop	jewelry	uk	Ювелірний магазин
+shop	kiosk	uk	Кіоск
+shop	laundry	uk	Пральня
+shop	mall	uk	Торгівельно-розважальний центр
+shop	market	uk	Магазин
+shop	mobile_phone	uk	Мобільні телефони
+shop	motorcycle	uk	Мотоцикли
+shop	music	uk	Музика
+shop	newsagent	uk	Газетний кіоск
+shop	optician	uk	Оптика
+shop	organic	uk	Продовольчий магазин
+shop	outdoor	uk	Виносна торгівля
+shop	pet	uk	Зоомагазин
+shop	photo	uk	Фотомагазин
+shop	salon	uk	Салон
+shop	shoes	uk	Взуття
+shop	shopping_centre	uk	Торговий центр
+shop	sports	uk	Спортивні товари
+shop	stationery	uk	Канцтовари
+shop	supermarket	uk	Супермаркет
+shop	toys	uk	Іграшки
+shop	travel_agency	uk	Туристична агенція
+shop	video	uk	Відео
+shop	wine	uk	Вино
+tourism	alpine_hut	uk	Гірський притулок
+tourism	artwork	uk	Образотворче мистецтво
+tourism	attraction	uk	Цікаві місця
+tourism	bed_and_breakfast	uk	Ліжко та сніданок
+tourism	cabin	uk	Кабіна
+tourism	camp_site	uk	Турбаза
+tourism	caravan_site	uk	Майданчик для трейлерів
+tourism	chalet	uk	Шале
+tourism	guest_house	uk	Гостьовий будинок
+tourism	hostel	uk	Хостел
+tourism	hotel	uk	Готель
+tourism	information	uk	Інформація
+tourism	lean_to	uk	Навіс
+tourism	motel	uk	Мотель
+tourism	museum	uk	Музей
+tourism	picnic_site	uk	Місце для пікніків
+tourism	theme_park	uk	Тематичний парк
+tourism	valley	uk	Долина
+tourism	viewpoint	uk	Оглядовий майданчик
+tourism	zoo	uk	Зоопарк
+waterway	boatyard	uk	Верф
+waterway	canal	uk	Канал
+waterway	connector	uk	З’єднання водних шляхів
+waterway	dam	uk	Дамба
+waterway	derelict_canal	uk	Покинутий канал
+waterway	ditch	uk	Рів
+waterway	dock	uk	Док
+waterway	drain	uk	Дренажний канал
+waterway	lock	uk	Шлюз
+waterway	lock_gate	uk	Шлюзові ворота
+waterway	mineral_spring	uk	Мінеральне джерело
+waterway	mooring	uk	Якірна стоянка
+waterway	rapids	uk	Пороги
+waterway	river	uk	Ріка
+waterway	riverbank	uk	Берег ріки
+waterway	stream	uk	Струмок
+waterway	wadi	uk	Пересохле русло
+waterway	waterfall	uk	Водоспад
+waterway	water_point	uk	Пункт водопостачання
+waterway	weir	uk	Ставок

@@ -1,0 +1,420 @@
+amenity	airport	nl	Luchthaven
+amenity	arts_centre	nl	Kunstcollectief
+amenity	atm	nl	Geldautomaat
+amenity	auditorium	nl	Auditorium
+amenity	bank	nl	Bank
+amenity	bar	nl	Bar
+amenity	bench	nl	Bankje
+amenity	bicycle_parking	nl	Fietsenstalling
+amenity	bicycle_rental	nl	Fietsverhuur
+amenity	brothel	nl	Bordeel
+amenity	bureau_de_change	nl	Wisselkantoor
+amenity	bus_station	nl	Busstation
+amenity	cafe	nl	Café
+amenity	car_rental	nl	Autoverhuur
+amenity	car_sharing	nl	Autodelen
+amenity	car_wash	nl	Autowasstraat
+amenity	casino	nl	Casino
+amenity	cinema	nl	Bioscoop
+amenity	clinic	nl	Kliniek
+amenity	club	nl	Club
+amenity	college	nl	Hogeschool
+amenity	community_centre	nl	Gemeenschapscentrum
+amenity	courthouse	nl	Rechtbank
+amenity	crematorium	nl	Crematorium
+amenity	dentist	nl	Tandarts
+amenity	doctors	nl	Dokter
+amenity	dormitory	nl	Studentenhuis
+amenity	drinking_water	nl	Drinkwater
+amenity	driving_school	nl	Rijschool
+amenity	embassy	nl	Ambassade
+amenity	emergency_phone	nl	Noodtelefoon
+amenity	fast_food	nl	Fast food
+amenity	ferry_terminal	nl	Veerterminal
+amenity	fire_hydrant	nl	Brandkraan
+amenity	fire_station	nl	Brandweer
+amenity	fountain	nl	Fontein
+amenity	fuel	nl	Brandstof
+amenity	grave_yard	nl	Begraafplaats
+amenity	gym	nl	Fitnesscentrum
+amenity	hall	nl	Hal
+amenity	health_centre	nl	Gezondheidscentrum
+amenity	hospital	nl	Ziekenhuis
+amenity	hotel	nl	Hotel
+amenity	hunting_stand	nl	Jachttoren
+amenity	ice_cream	nl	IJs
+amenity	kindergarten	nl	Kleuterschool
+amenity	library	nl	Bibliotheek
+amenity	market	nl	Markt
+amenity	marketplace	nl	Marktplein
+amenity	mountain_rescue	nl	Reddingsdienst
+amenity	nightclub	nl	Nachtclub
+amenity	nursery	nl	Peuterspeelzaal
+amenity	nursing_home	nl	Verpleeghuis
+amenity	office	nl	Kantoor
+amenity	park	nl	Park
+amenity	parking	nl	Parkeren
+amenity	pharmacy	nl	Apotheek
+amenity	place_of_worship	nl	Religieuze samenkomstplaats
+amenity	police	nl	Politie
+amenity	post_box	nl	Brievenbus
+amenity	post_office	nl	Postkantoor
+amenity	preschool	nl	Peuterspeelzaal of kleuterschool
+amenity	prison	nl	Gevangenis
+amenity	pub	nl	Café
+amenity	public_building	nl	Openbaar gebouw
+amenity	public_market	nl	Openbare markt
+amenity	reception_area	nl	Receptie
+amenity	recycling	nl	Recyclingpunt
+amenity	restaurant	nl	Restaurant
+amenity	retirement_home	nl	Bejaardenhuis
+amenity	sauna	nl	Sauna
+amenity	school	nl	School
+amenity	shelter	nl	Beschutting
+amenity	shop	nl	Winkel
+amenity	shopping	nl	Winkelen
+amenity	social_club	nl	Sociale club
+amenity	studio	nl	Eenkamerappartement
+amenity	supermarket	nl	Supermarkt
+amenity	taxi	nl	Taxi
+amenity	telephone	nl	Openbare telefoon
+amenity	theatre	nl	Theater
+amenity	toilets	nl	Toiletten
+amenity	townhall	nl	Gemeentehuis
+amenity	university	nl	Universiteit
+amenity	vending_machine	nl	Automaat
+amenity	veterinary	nl	Dierenarts
+amenity	village_hall	nl	Gemeentehuis
+amenity	waste_basket	nl	Prullenbak
+amenity	wifi	nl	Wifi-toegang
+amenity	youth_centre	nl	Jeugdcentrum
+boundary	administrative	nl	Administratieve grens
+building	apartments	nl	Appartementen
+building	block	nl	Bouwblok
+building	bunker	nl	Bunker
+building	chapel	nl	Kapel
+building	church	nl	Kerk
+building	city_hall	nl	Gemeentehuis
+building	commercial	nl	Commercieel gebouw
+building	dormitory	nl	Studentenhuis
+building	entrance	nl	Ingang
+building	faculty	nl	Faculteitsgebouw
+building	farm	nl	Agrarisch gebouw
+building	flats	nl	Flats
+building	garage	nl	Garage
+building	hall	nl	Hal
+building	hospital	nl	Ziekenhuis
+building	hotel	nl	Hotel
+building	house	nl	Huis
+building	industrial	nl	Industrieel gebouw
+building	office	nl	Kantoorgebouw
+building	public	nl	Openbaar gebouw
+building	residential	nl	Woningen
+building	retail	nl	Winkelpand
+building	school	nl	Schoolgebouw
+building	shop	nl	Winkel
+building	stadium	nl	Stadion
+building	store	nl	Winkel
+building	terrace	nl	Terras
+building	tower	nl	Toren
+building	train_station	nl	Spoorwegstation
+building	university	nl	Universiteitsgebouw
+highway	bridleway	nl	Ruiterpad
+highway	bus_guideway	nl	Vrijliggende busbaan
+highway	bus_stop	nl	Bushalte
+highway	byway	nl	Onverharde weg
+highway	construction	nl	Snelweg in aanbouw
+highway	cycleway	nl	Fietspad
+highway	distance_marker	nl	Afstandsmarkering
+highway	emergency_access_point	nl	Noodafslag
+highway	footway	nl	Voetpad
+highway	ford	nl	Voorde
+highway	gate	nl	Slagboom
+highway	living_street	nl	Woonerf
+highway	minor	nl	Lokale weg
+highway	motorway	nl	Autosnelweg
+highway	motorway_junction	nl	Autosnelwegknooppunt
+highway	motorway_link	nl	Autosnelwegverbindingsweg
+highway	path	nl	Pad
+highway	pedestrian	nl	Voetpad
+highway	platform	nl	Platform
+highway	primary	nl	Primaire weg
+highway	primary_link	nl	Primaire weg
+highway	raceway	nl	Racecircuit
+highway	residential	nl	Woonerf
+highway	road	nl	Weg
+highway	secondary	nl	Secundaire weg
+highway	secondary_link	nl	Secundaire weg
+highway	service	nl	Parallelweg
+highway	services	nl	Autosnelwegdienstverlening
+highway	steps	nl	Trap
+highway	stile	nl	Overstap
+highway	tertiary	nl	Tertiaire weg
+highway	track	nl	Pad
+highway	trail	nl	Pad
+highway	trunk	nl	Autosnelweg
+highway	trunk_link	nl	Autoweg
+highway	unclassified	nl	Ongeclassificeerde weg
+highway	unsurfaced	nl	Onverharde weg
+historic	archaeological_site	nl	Archeologische vindplaats
+historic	battlefield	nl	Slagveld
+historic	boundary_stone	nl	Grenspaal
+historic	building	nl	Gebouw
+historic	castle	nl	Kasteel
+historic	church	nl	Kerk
+historic	house	nl	Huis
+historic	icon	nl	Icoon
+historic	manor	nl	Landgoed
+historic	memorial	nl	Herdenkingsmonument
+historic	mine	nl	Mijn
+historic	monument	nl	Monoment
+historic	museum	nl	Museum
+historic	ruins	nl	Ruïne
+historic	tower	nl	Toren
+historic	wayside_cross	nl	Kruis langs de weg
+historic	wayside_shrine	nl	Altaar langs de weg
+historic	wreck	nl	Wrak
+landuse	allotments	nl	Volkstuinen
+landuse	basin	nl	Waterbekken
+landuse	brownfield	nl	Braakliggend terrein
+landuse	cemetery	nl	Begraafplaats
+landuse	commercial	nl	Commercieel gebied
+landuse	conservation	nl	Natuurbehoud
+landuse	construction	nl	In aanbouw
+landuse	farm	nl	Boerderij
+landuse	farmland	nl	Gecultiveerd areaal
+landuse	farmyard	nl	Boerenerf
+landuse	forest	nl	Bos
+landuse	grass	nl	Gras
+landuse	greenfield	nl	Stadsgroen
+landuse	industrial	nl	Industrieel gebied
+landuse	landfill	nl	Stortplaats
+landuse	meadow	nl	Weide
+landuse	military	nl	Miltair gebied
+landuse	mine	nl	Mijn
+landuse	mountain	nl	Berg
+landuse	nature_reserve	nl	Natuurreservaat
+landuse	park	nl	Park
+landuse	piste	nl	Piste
+landuse	plaza	nl	Plein
+landuse	quarry	nl	Steengroeve
+landuse	railway	nl	Spoor
+landuse	recreation_ground	nl	Recreatiegebied
+landuse	reservoir	nl	Reservoir
+landuse	residential	nl	Woonwijk
+landuse	retail	nl	Winkels
+landuse	village_green	nl	Stadsgroen
+landuse	vineyard	nl	Wijngaard
+landuse	wetland	nl	Moeras
+landuse	wood	nl	Hout
+leisure	beach_resort	nl	Badplaats
+leisure	common	nl	Meent
+leisure	fishing	nl	Visgrond
+leisure	garden	nl	Tuin
+leisure	golf_course	nl	Golfbaan
+leisure	ice_rink	nl	IJsbaan
+leisure	marina	nl	Jachthaven
+leisure	miniature_golf	nl	Midgetgolf
+leisure	nature_reserve	nl	Natuurreservaat
+leisure	park	nl	Park
+leisure	pitch	nl	Sportveld
+leisure	playground	nl	Speelplaats
+leisure	recreation_ground	nl	Recreatiegebied
+leisure	slipway	nl	Trailerhelling
+leisure	sports_centre	nl	Sportcentrum
+leisure	stadium	nl	Stadion
+leisure	swimming_pool	nl	Zwembad
+leisure	track	nl	Atletiekbaan
+leisure	water_park	nl	Waterspeelpark
+natural	bay	nl	Baai
+natural	beach	nl	Strand
+natural	cape	nl	Kaap
+natural	cave_entrance	nl	Grotingang
+natural	channel	nl	Kanaal
+natural	cliff	nl	Klif
+natural	coastline	nl	Kustlijn
+natural	crater	nl	Krater
+natural	feature	nl	Bezienswaardigheid
+natural	fell	nl	Fjell
+natural	fjord	nl	Fjord
+natural	geyser	nl	Geiser
+natural	glacier	nl	Gletsjer
+natural	heath	nl	Heide
+natural	hill	nl	Heuvel
+natural	island	nl	Eiland
+natural	land	nl	Land
+natural	marsh	nl	Moeras
+natural	moor	nl	Veen
+natural	mud	nl	Modder
+natural	peak	nl	Spits
+natural	point	nl	Punt
+natural	reef	nl	Rif
+natural	ridge	nl	Bergkam
+natural	river	nl	Rivier
+natural	rock	nl	Rotsen
+natural	scree	nl	Puin
+natural	scrub	nl	Struikgewas
+natural	shoal	nl	Zandbank
+natural	spring	nl	Bron
+natural	strait	nl	Zeeëngte
+natural	tree	nl	Boom
+natural	valley	nl	Vallei
+natural	volcano	nl	Vulkaan
+natural	water	nl	Water
+natural	wetland	nl	Moeras
+natural	wetlands	nl	Moeras
+natural	wood	nl	Bos
+place	airport	nl	Luchthaven
+place	city	nl	Stad
+place	country	nl	Land
+place	county	nl	District
+place	farm	nl	Boerderij
+place	hamlet	nl	Gehucht
+place	house	nl	Huis
+place	houses	nl	Huizen
+place	island	nl	Eiland
+place	islet	nl	Eilandje
+place	locality	nl	Plaats
+place	moor	nl	Veen
+place	municipality	nl	Gemeente
+place	postcode	nl	Postcode
+place	region	nl	Regio
+place	sea	nl	Zee
+place	state	nl	Staat
+place	subdivision	nl	Deelgebied
+place	suburb	nl	Buitenwijk
+place	town	nl	Stad
+place	unincorporated_area	nl	Gemeentevrij gebied
+place	village	nl	Dorp
+railway	abandoned	nl	Vervallen spoorweg
+railway	construction	nl	Spoor in aanbouw
+railway	disused	nl	Ongebruikte spoorweg
+railway	disused_station	nl	Ongebruikt spoorwegstation
+railway	funicular	nl	Kabelspoorweg
+railway	halt	nl	Treinhalte
+railway	historic_station	nl	Historisch spoorwegstation
+railway	junction	nl	Spoorwegkruising
+railway	level_crossing	nl	Spoorwegovergang
+railway	light_rail	nl	Lightrail
+railway	monorail	nl	Monorail
+railway	narrow_gauge	nl	Smalspoor
+railway	platform	nl	Spoorwegplatform
+railway	preserved	nl	Historisch spoor
+railway	spur	nl	Parallelspoorweg
+railway	station	nl	Spoorwegstation
+railway	subway	nl	Metrostation
+railway	subway_entrance	nl	Metroingang
+railway	switch	nl	Wissel
+railway	tram	nl	Tramrails
+railway	tram_stop	nl	Tramhalte
+railway	yard	nl	Rangeerterrein
+shop	alcohol	nl	Slijterij
+shop	apparel	nl	Kledingwinkel
+shop	art	nl	Kunstwinkel
+shop	bakery	nl	Bakkerij
+shop	beauty	nl	Schoonheidssalon
+shop	beverages	nl	Frisdrankverkooppunt
+shop	bicycle	nl	Fietsenwinkel
+shop	books	nl	Boekenwinkel
+shop	butcher	nl	Slagerij
+shop	car	nl	Automaterialenwinkel
+shop	car_dealer	nl	Autodealer
+shop	car_parts	nl	Autoonderdelen
+shop	carpet	nl	Tapijtzaak
+shop	car_repair	nl	Autogarage
+shop	charity	nl	Liefdadigheidswinkel
+shop	chemist	nl	Apotheek
+shop	clothes	nl	Kledingwinkel
+shop	computer	nl	Computerwinkel
+shop	confectionery	nl	Snoepverkooppunt
+shop	convenience	nl	Gemakswinkel
+shop	copyshop	nl	Copyshop
+shop	cosmetics	nl	Cosmeticawinkel
+shop	department_store	nl	Warenhuis
+shop	discount	nl	Discountwinkel
+shop	doityourself	nl	Doe-het-zelf-winkel
+shop	drugstore	nl	Drogisterij
+shop	dry_cleaning	nl	Stomerij
+shop	electronics	nl	Elektronicawinkel
+shop	estate_agent	nl	Makelaar
+shop	farm	nl	Boerenwinkel
+shop	fashion	nl	Kledingwinkel
+shop	fish	nl	Viswinkel
+shop	florist	nl	Bloemist
+shop	food	nl	Etenswarenwinkel
+shop	funeral_directors	nl	Uitvaartcentrum
+shop	furniture	nl	Meubelzaak
+shop	gallery	nl	Galerie
+shop	garden_centre	nl	Tuincentrum
+shop	general	nl	Algemene winkel
+shop	gift	nl	Cadeauwinkel
+shop	greengrocer	nl	Groenteboer
+shop	grocery	nl	Kruidenierswinkel
+shop	hairdresser	nl	Kapper
+shop	hardware	nl	Gereedschappenwinkel
+shop	hifi	nl	Hi-fi
+shop	insurance	nl	Verzekering
+shop	jewelry	nl	Juwelier
+shop	kiosk	nl	Kioskwinkel
+shop	laundry	nl	Wasserij
+shop	mall	nl	Overdekt winkelcentrum
+shop	market	nl	Markt
+shop	mobile_phone	nl	Mobiele telefoons
+shop	motorcycle	nl	Motorfietsenwinkel
+shop	music	nl	Muziekwinkel
+shop	newsagent	nl	Straatkiosk
+shop	optician	nl	Opticien
+shop	organic	nl	Organische winkel
+shop	outdoor	nl	Buitensportwinkel
+shop	pet	nl	Dierenwinkel
+shop	photo	nl	Fotowinkel
+shop	salon	nl	Schoonheidssalon
+shop	shoes	nl	Schoenenzaak
+shop	shopping_centre	nl	Winkelcentrum
+shop	sports	nl	Sportwinkel
+shop	stationery	nl	Kantoorartikelenwinkel
+shop	supermarket	nl	Supermarkt
+shop	toys	nl	Speelgoedwinkel
+shop	travel_agency	nl	Reisbureau
+shop	video	nl	Videotheek
+shop	wine	nl	Slijterij
+tourism	alpine_hut	nl	Berghut
+tourism	artwork	nl	Kunst
+tourism	attraction	nl	Attractie
+tourism	bed_and_breakfast	nl	Pension
+tourism	cabin	nl	Hut
+tourism	camp_site	nl	Kampeerterrein
+tourism	caravan_site	nl	Caravankampeerterrein
+tourism	chalet	nl	Vakantiehuisje
+tourism	guest_house	nl	Gastenverblijf
+tourism	hostel	nl	Jeugdherberg
+tourism	hotel	nl	Hotel
+tourism	information	nl	Gegevens
+tourism	lean_to	nl	Open schutplaats
+tourism	motel	nl	Motel
+tourism	museum	nl	Museum
+tourism	picnic_site	nl	Picknickplaats
+tourism	theme_park	nl	Pretpark
+tourism	valley	nl	Vallei
+tourism	viewpoint	nl	Bijzonder uitzicht
+tourism	zoo	nl	Dierentuin
+waterway	boatyard	nl	Scheepswerf
+waterway	canal	nl	Kanaal
+waterway	connector	nl	Waterverbinding
+waterway	dam	nl	Dam
+waterway	derelict_canal	nl	Onbeheerd kanaal
+waterway	ditch	nl	Sloot
+waterway	dock	nl	Dock
+waterway	drain	nl	Afvoerkanaal
+waterway	lock	nl	Schutsluis
+waterway	lock_gate	nl	Sluisdeur
+waterway	mineral_spring	nl	Bron
+waterway	mooring	nl	Aanlegplaats
+waterway	rapids	nl	Stroomversnelling
+waterway	river	nl	Rivier
+waterway	riverbank	nl	Rivierbedding
+waterway	stream	nl	Stroom
+waterway	wadi	nl	Beek
+waterway	waterfall	nl	Waterval
+waterway	water_point	nl	Waterpunt
+waterway	weir	nl	Stuwdam

@@ -1,0 +1,45 @@
+amenity	airport	te	విమానాశ్రయం
+amenity	bank	te	బ్యాంకు
+amenity	college	te	కళాశాల
+amenity	drinking_water	te	త్రాగు నీరు
+amenity	fuel	te	ఇంధనం
+amenity	hospital	te	ఆసుపత్రి
+amenity	library	te	గ్రంథాలయం
+amenity	office	te	కార్యాలయం
+amenity	park	te	పార్కు
+amenity	post_box	te	తపాలా పెట్టె
+amenity	prison	te	జైలు
+amenity	school	te	బడి
+amenity	toilets	te	మరుగుదొడ్లు
+amenity	university	te	విశ్వవిద్యాలయం
+building	church	te	చర్చి
+historic	church	te	చర్చి
+historic	ruins	te	శిథిలాలు
+landuse	forest	te	అడవి
+landuse	grass	te	పచ్చిక
+landuse	industrial	te	పారిశ్రామిక ప్రదేశం
+landuse	mountain	te	పర్వతం
+landuse	park	te	పార్కు
+leisure	garden	te	తోట
+leisure	park	te	పార్కు
+natural	cave_entrance	te	గుహ ద్వారం
+natural	hill	te	గుట్ట
+natural	mud	te	బురద
+natural	tree	te	చెట్టు
+place	airport	te	విమానాశ్రయం
+place	city	te	నగరం
+place	country	te	దేశం
+place	house	te	ఇల్లు
+place	houses	te	ఇళ్ళు
+place	island	te	దీవి
+place	sea	te	సముద్రం
+place	state	te	రాష్ట్రం
+place	town	te	పట్టణం
+place	village	te	గ్రామం
+shop	laundry	te	చాకలి
+shop	market	te	అంగడి
+tourism	hotel	te	హోటెల్
+tourism	information	te	సమాచారం
+tourism	zoo	te	జంతుప్రదర్శనశాల
+waterway	canal	te	కాలువ
+waterway	river	te	నది

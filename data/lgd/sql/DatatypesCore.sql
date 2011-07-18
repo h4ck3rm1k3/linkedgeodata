@@ -56,19 +56,3 @@ $$
     LANGUAGE 'plpgsql'
     IMMUTABLE
     RETURNS NULL ON NULL INPUT;
-
-
-/* Following query took 260 minutes on the server */
-SELECT
-	k,
-	SUM(1) AS count_total,
-	SUM(CASE WHEN LGD_TryParseInt(v) IS NOT NULL THEN 1 ELSE 0 END) AS count_int,
-	SUM(CASE WHEN LGD_TryParseFloat(v) IS NOT NULL THEN 1 ELSE 0 END) AS count_float,
-	SUM(CASE WHEN LGD_TryParseBoolean(v) IS NOT NULL THEN 1 ELSE 0 END) as count_boolean
-INTO
-	lgd_stats_tags_datatypes
-FROM
-	lgd_tags
-GROUP BY
-	k;
-
