@@ -326,7 +326,7 @@ public class NodeStatsDAO
 	 * @param shape
 	 * @return
 	 */
-	private String createGeographyFilter(String geographyColumn, RectangularShape shape)
+	public static String createGeographyFilter(String geographyColumn, RectangularShape shape)
 	{
 		if(shape == null)
 			return "";

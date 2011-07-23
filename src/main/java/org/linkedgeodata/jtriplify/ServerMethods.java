@@ -394,8 +394,10 @@ public class ServerMethods
 				entityTagConditions, offset, limit);
 
 		lgdRDFDAO.resolveNodes(result, nodeIds, false, null);
+		
+
 		// dao.getNodesWithinRect(result, rect, false, tagFilter, null, null);
-		// dao.getWaysWithinRect(result, rect, false, tagFilter, null, null);
+		lgdRDFDAO.getWaysWithinRect(result, shape, false, entityTagConditions, offset, limit);
 
 		return result;
 	}

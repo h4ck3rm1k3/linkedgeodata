@@ -20,6 +20,7 @@
  */
 package org.linkedgeodata.dao;
 
+import java.awt.geom.RectangularShape;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -27,11 +28,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections15.MultiMap;
 import org.apache.commons.collections15.multimap.MultiHashMap;
 import org.apache.log4j.Logger;
+import org.linkedgeodata.util.SQLUtil;
 import org.linkedgeodata.util.StringUtil;
 import org.openstreetmap.osmosis.core.domain.v0_6.OsmUser;
 import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
@@ -179,6 +182,52 @@ public class WayDAO
 	{
 		return LGDDAO.getTags(conn, "way", ids, tagFilterStr);
 	}
+	
+	
+	public List<Long> getWayIds(RectangularShape filter, Collection<String> tagConditions, Long offset, Long limit)
+			throws SQLException
+		{
+			// Limit and offset
+			String offsetPart = (offset == null)
+				? ""
+				: " OFFSET " + offset + " ";
+			
+			String limitPart = (limit == null)
+				? ""
+				: " LIMIT " + limit + " ";
+			
+		
+			// BBox part
+			String bbox = NodeStatsDAO.createGeographyFilter("w.linestring", filter);
+			
+			if(!bbox.isEmpty())
+				bbox = "AND " + bbox;
+			
+		
+			String query
+					= "SELECT n.id FROM "
+					+ NodeStatsDAO.createJoin("ways w", "w.id=wt0.w_id", "way_tags", "wt", "way_id", tagConditions) + " "
+					+ bbox
+					+ limitPart
+					+ offsetPart;
+		
+			/*
+			String query
+				= "SELECT node_id FROM node_tags "
+				+ "WHERE "
+				+ "LGD_ToTile(geom, " + zoom + ") IN (" + StringUtil.implode(",", tileIds) + ") "
+				+ bbox
+				+ strTagFilter;
+			*/
+			System.out.println(query);
+		
+			ResultSet rs = conn.createStatement().executeQuery(query);
+			List<Long> result = SQLUtil.list(rs, Long.class);
+			
+			return result;
+		}
+
+	
 	
 	/*
 	public MultiMap<Long, Tag> getWayTags(Collection<Long> wayIds, String tagFilterStr)

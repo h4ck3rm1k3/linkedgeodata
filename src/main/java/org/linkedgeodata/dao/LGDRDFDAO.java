@@ -237,7 +237,6 @@ public class LGDRDFDAO
 	}
 	
 	
-	
 	public int getNodesWithinRect(
 			Model model,
 			RectangularShape rect,
@@ -256,6 +255,21 @@ public class LGDRDFDAO
 			Model model,
 			RectangularShape rect,
 			boolean skipUntagged,
+			List<String> tagFilter,
+			Long offset,
+			Long limit)
+		throws SQLException
+	{
+		Collection<Long> ids = dao.getWayDAO().getWayIds(rect, tagFilter, offset, limit);
+		int result = resolveWays(model, ids, skipUntagged, null);
+		return result;
+	}
+
+	@Deprecated
+	public int getWaysWithinRect(
+			Model model,
+			RectangularShape rect,
+			boolean skipUntagged,
 			String tagFilter,
 			Long offset,
 			Integer limit)
@@ -265,7 +279,7 @@ public class LGDRDFDAO
 		int result = resolveWays(model, ids, skipUntagged, tagFilter);
 		return result;
 	}
-	
+
 
 	public int getNodesWithinRadius(
 			Model model,
