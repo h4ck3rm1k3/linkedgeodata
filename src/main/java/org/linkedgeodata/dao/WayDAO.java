@@ -205,7 +205,7 @@ public class WayDAO
 			
 		
 			String query
-					= "SELECT n.id FROM "
+					= "SELECT w.id FROM "
 					+ NodeStatsDAO.createJoin("ways w", "w.id=wt0.w_id", "way_tags", "wt", "way_id", tagConditions) + " "
 					+ bbox
 					+ limitPart
