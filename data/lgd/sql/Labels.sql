@@ -29,3 +29,5 @@ CREATE INDEX idx_lgd_tag_labels_lablan ON lgd_tag_labels(label, language);
 /* Index for searching by language */
 CREATE INDEX idx_lgd_tag_labels_lanlab ON lgd_tag_labels(language, label);
 
+/* Index for joins on (k, v) */
+CREATE INDEX idx_lgd_tag_labels_k_v ON lgd_tag_labels(v, k);

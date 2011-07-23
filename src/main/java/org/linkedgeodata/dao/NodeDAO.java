@@ -177,6 +177,9 @@ public class NodeDAO
 				lon = p.getX();
 			}
 
+			if(userId < 0) {
+				userId = 0;
+			}
 			
 			Node node = new Node(id, -1, (Date)null, new OsmUser(userId, "<not set>"), -1, lat, lon);
 			result.add(node);
