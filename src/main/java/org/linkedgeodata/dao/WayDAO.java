@@ -141,6 +141,10 @@ public class WayDAO
 			PGgeometry g = (PGgeometry)rs.getObject("linestring");
 
 			int userId = rs.getInt("user_id");
+		
+			if(userId < 0) {
+				userId = 0;
+			}
 			
 			Way way = new Way(id, -1, (Date)null, new OsmUser(userId, "<not set>"), -1);
 			result.add(way);
