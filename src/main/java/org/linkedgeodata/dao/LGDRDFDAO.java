@@ -55,8 +55,8 @@ class CannedQueries {
                 "Construct { ?s ?p ?o . } From <http://linkedgeodata.org/110406/dbpedia> From <http://linkedgeodata.org/110406/geonames> { ?s ?p ?o . Filter(?s = <" + filterStr + "> ) . }";
         //          "Construct { ?s ?p ?o . } { ?s ?p ?o . Filter(?s = <" + filterStr + "> ) . }";
 
-        // FIXME I know I should use a logger, but I'm sleepy
-        System.out.println(queryStr);
+
+        //System.out.println(queryStr);
         //Query query = new Query();
         //QueryFactory.parse(query, queryStr, null, Syntax.syntaxSPARQL);
 
@@ -65,6 +65,10 @@ class CannedQueries {
 
     public static Model execConstructBySubjects(SparqlEndpoint endpoint, Model model, Collection<Resource> subjects)
     {
+    	if(subjects.size() == 0) {
+    		return model;
+    	}
+    	
         return endpoint.executeConstruct(constructBySubjects(subjects), model);
     }
 }
