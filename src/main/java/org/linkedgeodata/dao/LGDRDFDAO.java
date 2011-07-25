@@ -55,6 +55,8 @@ class CannedQueries {
                 "Construct { ?s ?p ?o . } From <http://linkedgeodata.org/110406/dbpedia> From <http://linkedgeodata.org/110406/geonames> { ?s ?p ?o . Filter(?s = <" + filterStr + "> ) . }";
         //          "Construct { ?s ?p ?o . } { ?s ?p ?o . Filter(?s = <" + filterStr + "> ) . }";
 
+        // FIXME I know I should use a logger, but I'm sleepy
+        System.out.println(queryStr);
         //Query query = new Query();
         //QueryFactory.parse(query, queryStr, null, Syntax.syntaxSPARQL);
 
