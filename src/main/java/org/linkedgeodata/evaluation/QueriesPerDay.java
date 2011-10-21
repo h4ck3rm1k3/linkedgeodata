@@ -15,6 +15,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
+import org.aksw.commons.util.apache.ApacheLogEntry;
+import org.aksw.commons.util.apache.ApacheLogEntryIterator;
+import org.aksw.commons.util.strings.StringUtils;
+
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
@@ -25,7 +29,8 @@ public class QueriesPerDay
 	
 		BufferedReader reader = new BufferedReader(new InputStreamReader(
 				new FileInputStream(new File(
-						"/home/raven/Desktop/LGDSparql.txt"))));
+						"/home/raven/Documents/LinkedGeoData/QueryLogs/lgd-sparql.24-Nov-2010.22-Jun-2011.txt"))));
+		
 		
 		Multimap<Integer, String> queryMap = HashMultimap.create();
 		Map<Integer, Integer> map = new TreeMap<Integer, Integer>();
@@ -41,19 +46,41 @@ public class QueriesPerDay
 		
 		Map<String, Integer> dayToCount = new TreeMap<String, Integer>();
 		
-		while((line = reader.readLine()) != null) {
+		ApacheLogEntryIterator it = new ApacheLogEntryIterator(reader);
+		while(it.hasNext()) {
+			ApacheLogEntry entry = it.next();
+			
+			//String str = entry.getDate();
+			//String[] parts = line.split(" ", 2);
 
-			String[] parts = line.split("\t");
-
-			String str = parts[0];
-			String ip = parts[1];;
+			//String str = parts[0];
+			String ip = entry.getHostname();
 			
 			if(ip.contains("139.18.")) {
 				continue;
 			}
-			++lineCount;
 			
-			Date date = dateFormat.parse(str);
+
+			String uri = entry.getRequest().getUrl();
+			if (!(uri.contains("sparql") && uri.contains("query=") && uri
+					.contains("linkedgeodata"))) {
+				continue;
+			}
+			
+			if (!(uri.toLowerCase().contains("select"))) {
+				continue;
+			}
+
+/*
+			System.out.println(StringUtils.urlDecode(uri));
+			if(lineCount > 150) {
+				System.exit(0);
+			}
+*/
+			++lineCount;
+
+			
+			Date date = entry.getDate();//dateFormat.parse(str);
 			
 			Calendar cal = new GregorianCalendar();
 			cal.setTime(date);

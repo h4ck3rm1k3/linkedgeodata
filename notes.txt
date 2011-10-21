@@ -1,0 +1,72 @@
+Plan:
+
+Implement equals, joins and within. Nothing more for now.
+
+
+
+The goal is: Given a sparql query, transform it into a set of queries over
+possibly multiple sources.
+
+The subtasks are:
+For each triple pattern in the query, determine the set of sources that may provide solutions to it.
+
+
+Note that a source definion could be:
+
+Select c.id, b.mk, b.mv From tags a Join mappings b On (a.k = b.k AND a.v = b.v) Join id_to_uri c On(a.id = c.id).
+
+m1: mappings(k, v, mk, mv) := (b, b, f, f) 
+
+In this query, mappings is relation, that has two inputs and two outputs.
+The inputs must be bound, otherwise the query cannot be executed.
+
+(see 'Data Integration, Beschraenkte Quellen)
+
+However, mappings shoud also have the possibility to reverse map entries:
+
+m2: mappings(k, v, mk, mv) := (f, f, b, b) 
+
+
+
+
+The most important tranformation is described in this example:
+
+Select ?s ?p ?o From { ?s ?p ?o . Filter(bif:within(?o, "Rect(0 0 1 1)")) .}
+
+node(id, geom) -> tp(?x somepred ?y)
+
+In a first step, convert to predicates on the mapping:
+
+Select b.uri, b.literal From node a Join node_to_rdf() b On(a.id = b.in1 And a.geom = b.in2) Where Within(b.out2, "Rect(0 0 1 1)")));
+
+In a second step, push the filter on the mapping-relation down:
+
+Select b.uri, b.literal From node a Join node_to_rdf() b On(a.id = b.in1 And a.geom = b.in2) Where ST_DWithin(a.geom, "Rect(0 0 1 1)")));
+  
+
+So mappings need a way to push down the predicates:
+    Mapping.pushDown(PredicateExpression) -> NewPredicateExpression
+
+
+But what if the predicate involves the outputs of several mappings?
+
+Consider this example:
+
+Select x, y, z from node_to_rdf_1 a Join node_to_rdf_2 b Where Within(a.rdfGeom, b.rdfGeom) and a.uri = "lgdo:Pub" and b.uri = "lgdo:School";
+
+In this case the within has to be optimized by a global rule:
+Within(?s, rdfConst) -> Within(?s.getUnderlying, toRdb(rdfConst))
+Within(rdfConst, ?s) -> Within(toRdb(rdfConst), ?s.getUnderlying)
+Within(?x, ?y) -> ST_DWithin(?x.getUnderlying, ?y.getUnderlying)
+
+Equals(?x, ?y) -> Eq(?s.getUnterlying, ?s.getUnderlying)
+
+
+
+So a simple mapping is really just a function on a relation, that takes some of
+its columns as inputs, and maps the rows to some values.
+
+
+
+
+

@@ -16,7 +16,7 @@ public class SparqlReplay
 
 		String line;
 		while((line = reader.readLine()) != null) {
-			System.out.println(StringUtils.decodeUtf8(line));
+			System.out.println(StringUtils.urlDecode(line));
 		}
 		
 	}

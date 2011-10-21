@@ -96,7 +96,7 @@ public class QueryLog
 
 		MultiMap<String, String> queryMap = URIUtil.getQueryMap(values);
 
-		String queryString = StringUtils.decodeUtf8(queryMap.get("query").iterator().next());
+		String queryString = StringUtils.urlDecode(queryMap.get("query").iterator().next());
 		
 		return queryString;
 	}
@@ -124,7 +124,7 @@ public class QueryLog
 		
 		BufferedReader reader = new BufferedReader(new InputStreamReader(
 				new FileInputStream(new File(
-						"/home/raven/Desktop/LGDSparql.txt"))));
+						"/home/raven/Documents/LinkedGeoData/QueryLogs/lgd-sparql.24-Nov-2010.22-Jun-2011.txt"))));
 		
 		
 
@@ -133,10 +133,10 @@ public class QueryLog
 			
 
 
-			String[] parts = line.split("\t");
+			String[] parts = line.split(" ", 2);
 
-			String ip = parts[1];
-			String url = parts[2];
+			String ip = parts[0];
+			//String url = parts[2];
 			
 			
 			/**
@@ -332,7 +332,7 @@ public class QueryLog
 					queryToCount.put(query, Pair.create(opQuery, 1));
 					
 					
-					out.println(StringUtils.encodeUtf8(query.toString()));
+					out.println(StringUtils.urlDecode(query.toString()));
 				}
 
 				/*
@@ -408,7 +408,7 @@ public class QueryLog
 			String uri = entry.getRequest().getUrl();
 			// *
 			try {
-				StringUtils.decodeUtf8(uri);
+				StringUtils.urlDecode(uri);
 			} catch (Exception e) {
 				e.printStackTrace();
 				continue;
@@ -449,7 +449,7 @@ public class QueryLog
 					.contains("linkedgeodata")))
 				continue;
 
-			System.out.println(StringUtils.decodeUtf8(uri));
+			System.out.println(StringUtils.urlDecode(uri));
 
 			// String uri = parts[]
 		}
