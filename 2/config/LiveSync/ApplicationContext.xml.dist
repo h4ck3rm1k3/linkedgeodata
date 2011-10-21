@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	
+	<!-- The path an css file for formatting the HTML output of JTriplify -->
+	<bean id="triplifyCSSFile" class="java.lang.String">
+  		<constructor-arg type="java.lang.String" value="http://localhost/LinkedGeoData/triplify.css"/>
+	</bean>	
+	
+	<bean id="nodeSerializer" class="org.linkedgeodata.osm.osmosis.plugins.VirtuosoOseNodeSerializer"/>
+	
+	
+</beans>

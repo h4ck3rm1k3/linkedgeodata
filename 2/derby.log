@@ -1,0 +1,6 @@
+----------------------------------------------------------------
+2010-09-14 21:31:28.499 GMT:
+ Booting Derby version The Apache Software Foundation - Apache Derby - 10.6.1.0 - (938214): instance a816c00e-012b-1228-d7de-000002475998 
+on database directory /home/raven/Projects/Current/Eclipse/GoogleCodeLinkedGeoData/derbyDB   with class loader sun.misc.Launcher$AppClassLoader@1f12c4e
+
+Database Class Loader started - derby.database.classpath=''
