@@ -1,0 +1,271 @@
+--
+-- PostgreSQL database dump
+--
+
+SET statement_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = off;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET escape_string_warning = off;
+
+SET search_path = public, pg_catalog;
+
+--
+-- Data for Name: deleteme; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY deleteme (key, property, languagetag) FROM stdin;
+alt_name:de	http://linkedgeodata.org/ontology/alt_name	de
+tourism:it	http://linkedgeodata.org/ontology/tourism	it
+community:fr	http://linkedgeodata.org/ontology/community	fr
+denomination:ru	http://linkedgeodata.org/ontology/denomination	ru
+surface:de	http://linkedgeodata.org/ontology/surface	de
+opening_hours:de	http://linkedgeodata.org/ontology/opening_hours	de
+note:cz	http://linkedgeodata.org/ontology/note	cz
+wikiepdia:de	http://linkedgeodata.org/ontology/wikiepdia	de
+species:en	http://linkedgeodata.org/ontology/species	en
+addr:street	http://linkedgeodata.org/ontology/hasStreet	
+doctors:de	http://linkedgeodata.org/ontology/doctors	de
+addr:city	http://linkedgeodata.org/ontology/hasCity	
+operator:en	http://linkedgeodata.org/ontology/operator	en
+alternate_name:de	http://linkedgeodata.org/ontology/alternate_name	de
+source:opening_hours:en	http://linkedgeodata.org/ontology/source%3Aopening_hours	en
+description:en	http://linkedgeodata.org/ontology/description	en
+cycleway_name:en	http://linkedgeodata.org/ontology/cycleway_name	en
+operator:fr	http://linkedgeodata.org/ontology/operator	fr
+building:type:de	http://linkedgeodata.org/ontology/building%3Atype	de
+nat_name:fr	http://linkedgeodata.org/ontology/nat_name	fr
+type:fr	http://linkedgeodata.org/ontology/type	fr
+description:opening_hours:de	http://linkedgeodata.org/ontology/description%3Aopening_hours	de
+nat_name:en	http://linkedgeodata.org/ontology/nat_name	en
+\rname:en	http://linkedgeodata.org/ontology/%0Dname	en
+FIXME:de	http://linkedgeodata.org/ontology/FIXME	de
+old_name:cz	http://linkedgeodata.org/ontology/old_name	cz
+addr:city:it	http://linkedgeodata.org/ontology/addr%3Acity	it
+blind:description:en	http://linkedgeodata.org/ontology/blind%3Adescription	en
+leisure:de	http://linkedgeodata.org/ontology/leisure	de
+addr:country	http://linkedgeodata.org/ontology/hasCountry	
+old_tag:name:fr	http://linkedgeodata.org/ontology/old_tag%3Aname	fr
+mtb:description:cz	http://linkedgeodata.org/ontology/mtb%3Adescription	cz
+is_in:city:it	http://linkedgeodata.org/ontology/is_in%3Acity	it
+addr:postcode	http://linkedgeodata.org/ontology/hasPostalCode	
+item:de	http://linkedgeodata.org/ontology/item	de
+prefecture:en	http://linkedgeodata.org/ontology/prefecture	en
+official_name:fr	http://linkedgeodata.org/ontology/official_name	fr
+loc_name:fr	http://linkedgeodata.org/ontology/loc_name	fr
+canvec:entity:fr	http://linkedgeodata.org/ontology/canvec%3Aentity	fr
+place_name:fr	http://linkedgeodata.org/ontology/place_name	fr
+source:alt_name:en	http://linkedgeodata.org/ontology/source%3Aalt_name	en
+url:de	http://linkedgeodata.org/ontology/url	de
+address:province:fr	http://linkedgeodata.org/ontology/address%3Aprovince	fr
+source:en	http://linkedgeodata.org/ontology/source	en
+comment:de	http://linkedgeodata.org/ontology/comment	de
+naeme:en	http://linkedgeodata.org/ontology/naeme	en
+mtb:description:it	http://linkedgeodata.org/ontology/mtb%3Adescription	it
+name:en\rname:en	http://linkedgeodata.org/ontology/name%3Aen%0Dname	en
+description:DE	http://linkedgeodata.org/ontology/description	de
+symbol:de	http://linkedgeodata.org/ontology/symbol	de
+addr:city:en	http://linkedgeodata.org/ontology/addr%3Acity	en
+school:FR	http://linkedgeodata.org/ontology/school	fr
+alternate_name:en	http://linkedgeodata.org/ontology/alternate_name	en
+ref:fr	http://linkedgeodata.org/ontology/ref	fr
+old_name:de	http://linkedgeodata.org/ontology/old_name	de
+type:it	http://linkedgeodata.org/ontology/type	it
+name_left:en	http://linkedgeodata.org/ontology/name_left	en
+right:country:ru	http://linkedgeodata.org/ontology/right%3Acountry	ru
+official_name:en	http://linkedgeodata.org/ontology/official_name	en
+url:ru	http://linkedgeodata.org/ontology/url	ru
+is_name:en	http://linkedgeodata.org/ontology/is_name	en
+addr:state	http://linkedgeodata.org/ontology/hasState	
+addr:street:ru	http://linkedgeodata.org/ontology/addr%3Astreet	ru
+music_type:en	http://linkedgeodata.org/ontology/music_type	en
+route:name3:fr	http://linkedgeodata.org/ontology/route%3Aname3	fr
+long_name:ru	http://linkedgeodata.org/ontology/long_name	ru
+name	http://www.w3.org/2000/01/rdf-schema#label	
+addr:province:fr	http://linkedgeodata.org/ontology/addr%3Aprovince	fr
+fixme:DE	http://linkedgeodata.org/ontology/fixme	de
+namn:en	http://linkedgeodata.org/ontology/namn	en
+wikipediaq:de	http://linkedgeodata.org/ontology/wikipediaq	de
+school:de	http://linkedgeodata.org/ontology/school	de
+artist_name:en	http://linkedgeodata.org/ontology/artist_name	en
+comment:fr	http://linkedgeodata.org/ontology/comment	fr
+is_in:ru	http://linkedgeodata.org/ontology/is_in	ru
+landmark:de	http://linkedgeodata.org/ontology/landmark	de
+note:name:en	http://linkedgeodata.org/ontology/note%3Aname	en
+note:fr	http://linkedgeodata.org/ontology/note	fr
+towards:it	http://linkedgeodata.org/ontology/towards	it
+anme:de	http://linkedgeodata.org/ontology/anme	de
+denomination:it	http://linkedgeodata.org/ontology/denomination	it
+native_name:de	http://linkedgeodata.org/ontology/native_name	de
+native_name:en	http://linkedgeodata.org/ontology/native_name	en
+left:country:en	http://linkedgeodata.org/ontology/left%3Acountry	en
+kadastr:ru	http://linkedgeodata.org/ontology/kadastr	ru
+description:fr	http://linkedgeodata.org/ontology/description	fr
+source:name:fr	http://linkedgeodata.org/ontology/source%3Aname	fr
+source:DE	http://linkedgeodata.org/ontology/source	de
+fixme:de	http://linkedgeodata.org/ontology/fixme	de
+place_name:ru	http://linkedgeodata.org/ontology/place_name	ru
+old_name:en	http://linkedgeodata.org/ontology/old_name	en
+service:fr	http://linkedgeodata.org/ontology/service	fr
+wikpedia:jp	http://linkedgeodata.org/ontology/wikpedia	jp
+note:ru	http://linkedgeodata.org/ontology/note	ru
+historic_name:de	http://linkedgeodata.org/ontology/historic_name	de
+highway:plan.at:fr	http://linkedgeodata.org/ontology/highway%3Aplan.at	fr
+note:DE	http://linkedgeodata.org/ontology/note	de
+desciption:fr	http://linkedgeodata.org/ontology/desciption	fr
+tunnel_name:en	http://linkedgeodata.org/ontology/tunnel_name	en
+openGeoDB:name:de	http://linkedgeodata.org/ontology/openGeoDB%3Aname	de
+short_name:it	http://linkedgeodata.org/ontology/short_name	it
+description:ru	http://linkedgeodata.org/ontology/description	ru
+route:name2:fr	http://linkedgeodata.org/ontology/route%3Aname2	fr
+denomination:de	http://linkedgeodata.org/ontology/denomination	de
+nam:en	http://linkedgeodata.org/ontology/nam	en
+name:de\rname:en	http://linkedgeodata.org/ontology/name%3Ade%0Dname	en
+wheelchair:description:de	http://linkedgeodata.org/ontology/wheelchair%3Adescription	de
+place:fr	http://linkedgeodata.org/ontology/place	fr
+shop:en	http://linkedgeodata.org/ontology/shop	en
+wikipedia:cz	http://linkedgeodata.org/ontology/wikipedia	cz
+deaf:description:en	http://linkedgeodata.org/ontology/deaf%3Adescription	en
+shop:fr	http://linkedgeodata.org/ontology/shop	fr
+is_in:town:en	http://linkedgeodata.org/ontology/is_in%3Atown	en
+\N	http://linkedgeodata.org/property/	\N
+building:de	http://linkedgeodata.org/ontology/building	de
+neme:en	http://linkedgeodata.org/ontology/neme	en
+community:en	http://linkedgeodata.org/ontology/community	en
+operator:de	http://linkedgeodata.org/ontology/operator	de
+ืname:en	http://linkedgeodata.org/ontology/%E0%B8%B7name	en
+is_in:city:de	http://linkedgeodata.org/ontology/is_in%3Acity	de
+loc_name:de	http://linkedgeodata.org/ontology/loc_name	de
+name_sort:en	http://linkedgeodata.org/ontology/name_sort	en
+place_name:en	http://linkedgeodata.org/ontology/place_name	en
+cuisine:de	http://linkedgeodata.org/ontology/cuisine	de
+is_in:county:en	http://linkedgeodata.org/ontology/is_in%3Acounty	en
+tourism:en	http://linkedgeodata.org/ontology/tourism	en
+is_in:de	http://linkedgeodata.org/ontology/is_in	de
+school:fr	http://linkedgeodata.org/ontology/school	fr
+addr:country:fr	http://linkedgeodata.org/ontology/addr%3Acountry	fr
+description:it	http://linkedgeodata.org/ontology/description	it
+species:de	http://linkedgeodata.org/ontology/species	de
+opening_hours:note:de	http://linkedgeodata.org/ontology/opening_hours%3Anote	de
+type:en	http://linkedgeodata.org/ontology/type	en
+railway:de	http://linkedgeodata.org/ontology/railway	de
+website:en	http://linkedgeodata.org/ontology/website	en
+loc_name:en	http://linkedgeodata.org/ontology/loc_name	en
+cuisine:fr	http://linkedgeodata.org/ontology/cuisine	fr
+geobase:routeName1:en	http://linkedgeodata.org/ontology/geobase%3ArouteName1	en
+wikipedia:related:en	http://linkedgeodata.org/ontology/wikipedia%3Arelated	en
+note:en	http://linkedgeodata.org/ontology/note	en
+note_1:en	http://linkedgeodata.org/ontology/note_1	en
+operator:ru	http://linkedgeodata.org/ontology/operator	ru
+addr:streetnumber	http://linkedgeodata.org/ontology/hasStreetNumber	
+animals:en	http://linkedgeodata.org/ontology/animals	en
+native_name:fr	http://linkedgeodata.org/ontology/native_name	fr
+official_name:it	http://linkedgeodata.org/ontology/official_name	it
+note:it	http://linkedgeodata.org/ontology/note	it
+Wikipedia:en	http://linkedgeodata.org/ontology/Wikipedia	en
+cuisine:en	http://linkedgeodata.org/ontology/cuisine	en
+source:de	http://linkedgeodata.org/ontology/source	de
+doctors:en	http://linkedgeodata.org/ontology/doctors	en
+prefecture:de	http://linkedgeodata.org/ontology/prefecture	de
+symbol:en	http://linkedgeodata.org/ontology/symbol	en
+official_name:de	http://linkedgeodata.org/ontology/official_name	de
+index_name:ru	http://linkedgeodata.org/ontology/index_name	ru
+url:en	http://linkedgeodata.org/ontology/url	en
+alt_name:en	http://linkedgeodata.org/ontology/alt_name	en
+old_name:ru	http://linkedgeodata.org/ontology/old_name	ru
+whitewater:rapid_name:de	http://linkedgeodata.org/ontology/whitewater%3Arapid_name	de
+mane:en	http://linkedgeodata.org/ontology/mane	en
+name:el:en	http://linkedgeodata.org/ontology/name%3Ael	en
+@@geoRSSLine	http://www.georss.org/georss/line	
+addr:city:fr	http://linkedgeodata.org/ontology/addr%3Acity	fr
+ref:de	http://linkedgeodata.org/ontology/ref	de
+nam\rname:en	http://linkedgeodata.org/ontology/nam%0Dname	en
+nane:en	http://linkedgeodata.org/ontology/nane	en
+website:de	http://linkedgeodata.org/ontology/website	de
+shop:it	http://linkedgeodata.org/ontology/shop	it
+nbame:en	http://linkedgeodata.org/ontology/nbame	en
+wikipedia:it	http://linkedgeodata.org/ontology/wikipedia	it
+wikipedia:en	http://linkedgeodata.org/ontology/wikipedia	en
+is_in:fr	http://linkedgeodata.org/ontology/is_in	fr
+description:de	http://linkedgeodata.org/ontology/description	de
+note:de	http://linkedgeodata.org/ontology/note	de
+towards:de	http://linkedgeodata.org/ontology/towards	de
+opening_hours:allpeople:note:en	http://linkedgeodata.org/ontology/opening_hours%3Aallpeople%3Anote	en
+addr:ru	http://linkedgeodata.org/ontology/addr	ru
+addr:street:en	http://linkedgeodata.org/ontology/addr%3Astreet	en
+shop:de	http://linkedgeodata.org/ontology/shop	de
+structure:name:en	http://linkedgeodata.org/ontology/structure%3Aname	en
+is_in:state:en	http://linkedgeodata.org/ontology/is_in%3Astate	en
+shop:ru	http://linkedgeodata.org/ontology/shop	ru
+source:name:en	http://linkedgeodata.org/ontology/source%3Aname	en
+@@geoRSSPolygon	http://www.georss.org/georss/polygon	
+FIXME:en	http://linkedgeodata.org/ontology/FIXME	en
+official_name:ru	http://linkedgeodata.org/ontology/official_name	ru
+mtb:description:de	http://linkedgeodata.org/ontology/mtb%3Adescription	de
+vineyard:description:it	http://linkedgeodata.org/ontology/vineyard%3Adescription	it
+info:de	http://linkedgeodata.org/ontology/info	de
+alt_name:ru	http://linkedgeodata.org/ontology/alt_name	ru
+type:de	http://linkedgeodata.org/ontology/type	de
+denomination:en	http://linkedgeodata.org/ontology/denomination	en
+wikipedia:de	http://linkedgeodata.org/ontology/wikipedia	de
+mtb:description:en	http://linkedgeodata.org/ontology/mtb%3Adescription	en
+hospital_type:de	http://linkedgeodata.org/ontology/hospital_type	de
+amenity:de	http://linkedgeodata.org/ontology/amenity	de
+amenity:fr	http://linkedgeodata.org/ontology/amenity	fr
+sport:de	http://linkedgeodata.org/ontology/sport	de
+nat_name:de	http://linkedgeodata.org/ontology/nat_name	de
+alt_name:it	http://linkedgeodata.org/ontology/alt_name	it
+descripten:de	http://linkedgeodata.org/ontology/descripten	de
+addr:housenumber	http://linkedgeodata.org/ontology/hasHouseNumber	
+castle_type:de	http://linkedgeodata.org/ontology/castle_type	de
+deaf:description:de	http://linkedgeodata.org/ontology/deaf%3Adescription	de
+source:jp	http://linkedgeodata.org/ontology/source	jp
+ｎame:en	http://linkedgeodata.org/ontology/%EF%BD%8Eame	en
+name\rname:en	http://linkedgeodata.org/ontology/name%0Dname	en
+loc_name:ru	http://linkedgeodata.org/ontology/loc_name	ru
+transliteration:en	http://linkedgeodata.org/ontology/transliteration	en
+animal:en	http://linkedgeodata.org/ontology/animal	en
+is_in:en	http://linkedgeodata.org/ontology/is_in	en
+wikipedia:fr	http://linkedgeodata.org/ontology/wikipedia	fr
+taxon:en	http://linkedgeodata.org/ontology/taxon	en
+ref:it	http://linkedgeodata.org/ontology/ref	it
+lat_name:en	http://linkedgeodata.org/ontology/lat_name	en
+route:name1:fr	http://linkedgeodata.org/ontology/route%3Aname1	fr
+add:street:fr	http://linkedgeodata.org/ontology/add%3Astreet	fr
+ref:en	http://linkedgeodata.org/ontology/ref	en
+alt_name:fr	http://linkedgeodata.org/ontology/alt_name	fr
+rooftype:de	http://linkedgeodata.org/ontology/rooftype	de
+sign:de	http://linkedgeodata.org/ontology/sign	de
+geobase:routeName1:fr	http://linkedgeodata.org/ontology/geobase%3ArouteName1	fr
+old_name:fr	http://linkedgeodata.org/ontology/old_name	fr
+addr:street:fr	http://linkedgeodata.org/ontology/addr%3Astreet	fr
+nam:ru	http://linkedgeodata.org/ontology/nam	ru
+blind:description:de	http://linkedgeodata.org/ontology/blind%3Adescription	de
+dentist:de	http://linkedgeodata.org/ontology/dentist	de
+addr:conscriptionnumber	http://linkedgeodata.org/ontology/hasConscriptionNumber	
+bridge_name:en	http://linkedgeodata.org/ontology/bridge_name	en
+name:en\r:en	http://linkedgeodata.org/ontology/name%3Aen%0D	en
+is_in:it	http://linkedgeodata.org/ontology/is_in	it
+opening_hours:en	http://linkedgeodata.org/ontology/opening_hours	en
+wikipedia:ru	http://linkedgeodata.org/ontology/wikipedia	ru
+crossing_ref:fr	http://linkedgeodata.org/ontology/crossing_ref	fr
+blind.description:de	http://linkedgeodata.org/ontology/blind.description	de
+route:name4:fr	http://linkedgeodata.org/ontology/route%3Aname4	fr
+Note1:DE	http://linkedgeodata.org/ontology/Note1	de
+inscription:en	http://linkedgeodata.org/ontology/inscription	en
+name_right:en	http://linkedgeodata.org/ontology/name_right	en
+FIXME:DE	http://linkedgeodata.org/ontology/FIXME	de
+mine:de	http://linkedgeodata.org/ontology/mine	de
+old_name:it	http://linkedgeodata.org/ontology/old_name	it
+right:country:en	http://linkedgeodata.org/ontology/right%3Acountry	en
+sport:en	http://linkedgeodata.org/ontology/sport	en
+comment:en	http://linkedgeodata.org/ontology/comment	en
+name_full_nd:en	http://linkedgeodata.org/ontology/name_full_nd	en
+\.
+
+
+--
+-- PostgreSQL database dump complete
+--
+
