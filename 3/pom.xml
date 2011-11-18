@@ -67,7 +67,7 @@
 		<dependency>
 			<groupId>org.aksw.commons</groupId>
 			<artifactId>sparql-scala</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>0.2-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
@@ -79,13 +79,13 @@
 		<dependency>
 			<groupId>org.aksw.commons</groupId>
 			<artifactId>model</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>0.2-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.aksw.commons</groupId>
 			<artifactId>collections</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>0.2-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
 	<!--
