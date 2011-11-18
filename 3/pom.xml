@@ -43,20 +43,16 @@
 	<repositories>
 
 
-		<!-- Repository for hibernate -->
 
 		<repository>
-			<id>maven.aksw.org</id>
-			<name>University Leipzig, AKSW Maven2 Repository</name>
+			<id>maven.aksw.org.internal</id>
+			<name>University Leipzig, AKSW Maven Internal Repository</name>
 			<url>http://maven.aksw.org/repository/internal</url>
-			<releases>
-				<updatePolicy>daily</updatePolicy>
-				<checksumPolicy>ignore</checksumPolicy>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
-			</snapshots>
+		</repository>
+		<repository>
+			<id>maven.aksw.org.snapshot</id>
+			<name>University Leipzig, AKSW Maven Snapshot Repository</name>
+			<url>http://maven.aksw.org/repository/snapshots</url>
 		</repository>
 	</repositories>
 
