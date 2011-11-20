@@ -11,6 +11,7 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -36,6 +37,7 @@ import org.postgresql.ds.PGSimpleDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Joiner;
 import com.hp.hpl.jena.datatypes.RDFDatatype;
 import com.hp.hpl.jena.datatypes.TypeMapper;
 import com.hp.hpl.jena.graph.Node;
@@ -219,6 +221,8 @@ public class LgdDumper {
 
 		Connection conn = dataSource.getConnection();
 
+		conn.setAutoCommit(false);
+		
 		OutputStream out = System.out;
 		Sink<Triple> sink = new SinkTripleOutput(out);
 		
@@ -229,7 +233,9 @@ public class LgdDumper {
 		
 		LgdDumper dumper = new LgdDumper();
 		
+		dumper.dumpNodes(conn, sink);
 		
+		/*
 		dumper.dumpTagsDatatype(conn, "boolean", null, sink);
 		dumper.dumpTagsDatatype(conn, "int", null, sink);
 		dumper.dumpTagsDatatype(conn, "float", null, sink);
@@ -239,7 +245,7 @@ public class LgdDumper {
 		
 		dumper.dumpResourceTagsPrefixed(conn, "lgd_tags_resource_prefix", null, postProcessorMap, sink);
 		dumper.dumpResourceTags(conn, "lgd_tags_property", null, sink);
-		
+		*/
 
 		conn.close();
 	}
@@ -334,7 +340,27 @@ public class LgdDumper {
 		
 		while (rs.next()) {
 			Node subject = getResource(rs.getString("osm_entity_type"), rs.getLong("osm_entity_id"));
-			Node predicate = Node.createURI("http://ex.org/TODO");
+			
+			// Auto generate properties for now
+			String p = rs.getString("k");
+			String[] parts = p.split(":");
+
+			int last = parts.length - 1;
+
+			for(int i = 0; i < last; ++i) {
+				parts[i] = StringUtils.toCamelCase(parts[i], false);
+			}
+			
+			parts[last] = "boolean".equals(suffix)
+					? "is" + StringUtils.toCamelCase(parts[last], true)
+					: StringUtils.toCamelCase(p, false);
+
+					
+			p = "http://linkedgeodata.org/ontology/" + Joiner.on('/').join(parts);
+				
+			
+			
+			Node predicate = Node.createURI(p);
 			Node value = ResourceFactory.createTypedLiteral(rs.getObject("v")).asNode();
 			
 			sink.send(new Triple(subject, predicate, value));
@@ -438,8 +464,11 @@ public class LgdDumper {
 	
 	
 	public void dumpNodes(Connection conn, Sink<Triple> sink) throws Exception {
-		ResultSet rs = conn
-				.createStatement()
+		Statement stmt = conn.createStatement();
+		
+		stmt.setFetchSize(50000);
+		
+		ResultSet rs = stmt
 				.executeQuery(
 						"SELECT id, version, user_id, tstamp, changeset_id, ST_AsText(geom) geom FROM nodes");
 
