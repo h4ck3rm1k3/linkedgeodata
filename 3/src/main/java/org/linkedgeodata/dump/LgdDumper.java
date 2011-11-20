@@ -255,7 +255,7 @@ public class LgdDumper {
 
 	private TypeMapper tm = TypeMapper.getInstance();
 	private RDFDatatype virtRdf = tm
-			.getSafeTypeByName("http://www.openlinksw.com/schemas/virtrdf#");
+			.getSafeTypeByName("http://www.openlinksw.com/schemas/virtrdf#Geometry");
 
 	//private Sink<Triple> sink;
 	
@@ -477,12 +477,13 @@ public class LgdDumper {
 
 			Node subject = vocab.createNode(id);
 			Node version = NodeValue.makeInteger(rs.getInt("version")).asNode();
-			Node user = NodeValue.makeInteger(rs.getInt("user_id")).asNode();
+			Node user = vocab.createContributor(rs.getInt("user_id")); //NodeValue.makeInteger(rs.getInt("user_id")).asNode();
 			Date date = rs.getDate("tstamp");
 			cal.setTime(date);
 			Node tstamp = NodeValue.makeDateTime(cal).asNode();
-			Node changeset = NodeValue.makeDecimal(rs.getInt("changeset_id")).asNode();
+			Node changeset = vocab.createChangeset(rs.getInt("changeset_id"));
 			Node wkt = Node.createLiteral(rs.getString("geom"), null, virtRdf);
+			
 			
 			sink.send(new Triple(subject, vocab.version(), version));
 			sink.send(new Triple(subject, vocab.user(), user));
@@ -537,6 +538,8 @@ interface LgdVocab {
 	Node createNode(long id);
 	Node createRelation(long id);
 	Node createWay(long id);
+	Node createContributor(long id);
+	Node createChangeset(long id);
 
 	Node createNodeGeometry(long id);
 	Node createWayGeometry(long id);
@@ -558,17 +561,19 @@ class LgdVocabDefault implements LgdVocab {
 	private static final String wayNs = resourceNs + "way";
 	private static final String wayNodeNs = resourceNs + "waynode";
 	private static final String relationNs = resourceNs + "relation";
+	private static final String contributorNs = resourceNs + "contributor";
+	private static final String changesetNs = resourceNs + "changeset";
 
 	private static final String geometryNodeNs = ns + "geometry/node";
 	private static final String geometryWayNs = ns + "geometry/way";
 
 	
-	private static final String geometryLiteralNs = "http://www.w3.org/2003/01/geo/wgs84_pos#";
-	private static final Node geometryLiteral = Node.createURI(geometryLiteralNs);
+	//private static final String geometryLiteralNs = "http://www.w3.org/2003/01/geo/wgs84_pos#";
+	private static final Node geometryLiteral = WGS84Pos.geometry.asNode();
 	
 	private static final Node version = Node.createURI(ontologyNs + "version");
 	private static final Node user = Node.createURI(ontologyNs + "contributor");
-	private static final Node tstamp = Node.createURI(ontologyNs + "date");
+	private static final Node tstamp = Node.createURI(ontologyNs + "modificationDate");
 	private static final Node changeset = Node.createURI(ontologyNs + "changeset");
 	
 	public Node createNode(long id) {
@@ -583,6 +588,14 @@ class LgdVocabDefault implements LgdVocab {
 		return Node.createURI(relationNs + id);
 	}
 
+	public Node createContributor(long id) {
+		return Node.createURI(contributorNs + id);
+	}
+
+	public Node createChangeset(long id) {
+		return Node.createURI(changesetNs + id);
+	}
+	
 	public Node version() {
 		return version;
 	}
