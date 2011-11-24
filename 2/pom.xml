@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.linkedgeodata</groupId>
-	<artifactId>linkedgeodata</artifactId>
+	<artifactId>lgd2</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>LinkedGeoData</name>
 	<description>LinkedGeoData.org - Adding a spatial dimension to the Web of Data.</description>
@@ -14,13 +14,8 @@
 				<artifactId>gmaven-plugin</artifactId>
 				<version>1.0</version>
 			</plugin>
-			<!--
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>surefire-report-maven-plugin</artifactId>
-				<version>2.0-beta-1</version>
-			</plugin>
-			  -->
+			<!-- <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>surefire-report-maven-plugin</artifactId> 
+				<version>2.0-beta-1</version> </plugin> -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
@@ -67,7 +62,13 @@
 		<dependency>
 			<groupId>org.aksw.commons</groupId>
 			<artifactId>sparql-scala</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>0.2-SNAPSHOT</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.aksw.commons</groupId>
+			<artifactId>sparql</artifactId>
+			<version>0.2-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
@@ -79,23 +80,17 @@
 		<dependency>
 			<groupId>org.aksw.commons</groupId>
 			<artifactId>model</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>0.2-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.aksw.commons</groupId>
 			<artifactId>collections</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>0.2-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
-	<!--
-		<dependency>
-			<groupId>org.aksw.commons</groupId>
-			<artifactId>model</artifactId>
-			<version>1.0-SNAPSHOT</version>
-			<scope>compile</scope>
-		</dependency>
-  -->
+		<!-- <dependency> <groupId>org.aksw.commons</groupId> <artifactId>model</artifactId> 
+			<version>1.0-SNAPSHOT</version> <scope>compile</scope> </dependency> -->
 		<dependency>
 			<groupId>com.jamonapi</groupId>
 			<artifactId>jamon</artifactId>
@@ -107,6 +102,15 @@
 			<groupId>net.sourceforge.secondstring</groupId>
 			<artifactId>secondstring</artifactId>
 			<version>20060615</version>
+		</dependency>
+
+
+		<!-- Gson: Java to Json conversion -->
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>1.7.1</version>
+			<scope>compile</scope>
 		</dependency>
 
 		<dependency>
@@ -200,13 +204,13 @@
 		</dependency>
 
 		<!-- [Begin Osmosis Stuff] - would be nice if we got a repo working for 
-			that --> 
- <dependency>
-      <groupId>org.openstreetmap</groupId>
-      <artifactId>osmosis</artifactId>
-      <version>0.34</version>
-    </dependency>
-    		<!-- [End Osmosis Stuff] -->
+			that -->
+		<dependency>
+			<groupId>org.openstreetmap</groupId>
+			<artifactId>osmosis</artifactId>
+			<version>0.34</version>
+		</dependency>
+		<!-- [End Osmosis Stuff] -->
 
 
 		<!-- <dependency> <groupId>org.slf4j</groupId> <artifactId>slf4j-log4j12</artifactId> 
@@ -280,48 +284,48 @@
 		</dependency>
 
 
-       <dependency>
-       	<groupId>com.hp.hpl.jena</groupId>
-       	<artifactId>arq</artifactId>
-       	<version>2.8.7</version>
-       	<type>jar</type>
-       	<scope>compile</scope>
-       </dependency>
-       <dependency>
-       	<groupId>com.hp.hpl.jena</groupId>
-       	<artifactId>arq-extra</artifactId>
-       	<version>2.7.0</version>
-       	<type>jar</type>
-       	<scope>compile</scope>
-       </dependency>
-       <dependency>
-       	<groupId>com.hp.hpl.jena</groupId>
-       	<artifactId>jena</artifactId>
-       	<version>2.6.4</version>
-       	<type>jar</type>
-       	<scope>compile</scope>
-       </dependency>
-       <dependency>
-       	<groupId>com.hp.hpl.jena</groupId>
-       	<artifactId>sdb</artifactId>
-       	<version>1.3.4</version>
-       	<type>jar</type>
-       	<scope>compile</scope>
-       </dependency>
-       <dependency>
-       	<groupId>com.hp.hpl.jena</groupId>
-       	<artifactId>tdb</artifactId>
-       	<version>0.8.9</version>
-       	<type>jar</type>
-       	<scope>compile</scope>
-       </dependency>
-       <dependency>
-       	<groupId>com.google.guava</groupId>
-       	<artifactId>guava</artifactId>
-       	<version>r09</version>
-       	<type>jar</type>
-       	<scope>compile</scope>
-       </dependency>
+		<dependency>
+			<groupId>com.hp.hpl.jena</groupId>
+			<artifactId>arq</artifactId>
+			<version>2.8.7</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.hp.hpl.jena</groupId>
+			<artifactId>arq-extra</artifactId>
+			<version>2.7.0</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.hp.hpl.jena</groupId>
+			<artifactId>jena</artifactId>
+			<version>2.6.4</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.hp.hpl.jena</groupId>
+			<artifactId>sdb</artifactId>
+			<version>1.3.4</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.hp.hpl.jena</groupId>
+			<artifactId>tdb</artifactId>
+			<version>0.8.9</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>r09</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
 	</dependencies>
 	<properties>
 		<maven.compiler.source>1.6</maven.compiler.source>
