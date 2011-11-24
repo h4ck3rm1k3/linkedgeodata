@@ -11,8 +11,12 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
@@ -21,6 +25,9 @@ import org.linkedgeodata.dao.TagLabelDAO;
 import org.linkedgeodata.osm.mapping.InMemoryTagMapper;
 import org.linkedgeodata.util.ConnectionConfig;
 import org.linkedgeodata.util.PostGISUtil;
+import org.linkedgeodata.util.StreamUtil;
+
+import scala.actors.threadpool.Arrays;
 
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -108,6 +115,28 @@ public class TranslateWikiExporter
 	 */
 	public static final String	prefix	= "geocoder.search_osm_nominatim.prefix.";
 
+	public static List<String> retrieveLanguages() throws Exception {
+		List<String> result = new ArrayList<String>();
+		
+		URL url = new URL("http://translatewiki.net/w/i.php?title=Special:MessageGroupStats&group=out-osm-site");
+		String str = StreamUtil.toString(url.openStream());
+		
+		Pattern pattern = Pattern.compile(".*language=([^;\"]+).*");
+		
+		Matcher m = pattern.matcher(str);
+		while(m.find()) {
+			String lang = m.group(1);
+			if(!result.contains(lang)) {
+				result.add(lang);
+			}
+		}
+		
+		
+		
+		
+		return result;
+	}
+	
 	public static void main(String[] args) throws Exception
 	{
 		PropertyConfigurator.configure("log4j.properties");
@@ -120,13 +149,40 @@ public class TranslateWikiExporter
 		IEntityResolver resolver = new EntityResolver2(tagMapper);
 
 		logger.info("Starting export");
+		
+		List<String> langs = retrieveLanguages();
+		//List<String> langs = Arrays.asList(new String[] {"ce"});
+		System.out.println("Retrieved languages: " + langs);
+		
+		/*
+		List<String> tmp = new ArrayList<String>();
+		for(String lang : langs) {
+			if(lang.contains("-")) {
+				tmp.add(lang);
+			}
+		}
+		langs = tmp;
+		*/
 		//export("de", false, null, resolver);
 		
-		String[] langs = {"en","de","fr","pl","ja","it","nl","pt","es","ru","sv","zh","no","fi","ca","uk","tr","cs","hu","ro","vo","eo","da","sk","id","ar","ko","he","lt","vi","sl","sr","bg","et","fa","hr","simple","new","ht","nn","gl","th","te","el","ms","eu","ceb","mk","hi","ka","la","bs","lb","br","is","bpy","mr","sq","cy","az","sh","tl","lv","pms","bn","be_x_old","jv","ta","oc","io","be","an","su","nds","scn","nap","ku","ast","af","fy","sw","wa","zh_yue","bat_smg","qu","ur","cv","ksh"};
+		//if(true) { return; }
+		
+		//String[] langs = {"en-gb","de","fr","pl","ja","it","nl","pt","es","ru","sv","zh","no","fi","ca","uk","tr","cs","hu","ro","vo","eo","da","sk","id","ar","ko","he","lt","vi","sl","sr","bg","et","fa","hr","simple","new","ht","nn","gl","th","te","el","ms","eu","ceb","mk","hi","ka","la","bs","lb","br","is","bpy","mr","sq","cy","az","sh","tl","lv","pms","bn","be_x_old","jv","ta","oc","io","be","an","su","nds","scn","nap","ku","ast","af","fy","sw","wa","zh_yue","bat_smg","qu","ur","cv","ksh"};
+		int counter = 0;
 		for(String lang : langs) {
+			/*
+			++counter;
+			if(counter < 15) {
+				continue;
+			} else if (counter > 25) {
+				return;
+			}
+			*/
+			boolean idMode = lang.equals("en-gb");
+			
 			logger.info("Processing language: " + lang);
 			try {
-				export(lang, false, null, resolver);
+				export(lang, idMode, null, resolver);
 			} catch(Exception e) {
 				logger.warn("Failed for language:" + lang);
 			}

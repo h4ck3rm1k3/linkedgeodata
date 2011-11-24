@@ -23,6 +23,10 @@ package org.linkedgeodata.jtriplify;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RectangularShape;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.lang.reflect.Type;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -33,13 +37,15 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import org.aksw.commons.collections.MultiMaps;
+import org.aksw.commons.sparql.api.http.QueryExecutionFactoryHttp;
+import org.aksw.commons.util.strings.StringUtils;
 import org.apache.commons.collections15.MultiMap;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.engine.jdbc.StreamUtils;
 import org.linkedgeodata.access.TagFilterUtils;
 import org.linkedgeodata.dao.IConnectionFactory;
 import org.linkedgeodata.dao.IHibernateDAO;
@@ -56,6 +62,8 @@ import org.linkedgeodata.osm.mapping.IOneOneTagMapper;
 import org.linkedgeodata.osm.mapping.ITagMapper;
 import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Property;
@@ -421,6 +429,104 @@ public class ServerMethods
 		return model;
 	}
 
+	
+	class JsonResponseItem {
+		String osm_type;
+		long osm_id;
+		
+		public JsonResponseItem() {
+		}
+
+		public String getOsm_type() {
+			return osm_type;
+		}
+
+		public void setOsm_type(String osm_type) {
+			this.osm_type = osm_type;
+		}
+
+		public long getOsm_id() {
+			return osm_id;
+		}
+
+		public void setOsm_id(long osm_id) {
+			this.osm_id = osm_id;
+		}
+	}
+	
+	public Model publicGeocode(String queryString)
+		throws Exception
+	{
+		String uri = "http://nominatim.openstreetmap.org/search?format=json&q=" + StringUtils.urlEncode(queryString);
+		
+		URL url = new URL(uri);
+		
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		StreamUtils.copy(url.openStream(), out);
+		
+		String json = out.toString();
+		
+		Gson gson = new Gson();
+		
+		Type collectionType = new TypeToken<Collection<JsonResponseItem>>(){}.getType();
+		Collection<JsonResponseItem> items = gson.fromJson(json, collectionType);
+		
+		//gson.fromJson(json, JsonResponseItem.class);
+		
+		List<Resource> resources = new ArrayList<Resource>();
+		for(JsonResponseItem item : items) {
+			Resource resource = null;
+			
+			if(item.getOsm_type().equals("node")) {
+				resource = lgdRDFDAO.getVocabulary().createNIRNodeURI(item.getOsm_id());
+			} else if(item.getOsm_type().equals("way")) {
+				resource = lgdRDFDAO.getVocabulary().createNIRWayURI(item.getOsm_id());
+			} else {
+				continue;
+			}
+			
+			resources.add(resource);
+		}
+		
+		Model result = ModelFactory.createDefaultModel();
+
+		
+		
+		QueryExecutionFactoryHttp qef = new QueryExecutionFactoryHttp("http://live.linkedgeodata.org/sparql", Collections.singleton("http://linkedgeodata.org"));
+
+		for(Resource resource : resources) {
+			String serviceUri = "http://live.linkedgeodata.org/sparql?format=text%2Fplain&default-graph-uri=http%3A%2F%2Flinkedgeodata.org&query=DESCRIBE+<" + StringUtils.urlEncode(resource.toString()) + ">";
+			URL serviceUrl = new URL(serviceUri);
+			//URLConnection conn = serviceUrl.openConnection();
+			/*
+			ByteArrayOutputStream out1 = new ByteArrayOutputStream();
+			StreamUtils.copy(serviceUrl.openStream(), out1);
+			String nt = out1.toString();
+			*/
+			
+			InputStream in = null;
+			try {
+				in = serviceUrl.openStream();
+				result.read(in, null, "N-TRIPLE");
+			} finally {
+				if(in != null) {
+					in.close();
+				}
+			}
+			
+
+			/*
+			String tmp = "DESCRIBE <" + resource + ">";
+			System.out.println(tmp);
+			QueryExecution qe = qef.createQueryExecution(tmp);
+			qe.execDescribe(result);
+			*/
+			
+		}
+		
+		return result;
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 

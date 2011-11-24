@@ -1322,6 +1322,12 @@ public class JTriplifyServer
 	
 		dataHandler.getRIC().put(pattern, nearFn, "$1", "$2", "$3", "$5", "$7", "$8", "$9", "$11", "$13");
 
+		
+		IInvocable geocodeFn = DefaultCoercions.wrap(methods, "publicGeocode.*");
+		pattern = ".*/api/3/geocode\\?q=(.*)";
+	
+		dataHandler.getRIC().put(pattern, geocodeFn, "$1");
+		
 
 		
 		IInvocable areaFn = DefaultCoercions.wrap(methods, "publicGetAreaStatistics.*");
