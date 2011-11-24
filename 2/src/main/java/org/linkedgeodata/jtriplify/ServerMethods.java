@@ -27,6 +27,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.net.URL;
+import java.net.URLConnection;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -40,6 +41,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.aksw.commons.collections.MultiMaps;
+import org.aksw.commons.sparql.api.delay.extra.Delayer;
+import org.aksw.commons.sparql.api.delay.extra.DelayerDefault;
 import org.aksw.commons.sparql.api.http.QueryExecutionFactoryHttp;
 import org.aksw.commons.util.strings.StringUtils;
 import org.apache.commons.collections15.MultiMap;
@@ -454,16 +457,28 @@ public class ServerMethods
 		}
 	}
 	
+	private Delayer delayer = new DelayerDefault(1000);
+	
 	public Model publicGeocode(String queryString)
 		throws Exception
 	{
-		queryString = StringUtils.urlDecode(queryString);
-		String uri = "http://nominatim.openstreetmap.org/search?format=json&q=" + StringUtils.urlEncode(queryString);
+		delayer.doDelay();
+
+		//queryString = StringUtils.urlDecode(queryString);
+		
+		String service = "http://open.mapquestapi.com/nominatim/v1/search";
+//http://nominatim.openstreetmap.org/search
+			
+		String uri = service + "?format=json&q=" + queryString;
 		
 		URL url = new URL(uri);
+		URLConnection c = url.openConnection();
+		c.setRequestProperty("User-Agent", "http://linkedgeodata.org, mailto:cstadler@informatik.uni-leipzig.de");
+		
+		InputStream ins = c.getInputStream();
 		
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		StreamUtils.copy(url.openStream(), out);
+		StreamUtils.copy(ins, out);
 		
 		String json = out.toString();
 		
@@ -496,9 +511,11 @@ public class ServerMethods
 		QueryExecutionFactoryHttp qef = new QueryExecutionFactoryHttp("http://live.linkedgeodata.org/sparql", Collections.singleton("http://linkedgeodata.org"));
 
 		for(Resource resource : resources) {
-			String serviceUri = "http://live.linkedgeodata.org/sparql?format=text%2Fplain&default-graph-uri=http%3A%2F%2Flinkedgeodata.org&query=DESCRIBE+<" + StringUtils.urlEncode(resource.toString()) + ">";
+			String serviceUri = "http://test.linkedgeodata.org/sparql?format=text%2Fplain&default-graph-uri=http%3A%2F%2Flinkedgeodata.org&query=DESCRIBE+<" + StringUtils.urlEncode(resource.toString()) + ">";
 			URL serviceUrl = new URL(serviceUri);
-			//URLConnection conn = serviceUrl.openConnection();
+			URLConnection conn = serviceUrl.openConnection();
+			conn.addRequestProperty("Accept", "text/plain");
+			
 			/*
 			ByteArrayOutputStream out1 = new ByteArrayOutputStream();
 			StreamUtils.copy(serviceUrl.openStream(), out1);
@@ -507,7 +524,7 @@ public class ServerMethods
 			
 			InputStream in = null;
 			try {
-				in = serviceUrl.openStream();
+				in = conn.getInputStream();
 				result.read(in, null, "N-TRIPLE");
 			} finally {
 				if(in != null) {
