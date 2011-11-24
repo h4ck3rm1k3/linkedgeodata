@@ -504,7 +504,7 @@ public class ServerMethods
 			resources.add(resource);
 		}
 		
-		Model result = ModelFactory.createDefaultModel();
+		Model result = createModel();
 
 		
 		
