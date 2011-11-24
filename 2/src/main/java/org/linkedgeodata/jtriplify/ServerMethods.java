@@ -457,6 +457,7 @@ public class ServerMethods
 	public Model publicGeocode(String queryString)
 		throws Exception
 	{
+		queryString = StringUtils.urlDecode(queryString);
 		String uri = "http://nominatim.openstreetmap.org/search?format=json&q=" + StringUtils.urlEncode(queryString);
 		
 		URL url = new URL(uri);
