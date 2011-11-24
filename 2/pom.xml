@@ -41,7 +41,7 @@
 		<!-- Repository for hibernate -->
 
 		<repository>
-			<id>maven.aksw.org</id>
+			<id>maven.aksw.org.internal</id>
 			<name>University Leipzig, AKSW Maven2 Repository</name>
 			<url>http://maven.aksw.org/repository/internal</url>
 			<releases>
@@ -52,6 +52,11 @@
 				<enabled>true</enabled>
 				<updatePolicy>always</updatePolicy>
 			</snapshots>
+		</repository>
+			<repository>
+			<id>maven.aksw.org.snapshot</id>
+			<name>University Leipzig, AKSW Maven2 Snapshot Repository</name>
+			<url>http://maven.aksw.org/repository/snapshot</url>
 		</repository>
 	</repositories>
 
