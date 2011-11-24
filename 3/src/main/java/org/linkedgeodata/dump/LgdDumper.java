@@ -232,10 +232,19 @@ public class LgdDumper {
 		postProcessorMap.put("mediawikiTitle", new UCamelizeAndUrlEncodePostProcessor());
 		
 		LgdDumper dumper = new LgdDumper();
+
+		//dumper.dumpWayGeometriesNeoGeo(conn, sink);
+		//dumper.dumpResourceTags(conn, "lgd_tags_resource_kv", "way", sink);
+		dumper.dumpTagsDatatype(conn, "boolean", null, sink);
 		
-		dumper.dumpNodes(conn, sink);
 		
 		/*
+		dumper.dumpNodes(conn, sink);
+		dumper.dumpWays(conn, sink);
+		
+		dumper.dumpNodeGeometriesNeoGeo(conn, sink);
+		dumper.dumpWayGeometriesNeoGeo(conn, sink);
+
 		dumper.dumpTagsDatatype(conn, "boolean", null, sink);
 		dumper.dumpTagsDatatype(conn, "int", null, sink);
 		dumper.dumpTagsDatatype(conn, "float", null, sink);
@@ -245,7 +254,7 @@ public class LgdDumper {
 		
 		dumper.dumpResourceTagsPrefixed(conn, "lgd_tags_resource_prefix", null, postProcessorMap, sink);
 		dumper.dumpResourceTags(conn, "lgd_tags_property", null, sink);
-		*/
+		 */
 
 		conn.close();
 	}
@@ -336,28 +345,31 @@ public class LgdDumper {
 		ResultSet rs = conn
 				.createStatement()
 				.executeQuery(
-						"SELECT osm_entity_type, osm_entity_id, k, v FROM lgd_tags_" + suffix + whereClause(osmEntityType));
+						"SELECT osm_entity_type, osm_entity_id, b.property, k, v FROM lgd_tags_" + suffix + " a LEFT JOIN lgd_map_property b USING (k) " + whereClause(osmEntityType));
 		
 		while (rs.next()) {
 			Node subject = getResource(rs.getString("osm_entity_type"), rs.getLong("osm_entity_id"));
 			
-			// Auto generate properties for now
-			String p = rs.getString("k");
-			String[] parts = p.split(":");
-
-			int last = parts.length - 1;
-
-			for(int i = 0; i < last; ++i) {
-				parts[i] = StringUtils.toCamelCase(parts[i], false);
-			}
+			String p = rs.getString("property");
+			if(p == null) {
 			
-			parts[last] = "boolean".equals(suffix)
-					? "is" + StringUtils.toCamelCase(parts[last], true)
-					: StringUtils.toCamelCase(p, false);
-
-					
-			p = "http://linkedgeodata.org/ontology/" + Joiner.on('/').join(parts);
+				// Auto generate properties for now
+				p = rs.getString("k");
+				String[] parts = p.split(":");
+	
+				int last = parts.length - 1;
+	
+				for(int i = 0; i < last; ++i) {
+					parts[i] = StringUtils.toCamelCase(parts[i], false);
+				}
 				
+				parts[last] = "boolean".equals(suffix)
+						? "is" + StringUtils.toCamelCase(parts[last], true)
+						: StringUtils.toCamelCase(p, false);
+	
+						
+				p = "http://linkedgeodata.org/property/" + Joiner.on('/').join(parts);
+			}
 			
 			
 			Node predicate = Node.createURI(p);
@@ -384,6 +396,24 @@ public class LgdDumper {
 		} else {
 			throw new RuntimeException("Unknown entity type: " + osmEntityType);
 		}
+	}
+	
+	
+	public void dumpNodeGeometriesNeoGeo(Connection conn, Sink<Triple> sink)
+			throws Exception
+	{
+		ResultSet rs = conn
+				.createStatement()
+				.executeQuery(
+						"SELECT id, ST_X(geom) x, ST_Y(geom) y FROM nodes");
+		
+		while (rs.next()) {
+			writePointNeoGeo(
+					rs.getLong("id"),
+					rs.getDouble("x"),
+					rs.getDouble("y"),
+					sink);						
+		}		
 	}
 	
 	public void dumpWayGeometriesNeoGeo(Connection conn, Sink<Triple> sink)
@@ -441,8 +471,8 @@ public class LgdDumper {
 
 		Node first = nodeIds.isEmpty()
 				? RDF.nil.asNode()
-				: Node.createURI(vocab.createNodeGeometry(nodeIds.get(0)).toString() + "-0");
-
+				//: Node.createURI(vocab.createWayGeometry(nodeIds.get(0)).toString() + "-0");
+				: Node.createURI(geo.toString() + "-0");
 		
 		sink.send(new Triple(geo, GeoVocab.posList, first));
 	
@@ -452,7 +482,8 @@ public class LgdDumper {
 			
 			
 			Node rest = (i + 1 != nodeIds.size())
-					? Node.createURI(vocab.createNodeGeometry(nodeIds.get(0)).toString() + "-" + (i + 1))
+					//? Node.createURI(vocab.createNodeGeometry(nodeIds.get(0)).toString() + "-" + (i + 1))
+					? Node.createURI(geo + "-" + (i + 1))
 					: RDF.nil.asNode();
 						
 			sink.send(new Triple(first, RDF.rest.asNode(), rest));

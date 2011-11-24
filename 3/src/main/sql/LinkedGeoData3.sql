@@ -194,11 +194,11 @@ CREATE INDEX idx_lgd_map_resource_kv_object_property ON lgd_map_resource_kv USIN
 CREATE TABLE lgd_map_resource_prefix (
     k text NOT NULL,
     property text NOT NULL,
-    prefix prefix_range NOT NULL,
+    object_prefix prefix_range NOT NULL,
     post_processing text NOT NULL
 );
 
-CREATE INDEX idx_lgd_map_resource_prefix_prefix ON lgd_map_resource_prefix USING gist (prefix);
+CREATE INDEX idx_lgd_map_resource_prefix_prefix ON lgd_map_resource_prefix USING gist (object_prefix);
 CREATE INDEX idx_lgd_map_resource_prefix_k ON lgd_map_resource_prefix USING btree (k);
 
 
@@ -375,7 +375,7 @@ DROP VIEW IF EXISTS lgd_tags_resource_prefix;
 CREATE VIEW lgd_tags_resource_prefix AS   
   SELECT osm_entity_type, osm_entity_id, property, object_prefix, v, post_processing
    FROM lgd_tags a
-   JOIN lgd_map_resource_prefix b USING(k)
+   JOIN lgd_map_resource_prefix b USING(k);
 
 
 /* My attemp to push all the postprocessing into the DB

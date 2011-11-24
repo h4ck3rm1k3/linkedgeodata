@@ -334,9 +334,9 @@ highway	residential	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linke
 highway	unclassified	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedgeodata.org/ontology/UnclassifiedHighway
 highway	road	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedgeodata.org/ontology/Road
 highway	living_street	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedgeodata.org/ontology/LivingStreet
-highway	service	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedgeodata.org/ontology/ServiceHighway
+highway	service	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedgeodata.org/ontology/Alley
 highway	track	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedgeodata.org/ontology/Track
-highway	pedestrian	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedgeodata.org/ontology/PedestrianHighway
+highway	pedestrian	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedgeodata.org/ontology/PedestrianUse
 highway	raceway	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedgeodata.org/ontology/Raceway
 highway	services	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedgeodata.org/ontology/ServiceStation
 highway	rest_area	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedgeodata.org/ontology/RestArea
@@ -413,7 +413,7 @@ waterway	stream	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedgeo
 waterway	river	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedgeodata.org/ontology/River
 waterway	riverbank	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedgeodata.org/ontology/Riverbank
 waterway	canal	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedgeodata.org/ontology/Canal
-waterway	ditch	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedgeodata.org/ontology/WaterwayDitch
+waterway	ditch	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedgeodata.org/ontology/Ditch
 waterway	drain	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedgeodata.org/ontology/Drain
 waterway	dock	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedgeodata.org/ontology/Dock
 waterway	lock_gate	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedgeodata.org/ontology/LockGate
@@ -1469,10 +1469,10 @@ military	barracks	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedg
 military	danger_area	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedgeodata.org/ontology/DangerArea
 military	range	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedgeodata.org/ontology/MilitaryRange
 military	naval_base	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedgeodata.org/ontology/NavalBase
-motorcar	agricultural	http://linkedgeodata.org/ontology/agricultural	http://linkedgeodata.org/ontology/agricultural_%28Motorcar%29
-motorcar	no	http://linkedgeodata.org/ontology/motorcar	http://linkedgeodata.org/ontology/no_%28Motorcar%29
-motorcar	private	http://linkedgeodata.org/ontology/motorcar	http://linkedgeodata.org/ontology/private_%28Motorcar%29
-motorcar	yes	http://linkedgeodata.org/ontology/motorcar	http://linkedgeodata.org/ontology/yes_%28Motorcar%29
+motorcar	agricultural	http://linkedgeodata.org/ontology/agricultural	http://linkedgeodata.org/ontology/motorcar_agricultural
+motorcar	no	http://linkedgeodata.org/ontology/motorcar	http://linkedgeodata.org/ontology/motorcar_no
+motorcar	private	http://linkedgeodata.org/ontology/motorcar	http://linkedgeodata.org/ontology/motorcar_private
+motorcar	yes	http://linkedgeodata.org/ontology/motorcar	http://linkedgeodata.org/ontology/motorcar_yes
 natural	coastline	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedgeodata.org/ontology/Coastline
 natural	bay	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedgeodata.org/ontology/Bay
 natural	water	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedgeodata.org/ontology/Water
@@ -1665,10 +1665,10 @@ place	farm	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedgeodata.
 place	islet	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedgeodata.org/ontology/Islet
 place	municipality	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedgeodata.org/ontology/Municipality
 place	subdivision	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedgeodata.org/ontology/Subdivision
-wheelchair	limited	http://linkedgeodata.org/ontology/wheelchair	http://linkedgeodata.org/ontology/limited_%28WheelChair%29
-wheelchair	no	http://linkedgeodata.org/ontology/wheelchair	http://linkedgeodata.org/ontology/no_%28WheelChair%29
-wheelchair	unknown	http://linkedgeodata.org/ontology/wheelchair	http://linkedgeodata.org/ontology/unknown_%28WheelChair%29
-wheelchair	yes	http://linkedgeodata.org/ontology/wheelchair	http://linkedgeodata.org/ontology/yes_%28WheelChair%29
+wheelchair	limited	http://linkedgeodata.org/ontology/wheelchair	http://linkedgeodata.org/ontology/wheelchair_limited
+wheelchair	no	http://linkedgeodata.org/ontology/wheelchair	http://linkedgeodata.org/ontology/wheelchair_no
+wheelchair	unknown	http://linkedgeodata.org/ontology/wheelchair	http://linkedgeodata.org/ontology/wheelchair_unknown
+wheelchair	yes	http://linkedgeodata.org/ontology/wheelchair	http://linkedgeodata.org/ontology/wheelchair_yes
 \.
 
 
@@ -1678,6 +1678,151 @@ wheelchair	yes	http://linkedgeodata.org/ontology/wheelchair	http://linkedgeodata
 COPY lgd_map_property (k, property) FROM stdin;
 website	http://xmlns.com/foaf/0.1/homepage
 image	http://xmlns.com/foaf/0.1/depiction
+addr:postcode	http://linkedgeodata.org/ontology/addr/postcode
+admin_level	http://linkedgeodata.org/ontology/adminLevel
+agricultural	http://linkedgeodata.org/ontology/agricultural
+alternate	http://linkedgeodata.org/ontology/alternate
+area	http://linkedgeodata.org/ontology/area
+asb	http://linkedgeodata.org/ontology/asb
+atm	http://linkedgeodata.org/ontology/atm
+backrest	http://linkedgeodata.org/ontology/backrest
+bar	http://linkedgeodata.org/ontology/bar
+bench	http://linkedgeodata.org/ontology/bench
+bin	http://linkedgeodata.org/ontology/bin
+blz	http://linkedgeodata.org/ontology/blz
+board_type	http://linkedgeodata.org/ontology/boardType
+boat	http://linkedgeodata.org/ontology/boat
+bridge	http://linkedgeodata.org/ontology/bridge
+build	http://linkedgeodata.org/ontology/build
+building	http://linkedgeodata.org/ontology/building
+bus	http://linkedgeodata.org/ontology/bus
+by_night	http://linkedgeodata.org/ontology/byNight
+cables	http://linkedgeodata.org/ontology/cables
+charge	http://linkedgeodata.org/ontology/charge
+cutting	http://linkedgeodata.org/ontology/cutting
+de:amtlicher_gemeindeschluessel	http://linkedgeodata.org/ontology/de/amtlicherGemeindeschluessel
+departures_board	http://linkedgeodata.org/ontology/departuresBoard
+diaper	http://linkedgeodata.org/ontology/diaper
+dispensing	http://linkedgeodata.org/ontology/dispensing
+disused	http://linkedgeodata.org/ontology/disused
+ele	http://linkedgeodata.org/ontology/ele
+elevator	http://linkedgeodata.org/ontology/elevator
+embankment	http://linkedgeodata.org/ontology/embankment
+erected	http://linkedgeodata.org/ontology/erected
+family_spaces	http://linkedgeodata.org/ontology/familySpaces
+fenced	http://linkedgeodata.org/ontology/fenced
+frequency	http://linkedgeodata.org/ontology/frequency
+fuel:cng	http://linkedgeodata.org/ontology/fuel/cng
+fuel:diesel	http://linkedgeodata.org/ontology/fuel_diesel
+fuel:GTL_diesel	http://linkedgeodata.org/ontology/fuel/gtlDiesel
+fuel:HGV_diesel	http://linkedgeodata.org/ontology/fuel/hgvDiesel
+fuel:lpg	http://linkedgeodata.org/ontology/fuel/lpg
+fuel:octane_100	http://linkedgeodata.org/ontology/fuel/octane_100
+fuel:octane_91	http://linkedgeodata.org/ontology/fuel/octane_91
+fuel:octane_95	http://linkedgeodata.org/ontology/fuel/octane_95
+fuel:octane_98	http://linkedgeodata.org/ontology/fuel/octane_98
+game:patrizier2:bier	http://linkedgeodata.org/ontology/game/patrizier2/bier
+game:patrizier2:eisenerz	http://linkedgeodata.org/ontology/game/patrizier2/eisenerz
+game:patrizier2:eisenwaren	http://linkedgeodata.org/ontology/game/patrizier2/eisenwaren
+game:patrizier2:getreide	http://linkedgeodata.org/ontology/game/patrizier2/getreide
+game:patrizier2:tuch	http://linkedgeodata.org/ontology/game/patrizier2/tuch
+game:patrizier2:wolle	http://linkedgeodata.org/ontology/game/patrizier2/wolle
+game:patrizier2:ziegel	http://linkedgeodata.org/ontology/game/patrizier2/ziegel
+gauge	http://linkedgeodata.org/ontology/gauge
+horse	http://linkedgeodata.org/ontology/horse
+interner_access	http://linkedgeodata.org/ontology/internerAccess
+lanes	http://linkedgeodata.org/ontology/lanes
+layer	http://linkedgeodata.org/ontology/layer
+level	http://linkedgeodata.org/ontology/level
+lit	http://linkedgeodata.org/ontology/lit
+maxheight	http://linkedgeodata.org/ontology/maxheight
+maxlength	http://linkedgeodata.org/ontology/maxlength
+maxspeed	http://linkedgeodata.org/ontology/maxspeed
+maxweight	http://linkedgeodata.org/ontology/maxweight
+maxwidth	http://linkedgeodata.org/ontology/maxwidth
+minspeed	http://linkedgeodata.org/ontology/minspeed
+monument	http://linkedgeodata.org/ontology/monument
+mooring	http://linkedgeodata.org/ontology/mooring
+motorroad	http://linkedgeodata.org/ontology/motorroad
+ncn	http://linkedgeodata.org/ontology/ncn
+noexit	http://linkedgeodata.org/ontology/noexit
+oneway:bicycle	http://linkedgeodata.org/ontology/oneway/bicycle
+oneway	http://linkedgeodata.org/ontology/oneway
+on	http://linkedgeodata.org/ontology/on
+onkz	http://linkedgeodata.org/ontology/onkz
+openGeoDB:community_identification_number	http://linkedgeodata.org/ontology/openGeoDB/communityIdentificationNumber
+openGeoDB:is_in_loc_id	http://linkedgeodata.org/ontology/openGeoDB/isInLocId
+opengeodb:lat	http://linkedgeodata.org/ontology/opengeodb/lat
+openGeoDB:layer	http://linkedgeodata.org/ontology/openGeoDB/layer
+openGeoDB:loc_id	http://linkedgeodata.org/ontology/openGeoDB/locId
+opengeodb:lon	http://linkedgeodata.org/ontology/opengeodb/lon
+openGeoDB:population	http://linkedgeodata.org/ontology/openGeoDB/population
+openGeoDB:telephone_area_code	http://linkedgeodata.org/ontology/openGeoDB/telephoneAreaCode
+osmarender:renderName	http://linkedgeodata.org/ontology/osmarender/renderName
+osmarender:renderRef	http://linkedgeodata.org/ontology/osmarender/renderRef
+park_ride	http://linkedgeodata.org/ontology/parkRide
+payment:bob	http://linkedgeodata.org/ontology/payment/bob
+payment:coins	http://linkedgeodata.org/ontology/payment/coins
+payment:credit_cards	http://linkedgeodata.org/ontology/payment/creditCcards
+payment:debit_cards	http://linkedgeodata.org/ontology/payment/debitCards
+payment:electronic_purses	http://linkedgeodata.org/ontology/payment/electronicPurses
+payment:geldkarte	http://linkedgeodata.org/ontology/payment/geldkarte
+payment:geltkarte	http://linkedgeodata.org/ontology/payment/geltkarte
+payment:notes	http://linkedgeodata.org/ontology/payment/notes
+payment:telephone_cards	http://linkedgeodata.org/ontology/payment/telephoneCards
+permissive	http://linkedgeodata.org/ontology/permissive
+population	http://linkedgeodata.org/ontology/population
+postal_code	http://linkedgeodata.org/ontology/postalCode
+post_code	http://linkedgeodata.org/ontology/postCode
+produced	http://linkedgeodata.org/ontology/produced
+public	http://linkedgeodata.org/ontology/public
+rail	http://linkedgeodata.org/ontology/rail
+rcn	http://linkedgeodata.org/ontology/rcn
+recycling:batteries	http://linkedgeodata.org/ontology/recycling/batteries
+recycling:cans	http://linkedgeodata.org/ontology/recycling/cans
+recycling:clothes	http://linkedgeodata.org/ontology/recycling/clothes
+recycling:garden_waste	http://linkedgeodata.org/ontology/recycling/gardenWaste
+recycling:glass_bottles	http://linkedgeodata.org/ontology/recycling/glassBottles
+recycling:glass	http://linkedgeodata.org/ontology/recycling/glass
+recycling:green_waste	http://linkedgeodata.org/ontology/recycling/greenWaste
+recycling:metal	http://linkedgeodata.org/ontology/recycling/metal
+recycling:paper	http://linkedgeodata.org/ontology/recycling/paper
+recycling:paper_packaging	http://linkedgeodata.org/ontology/recycling/paperPackaging
+recycling:plastic	http://linkedgeodata.org/ontology/recycling/plastic
+recycling:scrap_metal	http://linkedgeodata.org/ontology/recycling/scrapMetal
+recycling:shoes	http://linkedgeodata.org/ontology/recycling/shoes
+ref:fgkz	http://linkedgeodata.org/ontology/ref/fgkz
+ruins	http://linkedgeodata.org/ontology/ruins
+seasonal	http://linkedgeodata.org/ontology/seasonal
+seats	http://linkedgeodata.org/ontology/seats
+segregated	http://linkedgeodata.org/ontology/segregated
+shelter	http://linkedgeodata.org/ontology/shelter
+ski	http://linkedgeodata.org/ontology/ski
+sms	http://linkedgeodata.org/ontology/sms
+snowmobile	http://linkedgeodata.org/ontology/snowmobile
+stars	http://linkedgeodata.org/ontology/stars
+step_count	http://linkedgeodata.org/ontology/stepCount
+StrVz	http://linkedgeodata.org/ontology/strVz
+tactile_paving	http://linkedgeodata.org/ontology/tactilePaving
+taxi	http://linkedgeodata.org/ontology/taxi
+TMC:cid_58:tabcd_1:LCLversion	http://linkedgeodata.org/ontology/TMC/cid_58/tabcd_1/lclVersion
+TMC:cid_58:tabcd_1:LocationCode	http://linkedgeodata.org/ontology/TMC/cid_58/tabcd_1/locationCode
+TMC:cid_58:tabcd_1:NextLocationCode	http://linkedgeodata.org/ontology/TMC/cid_58/tabcd_1/nextLocationCode
+TMC:cid_58:tabcd_1:PrevLocationCode	http://linkedgeodata.org/ontology/TMC/cid_58/tabcd_1/prevLocationCode
+toilet	http://linkedgeodata.org/ontology/toilet
+tracks	http://linkedgeodata.org/ontology/tracks
+traffic_signals:sound	http://linkedgeodata.org/ontology/traffic_signals/sound
+tram	http://linkedgeodata.org/ontology/tram
+tunnel	http://linkedgeodata.org/ontology/tunnel
+uic_ref	http://linkedgeodata.org/ontology/uic_ref
+undefined	http://linkedgeodata.org/ontology/undefined
+unisex	http://linkedgeodata.org/ontology/unisex
+verified	http://linkedgeodata.org/ontology/verified
+via	http://linkedgeodata.org/ontology/via
+video	http://linkedgeodata.org/ontology/video
+VzG	http://linkedgeodata.org/ontology/VzG
+waterway:lock:height	http://linkedgeodata.org/ontology/waterway/lock/height
+wheelchair	http://linkedgeodata.org/ontology/wheelchair
 \.
 
 
