@@ -245,19 +245,30 @@ class MediaWikiTitlePostProcessor
 	
 	private static Pattern pattern = Pattern.compile("wikipedia.org/wiki/(.*)");
 	
+	public static String fragmentIdentifierEncode(String str) {
+		return StringUtils.urlEncode(str).replace('%', '.');
+	}
+	
 	public Node process(String prefix, String value) {
+		String effectiveValue = value;
 		Matcher matcher = pattern.matcher(value);
 		if(matcher.find()) {
-			value = matcher.group(1);
+			effectiveValue = matcher.group(1);
 		}
 
 		
 		// We assume that a decoded string equals the encoded one
-		value = StringUtils.urlDecode(value);
+		effectiveValue = StringUtils.urlDecode(effectiveValue);
 		
-		String canonicalized = MediawikiUtils.toCanonicalWikiCase(value, namespaces);
+		String canonicalized = MediawikiUtils.toCanonicalWikiCase(effectiveValue, namespaces);
 
-		String encoded = StringUtils.urlEncode(canonicalized);
+		String[] parts = canonicalized.split("#", 0);
+		
+		String encoded = StringUtils.urlEncode(parts[0].trim());
+		if(parts.length == 2) {
+			encoded += "#" + fragmentIdentifierEncode(parts[1].trim());
+		}
+				
 		/*
 		String encoded = canonicalized.contains("%")
 				? StringUtils.urlEncode(canonicalized)
@@ -381,6 +392,8 @@ public class LgdDumper {
 		
 		
 		//if(true) { System.exit(0); }
+		dumper.dumpResourceTagsPrefixed(conn, "lgd_tags_resource_prefix", null, postProcessorMap, sink);
+		dumper.dumpResourceTags(conn, "lgd_tags_property", null, sink);
 
 		dumper.dumpText(conn, null, sink);
 		dumper.dumpStrings(conn, null, sink);
@@ -398,8 +411,6 @@ public class LgdDumper {
 		dumper.dumpResourceTags(conn, "lgd_tags_resource_k", null, sink);
 		dumper.dumpResourceTags(conn, "lgd_tags_resource_kv", null, sink);
 		
-		dumper.dumpResourceTagsPrefixed(conn, "lgd_tags_resource_prefix", null, postProcessorMap, sink);
-		dumper.dumpResourceTags(conn, "lgd_tags_property", null, sink);
 
 
 		conn.close();
@@ -417,6 +428,18 @@ public class LgdDumper {
 	
 	private static UrlValidator urlValidator = new UrlValidator();
 	
+	public static boolean isAsciiLetter(int c) {
+		return c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z';		
+	}
+	
+	public static boolean isAsciiDigit(int c) {
+		return c >= '0' && c <= '9';
+	}
+		
+	public static boolean isUriCharacter(int c) {
+		return isAsciiLetter(c) || isAsciiDigit(c) || c == '.' || c == '-' || c == '_' || c == '*';
+	}
+	
 	public static String fixUri(String str) {
 		str = str.trim();
 		
@@ -427,17 +450,60 @@ public class LgdDumper {
 			
 			return str;
 		} else if(!str.contains("://")) {
-			str = "http://" + str;
+			str = "http://" + str;			
 		}
 
 		str = str.replaceAll("\\s+", "");
 
+
+		str = fixUriLettersIfRequired(str);
+
+		
 		return str;
 		/*
 		boolean isValid = urlValidator.isValid(str);
 
 		return isValid ? str : null;
 		*/
+	}
+
+	
+	public static boolean isFixUriLettersRequired(String uri) {
+		for(int i = 0; i < uri.length(); ++i) {
+			int codePoint = uri.codePointAt(i);
+			
+			if(Character.isLetter(codePoint) && !isAsciiLetter(codePoint)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public static String fixUriLettersIfRequired(String uri) {
+		return isFixUriLettersRequired(uri)
+			? fixUriLetters(uri)
+			: uri;
+	}
+	
+	public static String fixUriLetters(String uri) {
+		// encode some chars
+		StringBuilder builder = new StringBuilder();
+		for(int i = 0; i < uri.length(); ++i) {
+			int codePoint = uri.codePointAt(i);
+			char[] chars = Character.toChars(codePoint);
+			String c;
+			if(Character.isLetter(codePoint) && !isAsciiLetter(codePoint)) {
+				
+				c = new String(chars);
+				c = StringUtils.urlEncode(c);
+				builder.append(c);
+			} else {
+				builder.append(chars);
+			}
+		}
+		String result = builder.toString();
+		return result;		
 	}
 	
 	public static Node createFixedNodeUri(String str) {
