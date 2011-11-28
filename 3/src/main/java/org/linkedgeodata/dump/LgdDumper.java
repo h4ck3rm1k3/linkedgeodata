@@ -7,10 +7,10 @@ package org.linkedgeodata.dump;
 
 
 import java.io.OutputStream;
-import java.net.URL;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,6 +21,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.aksw.commons.collections.SinglePrefetchIterator;
 import org.aksw.commons.util.strings.StringUtils;
@@ -29,6 +31,8 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
+import org.apache.commons.collections15.map.LRUMap;
+import org.apache.commons.validator.UrlValidator;
 import org.apache.log4j.PropertyConfigurator;
 import org.openjena.atlas.lib.Sink;
 import org.openjena.riot.out.SinkTripleOutput;
@@ -56,6 +60,108 @@ class GeoVocabRdfSerializer implements GeometryRdfSerializer {
 
 	public void write(PGgeometry geometry, Sink<Triple> sink) {
 	}
+}
+
+class ValidatingSink
+	implements Sink<Triple>
+{
+	private static UrlValidator urlValidator = new UrlValidator();
+
+	
+	private Sink<Triple> decoratee;
+	
+	private Sink<Triple> errorSink;
+	
+	
+	public LRUMap<Node, Boolean> cache = new LRUMap<Node, Boolean>(1000);
+	
+	public ValidatingSink(Sink<Triple> decoratee)
+	{
+		this.decoratee = decoratee;
+	}
+	
+	public ValidatingSink(Sink<Triple> decoratee, Sink<Triple> errorSink)
+	{
+		this.decoratee = decoratee;
+		this.errorSink = errorSink;
+	}
+
+	
+	@Override
+	public void close() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public boolean validateResourceCached(Node node) {
+		Boolean result = cache.get(node);
+		if(result == null) {
+			result = validateResource(node);
+			
+			cache.put(node, result);
+		}
+		
+		return result;
+	}
+
+	public boolean validateNodeCached(Node node) {
+		Boolean result = cache.get(node);
+		if(result == null) {
+			result = validateNode(node);
+			
+			cache.put(node, result);
+		}
+		
+		return result;
+	}
+
+	
+	public static boolean validateResource(Node node) {
+		if(node.isBlank()) {
+			return true;
+		}
+
+		if(!node.isURI()) {
+			return false;
+		}
+
+		if(node.getURI().startsWith("mailto:")) {
+			return true;
+		}
+		
+		return urlValidator.isValid(node.getURI());
+	}
+
+	public static boolean validateNode(Node node) {
+		if(node.isLiteral()) {
+			/*
+			String dt = node.getLiteralDatatypeURI();
+			if(dt == null || dt.isEmpty()) {
+				return true;
+			}
+			*/
+			
+			return true; 
+		} else {
+			return validateResource(node);
+		}
+	}
+	
+	@Override
+	public void send(Triple item) {
+		if(validateResourceCached(item.getSubject()) && validateResourceCached(item.getPredicate()) && validateNodeCached(item.getObject())) {
+			decoratee.send(item);
+		} else if(errorSink != null) {
+			errorSink.send(item);
+		}
+	}
+
+	@Override
+	public void flush() {
+		// TODO Auto-generated method stub
+		
+	}
+	
 }
 
 /**
@@ -88,7 +194,8 @@ class DefaultPostProcessor
 	}
 	
 	public Node process(String prefix, String value) {
-		return Node.createURI(prefix + value);
+		//return Node.createURI(prefix + value);
+		return LgdDumper.createFixedNodeUri(prefix + value);
 	}
 }
 
@@ -101,9 +208,12 @@ class UCamelizeAndUrlEncodePostProcessor
 		String camelized = StringUtils.toUpperCamelCase(value.replace(' ', '_'));
 		String encoded = StringUtils.urlEncode(camelized);
 		
-		return Node.createURI(prefix + encoded);
+		//return Node.createURI(prefix + encoded);
+		return LgdDumper.createFixedNodeUri(prefix + encoded);
 	}
 }
+
+
 
 class MediaWikiTitlePostProcessor
 	implements PostProcessor
@@ -133,19 +243,42 @@ class MediaWikiTitlePostProcessor
 			"Book_talk"			
 			));
 	
+	private static Pattern pattern = Pattern.compile("wikipedia.org/wiki/(.*)");
+	
 	public Node process(String prefix, String value) {
-		String canonicalized = MediawikiUtils.toCanonicalWikiCase(value, namespaces);
+		Matcher matcher = pattern.matcher(value);
+		if(matcher.find()) {
+			value = matcher.group(1);
+		}
+
 		
+		// We assume that a decoded string equals the encoded one
+		value = StringUtils.urlDecode(value);
+		
+		String canonicalized = MediawikiUtils.toCanonicalWikiCase(value, namespaces);
+
+		String encoded = StringUtils.urlEncode(canonicalized);
+		/*
+		String encoded = canonicalized.contains("%")
+				? StringUtils.urlEncode(canonicalized)
+				: canonicalized;
+		*/
+		
+		return LgdDumper.createFixedNodeUri(prefix + encoded);
+
+		/*
 		// Check if it already forms a valid uri
 		try {
-			URL url = new URL(prefix + canonicalized);
+			return LgdDumper.createFixedNodeUri(prefix + canonicalized);
 			
-			return Node.createURI(url.toString());
+			//return Node.createURI(url.toString());
 		} catch(Exception e) {
 			String encoded = StringUtils.urlEncode(canonicalized);
 			
-			return Node.createURI(prefix + encoded);
+			//return Node.createURI(prefix + encoded);
+			return LgdDumper.createFixedNodeUri(prefix + encoded);
 		}
+		*/
 	}
 }
 
@@ -224,21 +357,34 @@ public class LgdDumper {
 		conn.setAutoCommit(false);
 		
 		OutputStream out = System.out;
-		Sink<Triple> sink = new SinkTripleOutput(out);
+
 		
+		Sink<Triple> outputSink = new SinkTripleOutput(out);
+		Sink<Triple> errorSink = new SinkTripleOutput(System.err);
+		
+		Sink<Triple> sink = new ValidatingSink(outputSink, errorSink);
 		
 		Map<String, PostProcessor> postProcessorMap = new HashMap<String, PostProcessor>();
-		postProcessorMap.put("ucamelize&urlEncode", new UCamelizeAndUrlEncodePostProcessor());
-		postProcessorMap.put("mediawikiTitle", new UCamelizeAndUrlEncodePostProcessor());
+		postProcessorMap.put("ucamelize&urlencode", new UCamelizeAndUrlEncodePostProcessor());
+		postProcessorMap.put("mediawikiTitle", new MediaWikiTitlePostProcessor());
 		
 		LgdDumper dumper = new LgdDumper();
 
 		//dumper.dumpWayGeometriesNeoGeo(conn, sink);
 		//dumper.dumpResourceTags(conn, "lgd_tags_resource_kv", "way", sink);
-		dumper.dumpTagsDatatype(conn, "boolean", null, sink);
+		//dumper.dumpTagsDatatype(conn, "boolean", null, sink);
+		
+		//dumper.dumpResourceTagsPrefixed(conn, "lgd_tags_resource_prefix", null, postProcessorMap, sink);
+		//dumper.dumpResourceTags(conn, "lgd_tags_property", null, sink);
+		//dumper.dumpResourceTags(conn, "lgd_tags_property", null, sink);
+
 		
 		
-		/*
+		//if(true) { System.exit(0); }
+
+		dumper.dumpText(conn, null, sink);
+		dumper.dumpStrings(conn, null, sink);
+
 		dumper.dumpNodes(conn, sink);
 		dumper.dumpWays(conn, sink);
 		
@@ -254,7 +400,7 @@ public class LgdDumper {
 		
 		dumper.dumpResourceTagsPrefixed(conn, "lgd_tags_resource_prefix", null, postProcessorMap, sink);
 		dumper.dumpResourceTags(conn, "lgd_tags_property", null, sink);
-		 */
+
 
 		conn.close();
 	}
@@ -268,33 +414,125 @@ public class LgdDumper {
 
 	//private Sink<Triple> sink;
 	
+	
+	private static UrlValidator urlValidator = new UrlValidator();
+	
+	public static String fixUri(String str) {
+		str = str.trim();
+		
+		if(str.startsWith("mailto:")) {
+			str = str.replaceAll("\\sA|aT|t\\s", "@");
+			str = str.replaceAll("\\sD|dO|oT|t\\s", ".");
+			str = str.replaceAll("\\s+", "");
+			
+			return str;
+		} else if(!str.contains("://")) {
+			str = "http://" + str;
+		}
+
+		str = str.replaceAll("\\s+", "");
+
+		return str;
+		/*
+		boolean isValid = urlValidator.isValid(str);
+
+		return isValid ? str : null;
+		*/
+	}
+	
+	public static Node createFixedNodeUri(String str) {
+		str = fixUri(str);
+		return str == null ? null : Node.createURI(str);
+	}
+	
+	public Triple createTriple(Node s, Node p, Node o) {
+		return (o == null || p == null || s == null)
+				? null
+				: new Triple(s, p, o);
+	}
+	
+	public void sendTriple(Triple triple, Sink<Triple> sink) {
+		if(triple != null) {
+			sink.send(triple);
+		}
+	}
+	
 	public LgdDumper() {
 		
 	}
 	
-	public void dumpResourceTags(Connection conn, String tableName, String osmEntityType, Sink<Triple> sink)
+
+	public Statement createStatement(Connection conn)
+		throws SQLException
+	{
+		Statement stmt = conn.createStatement();		
+		stmt.setFetchSize(50000);
+		
+		return stmt;
+	}
+
+	
+	public void dumpText(Connection conn, String osmEntityType, Sink<Triple> sink)
 		throws Exception
 	{		
-		ResultSet rs = conn
-				.createStatement()
-				.executeQuery(
-						"SELECT osm_entity_type, osm_entity_id, property, object FROM " + tableName + whereClause(osmEntityType));
+		Statement stmt = createStatement(conn);
+		ResultSet rs = stmt.executeQuery(
+					"SELECT osm_entity_type, osm_entity_id, property, v, language FROM lgd_tags_text " + whereClause(osmEntityType));
 		
 		while (rs.next()) {
 			Node subject = getResource(rs.getString("osm_entity_type"), rs.getLong("osm_entity_id"));
 			Node predicate = Node.createURI(rs.getString("property"));
-			Node object = Node.createURI(rs.getString("object"));
+			String v = rs.getString("v");
+			String lang = rs.getString("language");
 
-			sink.send(new Triple(subject, predicate, object));
+			Node literal = (lang == null || lang.isEmpty())
+				? Node.createLiteral(v)
+				: Node.createLiteral(v, lang, false);
+
+			sink.send(new Triple(subject, predicate, literal));
+		}		
+	}
+
+	public void dumpStrings(Connection conn, String osmEntityType, Sink<Triple> sink)
+			throws Exception
+		{		
+			Statement stmt = createStatement(conn);
+			ResultSet rs = stmt.executeQuery(
+						"SELECT osm_entity_type, osm_entity_id, k, v FROM lgd_tags_string " + whereClause(osmEntityType));
+			
+			while (rs.next()) {
+				Node subject = getResource(rs.getString("osm_entity_type"), rs.getLong("osm_entity_id"));
+				Node predicate = encodeK(rs.getString("k"));
+				Node value = Node.createLiteral(rs.getString("v"));
+
+				sink.send(new Triple(subject, predicate, value));
+			}		
+		}
+	
+	public void dumpResourceTags(Connection conn, String tableName, String osmEntityType, Sink<Triple> sink)
+		throws Exception
+	{		
+		Statement stmt = createStatement(conn);
+		ResultSet rs = stmt.executeQuery(
+					"SELECT osm_entity_type, osm_entity_id, property, object FROM " + tableName + whereClause(osmEntityType));
+		
+		while (rs.next()) {
+			Node subject = getResource(rs.getString("osm_entity_type"), rs.getLong("osm_entity_id"));
+			Node predicate = Node.createURI(rs.getString("property"));
+			Node object = createFixedNodeUri(rs.getString("object"));
+
+			if(object != null) {
+				sink.send(new Triple(subject, predicate, object));
+			}
 		}
 	}
 
 	public void dumpResourceTagsPrefixed(Connection conn, String tableName, String osmEntityType, Map<String, PostProcessor> postProcessorMap, Sink<Triple> sink)
 			throws Exception
-		{		
-			ResultSet rs = conn
-					.createStatement()
-					.executeQuery(
+	{		
+		Statement stmt = createStatement(conn);
+
+		ResultSet rs = stmt.executeQuery(
 							"SELECT osm_entity_type, osm_entity_id, property, object_prefix, v, post_processing FROM " + tableName + whereClause(osmEntityType));
 			
 			while (rs.next()) {
@@ -310,8 +548,13 @@ public class LgdDumper {
 				}
 				
 				Node object = postProcessor.process(objectPrefix, v);
+
+				if(object != null) {
+					sink.send(new Triple(subject, predicate, object));
+				} else {
+					//System.out.println(objectPrefix + " --- " + v);
+				}
 				
-				sink.send(new Triple(subject, predicate, object));
 			}
 		}
 	
@@ -339,11 +582,25 @@ public class LgdDumper {
 	
 	
 
+	public Node encodeK(String k) {
+		String[] parts = k.split(":");
+
+		int last = parts.length - 1;
+
+		for(int i = 0; i < last; ++i) {
+			parts[i] = StringUtils.urlEncode(StringUtils.toCamelCase(parts[i], false));
+		}
+		
+		return Node.createURI("http://linkedgeodata.org/property/" + Joiner.on('/').join(parts));
+	}
+	
+	
 	public void dumpTagsDatatype(Connection conn, String suffix, String osmEntityType, Sink<Triple> sink)
 		throws Exception
-	{		
-		ResultSet rs = conn
-				.createStatement()
+	{	
+		Statement stmt = createStatement(conn);
+
+		ResultSet rs = stmt
 				.executeQuery(
 						"SELECT osm_entity_type, osm_entity_id, b.property, k, v FROM lgd_tags_" + suffix + " a LEFT JOIN lgd_map_property b USING (k) " + whereClause(osmEntityType));
 		
@@ -368,7 +625,7 @@ public class LgdDumper {
 						: StringUtils.toCamelCase(p, false);
 	
 						
-				p = "http://linkedgeodata.org/property/" + Joiner.on('/').join(parts);
+				p = "http://linkedgeodata.org/ontology/" + Joiner.on('/').join(parts);
 			}
 			
 			
@@ -402,8 +659,9 @@ public class LgdDumper {
 	public void dumpNodeGeometriesNeoGeo(Connection conn, Sink<Triple> sink)
 			throws Exception
 	{
-		ResultSet rs = conn
-				.createStatement()
+		Statement stmt = createStatement(conn);
+
+		ResultSet rs = stmt
 				.executeQuery(
 						"SELECT id, ST_X(geom) x, ST_Y(geom) y FROM nodes");
 		
@@ -419,8 +677,9 @@ public class LgdDumper {
 	public void dumpWayGeometriesNeoGeo(Connection conn, Sink<Triple> sink)
 			throws Exception
 	{
-		ResultSet rs = conn
-				.createStatement()
+		Statement stmt = createStatement(conn);
+
+		ResultSet rs = stmt
 				.executeQuery(
 						"SELECT way_id, node_id FROM way_nodes ORDER BY way_id, sequence_id");
 
@@ -495,9 +754,7 @@ public class LgdDumper {
 	
 	
 	public void dumpNodes(Connection conn, Sink<Triple> sink) throws Exception {
-		Statement stmt = conn.createStatement();
-		
-		stmt.setFetchSize(50000);
+		Statement stmt = createStatement(conn);		
 		
 		ResultSet rs = stmt
 				.executeQuery(
@@ -507,27 +764,36 @@ public class LgdDumper {
 			long id = rs.getLong("id");
 
 			Node subject = vocab.createNode(id);
-			Node version = NodeValue.makeInteger(rs.getInt("version")).asNode();
-			Node user = vocab.createContributor(rs.getInt("user_id")); //NodeValue.makeInteger(rs.getInt("user_id")).asNode();
-			Date date = rs.getDate("tstamp");
-			cal.setTime(date);
-			Node tstamp = NodeValue.makeDateTime(cal).asNode();
-			Node changeset = vocab.createChangeset(rs.getInt("changeset_id"));
 			Node wkt = Node.createLiteral(rs.getString("geom"), null, virtRdf);
 			
-			
-			sink.send(new Triple(subject, vocab.version(), version));
-			sink.send(new Triple(subject, vocab.user(), user));
-			sink.send(new Triple(subject, vocab.tstamp(), tstamp));
-			sink.send(new Triple(subject, vocab.changeSet(), changeset));
 			sink.send(new Triple(subject, vocab.geometryLiteral(), wkt));
+			writeMetadata(subject, rs, sink);			
 		}		
+	}
+	
+	
+	public void writeMetadata(Node subject, ResultSet rs, Sink<Triple> sink)
+			throws SQLException
+	{
+		Node version = NodeValue.makeInteger(rs.getInt("version")).asNode();
+		Node user = vocab.createContributor(rs.getInt("user_id")); //NodeValue.makeInteger(rs.getInt("user_id")).asNode();
+		Date date = rs.getDate("tstamp");
+		cal.setTime(date);
+		Node tstamp = NodeValue.makeDateTime(cal).asNode();
+		Node changeset = vocab.createChangeset(rs.getInt("changeset_id"));
+		
+		
+		sink.send(new Triple(subject, vocab.version(), version));
+		sink.send(new Triple(subject, vocab.user(), user));
+		sink.send(new Triple(subject, vocab.tstamp(), tstamp));
+		sink.send(new Triple(subject, vocab.changeSet(), changeset));		
 	}
 
 	
 	public void dumpWays(Connection conn, Sink<Triple> sink) throws Exception {
-		ResultSet rs = conn
-				.createStatement()
+		Statement stmt = createStatement(conn);
+
+		ResultSet rs = stmt
 				.executeQuery(
 						"SELECT id, version, user_id, tstamp, changeset_id, ST_AsText(linestring) linestring FROM ways");
 
@@ -535,19 +801,11 @@ public class LgdDumper {
 			long id = rs.getLong("id");
 
 			Node subject = vocab.createWay(id);
-			Node version = NodeValue.makeInteger(rs.getInt("version")).asNode();
-			Node user = NodeValue.makeInteger(rs.getInt("user_id")).asNode();
-			Date date = rs.getDate("tstamp");
-			cal.setTime(date);
-			Node tstamp = NodeValue.makeDateTime(cal).asNode();
-			Node changeset = NodeValue.makeDecimal(rs.getInt("changeset_id")).asNode();
 			Node wkt = Node.createLiteral(rs.getString("linestring"), null, virtRdf);
 			
-			sink.send(new Triple(subject, vocab.version(), version));
-			sink.send(new Triple(subject, vocab.user(), user));
-			sink.send(new Triple(subject, vocab.tstamp(), tstamp));
-			sink.send(new Triple(subject, vocab.changeSet(), changeset));
 			sink.send(new Triple(subject, vocab.geometryLiteral(), wkt));
+			
+			writeMetadata(subject, rs, sink);
 		}		
 	}
 	
