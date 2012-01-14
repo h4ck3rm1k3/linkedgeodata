@@ -392,6 +392,7 @@ public class LgdDumper {
 		
 		
 		//if(true) { System.exit(0); }
+		/*
 		dumper.dumpResourceTagsPrefixed(conn, "lgd_tags_resource_prefix", null, postProcessorMap, sink);
 		dumper.dumpResourceTags(conn, "lgd_tags_property", null, sink);
 
@@ -410,6 +411,8 @@ public class LgdDumper {
 		
 		dumper.dumpResourceTags(conn, "lgd_tags_resource_k", null, sink);
 		dumper.dumpResourceTags(conn, "lgd_tags_resource_kv", null, sink);
+		*/
+		dumper.dumpWayNodesOriginal(conn, sink);
 		
 
 
@@ -740,6 +743,65 @@ public class LgdDumper {
 		}		
 	}
 	
+	
+	public void dumpWayNodesOriginal(Connection conn, Sink<Triple> sink)
+			throws Exception
+	{
+		Statement stmt = createStatement(conn);
+
+		ResultSet rs = stmt
+				.executeQuery(
+						"SELECT way_id, node_id FROM way_nodes ORDER BY way_id, sequence_id");
+
+		Long currentWayId = null;
+		List<Long> currentNodeIds = new ArrayList<Long>();
+		
+		while (rs.next()) {
+			Long wayId = rs.getLong("way_id");
+			if(!wayId.equals(currentWayId)) {
+				if(currentWayId == null) {
+					currentWayId = wayId;					
+				} else {
+					writeWayNodeOriginal(currentWayId, currentNodeIds, sink);
+					
+					currentNodeIds.clear();
+					currentWayId = wayId;
+				}
+			}
+			
+			currentNodeIds.add(rs.getLong("node_id"));
+		}
+		writeWayNodeOriginal(currentWayId, currentNodeIds, sink);		
+	}
+	
+
+	/**
+	 * way-id lgdo:hasNodes waynode-id
+	 * waynode-id a rdf:Seq
+	 * 
+	 * @param wayId
+	 * @param nodeIds
+	 * @param sink
+	 */
+	public void writeWayNodeOriginal(Long wayId, List<Long> nodeIds, Sink<Triple> sink) {
+		
+		Node way = vocab.createWay(wayId);	
+		Node wayNode = vocab.createWayNode(wayId);
+		
+		sink.send(new Triple(way, vocab.hasNodes(), wayNode));
+		sink.send(new Triple(wayNode, RDF.type.asNode(), RDF.Seq.asNode()));
+		
+
+		int i = 0;
+		for(Long nodeId : nodeIds) {
+			++i;
+			sink.send(new Triple(wayNode, RDF.li(i).asNode(), vocab.createNode(nodeId)));
+		}
+	}
+	
+	
+	
+	
 	public void dumpWayGeometriesNeoGeo(Connection conn, Sink<Triple> sink)
 			throws Exception
 	{
@@ -893,6 +955,7 @@ interface LgdVocab {
 	Node createNode(long id);
 	Node createRelation(long id);
 	Node createWay(long id);
+	Node createWayNode(long id);
 	Node createContributor(long id);
 	Node createChangeset(long id);
 
@@ -905,6 +968,8 @@ interface LgdVocab {
 	Node user();
 	Node tstamp();
 	Node geometryLiteral();
+	
+	Node hasNodes();
 }
 
 class LgdVocabDefault implements LgdVocab {
@@ -930,6 +995,13 @@ class LgdVocabDefault implements LgdVocab {
 	private static final Node user = Node.createURI(ontologyNs + "contributor");
 	private static final Node tstamp = Node.createURI(ontologyNs + "modificationDate");
 	private static final Node changeset = Node.createURI(ontologyNs + "changeset");
+
+	private static final Node hasNodes = Node.createURI(ontologyNs + "hasNodes");
+
+	public Node hasNodes()
+	{
+		return hasNodes;
+	}
 	
 	public Node createNode(long id) {
 		return Node.createURI(nodeNs + id);
@@ -937,6 +1009,10 @@ class LgdVocabDefault implements LgdVocab {
 
 	public Node createWay(long id) {
 		return Node.createURI(wayNs + id);
+	}
+	
+	public Node createWayNode(long id) {
+		return Node.createURI(wayNodeNs + id);
 	}
 
 	public Node createRelation(long id) {
