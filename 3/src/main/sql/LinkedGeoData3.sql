@@ -142,8 +142,8 @@ CREATE INDEX idx_lgd_map_literal_language_property ON lgd_map_literal(language, 
 
 
 
-DROP TABLE IF EXISTS lgd_map_label_kv;
-CREATE TABLE lgd_map_label_kv (
+DROP TABLE IF EXISTS lgd_map_label;
+CREATE TABLE lgd_map_label (
 	k TEXT NOT NULL,
 	v TEXT NOT NULL, 
 	language VARCHAR(16) NOT NULL,
@@ -154,13 +154,13 @@ CREATE TABLE lgd_map_label_kv (
 );
 
 /* Index for searching by label */ 
-CREATE INDEX idx_lgd_map_label_kv_label_language ON lgd_map_label_kv(label, language);
+CREATE INDEX idx_lgd_map_label_label_language ON lgd_map_label(label, language);
 
 /* Index for searching by language */
-CREATE INDEX idx_lgd_map_label_kv_language_label ON lgd_map_label_kv(language, label);
+CREATE INDEX idx_lgd_map_label_language_label ON lgd_map_label(language, label);
 
 /* Index for joins on (k, v) */
-CREATE INDEX idx_lgd_map_label_kv_k_v ON lgd_map_label_kv(v, k);
+CREATE INDEX idx_lgd_map_label_k_v ON lgd_map_label(v, k);
 
 
 DROP TABLE IF EXISTS lgd_map_resource_k; 
@@ -214,7 +214,7 @@ CREATE INDEX idx_lgd_map_property_property ON lgd_map_property USING btree (prop
 
 CREATE VIEW lgd_resource_label AS
  SELECT b.object AS resource, a.label, a.language
-   FROM lgd_map_label_kv a
+   FROM lgd_map_label a
    JOIN lgd_map_resource_kv b USING (k, v);
 
    
@@ -472,7 +472,7 @@ DROP VIEW IF EXISTS lgd_tags_resource_prefix;
 CREATE VIEW lgd_tags_resource_prefix AS   
   SELECT osm_entity_type, osm_entity_id, property, object_prefix, v, post_processing
    FROM lgd_tags a
-   JOIN lgd_map_resource_prefix b USING(k);
+   JOIN lgd_map_resource_prefix b USING(k)
  WHERE
   NOT EXISTS (SELECT c.k FROM lgd_map_datatype c WHERE c.k = b.k); 
 

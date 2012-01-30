@@ -15291,149 +15291,6 @@ tourism	zoo	pt	Jardim zoológico
 waterway	canal	pt	Canal
 waterway	dock	pt	Doca
 waterway	river	pt	Rio
-amenity	atm	qqq	See http://wiki.openstreetmap.org/wiki/Tag:amenity=atm
-amenity	bench	qqq	See http://wiki.openstreetmap.org/wiki/Tag:amenity=bench
-amenity	bicycle_parking	qqq	See http://wiki.openstreetmap.org/wiki/Tag:amenity=bicycle_parking
-amenity	bicycle_rental	qqq	See http://wiki.openstreetmap.org/wiki/Tag:amenity=bicycle_rental
-amenity	brothel	qqq	See http://wiki.openstreetmap.org/wiki/Tag:amenity=brothel
-amenity	bureau_de_change	qqq	See http://wiki.openstreetmap.org/wiki/Tag:amenity=bureau_de_change
-amenity	bus_station	qqq	See http://wiki.openstreetmap.org/wiki/Tag:amenity=bus_station
-amenity	car_sharing	qqq	See [[wikipedia:Carsharing]]
-amenity	courthouse	qqq	See http://wiki.openstreetmap.org/wiki/Tag:amenity=courthouse
-amenity	dormitory	qqq	See [[wikipedia:Dormitory]]
-amenity	drinking_water	qqq	See http://wiki.openstreetmap.org/wiki/Tag:amenity=drinking_water
-amenity	ferry_terminal	qqq	See http://wiki.openstreetmap.org/wiki/Tag:amenity=ferry_terminal
-amenity	fire_hydrant	qqq	See http://wiki.openstreetmap.org/wiki/Tag:amenity=fire_hydrant
-amenity	fire_station	qqq	See http://wiki.openstreetmap.org/wiki/Tag:amenity=fire_station
-amenity	fountain	qqq	See http://wiki.openstreetmap.org/wiki/Tag:amenity=fountain
-amenity	fuel	qqq	See http://wiki.openstreetmap.org/wiki/Tag:amenity=fuel
-amenity	grave_yard	qqq	See http://wiki.openstreetmap.org/wiki/Tag:amenity=grave_yard
-amenity	hall	qqq	See [[wikipedia:Assembly Hall]]
-amenity	hospital	qqq	See http://wiki.openstreetmap.org/wiki/Tag:amenity=hospital
-amenity	hunting_stand	qqq	See http://wiki.openstreetmap.org/wiki/Tag:amenity=hunting_stand
-amenity	ice_cream	qqq	See http://wiki.openstreetmap.org/wiki/Tag:amenity=ice_cream
-amenity	library	qqq	See http://wiki.openstreetmap.org/wiki/Tag:amenity=library
-amenity	marketplace	qqq	See http://wiki.openstreetmap.org/wiki/Tag:amenity=marketplace, [[wikipedia:Marketplace]]
-amenity	mountain_rescue	qqq	See [[wikipedia:Mountain rescue]]
-amenity	nursery	qqq	See [[wikipedia:Nursery school]]
-amenity	nursing_home	qqq	See [[wikipedia:Nursing home]], http://wiki.openstreetmap.org/wiki/Tag:amenity=nursing_home
-amenity	pharmacy	qqq	See http://wiki.openstreetmap.org/wiki/Tag:amenity=pharmacy
-amenity	place_of_worship	qqq	See http://wiki.openstreetmap.org/wiki/Tag:amenity=place_of_worship
-amenity	police	qqq	See http://wiki.openstreetmap.org/wiki/Tag:amenity=police
-amenity	post_box	qqq	See http://wiki.openstreetmap.org/wiki/Tag:amenity=post_box
-amenity	prison	qqq	See http://wiki.openstreetmap.org/wiki/Tag:amenity=prison
-amenity	pub	qqq	See http://wiki.openstreetmap.org/wiki/Tag:amenity=pub
-amenity	public_building	qqq	See http://wiki.openstreetmap.org/wiki/Tag:amenity=public_building
-amenity	public_market	qqq	See [[wikipedia:Public market]]
-amenity	restaurant	qqq	See http://wiki.openstreetmap.org/wiki/Tag:amenity=restaurant
-amenity	shelter	qqq	See http://wiki.openstreetmap.org/wiki/Tag:amenity=shelter
-amenity	studio	qqq	See [[wikipedia:Studio apartment]], http://wiki.openstreetmap.org/wiki/Tag:amenity=studio
-amenity	theatre	qqq	See http://wiki.openstreetmap.org/wiki/Tag:amenity=theatre
-amenity	townhall	qqq	See http://wiki.openstreetmap.org/wiki/Tag:amenity=townhall
-amenity	vending_machine	qqq	See http://wiki.openstreetmap.org/wiki/Tag:amenity=vending_machine
-amenity	veterinary	qqq	See http://wiki.openstreetmap.org/wiki/Tag:amenity=veterinary
-amenity	village_hall	qqq	See [[wikipedia:Village hall]]
-amenity	waste_basket	qqq	See http://wiki.openstreetmap.org/wiki/Tag:amenity=waste_basket
-boundary	administrative	qqq	See http://wiki.openstreetmap.org/wiki/Tag:boundary=administrative
-building	dormitory	qqq	See http://wiki.openstreetmap.org/wiki/Tag:building=dormitory
-building	house	qqq	{{Identical|House}}
-building	train_station	qqq	See [[wikipedia:Train station]]
-highway	bridleway	qqq	See http://wiki.openstreetmap.org/wiki/Tag:highway=bridleway
-highway	bus_guideway	qqq	See http://wiki.openstreetmap.org/wiki/Tag:highway=bus_guideway
-highway	byway	qqq	See [[wikipedia:Byway_(road)]]
-highway	cycleway	qqq	See http://wiki.openstreetmap.org/wiki/Tag:highway=cycleway
-highway	footway	qqq	See http://wiki.openstreetmap.org/wiki/Tag:highway=footway
-highway	ford	qqq	See http://wiki.openstreetmap.org/wiki/Tag:highway=ford, [[wikipedia:Ford_(crossing)]]
-highway	living_street	qqq	See [[wikipedia:Living_street]]
-highway	minor	qqq	See http://wiki.openstreetmap.org/wiki/Tag:highway=minor
-highway	motorway	qqq	See [[wikipedia:Motorway]]
-highway	path	qqq	See http://wiki.openstreetmap.org/wiki/Tag:highway=path\n{{Identical|Path}}
-highway	pedestrian	qqq	See http://wiki.openstreetmap.org/wiki/Tag:highway=pedestrian
-highway	platform	qqq	See http://wiki.openstreetmap.org/wiki/Tag:highway=platform
-highway	primary_link	qqq	Road link, see [[http://wiki.openstreetmap.org/wiki/Link_(highway)]]
-highway	raceway	qqq	See http://wiki.openstreetmap.org/wiki/Tag:highway=raceway
-highway	service	qqq	See [[wikipedia:Frontage road]]
-highway	services	qqq	See http://wiki.openstreetmap.org/wiki/Tag:highway=services
-highway	stile	qqq	See [[wikipedia:Stile]]
-highway	track	qqq	See http://wiki.openstreetmap.org/wiki/Tag:highway=track, [[wikipedia:Trail]]
-highway	trunk_link	qqq	See [[wikipedia:Trunk road]]
-highway	unclassified	qqq	See http://wiki.openstreetmap.org/wiki/Tag:highway=unclassified
-historic	archaeological_site	qqq	See http://wiki.openstreetmap.org/wiki/Tag:historic=archaeological_site
-historic	boundary_stone	qqq	See [[wikipedia:Boundary marker]]
-historic	house	qqq	{{Identical|House}}
-historic	ruins	qqq	See http://wiki.openstreetmap.org/wiki/Tag:historic=ruins
-historic	wayside_shrine	qqq	See http://en.wikipedia.org/wiki/Wayside_shrine
-landuse	allotments	qqq	See [[:wikipedia:Allotment (gardening)]]
-landuse	brownfield	qqq	See [[wikipedia:Brownfield Land]]
-landuse	conservation	qqq	See [http://wiki.openstreetmap.org/wiki/Proposed_features/conservation wiki.openstreetmap:Conservation]
-landuse	farmland	qqq	See [[wikipedia:Arable land]]
-landuse	farmyard	qqq	An area surrounded by or adjacent to farm buildings.
-landuse	greenfield	qqq	See [[wikipedia:Greenfield land]]
-landuse	piste	qqq	See http://wiki.openstreetmap.org/wiki/Tag:landuse=piste
-landuse	reservoir	qqq	See http://wiki.openstreetmap.org/wiki/Tag:landuse=reservoir
-landuse	residential	qqq	See http://wiki.openstreetmap.org/wiki/Tag:landuse=residential
-leisure	beach_resort	qqq	See [[wikipedia:Seaside resort]]
-leisure	common	qqq	See [[wikipedia:Common land]]
-leisure	pitch	qqq	See [[wikipedia:Pitch_(sports)]]
-leisure	playground	qqq	See http://wiki.openstreetmap.org/wiki/Tag:leisure=playground
-leisure	recreation_ground	qqq	See [[wikipedia:Recreation Ground]]
-leisure	slipway	qqq	See http://wiki.openstreetmap.org/wiki/Tag:leisure=slipway, [[wikipedia:Slipway]]
-leisure	track	qqq	See http://wiki.openstreetmap.org/wiki/Tag:leisure=track
-leisure	water_park	qqq	See http://wiki.openstreetmap.org/wiki/Tag:leisure=water_park, [[wikipedia:Waterpark]]
-natural	bay	qqq	See http://wiki.openstreetmap.org/wiki/Tag:natural=bay
-natural	cave_entrance	qqq	See http://wiki.openstreetmap.org/wiki/Tag:natural=cave_entrance
-natural	fell	qqq	See [[wikipedia:Fell]]
-natural	land	qqq	See http://wiki.openstreetmap.org/wiki/Tag:natural=land
-natural	ridge	qqq	See [[wikipedia:Ridge]]
-natural	river	qqq	{{Identical|River}}
-natural	rock	qqq	See http://wiki.openstreetmap.org/wiki/Tag:natural=rock
-natural	scree	qqq	See http://wiki.openstreetmap.org/wiki/Tag:natural=scree, [[wikipedia:Scree]]
-natural	spring	qqq	See http://wiki.openstreetmap.org/wiki/Tag:natural=spring
-natural	water	qqq	See http://wiki.openstreetmap.org/wiki/Tag:natural=water
-natural	wetlands	qqq	See http://wiki.openstreetmap.org/wiki/Tag:natural=wetland
-place	city	qqq	{{Identical|City}}
-place	country	qqq	{{Identical|Country}}
-place	hamlet	qqq	See [[wikipedia:Hamlet_(place)]]
-place	house	qqq	{{Identical|House}}
-place	houses	qqq	{{Identical|House}}
-place	unincorporated_area	qqq	An unincorporated area is a region of land that is not a part of any municipality. See [[wikipedia:Unincorporated area]].
-railway	funicular	qqq	Um funicular é um carro de cabos que circula sobre carris; a sua principal função é o transporte de passageiros ou carga ao longo de encostas. Fonte: http://pt.wikipedia.org/wiki/Funicular
-railway	light_rail	qqq	See [[wikipedia:Light rail]]
-railway	narrow_gauge	qqq	See [[wikipedia:Narrow gauge railway]]
-railway	spur	qqq	See [[wikipedia:Branch line]]
-railway	station	qqq	See http://wiki.openstreetmap.org/wiki/Tag:railway=station
-railway	yard	qqq	See [[wikipedia:Rail yard]]
-shop	bicycle	qqq	See http://wiki.openstreetmap.org/wiki/Tag:shop=bicycle
-shop	butcher	qqq	See http://wiki.openstreetmap.org/wiki/Tag:shop=butcher
-shop	convenience	qqq	See [[wikipedia:Convenience store]]
-shop	dry_cleaning	qqq	See http://wiki.openstreetmap.org/wiki/Tag:shop=dry_cleaning
-shop	funeral_directors	qqq	See http://wiki.openstreetmap.org/wiki/Tag:shop=funeral_directors
-shop	gallery	qqq	{{Identical|Gallery}}
-shop	greengrocer	qqq	See [[wikipedia:Greengrocer]]
-shop	hardware	qqq	This is about hardware in the DIY sense, '''not''' in the computer sense! See [[:wikipedia:Hardware store]].
-shop	laundry	qqq	See http://wiki.openstreetmap.org/wiki/Tag:shop=laundry
-shop	newsagent	qqq	See [[wikipedia:Newsstand]]
-shop	salon	qqq	See [[wikipedia:Beauty salon]]
-shop	shoes	qqq	See http://wiki.openstreetmap.org/wiki/Tag:shop=shoes
-shop	toys	qqq	See http://wiki.openstreetmap.org/wiki/Tag:shop=toys
-shop	travel_agency	qqq	See http://wiki.openstreetmap.org/wiki/Tag:shop=travel_agency
-tourism	artwork	qqq	See http://wiki.openstreetmap.org/wiki/Tag:tourism=artwork
-tourism	chalet	qqq	See http://wiki.openstreetmap.org/wiki/Tag:tourism=chalet
-tourism	information	qqq	{{Identical|Information}}
-tourism	picnic_site	qqq	See http://wiki.openstreetmap.org/wiki/Tag:tourism=picnic_site
-waterway	canal	qqq	See http://wiki.openstreetmap.org/wiki/Tag:waterway=canal
-waterway	dam	qqq	See http://wiki.openstreetmap.org/wiki/Tag:waterway=dam
-waterway	derelict_canal	qqq	See http://wiki.openstreetmap.org/wiki/Tag:waterway=derelict_canal
-waterway	ditch	qqq	See [[wikipedia:Ditch]]
-waterway	dock	qqq	A large basin in which the water is impounded by gates or locks allowing ships to remain afloat at low tide
-waterway	lock	qqq	See [[wikipedia:Lock_(water_transport)]]
-waterway	lock_gate	qqq	See http://wiki.openstreetmap.org/wiki/Tag:waterway=lock_gate, [[wikipedia:Lock (water transport)]]
-waterway	mooring	qqq	See [[wikipedia:Mooring_(watercraft)]]
-waterway	rapids	qqq	See http://wiki.openstreetmap.org/wiki/Tag:waterway=rapids, [[wikipedia:Rapids]]
-waterway	river	qqq	{{Identical|River}}
-waterway	riverbank	qqq	See [[wikipedia:Bank_(geography)]], http://wiki.openstreetmap.org/wiki/Tag:waterway=riverbank
-waterway	stream	qqq	See http://wiki.openstreetmap.org/wiki/Tag:waterway=stream
-waterway	weir	qqq	See http://wiki.openstreetmap.org/wiki/Tag:waterway=weir
 amenity	airport	ru	Аэропорт
 amenity	arts_centre	ru	Дом искусств
 amenity	atm	ru	Банкомат
@@ -17618,7 +17475,7 @@ amenity	ice_cream	sv	Glass
 amenity	kindergarten	sv	Dagis
 amenity	library	sv	Bibliotek
 amenity	market	sv	Torghandel
-amenity	marketplace	sv	\nMarknad
+amenity	marketplace	sv	Marknad
 amenity	mountain_rescue	sv	Fjällräddning
 amenity	nightclub	sv	Nattklubb
 amenity	nursery	sv	Förskola
@@ -20134,3 +19991,4 @@ tourism	picnic_site	zh-hant	野餐地
 tourism	zoo	zh-hant	動物園
 waterway	dam	zh-hant	水壩
 \.
+
