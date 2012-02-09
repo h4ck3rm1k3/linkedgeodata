@@ -305,7 +305,7 @@ historic	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedgeodata.or
 landuse	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedgeodata.org/ontology/Landuse
 military	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedgeodata.org/ontology/MilitaryThing
 natural	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedgeodata.org/ontology/NaturalThing
-route	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedgeodata.org/ontology/Route
+route	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedgeodata.org/ontology/RouteThing
 boundary	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedgeodata.org/ontology/Boundary
 sport	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedgeodata.org/ontology/SportThing
 abutters	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedgeodata.org/ontology/Abutters
@@ -320,6 +320,8 @@ building	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedgeodata.or
 --
 
 COPY lgd_map_resource_kv (k, v, property, object) FROM stdin;
+type	route	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedgeodata.org/ontology/Route
+type	multipolygon	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedgeodata.org/ontology/MultiPolygon	
 highway	motorway	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedgeodata.org/ontology/Motorway
 highway	motorway_link	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedgeodata.org/ontology/MotorwayLink
 highway	trunk	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedgeodata.org/ontology/Trunk
@@ -1678,6 +1680,7 @@ wheelchair	yes	http://linkedgeodata.org/ontology/wheelchair	http://linkedgeodata
 COPY lgd_map_property (k, property) FROM stdin;
 website	http://xmlns.com/foaf/0.1/homepage
 image	http://xmlns.com/foaf/0.1/depiction
+owl:sameAs:1	http://www.w3.org/2002/07/owl#sameAs
 addr:postcode	http://linkedgeodata.org/ontology/addr/postcode
 admin_level	http://linkedgeodata.org/ontology/adminLevel
 agricultural	http://linkedgeodata.org/ontology/agricultural

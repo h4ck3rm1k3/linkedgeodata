@@ -16,7 +16,7 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.sparql.engine.http.HttpParams;
 
 @Provider
-@Produces(HttpParams.contentTypeNTriples)
+@Produces({HttpParams.contentTypeNTriples})
 //@Consumes({HttpParams.contentTypeNTriples})
 public class MessageBodyWriterNTriples
 	//extends AbstractModelMessageReaderWriterProvider

@@ -411,9 +411,13 @@ public class LgdDumper {
 		
 		dumper.dumpResourceTags(conn, "lgd_tags_resource_k", null, sink);
 		dumper.dumpResourceTags(conn, "lgd_tags_resource_kv", null, sink);
-		*/
+
 		dumper.dumpWayNodesOriginal(conn, sink);
-		
+		*/
+
+		dumper.dumpWays(conn, sink);
+		dumper.dumpWayLineStrings(conn, sink);
+		dumper.dumpWayPolygons(conn, sink);
 
 
 		conn.close();
@@ -451,7 +455,9 @@ public class LgdDumper {
 			str = str.replaceAll("\\sD|dO|oT|t\\s", ".");
 			str = str.replaceAll("\\s+", "");
 			
-			return str;
+			// TODO NOT SURE ABOUT LEGAL ISSUES - THEREFORE I DO NOT ADD EMAIL ADDRESSES FOR NOW
+			return null;
+			//return str;
 		} else if(!str.contains("://")) {
 			str = "http://" + str;			
 		}
@@ -923,19 +929,54 @@ public class LgdDumper {
 
 		ResultSet rs = stmt
 				.executeQuery(
-						"SELECT id, version, user_id, tstamp, changeset_id, ST_AsText(linestring) linestring FROM ways");
+						"SELECT id, version, user_id, tstamp, changeset_id FROM ways a");
 
 		while (rs.next()) {
 			long id = rs.getLong("id");
 
 			Node subject = vocab.createWay(id);
-			Node wkt = Node.createLiteral(rs.getString("linestring"), null, virtRdf);
-			
-			sink.send(new Triple(subject, vocab.geometryLiteral(), wkt));
 			
 			writeMetadata(subject, rs, sink);
 		}		
 	}
+	
+	public void dumpWayLineStrings(Connection conn, Sink<Triple> sink) throws Exception {
+		Statement stmt = createStatement(conn);
+
+		ResultSet rs = stmt
+				.executeQuery(
+						"SELECT id, ST_AsText(linestring) AS wkt FROM ways a WHERE NOT EXISTS (SELECT way_id from simple_polys b WHERE b.way_id = a.id AND b.polygon IS NOT NULL)");
+
+		while (rs.next()) {
+			long id = rs.getLong("id");
+
+			Node subject = vocab.createWay(id);
+			Node wkt = Node.createLiteral(rs.getString("wkt"), null, virtRdf);
+			
+			sink.send(new Triple(subject, vocab.geometryLiteral(), wkt));
+		}		
+	}
+
+	public void dumpWayPolygons(Connection conn, Sink<Triple> sink) throws Exception {
+		Statement stmt = createStatement(conn);
+
+		ResultSet rs = stmt
+				.executeQuery(
+						"SELECT id, ST_AsText(polygon) AS wkt FROM ways a JOIN simple_polys b ON (b.way_id = a.id) WHERE b.polygon IS NOT NULL");
+
+		while (rs.next()) {
+			long id = rs.getLong("id");
+
+			Node subject = vocab.createWay(id);
+			Node wkt = Node.createLiteral(rs.getString("wkt"), null, virtRdf);
+			
+			sink.send(new Triple(subject, vocab.geometryLiteral(), wkt));
+		}		
+	}
+
+	
+	
+	
 	
 	
 	

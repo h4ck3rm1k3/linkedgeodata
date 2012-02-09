@@ -15,6 +15,7 @@ import java.util.Map;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
@@ -84,6 +85,32 @@ public class RestApi {
 		return result;
 	}
 
+	
+	@GET
+	@Path("/node/{id}")
+	public Model describeNode(@PathParam("id") long id)
+	{
+		return describe("http://linkedgeodata.org/triplify/node" + id);
+	}
+
+	@GET
+	@Path("/way/{id}")
+	public Model describeWay(@PathParam("id") long id)
+	{
+		return describe("http://linkedgeodata.org/triplify/way" + id);
+	}
+
+	@GET
+	@Path("/relation/{id}")
+	public Model describeRelation(@PathParam("id") long id)
+	{
+		return describe("http://linkedgeodata.org/triplify/relation" + id);
+	}
+
+	
+	
+	
+	
 	@GET
 	@Path("/ontology/")
 	public Model getOntology() throws Exception
@@ -215,7 +242,8 @@ public class RestApi {
 	
 	public Model describe(String uri)
 	{
-		String query = "Describe <" + uri + ">";
+		String query = "Construct { ?s ?p ?o . } { ?s ?p ?o . Filter(?s = <" + uri + ">) . }";
+		//String query = "Describe <" + uri + ">";
 		
 		return qeFactory.createQueryExecution(query).execConstruct();
 	}
