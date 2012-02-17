@@ -404,20 +404,26 @@ public class LgdDumper {
 		
 		dumper.dumpNodeGeometriesNeoGeo(conn, sink);
 		dumper.dumpWayGeometriesNeoGeo(conn, sink);
+		*/
+
 
 		dumper.dumpTagsDatatype(conn, "boolean", null, sink);
 		dumper.dumpTagsDatatype(conn, "int", null, sink);
 		dumper.dumpTagsDatatype(conn, "float", null, sink);
-		
+
 		dumper.dumpResourceTags(conn, "lgd_tags_resource_k", null, sink);
 		dumper.dumpResourceTags(conn, "lgd_tags_resource_kv", null, sink);
 
+		dumper.dumpResourceTagsPrefixed(conn, "lgd_tags_resource_prefix", null, postProcessorMap, sink);
+
+		
+		/*
 		dumper.dumpWayNodesOriginal(conn, sink);
-		*/
 
 		dumper.dumpWays(conn, sink);
 		dumper.dumpWayLineStrings(conn, sink);
 		dumper.dumpWayPolygons(conn, sink);
+		*/
 
 
 		conn.close();
