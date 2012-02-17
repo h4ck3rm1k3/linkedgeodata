@@ -321,7 +321,7 @@ building	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedgeodata.or
 
 COPY lgd_map_resource_kv (k, v, property, object) FROM stdin;
 type	route	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedgeodata.org/ontology/Route
-type	multipolygon	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedgeodata.org/ontology/MultiPolygon	
+type	multipolygon	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedgeodata.org/ontology/MultiPolygon
 highway	motorway	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedgeodata.org/ontology/Motorway
 highway	motorway_link	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedgeodata.org/ontology/MotorwayLink
 highway	trunk	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://linkedgeodata.org/ontology/Trunk
