@@ -1,4 +1,6 @@
-   
+
+// DO NOT USE THIS FILE, ITS OUTDATED
+
 /****************************************************************************
  * node_tags                                                                *
  ****************************************************************************/
@@ -21,7 +23,7 @@ CREATE VIEW lgd_tags_int AS
 DROP VIEW IF EXISTS lgd_node_tags_float;
 CREATE VIEW lgd_node_tags_float AS
   SELECT a.node_id, a.k, lgd_tryparse_float(a.v) AS v
-   FROMnode_tags a
+   FROM node_tags a
    JOIN lgd_map_datatype b ON a.k = b.k
   WHERE lgd_tryparse_float(a.v) IS NOT NULL AND b.datatype = 'float'::lgd_datatype;
 
@@ -32,7 +34,7 @@ CREATE VIEW lgd_node_tags_float AS
  */
 DROP VIEW IF EXISTS lgd_node_tags_string;
 CREATE VIEW lgd_node_tags_string AS
-	SELECT a.node, a.k, a.v FROM node_tags a WHERE
+	SELECT a.node_id, a.k, a.v FROM node_tags a WHERE
 		NOT EXISTS (SELECT b.k FROM lgd_map_datatype  b WHERE b.k = a.k) AND 
 		NOT EXISTS (SELECT c.k FROM lgd_map_resource_k  c WHERE c.k = a.k) AND 
 		NOT EXISTS (SELECT d.k FROM lgd_map_resource_kv d WHERE (d.k, d.v) = (a.k, a.v)) AND 
@@ -67,7 +69,7 @@ CREATE VIEW lgd_node_tags_resource_k AS
   
 DROP VIEW IF EXISTS lgd_node_tags_resource_kv;
 CREATE VIEW lgd_node_tags_resource_kv AS   
-  SELECT a.osm_node_id, b.property, b.object
+  SELECT a.node_id, b.property, b.object
    FROM node_tags a
    JOIN lgd_map_resource_kv b USING(k, v)
  WHERE
