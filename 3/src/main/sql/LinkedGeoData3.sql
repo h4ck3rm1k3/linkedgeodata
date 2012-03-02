@@ -123,8 +123,8 @@ CREATE VIEW lgd_tags AS
 
 
 
-CREATE TABLE IF NOT EXISTS lgd_stat_datatype;
-CREATE TABLE lgd_stat_datatype (
+
+CREATE TABLE IF NOT EXIST lgd_stat_datatype (
 	k             text   PRIMARY KEY NOT NULL,
 	count_total   bigint NOT NULL,
 	count_int     bigint NOT NULL,
