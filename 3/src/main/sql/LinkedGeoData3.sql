@@ -215,7 +215,7 @@ DROP VIEW IF EXISTS lgd_tags_resource_k;
 CREATE VIEW lgd_tags_resource_k AS
  SELECT a.osm_entity_type, a.osm_entity_id, b.property, b.object
    FROM lgd_tags a
-   JOIN lgd_map_resource_k b USING(k)
+   JOIN lgd_map_resource_k b ON (b.k = a.k)
  WHERE
   NOT EXISTS (SELECT c.k FROM lgd_map_datatype c WHERE c.k = a.k); 
 
