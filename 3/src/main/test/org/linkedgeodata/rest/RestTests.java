@@ -31,6 +31,7 @@ public class RestTests {
 		model.write(System.out, "N-TRIPLES");
 	}
 	
+	@Ignore
 	@Test
 	public void testIntersects() {
 		
@@ -40,7 +41,7 @@ public class RestTests {
 		// Rectangle2D.Double c = new Rectangle2D.Double(a.x, a.y, b.x - a.x,
 		// b.y - a.y);
 
-		String polygon = a.y + "-" + b.y + "," + a.x + "-" + b.y;
+		String polygon = a.y + "-" + b.y + "," + a.x + "-" + b.x;
 		
 		
 		String url = "http://localhost:9998/api/3/intersects/" + polygon;
@@ -50,4 +51,40 @@ public class RestTests {
 		
 		model.write(System.out, "N-TRIPLES");
 	}
+
+	@Test
+	public void testGeocode() {
+		
+		
+		String url = "http://localhost:9998/api/3/geocode?q=Leipzig";
+		
+		Model model = ModelFactory.createDefaultModel();
+		model.read(url);
+		
+		model.write(System.out, "N-TRIPLES");
+	}
+
+	
+	
+	@Ignore
+	@Test
+	public void testIntersectsClass() {
+		
+		Point2D.Double a = new Point2D.Double(12.34593062612, 51.33298118419);
+		Point2D.Double b = new Point2D.Double(12.404552986346, 51.348557018545);
+
+		// Rectangle2D.Double c = new Rectangle2D.Double(a.x, a.y, b.x - a.x,
+		// b.y - a.y);
+
+		String polygon = a.y + "-" + b.y + "," + a.x + "-" + b.x;
+		
+		
+		String url = "http://localhost:9998/api/3/intersects/" + polygon + "/Bakery";
+		
+		Model model = ModelFactory.createDefaultModel();
+		model.read(url);
+		
+		model.write(System.out, "N-TRIPLES");
+	}
+
 }

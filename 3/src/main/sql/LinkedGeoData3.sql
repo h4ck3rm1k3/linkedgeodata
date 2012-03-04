@@ -6,10 +6,11 @@
 
 CREATE TABLE simple_polys (
 	way_id BIGINT PRIMARY KEY NOT NULL,
-	polygon geometry NOT NULL,
 	area float NOT NULL
 );
 
+-- TODO: Not Null constraint
+SELECT AddGeometryColumn('simple_polys', 'polygon', 4326, 'GEOMETRY', 2);
 
 /*
 -- Source osm2postgresql

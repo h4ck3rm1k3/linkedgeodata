@@ -17,8 +17,8 @@ import java.util.Map;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
 
-import org.aksw.commons.sparql.api.cache.core.QueryExecutionFactoryCacheEx;
 import org.aksw.commons.sparql.api.cache.extra.CacheCoreEx;
 import org.aksw.commons.sparql.api.cache.extra.CacheCoreH2;
 import org.aksw.commons.sparql.api.cache.extra.CacheEx;
@@ -27,7 +27,6 @@ import org.aksw.commons.sparql.api.core.QueryExecutionFactory;
 import org.aksw.commons.sparql.api.delay.extra.Delayer;
 import org.aksw.commons.sparql.api.delay.extra.DelayerDefault;
 import org.aksw.commons.sparql.api.http.QueryExecutionFactoryHttp;
-import org.aksw.commons.sparql.api.pagination.core.QueryExecutionFactoryPaginated;
 import org.aksw.commons.util.strings.StringUtils;
 import org.hibernate.engine.jdbc.StreamUtils;
 import org.slf4j.Logger;
@@ -35,6 +34,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -68,10 +68,10 @@ public class RestApi {
 		CacheEx cacheFrontend = new CacheExImpl(cacheBackend);
 		
 		//QueryExecutionFactory<?> 
-		tmp = new QueryExecutionFactoryCacheEx(tmp, cacheFrontend);
+		//tmp = new QueryExecutionFactoryCacheEx(tmp, cacheFrontend);
 
 		
-		tmp = new QueryExecutionFactoryPaginated(tmp, 1000);
+		//tmp = new QueryExecutionFactoryPaginated(tmp, 1000);
 		
 		qeFactory = tmp;
 		
@@ -111,10 +111,8 @@ public class RestApi {
 	}
 
 
-	
-	@GET
-	@Path("/intersects/{yMin}-{yMax},{xMin}-{xMax}/")
-	public Model near(@PathParam("xMin") double xMin, @PathParam("xMax") double xMax, @PathParam("yMin") double yMin, @PathParam("yMin") double yMax)
+	@Path("/intersects/{yMin}-{yMax},{xMin}-{xMax}/{className}") 	// /label/{lang}/{predicate}/{value}")
+	public Model nearClass(@PathParam("xMin") double xMin, @PathParam("xMax") double xMax, @PathParam("yMin") double yMin, @PathParam("yMax") double yMax, @PathParam("className") String className)
 	{
 		Point2D.Double a = new Point2D.Double(xMin, yMin);
 		Point2D.Double b = new Point2D.Double(xMax, yMax);
@@ -128,8 +126,15 @@ public class RestApi {
 
 		String filter = "Filter(ogc:intersects(?geo, ogc:geomFromText('" + polygon + "')))";
 		
-		String query = "Prefix geom:<http://geovocab.org/geometry#> Prefix ogc:<http://www.opengis.net/rdf#> Construct { ?s ?p ?o } { ?s geom:geometry ?x . ?x ogc:asWKT ?geo . ?s ?p ?o . " + filter + "}";
+		String typeTriple = "";
+		if(className != null) {
+			// TODO: Support resolving class labels
+			
+			typeTriple = "?s a <http://linkedgeodata.org/ontology/" + className + "> . ";
+		}
 		
+		String query = "Prefix geom:<http://geovocab.org/geometry#> Prefix ogc:<http://www.opengis.net/rdf#> Construct { ?s ?p ?o } { " + typeTriple + " ?s geom:geometry ?x . ?x ogc:asWKT ?geo . ?s ?p ?o . " + filter + "} Limit 1000";
+		//String query = "Prefix geom:<http://geovocab.org/geometry#> Prefix ogc:<http://www.opengis.net/rdf#> Construct { ?s ?p ?o } { { Select ?s { " + typeTriple + " ?s geom:geometry ?x . ?x ogc:asWKT ?geo } Order By Asc(?s) Limit 1000 }. ?s ?p ?o . " + filter + "} Order By Asc(?s) Limit 1000";		
 		
 		logger.debug(query);
 		
@@ -138,6 +143,16 @@ public class RestApi {
 		return result;
 	}
 	
+	
+	@GET
+	@Path("/intersects/{yMin}-{yMax},{xMin}-{xMax}/")
+	public Model nearBasic(@PathParam("xMin") double xMin, @PathParam("xMax") double xMax, @PathParam("yMin") double yMin, @PathParam("yMax") double yMax)
+	{
+		return nearClass(xMin, xMax, yMin, yMax, null);
+	}
+	
+
+
 	
 	@GET
 	@Path("/ontology/")
@@ -178,18 +193,20 @@ public class RestApi {
 	}
 	
 	private Delayer delayer = new DelayerDefault(1000);
-	
-	public Model publicGeocode(String queryString)
+
+	@GET
+	@Path("/geocode/")
+	public Model geocode(@QueryParam("q") String queryString)
 		throws Exception
 	{
 		delayer.doDelay();
 
 		//queryString = StringUtils.urlDecode(queryString);
 		
-		String service = "http://open.mapquestapi.com/nominatim/v1/search";
+		String geocodeService = "http://open.mapquestapi.com/nominatim/v1/search";
 //http://nominatim.openstreetmap.org/search
 			
-		String uri = service + "?format=json&q=" + queryString;
+		String uri = geocodeService + "?format=json&q=" + queryString;
 		
 		URL url = new URL(uri);
 		URLConnection c = url.openConnection();
@@ -230,11 +247,19 @@ public class RestApi {
 		Model result = createModel();
 
 		
-		
-		QueryExecutionFactoryHttp qef = new QueryExecutionFactoryHttp("http://live.linkedgeodata.org/sparql", Collections.singleton("http://linkedgeodata.org"));
+		//String lgdService = "http://live.linkedgeodata.org/sparql";
+		String lgdService = "http://test.linkedgeodata.org/sparql";
+		QueryExecutionFactoryHttp qef = new QueryExecutionFactoryHttp(lgdService, Collections.singleton("http://linkedgeodata.org"));
 
 		for(Resource resource : resources) {
+			//QueryExecution qe = qef.createQueryExecution("Describe <" + resource.toString() + ">");
+			//qe.execDescribe(result);
+			
+			
+			// Workaround for Virtuoso returning invalid XML (which means we can't use the query execution
 			String serviceUri = "http://test.linkedgeodata.org/sparql?format=text%2Fplain&default-graph-uri=http%3A%2F%2Flinkedgeodata.org&query=DESCRIBE+<" + StringUtils.urlEncode(resource.toString()) + ">";
+			
+
 			URL serviceUrl = new URL(serviceUri);
 			URLConnection conn = serviceUrl.openConnection();
 			conn.addRequestProperty("Accept", "text/plain");
@@ -279,20 +304,22 @@ public class RestApi {
 	/*************************************************************************/
 	/* Helper methods for processing class and label restrictions */
 	/*************************************************************************/
+
 	/*
-	private Pair<String, TagFilterUtils.MatchMode> getMatchConfig(String label,
-			String matchMode)
+	private String getLabelFilter(String var, String label, String matchMode, String value)
 	{
 		if (label == null || matchMode == null)
 			return null;
 
-		TagFilterUtils.MatchMode mm = TagFilterUtils.MatchMode.EQUALS;
 		if (matchMode.equalsIgnoreCase("contains")) {
-			mm = TagFilterUtils.MatchMode.ILIKE;
+			//mm = TagFilterUtils.MatchMode.ILIKE;
 			label = "%" + label.replace("%", "\\%") + "%";
+			
 		} else if (matchMode.equalsIgnoreCase("startsWith")) {
-			mm = TagFilterUtils.MatchMode.ILIKE;
-			label = label.replace("%", "\\%") + "%";
+			//mm = TagFilterUtils.MatchMode.ILIKE;
+			//label = label.replace("%", "\\%") + "%";
+			return "Filter(regex(?" + var + ", " + value + ", 'i')"
+			
 		}
 		if (matchMode.equalsIgnoreCase("ccontains")) {
 			mm = TagFilterUtils.MatchMode.LIKE;
@@ -305,35 +332,15 @@ public class RestApi {
 		return new Pair<String, TagFilterUtils.MatchMode>(label, mm);
 	}
 
-	private List<String> getEntityTagCondititions(String className,
-			String label, String language, String matchMode) throws Exception
+	private List<String> getEntityTagCondititions(String var, String className,
+			String label, String language, String matchMode)
 	{
-		if (language != null && language.equalsIgnoreCase("any"))
-			language = null;
-
-		Pair<String, TagFilterUtils.MatchMode> lmm = getMatchConfig(label,
-				matchMode);
-
-		// FIXME Add this to some kind of facade
-		TagFilterUtils filterUtil = new TagFilterUtils(
-				lgdRDFDAO.getOntologyDAO());
-		filterUtil.setSession(lgdRDFDAO.getOntologyDAO().getSession());
-
-		List<String> entityTagConditions = new ArrayList<String>();
-
-		if (className != null)
-			entityTagConditions.add(filterUtil.restrictByObject(
-					RDF.type.toString(), "http://linkedgeodata.org/ontology/"
-							+ className, "$$"));
-
-		if (label != null)
-			entityTagConditions.add(filterUtil.restrictByText(
-					RDFS.label.toString(), lmm.getKey(), language,
-					lmm.getValue(), "$$"));
-
-		return entityTagConditions;
+		String result = "";
+		
+		result += "Filter(?" + var + " a "
 	}
 	*/
+
 
 
 }
