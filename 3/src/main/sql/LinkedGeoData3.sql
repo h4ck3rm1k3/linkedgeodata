@@ -4,6 +4,13 @@
  *                                                                          *
  ****************************************************************************/
 
+CREATE TABLE simple_polys (
+	way_id BIGINT PRIMARY KEY NOT NULL,
+	polygon geometry NOT NULL,
+	area float NOT NULL
+);
+
+
 /*
 -- Source osm2postgresql
 DROP TABLE simple_polys;

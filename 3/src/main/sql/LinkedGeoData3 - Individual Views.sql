@@ -40,6 +40,21 @@ CREATE VIEW lgd_node_tags_string AS
 		NOT EXISTS (SELECT f.k FROM lgd_map_property f WHERE f.k = a.k) AND 
 		NOT EXISTS (SELECT g.k FROM lgd_map_resource_prefix g WHERE g.k = a.k); 
 
+
+-- This view seems to work ALOT better ;)
+CREATE OR REPLACE VIEW lgd_node_tags_string AS
+	SELECT a.node_id, a.k, a.v FROM node_tags a WHERE
+		NOT EXISTS (
+			SELECT b.k FROM lgd_map_datatype  b WHERE b.k = a.k UNION ALL 
+			SELECT c.k FROM lgd_map_resource_k  c WHERE c.k = a.k UNION ALL 
+			SELECT d.k FROM lgd_map_resource_kv d WHERE (d.k, d.v) = (a.k, a.v) UNION ALL 
+			SELECT e.k FROM lgd_map_literal e WHERE e.k = a.k UNION ALL
+			SELECT f.k FROM lgd_map_property f WHERE f.k = a.k UNION ALL
+			SELECT g.k FROM lgd_map_resource_prefix g WHERE g.k = a.k); 
+
+		
+		
+		
 		
 DROP VIEW IF EXISTS lgd_node_tags_text;
 CREATE VIEW lgd_node_tags_text AS
@@ -138,6 +153,16 @@ CREATE VIEW lgd_way_tags_string AS
 		NOT EXISTS (SELECT f.k FROM lgd_map_property f WHERE f.k = a.k) AND 
 		NOT EXISTS (SELECT g.k FROM lgd_map_resource_prefix g WHERE g.k = a.k); 
 
+CREATE OR REPLACE VIEW lgd_way_tags_string AS
+	SELECT a.way_id, a.k, a.v FROM way_tags a WHERE
+		NOT EXISTS (
+			SELECT b.k FROM lgd_map_datatype  b WHERE b.k = a.k UNION ALL 
+			SELECT c.k FROM lgd_map_resource_k  c WHERE c.k = a.k UNION ALL 
+			SELECT d.k FROM lgd_map_resource_kv d WHERE (d.k, d.v) = (a.k, a.v) UNION ALL 
+			SELECT e.k FROM lgd_map_literal e WHERE e.k = a.k UNION ALL
+			SELECT f.k FROM lgd_map_property f WHERE f.k = a.k UNION ALL
+			SELECT g.k FROM lgd_map_resource_prefix g WHERE g.k = a.k); 
+
 		
 DROP VIEW IF EXISTS lgd_way_tags_text;
 CREATE VIEW lgd_way_tags_text AS
@@ -235,6 +260,17 @@ CREATE VIEW lgd_relation_tags_string AS
 		NOT EXISTS (SELECT e.k FROM lgd_map_literal e WHERE e.k = a.k) AND
 		NOT EXISTS (SELECT f.k FROM lgd_map_property f WHERE f.k = a.k) AND 
 		NOT EXISTS (SELECT g.k FROM lgd_map_resource_prefix g WHERE g.k = a.k); 
+
+		
+CREATE OR REPLACE VIEW lgd_relation_tags_string AS
+	SELECT a.relation_id, a.k, a.v FROM relation_tags a WHERE
+		NOT EXISTS (
+			SELECT b.k FROM lgd_map_datatype  b WHERE b.k = a.k UNION ALL 
+			SELECT c.k FROM lgd_map_resource_k  c WHERE c.k = a.k UNION ALL 
+			SELECT d.k FROM lgd_map_resource_kv d WHERE (d.k, d.v) = (a.k, a.v) UNION ALL 
+			SELECT e.k FROM lgd_map_literal e WHERE e.k = a.k UNION ALL
+			SELECT f.k FROM lgd_map_property f WHERE f.k = a.k UNION ALL
+			SELECT g.k FROM lgd_map_resource_prefix g WHERE g.k = a.k); 
 
 		
 DROP VIEW IF EXISTS lgd_relation_tags_text;

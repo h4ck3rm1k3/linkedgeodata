@@ -32,6 +32,10 @@ CREATE INDEX idx_ways_tstamp on ways(tstamp);
 CREATE INDEX idx_relations_tstamp on relations(tstamp);
 
 
+CREATE INDEX idx_nodes_geom on nodes USING GIST(geom);
+CREATE INDEX idx_ways_linestring on ways USING GIST(linestring);
+CREATE INDEX idx_simple_polys_polygon on simple_polys USING GIST(polygon);
+
 
 
 /**

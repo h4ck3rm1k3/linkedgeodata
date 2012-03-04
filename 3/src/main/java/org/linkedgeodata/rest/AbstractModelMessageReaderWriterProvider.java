@@ -11,6 +11,8 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.ext.MessageBodyWriter;
 
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.RDFWriter;
 
 
 public class AbstractModelMessageReaderWriterProvider
@@ -44,6 +46,23 @@ public class AbstractModelMessageReaderWriterProvider
 	}
 	*/
 
+	//private static RDFWriter htmlWriter = new RDFWriterHtml();
+	
+	public static RDFWriter getWriter(String format)
+	{
+		// FIXME The Jena writer needs to be configurable (e.g. css path)
+		// Probably use ApplicationContext for that
+		/*
+		if("HTML".equalsIgnoreCase(format)) ;
+			return htmlWriter;
+		}
+		*/
+		
+		RDFWriter writer = ModelFactory.createDefaultModel().getWriter(format);
+
+		return writer;
+	}
+	
 	@Override
 	public boolean isWriteable(Class<?> type, Type genericType,
 			Annotation[] annotations, MediaType mediaType) {

@@ -20,18 +20,18 @@ import com.sun.jersey.spi.container.servlet.ServletContainer;
 
 
 
-public class Main {
+public class LinkedGeoDataApiMain {
 	/**
 	 * @param exitCode
 	 */
 	public static void printHelpAndExit(int exitCode) {
 		HelpFormatter formatter = new HelpFormatter();
-		formatter.printHelp(Main.class.getName(), cliOptions);
+		formatter.printHelp(LinkedGeoDataApiMain.class.getName(), cliOptions);
 		System.exit(exitCode);
 	}
 
 	private static final Logger logger = LoggerFactory
-			.getLogger(Main.class);
+			.getLogger(LinkedGeoDataApiMain.class);
 	private static final Options cliOptions = new Options();
 
 	/**

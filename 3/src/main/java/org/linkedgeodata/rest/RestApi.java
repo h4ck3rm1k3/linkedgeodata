@@ -1,5 +1,6 @@
 package org.linkedgeodata.rest;
 
+import java.awt.geom.Point2D;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.lang.reflect.Type;
@@ -16,8 +17,6 @@ import java.util.Map;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 
 import org.aksw.commons.sparql.api.cache.core.QueryExecutionFactoryCacheEx;
 import org.aksw.commons.sparql.api.cache.extra.CacheCoreEx;
@@ -31,6 +30,8 @@ import org.aksw.commons.sparql.api.http.QueryExecutionFactoryHttp;
 import org.aksw.commons.sparql.api.pagination.core.QueryExecutionFactoryPaginated;
 import org.aksw.commons.util.strings.StringUtils;
 import org.hibernate.engine.jdbc.StreamUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -44,9 +45,11 @@ import com.hp.hpl.jena.vocabulary.OWL;
 
 
 
-@Path("/api/")
+@Path("/api/3/")
 public class RestApi {
 
+	private static final Logger logger = LoggerFactory.getLogger(RestApi.class);
+	
 	private static LGDVocab vocab = new LGDVocabDefault();
 	
 	private QueryExecutionFactory<?> qeFactory;
@@ -62,7 +65,7 @@ public class RestApi {
 		QueryExecutionFactory<?> tmp = new QueryExecutionFactoryHttp(service);
 		
 		CacheCoreEx cacheBackend = CacheCoreH2.create("sparql", 24l * 60l * 60l * 1000l, true);
-		CacheEx cacheFrontend = new CacheExImpl(cacheBackend); 
+		CacheEx cacheFrontend = new CacheExImpl(cacheBackend);
 		
 		//QueryExecutionFactory<?> 
 		tmp = new QueryExecutionFactoryCacheEx(tmp, cacheFrontend);
@@ -107,8 +110,33 @@ public class RestApi {
 		return describe("http://linkedgeodata.org/triplify/relation" + id);
 	}
 
+
 	
-	
+	@GET
+	@Path("/intersects/{yMin}-{yMax},{xMin}-{xMax}/")
+	public Model near(@PathParam("xMin") double xMin, @PathParam("xMax") double xMax, @PathParam("yMin") double yMin, @PathParam("yMin") double yMax)
+	{
+		Point2D.Double a = new Point2D.Double(xMin, yMin);
+		Point2D.Double b = new Point2D.Double(xMax, yMax);
+
+		// Rectangle2D.Double c = new Rectangle2D.Double(a.x, a.y, b.x - a.x,
+		// b.y - a.y);
+
+		String polygon = "POLYGON((" + a.x + " " + a.y + "," + b.x + " " + a.y
+				+ "," + b.x + " " + b.y + "," + a.x + " " + b.y + "," + a.x
+				+ " " + a.y + "))";
+
+		String filter = "Filter(ogc:intersects(?geo, ogc:geomFromText('" + polygon + "')))";
+		
+		String query = "Prefix geom:<http://geovocab.org/geometry#> Prefix ogc:<http://www.opengis.net/rdf#> Construct { ?s ?p ?o } { ?s geom:geometry ?x . ?x ogc:asWKT ?geo . ?s ?p ?o . " + filter + "}";
+		
+		
+		logger.debug(query);
+		
+		Model result = qeFactory.createQueryExecution(query).execConstruct();
+		
+		return result;
+	}
 	
 	
 	@GET
