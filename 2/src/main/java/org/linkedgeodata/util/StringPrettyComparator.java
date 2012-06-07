@@ -15,8 +15,9 @@ public class StringPrettyComparator
 {
 	boolean isDigitPrefix(String s)
 	{
-		if(s.isEmpty())
+		if(s.isEmpty()) {
 			return false;
+		}
 	
 		boolean result = Character.isDigit(s.charAt(0)); 
 		return result;

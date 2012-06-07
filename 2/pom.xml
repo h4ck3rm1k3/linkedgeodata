@@ -53,7 +53,7 @@
 				<updatePolicy>always</updatePolicy>
 			</snapshots>
 		</repository>
-			<repository>
+		<repository>
 			<id>maven.aksw.org.snapshot</id>
 			<name>University Leipzig, AKSW Maven2 Snapshot Repository</name>
 			<url>http://maven.aksw.org/repository/snapshot</url>
