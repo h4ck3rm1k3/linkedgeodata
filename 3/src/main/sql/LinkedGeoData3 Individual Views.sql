@@ -1,4 +1,12 @@
 /****************************************************************************
+ *                                                                          *
+ * Helper Views to be used with Sparqlify                                   *
+ *     (https://github.com/AKSW/Sparqlify)                                  *
+ *                                                                          *
+ ****************************************************************************/
+
+
+/****************************************************************************
  * nodes                                                                    *
  ****************************************************************************/
    
@@ -70,7 +78,8 @@ CREATE VIEW lgd_node_node_tags_text AS
    FROM lgd_node_node_tags_string a
    JOIN lgd_map_literal b ON b.k = a.k;
 */
-   
+  
+
 DROP VIEW IF EXISTS lgd_node_tags_resource_k;
 CREATE VIEW lgd_node_tags_resource_k AS
  SELECT a.node_id, b.property, b.object
@@ -84,16 +93,43 @@ DROP VIEW IF EXISTS lgd_node_tags_resource_kv;
 CREATE VIEW lgd_node_tags_resource_kv AS   
   SELECT a.node_id, b.property, b.object
    FROM node_tags a
-   JOIN lgd_map_resource_kv b USING(k, v)
+   JOIN lgd_map_resource_kv b ON (b.k, b.v) = (a.k, a.v)
  WHERE
   NOT EXISTS (SELECT c.k FROM lgd_map_datatype c WHERE c.k = a.k); 
 
+DROP VIEW IF EXISTS lgd_node_tags_resource_kv;
+CREATE VIEW lgd_node_tags_resource_kv AS   
+  SELECT a.node_id, b.property, b.object
+   FROM node_tags a
+   JOIN lgd_map_resource_kv b ON (b.k, b.v) = (a.k, a.v)
+ WHERE
+  b.k NOT IN (SELECT c.k FROM lgd_map_datatype c); 
+
+/*
+DROP VIEW IF EXISTS lgd_node_tags_resource_kv;
+CREATE VIEW lgd_node_tags_resource_kv AS   
+  SELECT a.node_id, b.property, b.object
+   FROM node_tags a
+   JOIN (SELECT k FROM lgd_map_resource_kv WHERE k NOT IN (SELECT k FROM lgd_map_datatype c)) b ON (b.k, b.v) = (a.k, a.v); 
+
+DROP VIEW IF EXISTS lgd_node_tags_resource_kv;
+CREATE VIEW lgd_node_tags_resource_kv AS   
+  SELECT a.node_id, b.property, b.object
+   FROM node_tags a
+   JOIN lgd_map_resource_kv b ON (b.v = a.v)
+WHERE
+	b.k = a.k;
+*/
+
+/* TODO Resolve above */
+  
+  
 
 DROP VIEW IF EXISTS lgd_node_tags_resource_prefix;
 CREATE VIEW lgd_node_tags_resource_prefix AS   
   SELECT a.node_id, b.property, b.object_prefix, a.v, b.post_processing
    FROM node_tags a
-   JOIN lgd_map_resource_prefix b USING(k)
+   JOIN lgd_map_resource_prefix b ON (b.k = a.k)
  WHERE
   NOT EXISTS (SELECT c.k FROM lgd_map_datatype c WHERE c.k = b.k); 
 
@@ -101,7 +137,7 @@ DROP VIEW IF EXISTS lgd_node_tags_property;
 CREATE VIEW lgd_node_tags_property AS   
   SELECT a.node_id, b.property, a.v "object"
    FROM node_tags a
-   JOIN lgd_map_property b USING(k)
+   JOIN lgd_map_property b ON (b.k = a.k)
  WHERE
   NOT EXISTS (SELECT c.k FROM lgd_map_datatype c WHERE c.k = b.k) AND 
   NOT EXISTS (SELECT d.k FROM lgd_map_resource_k d WHERE d.k = b.k) AND 
@@ -192,7 +228,7 @@ DROP VIEW IF EXISTS lgd_way_tags_resource_kv;
 CREATE VIEW lgd_way_tags_resource_kv AS   
   SELECT a.way_id, b.property, b.object
    FROM way_tags a
-   JOIN lgd_map_resource_kv b USING(k, v)
+   JOIN lgd_map_resource_kv b ON (b.k, b.v) = (a.k, a.v)
  WHERE
   NOT EXISTS (SELECT c.k FROM lgd_map_datatype c WHERE c.k = a.k); 
 
@@ -201,9 +237,9 @@ DROP VIEW IF EXISTS lgd_way_tags_resource_prefix;
 CREATE VIEW lgd_way_tags_resource_prefix AS   
   SELECT a.way_id, b.property, b.object_prefix, a.v, b.post_processing
    FROM way_tags a
-   JOIN lgd_map_resource_prefix b USING(k)
+   JOIN lgd_map_resource_prefix b ON (b.k = a.k)
  WHERE
-  NOT EXISTS (SELECT c.k FROM lgd_map_datatype c WHERE c.k = b.k); 
+  NOT EXISTS (SELECT c.k FROM lgd_map_datatype c WHERE c.k = a.k); 
 
 DROP VIEW IF EXISTS lgd_way_tags_property;
 CREATE VIEW lgd_way_tags_property AS   
@@ -301,7 +337,7 @@ DROP VIEW IF EXISTS lgd_relation_tags_resource_kv;
 CREATE VIEW lgd_relation_tags_resource_kv AS   
   SELECT a.relation_id, b.property, b.object
    FROM relation_tags a
-   JOIN lgd_map_resource_kv b USING(k, v)
+   JOIN lgd_map_resource_kv b ON (b.k, b.v) = (a.k, a.v)
  WHERE
   NOT EXISTS (SELECT c.k FROM lgd_map_datatype c WHERE c.k = a.k); 
 
@@ -310,7 +346,7 @@ DROP VIEW IF EXISTS lgd_relation_tags_resource_prefix;
 CREATE VIEW lgd_relation_tags_resource_prefix AS   
   SELECT a.relation_id, b.property, b.object_prefix, a.v, b.post_processing
    FROM relation_tags a
-   JOIN lgd_map_resource_prefix b USING(k)
+   JOIN lgd_map_resource_prefix b ON (b.k = a.k)
  WHERE
   NOT EXISTS (SELECT c.k FROM lgd_map_datatype c WHERE c.k = b.k); 
 

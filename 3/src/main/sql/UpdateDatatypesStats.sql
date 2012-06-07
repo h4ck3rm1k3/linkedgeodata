@@ -1,5 +1,5 @@
 /* Following query took 260 minutes on the server */
-DELETE FROM lgd_stat_datatype;
+TRUNCATE lgd_stat_datatype;
 INSERT INTO
 	lgd_stat_datatype
 SELECT
@@ -18,7 +18,7 @@ GROUP BY
 
 /* Based on the stats, determine the best matching datatyp */
 /* DROP TABLE IF EXISTS lgd_tags_datatypes; */
-DELETE FROM lgd_map_datatype;
+TRUNCATE lgd_map_datatype;
 INSERT INTO
 	lgd_map_datatype
 SELECT

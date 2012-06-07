@@ -16,4 +16,6 @@ CREATE INDEX idx_lgd_stat_tags_k_k ON lgd_stat_tags_k(k);
 
 
 SELECT k, v, COUNT(*) AS usage_count INTO lgd_stat_tags_kv FROM lgd_tags GROUP BY k, v;
-CREATE INDEX idx_lgd_stats_kv_k_v ON lgd_stat_tags_kv(k, v);
+CREATE INDEX idx_lgd_stats_kv_v ON lgd_stat_tags_kv(v);
+CREATE INDEX idx_lgd_stats_kv_k ON lgd_stat_tags_kv(k);
+

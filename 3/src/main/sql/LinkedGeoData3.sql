@@ -1,16 +1,23 @@
+
+
+
+
+!!!USE LinkedGeoData3 Individual Views.sql instead of this file for now!!!
+
+
+
 /****************************************************************************
  *                                                                          *
  * LinkedGeoData 3 Utility Functions                                        *
  *                                                                          *
  ****************************************************************************/
 
-CREATE TABLE simple_polys (
-	way_id BIGINT PRIMARY KEY NOT NULL,
-	area float NOT NULL
-);
 
--- TODO: Not Null constraint
-SELECT AddGeometryColumn('simple_polys', 'polygon', 4326, 'GEOMETRY', 2);
+
+ALTER TABLE simple_polys cluster ON idx_simple_polys_polygon;
+ALTER TABLE nodes cluster ON idx_nodes_geom;
+ALTER TABLE ways cluster ON idx_ways_linestring;
+
 
 /*
 -- Source osm2postgresql

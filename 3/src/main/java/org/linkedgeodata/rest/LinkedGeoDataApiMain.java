@@ -40,34 +40,33 @@ public class LinkedGeoDataApiMain {
 	 */
 	@SuppressWarnings("static-access")
 	public static void main(String[] args) throws Exception {
-		PropertyConfigurator.configure("log4j.properties");
 		LogManager.getLogManager().readConfiguration(
-				new FileInputStream("jdklog.properties"));
+				new FileInputStream("src/main/resources/jdklog.properties"));
+		PropertyConfigurator.configure("src/main/resources/log4j.properties");
 
 		CommandLineParser cliParser = new GnuParser();
 
 		cliOptions.addOption("P", "port", true, "Server port");
-		cliOptions.addOption("C", "context", true, "Context e.g. /sparqlify");
-		cliOptions.addOption("B", "backlog", true,
-				"Maximum number of connections");
+		//cliOptions.addOption("C", "context", true, "Context e.g. /");
+//		cliOptions.addOption("B", "backlog", true,
+//				"Maximum number of connections");
 
-		cliOptions.addOption("t", "type", true,
-				"Database type (posgres, mysql,...)");
-		cliOptions.addOption("d", "database", true, "Database name");
-		cliOptions.addOption("u", "username", true, "");
-		cliOptions.addOption("p", "password", true, "");
-		cliOptions.addOption("h", "hostname", true, "");
 
-		cliOptions.addOption("c", "config", true, "Sparqlify config file");
-
-		cliOptions.addOption("t", "timeout", true, "Maximum query execution timeout");
-		cliOptions.addOption("n", "resultsetsize", true, "Maximum result set size");
+		cliOptions.addOption("s", "service", true, "Sparql service url");
+//		cliOptions.addOption("t", "timeout", true, "Maximum query execution timeout");
+//		cliOptions.addOption("n", "resultsetsize", true, "Maximum result set size");
 		
 		CommandLine commandLine = cliParser.parse(cliOptions, args);
 
 		// Parsing of command line args
+
+		String portStr = commandLine.getOptionValue("P", "9998");
+		int port = Integer.parseInt(portStr);
+		
+		
+		String serviceUrl = commandLine.getOptionValue("s");
+		
 		/*
-		String portStr = commandLine.getOptionValue("P", "7000");
 		String backLogStr = commandLine.getOptionValue("B", "100");
 		String contextStr = commandLine.getOptionValue("C", "/sparqlify");
 		int port = Integer.parseInt(portStr);
@@ -124,7 +123,9 @@ public class LinkedGeoDataApiMain {
 		sh.setInitParameter("com.sun.jersey.config.property.packages",
 				"org.linkedgeodata.rest");
 
-		Server server = new Server(9998);
+		sh.setInitParameter("serviceUrl", serviceUrl);
+
+		Server server = new Server(port);
 		Context context = new Context(server, "/", Context.SESSIONS);
 		context.addServlet(sh, "/*");
 		

@@ -1,3 +1,73 @@
+
+/****************************************************************************
+ * Stored Procedures                                                        *
+ ****************************************************************************/
+
+DROP FUNCTION lgd_tryparse_boolean(v TEXT);
+CREATE FUNCTION lgd_tryparse_boolean(v TEXT) RETURNS BOOL AS
+$$
+DECLARE
+BEGIN
+    RETURN
+    	CASE
+    		WHEN (v ~* 'true'  OR v ~* 'yes' OR v = '1') THEN TRUE
+    		WHEN (v ~* 'false' OR v ~* 'no'  OR v = '0') THEN FALSE
+    		ELSE NULL
+    	END;
+END;
+$$
+    LANGUAGE 'plpgsql'
+    IMMUTABLE
+    RETURNS NULL ON NULL INPUT;
+    
+
+    
+DROP FUNCTION lgd_tryparse_int(str TEXT);
+CREATE FUNCTION lgd_tryparse_int(str TEXT) RETURNS INT8 AS
+$$
+DECLARE
+BEGIN
+    RETURN str::int8;
+EXCEPTION
+	WHEN OTHERS THEN
+		RETURN NULL;
+END;
+$$
+    LANGUAGE 'plpgsql'
+    IMMUTABLE
+    RETURNS NULL ON NULL INPUT;
+
+    
+DROP FUNCTION lgd_tryparse_float(str TEXT);
+CREATE FUNCTION lgd_tryparse_float(str TEXT) RETURNS FLOAT AS
+$$
+DECLARE
+BEGIN
+    RETURN str::float;
+EXCEPTION
+	WHEN OTHERS THEN
+		RETURN NULL;
+END;
+$$
+    LANGUAGE 'plpgsql'
+    IMMUTABLE
+    RETURNS NULL ON NULL INPUT;
+
+/****************************************************************************
+ * Mapping tables                                                           *
+ ****************************************************************************/
+
+
+CREATE TABLE simple_polys (
+	way_id BIGINT PRIMARY KEY NOT NULL,
+	area float NOT NULL
+);
+
+-- TODO: Not Null constraint
+SELECT AddGeometryColumn('simple_polys', 'polygon', 4326, 'GEOMETRY', 2);
+CREATE INDEX idx_simple_polys_polygon ON simple_polys USING GIST(polygon);
+
+
 DROP TYPE IF EXISTS lgd_datatype;
 CREATE TYPE lgd_datatype AS ENUM ('boolean', 'int', 'float');
 
@@ -71,13 +141,17 @@ CREATE TABLE lgd_map_resource_kv (
     object text NOT NULL
 );
 
+/* Avoid multi column indexes */
+CREATE INDEX idx_lgd_map_resource_kv_v ON lgd_map_resource_kv USING btree (v);
 CREATE INDEX idx_lgd_map_resource_kv_k ON lgd_map_resource_kv USING btree (k);
+CREATE INDEX idx_lgd_map_resource_kv_property ON lgd_map_resource_kv USING btree (property);
+CREATE INDEX idx_lgd_map_resource_kv_object ON lgd_map_resource_kv USING btree (object);
+/*
 CREATE INDEX idx_lgd_map_resource_kv_v_k ON lgd_map_resource_kv USING btree (v, k);
+CREATE INDEX idx_lgd_map_resource_kv_k_v ON lgd_map_resource_kv USING btree (k, v);
 CREATE INDEX idx_lgd_map_resource_kv_property_object ON lgd_map_resource_kv USING btree (property, object);
 CREATE INDEX idx_lgd_map_resource_kv_object_property ON lgd_map_resource_kv USING btree (object, property);
-
-/* Maybe not needed */
-CREATE INDEX idx_lgd_map_resource_kv_k_v ON lgd_map_resource_kv USING btree (k, v);
+*/
 
 
 
