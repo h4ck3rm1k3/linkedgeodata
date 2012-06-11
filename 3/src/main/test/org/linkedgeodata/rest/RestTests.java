@@ -19,13 +19,13 @@ public class RestTests {
 	@Test
 	public void testOntology() {
 		
-		Point2D.Double a = new Point2D.Double(12.34593062612, 51.33298118419);
-		Point2D.Double b = new Point2D.Double(12.404552986346, 51.348557018545);
+		//Point2D.Double a = new Point2D.Double(12.34593062612, 51.33298118419);
+		//Point2D.Double b = new Point2D.Double(12.404552986346, 51.348557018545);
 
 		// Rectangle2D.Double c = new Rectangle2D.Double(a.x, a.y, b.x - a.x,
 		// b.y - a.y);
 
-		String polygon = a.y + "-" + b.y + "," + a.x + "-" + b.y;
+		//String polygon = a.y + "-" + b.y + "," + a.x + "-" + b.y;
 		
 		
 		String url = "http://localhost:9998/api/3/ontology";
@@ -38,10 +38,48 @@ public class RestTests {
 	}
 	
 	@Test
-	public void testIntersects() {
+	public void testIntersectsCircle() {
+		Point2D.Double a = new Point2D.Double(12.00, 51.00);
+		double radius = 0.1;
 		
-		Point2D.Double a = new Point2D.Double(12.34593062612, 51.33298118419);
-		Point2D.Double b = new Point2D.Double(12.404552986346, 51.348557018545);
+		intersectsCircle(a, radius, null);
+	}
+
+	@Test
+	public void testIntersectsCircleClass() {
+		Point2D.Double a = new Point2D.Double(12.00, 51.00);
+		double radius = 0.5;
+		String className = "Bakery";
+		
+		intersectsCircle(a, radius, className);
+	}
+
+
+	public void intersectsCircle(Point2D point, double radius, String className) {
+
+		
+		String geomStr = point.getY() + "," + point.getX() + "/" + radius;
+		String url = "http://localhost:9998/api/3/intersects/" + geomStr;
+		
+		if(className != null) {
+			url += "/class/" + className;
+		}
+		
+		System.out.println(url);
+		Model model = ModelFactory.createDefaultModel();
+		model.read(url);
+		
+		model.write(System.out, "N-TRIPLES");
+	}
+	
+	@Test
+	public void testIntersectsRect() {
+		
+		//Point2D.Double a = new Point2D.Double(12.34593062612, 51.33298118419);
+		//Point2D.Double b = new Point2D.Double(12.404552986346, 51.348557018545);
+
+		Point2D.Double a = new Point2D.Double(12.00, 51.00);
+		Point2D.Double b = new Point2D.Double(12.01, 51.01);
 
 		// Rectangle2D.Double c = new Rectangle2D.Double(a.x, a.y, b.x - a.x,
 		// b.y - a.y);
@@ -57,7 +95,6 @@ public class RestTests {
 		model.write(System.out, "N-TRIPLES");
 	}
 
-	@Ignore
 	@Test
 	public void testGeocode() {
 		
@@ -109,7 +146,7 @@ public class RestTests {
 		String polygon = a.y + "-" + b.y + "," + a.x + "-" + b.x;
 		
 		
-		String url = "http://localhost:9998/api/3/intersects/" + polygon + "/Bakery";
+		String url = "http://localhost:9998/api/3/intersects/" + polygon + "/class/Bakery";
 		logger.debug("Requesting: " + url);
 		
 		Model model = ModelFactory.createDefaultModel();
