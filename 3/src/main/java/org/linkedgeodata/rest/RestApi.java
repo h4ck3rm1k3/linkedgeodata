@@ -169,11 +169,26 @@ public class RestApi {
 		}
 
 		// Flat
-		String query = "Prefix meta:<http://linkedgeodata.org/meta/> Prefix geom:<http://geovocab.org/geometry#> Prefix ogc:<http://www.opengis.net/rdf#> Construct { ?s ?p ?o } { ?s a meta:Node . "
+		String query
+				= "Prefix meta:<http://linkedgeodata.org/meta/> Prefix geom:<http://geovocab.org/geometry#> Prefix ogc:<http://www.opengis.net/rdf#> "
+				+ "Construct { ?s ?p ?o } {\n"
+				+ "?s a ?t . "
+				+ "Filter(?t = meta:Node || ?t = meta:Way) ."
+				+ typeTriple
+				+ "?s geom:geometry ?x ."
+				+ "?x ogc:asWKT ?geo ."
+				+ "?s ?p ?o . "
+				+ filter
+				+ "} Order By ?s Limit 1000";
+
+				/*
+				+ "Union "
+				+ "{ ?s a meta:Way . "
 				+ typeTriple
 				+ " ?s geom:geometry ?x . ?x ogc:asWKT ?geo . ?s ?p ?o . "
-				+ filter + "} Order By ?s Limit 1000";
-
+				+ filter + "}"
+				+"} Order By ?s Limit 1000";
+*/
 		// Intersects as sub-query
 		// String query =
 		// "Prefix geom:<http://geovocab.org/geometry#> Prefix ogc:<http://www.opengis.net/rdf#> Construct { ?s ?p ?o } { "
@@ -258,10 +273,15 @@ public class RestApi {
 			+ "Prefix geom:<http://geovocab.org/geometry#>\n"
 			+ "Prefix ogc:<http://www.opengis.net/rdf#>\n"
 			+ "PREFIX bif: <http://www.openlinksw.com/schemas/bif#>\n"
-			+ "Construct { ?s ?p ?o } { ?s a meta:Node . "
+			+ "Construct { ?s ?p ?o } {\n"
+			+ "?s a ?t .\n"
+			+ "Filter(?t = meta:Node || ?t = meta:Way) .\n"
 			+ typeTriple
-			+ " ?s geom:geometry ?x . ?x ogc:asWKT ?geo . ?s ?p ?o . "
-			+ filter + "} Order By ?s Limit 1000";
+			+ " ?s geom:geometry ?x .\n" +
+			"?x ogc:asWKT ?geo .\n" +
+			"?s ?p ?o . "
+			+ filter
+			+ "} Order By ?s Limit 1000";
 
 		logger.debug(query);
 

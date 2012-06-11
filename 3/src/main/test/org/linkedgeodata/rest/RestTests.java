@@ -40,7 +40,7 @@ public class RestTests {
 	@Test
 	public void testIntersectsCircle() {
 		Point2D.Double a = new Point2D.Double(12.00, 51.00);
-		double radius = 0.1;
+		double radius = 0.01;
 		
 		intersectsCircle(a, radius, null);
 	}
@@ -48,7 +48,7 @@ public class RestTests {
 	@Test
 	public void testIntersectsCircleClass() {
 		Point2D.Double a = new Point2D.Double(12.00, 51.00);
-		double radius = 0.5;
+		double radius = 0.01;
 		String className = "Bakery";
 		
 		intersectsCircle(a, radius, className);
@@ -120,18 +120,18 @@ public class RestTests {
 	
 
 	@Test
-	public void testIntersectsClass() {
+	public void testIntersectsRectClass() {
 		
 		Random r = new Random(System.currentTimeMillis());
 		
 		for(int i = 0; i < 1; ++i) {
 			float e = r.nextFloat();
 			
-			intersectsClass(-20 + i * 10 + e, 30 + i * 10 + e, 0.01f ,0.01f);
+			intersectsRectClass(-20 + i * 10 + e, 30 + i * 10 + e, 0.01f ,0.01f);
 		}
 	}
 	
-	public void intersectsClass(float x, float y, float width, float height) {
+	public void intersectsRectClass(float x, float y, float width, float height) {
 		
 		/*
 		Point2D.Double a = new Point2D.Double(12.34593062612, 51.33298118419);
