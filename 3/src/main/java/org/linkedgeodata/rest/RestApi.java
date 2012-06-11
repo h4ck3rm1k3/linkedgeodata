@@ -78,9 +78,9 @@ public class RestApi {
 		CacheEx cacheFrontend = new CacheExImpl(cacheBackend);
 
 		// QueryExecutionFactory<?>
-		//tmp = new QueryExecutionFactoryCacheEx(tmp, cacheFrontend);
+		tmp = new QueryExecutionFactoryCacheEx(tmp, cacheFrontend);
 
-		//tmp = new QueryExecutionFactoryPaginated(tmp, 1000);
+		tmp = new QueryExecutionFactoryPaginated(tmp, 1000);
 
 		qeFactory = tmp;
 
@@ -261,7 +261,7 @@ public class RestApi {
 			+ "Construct { ?s ?p ?o } { ?s a meta:Node . "
 			+ typeTriple
 			+ " ?s geom:geometry ?x . ?x ogc:asWKT ?geo . ?s ?p ?o . "
-			+ filter + "} Order By ?s";
+			+ filter + "} Order By ?s Limit 1000";
 
 		logger.debug(query);
 
